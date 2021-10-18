@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Include>
+
+  <!-- 
+    The Visual C++ Runtime Library merge modules have to be listed in each feature separately,
+    so rather than taking up all that space and retyping it every since time, this include
+    file should be thrown into each <Feature> element in the main isrp_setup.wxs file
+  -->
+
+  <MergeRef Id="Microsoft_VC142_CRT_x86"/>
+  <MergeRef Id="Microsoft_VC142_MFC_x86"/>
+
+  <?if $(var.Configuration) = "Debug" ?>
+  <MergeRef Id="Microsoft_VC142_DebugCRT_x86"/>
+  <MergeRef Id="Microsoft_VC142_DebugMFC_x86"/>
+  <?endif?>
+
+</Include>

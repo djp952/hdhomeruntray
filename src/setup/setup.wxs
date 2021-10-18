@@ -45,7 +45,11 @@
 
 
     <Feature Id="ProductFeature" Title="setup" Level="1">
-			<ComponentGroupRef Id="ProductComponents" />
+
+      <!-- Include Visual C++ runtime library merge modules -->
+      <?include addvcrt.wxi ?>
+
+      <ComponentGroupRef Id="ProductComponents" />
 		</Feature>
 	</Product>
 

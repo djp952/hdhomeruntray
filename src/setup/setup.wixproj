@@ -10,15 +10,22 @@
     <OutputType>Package</OutputType>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
-    <OutputPath>..\..\out\</OutputPath>
+    <OutputPath>..\..\bin\$(Configuration)\</OutputPath>
     <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
     <DefineConstants>Debug</DefineConstants>
+    <DefineSolutionProperties>false</DefineSolutionProperties>
+    <SuppressIces>ICE03</SuppressIces>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
-    <OutputPath>..\..\out\</OutputPath>
+    <OutputPath>..\..\bin\$(Configuration)\</OutputPath>
     <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
+    <DefineSolutionProperties>false</DefineSolutionProperties>
+    <SuppressIces>ICE03</SuppressIces>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="..\..\tmp\msm\vcmergemods.wxs">
+      <Link>vcmergemods.wxs</Link>
+    </Compile>
     <Compile Include="net472.wxs" />
     <Compile Include="setup.wxs" />
   </ItemGroup>
@@ -26,6 +33,7 @@
     <Content Include="..\..\tmp\version\version.wxi">
       <Link>version.wxi</Link>
     </Content>
+    <Content Include="addvcrt.wxi" />
     <Content Include="buildenv.wxi" />
   </ItemGroup>
   <ItemGroup>
