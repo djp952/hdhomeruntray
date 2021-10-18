@@ -1,0 +1,127 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="External Libraries">
+      <UniqueIdentifier>{e07986af-3056-4950-bc4d-9efaaa32ea22}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="External Libraries\libhdhomerun">
+      <UniqueIdentifier>{33d97339-43f3-492b-a519-d9db4c8eec30}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="External Libraries\libhdhomerun\Source Files">
+      <UniqueIdentifier>{74137167-3c44-419c-84ac-0cd65a96eabe}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="External Libraries\libhdhomerun\Header Files">
+      <UniqueIdentifier>{ab3432f2-21e7-4514-aae2-0c63c4fc1af8}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="stdafx.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\depends\libhdhomerun\hdhomerun.h">
+      <Filter>External Libraries\libhdhomerun\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\depends\libhdhomerun\hdhomerun_channels.h">
+      <Filter>External Libraries\libhdhomerun\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\depends\libhdhomerun\hdhomerun_channelscan.h">
+      <Filter>External Libraries\libhdhomerun\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\depends\libhdhomerun\hdhomerun_control.h">
+      <Filter>External Libraries\libhdhomerun\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\depends\libhdhomerun\hdhomerun_debug.h">
+      <Filter>External Libraries\libhdhomerun\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\depends\libhdhomerun\hdhomerun_device.h">
+      <Filter>External Libraries\libhdhomerun\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\depends\libhdhomerun\hdhomerun_device_selector.h">
+      <Filter>External Libraries\libhdhomerun\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\depends\libhdhomerun\hdhomerun_discover.h">
+      <Filter>External Libraries\libhdhomerun\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\depends\libhdhomerun\hdhomerun_os.h">
+      <Filter>External Libraries\libhdhomerun\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\depends\libhdhomerun\hdhomerun_os_windows.h">
+      <Filter>External Libraries\libhdhomerun\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\depends\libhdhomerun\hdhomerun_pkt.h">
+      <Filter>External Libraries\libhdhomerun\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\depends\libhdhomerun\hdhomerun_sock.h">
+      <Filter>External Libraries\libhdhomerun\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\depends\libhdhomerun\hdhomerun_types.h">
+      <Filter>External Libraries\libhdhomerun\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\depends\libhdhomerun\hdhomerun_video.h">
+      <Filter>External Libraries\libhdhomerun\Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="AssemblyInfo.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tmp\version\version.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\depends\libhdhomerun\hdhomerun_channels.c">
+      <Filter>External Libraries\libhdhomerun\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\depends\libhdhomerun\hdhomerun_channelscan.c">
+      <Filter>External Libraries\libhdhomerun\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\depends\libhdhomerun\hdhomerun_control.c">
+      <Filter>External Libraries\libhdhomerun\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\depends\libhdhomerun\hdhomerun_debug.c">
+      <Filter>External Libraries\libhdhomerun\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\depends\libhdhomerun\hdhomerun_device.c">
+      <Filter>External Libraries\libhdhomerun\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\depends\libhdhomerun\hdhomerun_device_selector.c">
+      <Filter>External Libraries\libhdhomerun\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\depends\libhdhomerun\hdhomerun_discover.c">
+      <Filter>External Libraries\libhdhomerun\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\depends\libhdhomerun\hdhomerun_os_windows.c">
+      <Filter>External Libraries\libhdhomerun\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\depends\libhdhomerun\hdhomerun_pkt.c">
+      <Filter>External Libraries\libhdhomerun\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\depends\libhdhomerun\hdhomerun_sock_windows.c">
+      <Filter>External Libraries\libhdhomerun\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\depends\libhdhomerun\hdhomerun_video.c">
+      <Filter>External Libraries\libhdhomerun\Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="..\..\tmp\version\version.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+</Project>

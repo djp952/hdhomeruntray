@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+  <!-- Version -->
+  <?include $(var.ProjectDir)..\..\tmp\version\version.wxi ?>
+  
+  <!-- Build Environment -->
+  <?include $(var.ProjectDir)buildenv.wxi ?>
+
+  <Product Id="*"
+    Name="HDHomeRun System Tray $(var.ProjectVersion.4)"
+    Language="1033"
+    Version="$(var.ProjectVersion.4)"
+    Manufacturer="ZukiSoft"
+    UpgradeCode="E9655935-8B9E-4BB4-A452-302EF25F0232"> <!-- NEVER CHANGE THE UPGRADE CODE -->
+
+    <Package InstallerVersion="405" Compressed="yes" InstallPrivileges="elevated" InstallScope="perMachine"/>
+    <MediaTemplate/>
+    
+    <!-- TODO: Figure out if I want to deal with downgrades or not (probably not) -->
+		<!--<MajorUpgrade AllowDowngrades="no" DowngradeErrorMessage="A newer version of HDHomeRun System Tray has been installed.  Please remove that version before running HDHomeRun System Tray setup."
+			MigrateFeatures="no" Schedule="afterInstallValidate"/>-->
+		
+		<!-- UPGRADES -->
+    <!--<Upgrade Id='E9655935-8B9E-4BB4-A452-302EF25F0232'>
+      <UpgradeVersion OnlyDetect="no" Property="PATCHFOUND" IncludeMinimum="yes" IncludeMaximum="yes"
+        Minimum="1.0.0" Maximum="$(var.ProjectVersion.4)"/>
+    </Upgrade>-->
+
+		<!-- DISALLOW ADVERTISED SHORTCUTS -->
+		<Property Id="DISABLEADVTSHORTCUTS" Value="1" />
+
+		<!-- DISALLOW CHANGE OPTION -->
+		<Property Id="ARPNOMODIFY" Value="1" />
+
+    <!-- ENVIRONMENTAL CONDITION: Windows 10 or higher -->
+    <Condition Message='HDHomeRun System Tray requires Microsoft Windows 10 (or higher).'>
+      (VersionNT >= A00)
+    </Condition>
+
+    <!-- ENVIRONMENTAL CONDITION: Microsoft .NET 4.7.2 -->
+    <PropertyRef Id="WIX_IS_NETFRAMEWORK_472_OR_LATER_INSTALLED"/>
+    <Condition Message="The Microsoft .NET Framework version 4.7.2 is not installed. Please install before installing HDHomeRun System Tray.">
+      <![CDATA[Installed OR WIX_IS_NETFRAMEWORK_472_OR_LATER_INSTALLED]]>
+    </Condition>
+
+
+    <Feature Id="ProductFeature" Title="setup" Level="1">
+			<ComponentGroupRef Id="ProductComponents" />
+		</Feature>
+	</Product>
+
+	<Fragment>
+		<Directory Id="TARGETDIR" Name="SourceDir">
+			<Directory Id="ProgramFilesFolder">
+				<Directory Id="INSTALLFOLDER" Name="setup" />
+			</Directory>
+		</Directory>
+	</Fragment>
+
+	<Fragment>
+		<ComponentGroup Id="ProductComponents" Directory="INSTALLFOLDER">
+			<!-- TODO: Remove the comments around this Component element and the ComponentRef below in order to add resources to this installer. -->
+			<!-- <Component Id="ProductComponent"> -->
+				<!-- TODO: Insert files, registry keys, and other resources here. -->
+			<!-- </Component> -->
+		</ComponentGroup>
+	</Fragment>
+</Wix>

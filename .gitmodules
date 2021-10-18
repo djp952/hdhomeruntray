@@ -1,0 +1,6 @@
+[submodule "libhdhomerun"]
+	path = depends/libhdhomerun
+	url = https://github.com/djp952/libhdhomerun.git
+[submodule "build"]
+	path = depends/build
+	url = https://github.com/djp952/build.git
