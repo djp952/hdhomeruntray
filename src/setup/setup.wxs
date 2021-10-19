@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+
   <!-- Version -->
   <?include $(var.ProjectDir)..\..\tmp\version\version.wxi ?>
-  
+
   <!-- Build Environment -->
   <?include $(var.ProjectDir)buildenv.wxi ?>
 
@@ -11,26 +12,26 @@
     Language="1033"
     Version="$(var.ProjectVersion.4)"
     Manufacturer="ZukiSoft"
-    UpgradeCode="E9655935-8B9E-4BB4-A452-302EF25F0232"> <!-- NEVER CHANGE THE UPGRADE CODE -->
+    UpgradeCode="E9655935-8B9E-4BB4-A452-302EF25F0232">
+    <!-- NEVER CHANGE THE UPGRADE CODE -->
 
     <Package InstallerVersion="405" Compressed="yes" InstallPrivileges="elevated" InstallScope="perMachine"/>
-    <MediaTemplate/>
-    
-    <!-- TODO: Figure out if I want to deal with downgrades or not (probably not) -->
-		<!--<MajorUpgrade AllowDowngrades="no" DowngradeErrorMessage="A newer version of HDHomeRun System Tray has been installed.  Please remove that version before running HDHomeRun System Tray setup."
-			MigrateFeatures="no" Schedule="afterInstallValidate"/>-->
-		
-		<!-- UPGRADES -->
-    <!--<Upgrade Id='E9655935-8B9E-4BB4-A452-302EF25F0232'>
-      <UpgradeVersion OnlyDetect="no" Property="PATCHFOUND" IncludeMinimum="yes" IncludeMaximum="yes"
-        Minimum="1.0.0" Maximum="$(var.ProjectVersion.4)"/>
-    </Upgrade>-->
+    <Media Id="1" Cabinet="hdhomeruntray.cab" EmbedCab="yes" />
 
-		<!-- DISALLOW ADVERTISED SHORTCUTS -->
-		<Property Id="DISABLEADVTSHORTCUTS" Value="1" />
+    <Upgrade Id='E9655935-8B9E-4BB4-A452-302EF25F0232'>
+      <UpgradeVersion OnlyDetect="no" Property="PATCHFOUND" IncludeMinimum="yes" IncludeMaximum="no"
+        Minimum="0.0.0.1" Maximum="$(var.ProjectVersion.4)"/>
+    </Upgrade>
 
-		<!-- DISALLOW CHANGE OPTION -->
-		<Property Id="ARPNOMODIFY" Value="1" />
+    <!-- DISALLOW DOWNGRADES -->
+    <MajorUpgrade AllowDowngrades="no" DowngradeErrorMessage="A newer version of HDHomeRun System Tray has been installed. Please remove that version before running HDHomeRun System Tray setup."
+			MigrateFeatures="no" Schedule="afterInstallValidate"/>
+
+    <!-- DISALLOW ADVERTISED SHORTCUTS -->
+    <Property Id="DISABLEADVTSHORTCUTS" Value="1" />
+
+    <!-- DISALLOW CHANGE OPTION -->
+    <Property Id="ARPNOMODIFY" Value="1" />
 
     <!-- ENVIRONMENTAL CONDITION: Windows 10 or higher -->
     <Condition Message='HDHomeRun System Tray requires Microsoft Windows 10 (or higher).'>
@@ -43,30 +44,42 @@
       <![CDATA[Installed OR WIX_IS_NETFRAMEWORK_472_OR_LATER_INSTALLED]]>
     </Condition>
 
+    <Directory Id="TARGETDIR" Name="SourceDir">
 
-    <Feature Id="ProductFeature" Title="setup" Level="1">
+      <!-- C:\Program Files (x86)\ZukiSoft\HDHomeRun System Tray -->
+      <Directory Id="ProgramFilesFolder">
+        <Directory Id="ZukiSoftBinFolder" Name="ZukiSoft">
+          <Directory Id="HDHomeRunTrayBinFolder" Name="HDHomeRun System Tray"/>
+        </Directory>
+      </Directory>
 
-      <!-- Include Visual C++ runtime library merge modules -->
+      <!-- Start Menu -->
+      <Directory Id="ProgramMenuFolder"/>
+
+    </Directory>
+
+    <!-- Default feature and components -->
+    <Feature Id="feature_hdhomeruntray" Title="HDHomeRun System Tray" Level="1" TypicalDefault="install"
+      Description="Installs the HDHomeRun System Tray application" Absent="disallow" AllowAdvertise="no">
       <?include addvcrt.wxi ?>
+      <ComponentGroupRef Id="componentgroup_hdhomeruntray"/>
+    </Feature>
 
-      <ComponentGroupRef Id="ProductComponents" />
-		</Feature>
-	</Product>
+    <ComponentGroup Id="componentgroup_hdhomeruntray">
+      <ComponentRef Id="hdhomeruntray_exe"/>
+      <ComponentRef Id="hdhomeruntray_interop_dll"/>
+    </ComponentGroup>
 
-	<Fragment>
-		<Directory Id="TARGETDIR" Name="SourceDir">
-			<Directory Id="ProgramFilesFolder">
-				<Directory Id="INSTALLFOLDER" Name="setup" />
-			</Directory>
-		</Directory>
-	</Fragment>
+    <Component Id="hdhomeruntray_exe" Directory="ZukiSoftBinFolder" Guid="16F99373-B2BB-49C0-907C-08A6AF1CBE83">
+      <File Id="hdhomeruntray.exe" Source="$(var.ProjectBinFolder)hdhomeruntray.exe" Vital="yes" KeyPath="yes"/>
+      <Shortcut Id="hdhomeruntray_exe_shortcut" Directory="ProgramMenuFolder" Advertise="yes" Name="HDHomeRun System Tray" Description="HDHomeRun System Tray" WorkingDirectory="ZukiSoftBinFolder"/>
+    </Component>
 
-	<Fragment>
-		<ComponentGroup Id="ProductComponents" Directory="INSTALLFOLDER">
-			<!-- TODO: Remove the comments around this Component element and the ComponentRef below in order to add resources to this installer. -->
-			<!-- <Component Id="ProductComponent"> -->
-				<!-- TODO: Insert files, registry keys, and other resources here. -->
-			<!-- </Component> -->
-		</ComponentGroup>
-	</Fragment>
+    <Component Id="hdhomeruntray_interop_dll" Directory="ZukiSoftBinFolder" Guid="3A95EABB-D8FD-4945-89A3-918253AF419A">
+      <File Id="hdhomeruntray.interop.dll" Source="$(var.ProjectBinFolder)hdhomeruntray.interop.dll" Vital="yes" KeyPath="yes">
+      </File>
+    </Component>
+
+  </Product>
+
 </Wix>

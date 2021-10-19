@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Include>
 
-  <!-- ProjectBinPath -->
+  <!-- ProjectBinFolder -->
   <!-- Set to the platform-specific \bin path  for the project -->
-  <?define ProjectBinPath = $(var.ProjectDir)..\..\bin\$(var.Configuration)\ ?>
+  <?define ProjectBinFolder = $(var.ProjectDir)..\..\bin\$(var.Configuration)\ ?>
 
-  <!-- SourcePath -->
+  <!-- ProjectSourceFolder -->
   <!-- Set to the root \src path for the project -->
-  <?define ProjectSourcePath = $(var.ProjectDir)..\..\src\ ?>
+  <?define ProjectSourceFolder = $(var.ProjectDir)..\..\src\ ?>
 
 </Include>

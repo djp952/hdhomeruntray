@@ -15,7 +15,7 @@
     <ProjectGuid>{717D3B61-E1FD-4960-8188-0B2215F6A7FB}</ProjectGuid>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <Keyword>ManagedCProj</Keyword>
-    <RootNamespace>hdhomeruntrayinterop</RootNamespace>
+    <RootNamespace>hdhomeruntray.interop</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
