@@ -20,48 +20,74 @@
 // SOFTWARE.
 //---------------------------------------------------------------------------
 
-#ifndef __STDAFX_H_
-#define __STDAFX_H_
-#pragma once
+#include "stdafx.h"
+
+#include "TunerDevice.h"
+
+#pragma warning(push, 4)
+
+namespace zuki::hdhomeruntray::interop {
 
 //---------------------------------------------------------------------------
-// CHECK_DISPOSED
+// TunerDevice Constructor (private)
 //
-// Used throughout to make object disposed exceptions easier to read and not
-// require hard-coding a class name into the statement.  This will throw the
-// function name, but that's actually better in my opinion
-
-#define CHECK_DISPOSED(__flag) \
-	if(__flag) throw gcnew ObjectDisposedException(gcnew String(__FUNCTION__));
-
-//-----------------------------------------------------------------------------
-// CLRASSERT
+// Arguments:
 //
-// Used in place of directly calling Debug::Assert() in the code to ensure that
-// it won't fire for RELEASE builds.  C++/CLI does not define the necessary DEBUG
-// ConditionalAttribute to suppress it
+//	device			- Pointer to the unmanaged device information
 
-#ifdef _DEBUG
-#define CLRASSERT(condition, ...) System::Diagnostics::Debug::Assert(condition, ##__VA_ARGS__)
-#else
-#define CLRASSERT(condition, ...)
-#endif
+TunerDevice::TunerDevice(struct hdhomerun_discover_device_v3_t const* device) : Device(device)
+{
+	CLRASSERT(device != nullptr);
 
-//---------------------------------------------------------------------------
-// Win32 Declarations
-
-#define WINVER				_WIN32_WINNT_WIN10
-#define	_WIN32_WINNT		_WIN32_WINNT_WIN10
-#define	_WIN32_IE			_WIN32_IE_IE110
-
-#include <WinSock2.h>
-#include <Windows.h>
+	// TODO: Assign local properties here
+}
 
 //---------------------------------------------------------------------------
-// libhdhomerun
+// TunerDevice::Create (internal)
+//
+// Creates a new TunerDevice instance
+//
+// Arguments:
+//
+//	device			- Pointer to the unmanaged device information
 
-#include <hdhomerun.h>				// Include HDHomeRun declarations
+TunerDevice^ TunerDevice::Create(struct hdhomerun_discover_device_v3_t const* device)
+{
+	return gcnew TunerDevice(device);
+}
+
+//---------------------------------------------------------------------------
+// TunerDevice::DeviceID::get
+//
+// Gets the tuner device identifier
+
+String^ TunerDevice::DeviceID::get(void)
+{
+	return m_deviceid;
+}
+
+//---------------------------------------------------------------------------
+// TunerDevice::IsLegacy::get
+//
+// Get a flag indicating if the tuner device is a legacy device
+
+bool TunerDevice::IsLegacy::get(void)
+{
+	return m_islegacy;
+}
+
+//---------------------------------------------------------------------------
+// TunerDevice::TunerCount::get
+//
+// Gets the number of individual device tuners on the device
+
+int TunerDevice::TunerCount::get(void)
+{
+	return m_tunercount;
+}
 
 //---------------------------------------------------------------------------
 
-#endif	// __STDAFX_H_
+} // zuki::hdhomeruntray::interop
+
+#pragma warning(pop)

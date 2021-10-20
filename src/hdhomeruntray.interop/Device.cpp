@@ -20,48 +20,60 @@
 // SOFTWARE.
 //---------------------------------------------------------------------------
 
-#ifndef __STDAFX_H_
-#define __STDAFX_H_
-#pragma once
+#include "stdafx.h"
+
+#include "Device.h"
+
+#pragma warning(push, 4)
+
+namespace zuki::hdhomeruntray::interop {
 
 //---------------------------------------------------------------------------
-// CHECK_DISPOSED
+// Device Constructor (protected)
 //
-// Used throughout to make object disposed exceptions easier to read and not
-// require hard-coding a class name into the statement.  This will throw the
-// function name, but that's actually better in my opinion
-
-#define CHECK_DISPOSED(__flag) \
-	if(__flag) throw gcnew ObjectDisposedException(gcnew String(__FUNCTION__));
-
-//-----------------------------------------------------------------------------
-// CLRASSERT
+// Arguments:
 //
-// Used in place of directly calling Debug::Assert() in the code to ensure that
-// it won't fire for RELEASE builds.  C++/CLI does not define the necessary DEBUG
-// ConditionalAttribute to suppress it
+//	device			- Pointer to the unmanaged device information
 
-#ifdef _DEBUG
-#define CLRASSERT(condition, ...) System::Diagnostics::Debug::Assert(condition, ##__VA_ARGS__)
-#else
-#define CLRASSERT(condition, ...)
-#endif
+Device::Device(struct hdhomerun_discover_device_v3_t const* device)
+{
+	CLRASSERT(device != nullptr);
 
-//---------------------------------------------------------------------------
-// Win32 Declarations
-
-#define WINVER				_WIN32_WINNT_WIN10
-#define	_WIN32_WINNT		_WIN32_WINNT_WIN10
-#define	_WIN32_IE			_WIN32_IE_IE110
-
-#include <WinSock2.h>
-#include <Windows.h>
+	// TODO: Assign local properties here
+}
 
 //---------------------------------------------------------------------------
-// libhdhomerun
+// Device::BaseURL::get
+//
+// Gets the device web interface base URL
 
-#include <hdhomerun.h>				// Include HDHomeRun declarations
+String^ Device::BaseURL::get(void)
+{
+	return m_baseurl;
+}
+
+//---------------------------------------------------------------------------
+// Device::DeviceType::get
+//
+// Gets the device type identifier
+
+zuki::hdhomeruntray::interop::DeviceType Device::DeviceType::get(void)
+{
+	return m_devicetype;
+}
+
+//---------------------------------------------------------------------------
+// Device::IPAddress::get
+//
+// Get the IPv4 address of the device
+
+System::Net::IPAddress^ Device::IPAddress::get(void)
+{
+	return m_ipaddress;
+}
 
 //---------------------------------------------------------------------------
 
-#endif	// __STDAFX_H_
+} // zuki::hdhomeruntray::interop
+
+#pragma warning(pop)

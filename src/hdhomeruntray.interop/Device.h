@@ -20,48 +20,74 @@
 // SOFTWARE.
 //---------------------------------------------------------------------------
 
-#ifndef __STDAFX_H_
-#define __STDAFX_H_
+#ifndef __DEVICE_H_
+#define __DEVICE_H_
 #pragma once
 
+#include "DeviceType.h"
+
+#pragma warning(push, 4)
+
+using namespace System;
+using namespace System::Net;
+
+namespace zuki::hdhomeruntray::interop {
+
 //---------------------------------------------------------------------------
-// CHECK_DISPOSED
+// Class Device (abstract)
 //
-// Used throughout to make object disposed exceptions easier to read and not
-// require hard-coding a class name into the statement.  This will throw the
-// function name, but that's actually better in my opinion
-
-#define CHECK_DISPOSED(__flag) \
-	if(__flag) throw gcnew ObjectDisposedException(gcnew String(__FUNCTION__));
-
-//-----------------------------------------------------------------------------
-// CLRASSERT
-//
-// Used in place of directly calling Debug::Assert() in the code to ensure that
-// it won't fire for RELEASE builds.  C++/CLI does not define the necessary DEBUG
-// ConditionalAttribute to suppress it
-
-#ifdef _DEBUG
-#define CLRASSERT(condition, ...) System::Diagnostics::Debug::Assert(condition, ##__VA_ARGS__)
-#else
-#define CLRASSERT(condition, ...)
-#endif
-
-//---------------------------------------------------------------------------
-// Win32 Declarations
-
-#define WINVER				_WIN32_WINNT_WIN10
-#define	_WIN32_WINNT		_WIN32_WINNT_WIN10
-#define	_WIN32_IE			_WIN32_IE_IE110
-
-#include <WinSock2.h>
-#include <Windows.h>
-
-//---------------------------------------------------------------------------
-// libhdhomerun
-
-#include <hdhomerun.h>				// Include HDHomeRun declarations
-
+// Describes an individual HDHomeRun device
 //---------------------------------------------------------------------------
 
-#endif	// __STDAFX_H_
+public ref class Device abstract
+{
+public:
+
+	//-----------------------------------------------------------------------
+	// Properties
+
+	// BaseURL
+	//
+	// Gets the device web interface base URL
+	property String^ BaseURL
+	{
+		String^ get(void);
+	}
+
+	// DeviceType
+	//
+	// Gets the device type identifier
+	property zuki::hdhomeruntray::interop::DeviceType DeviceType
+	{
+		zuki::hdhomeruntray::interop::DeviceType get(void);
+	}
+
+	// IPAddress
+	//
+	// Get the IPv4 address of the device
+	property System::Net::IPAddress^ IPAddress
+	{
+		System::Net::IPAddress^ get(void);
+	}
+
+protected:
+
+	// Instance Constructor
+	//
+	Device(struct hdhomerun_discover_device_v3_t const* device);
+
+	//-----------------------------------------------------------------------
+	// Member Variables
+
+	String^										m_baseurl;		// Device base URL string
+	zuki::hdhomeruntray::interop::DeviceType	m_devicetype;	// Device type flag
+	System::Net::IPAddress^						m_ipaddress;	// Device IPv4 address
+};
+
+//---------------------------------------------------------------------------
+
+} // zuki::hdhomeruntray::interop
+
+#pragma warning(pop)
+
+#endif	// __DEVICE_H_

@@ -20,48 +20,64 @@
 // SOFTWARE.
 //---------------------------------------------------------------------------
 
-#ifndef __STDAFX_H_
-#define __STDAFX_H_
-#pragma once
+#include "stdafx.h"
+
+#include "StorageDevice.h"
+
+#pragma warning(push, 4)
+
+namespace zuki::hdhomeruntray::interop {
 
 //---------------------------------------------------------------------------
-// CHECK_DISPOSED
+// StorageDevice Constructor (private)
 //
-// Used throughout to make object disposed exceptions easier to read and not
-// require hard-coding a class name into the statement.  This will throw the
-// function name, but that's actually better in my opinion
-
-#define CHECK_DISPOSED(__flag) \
-	if(__flag) throw gcnew ObjectDisposedException(gcnew String(__FUNCTION__));
-
-//-----------------------------------------------------------------------------
-// CLRASSERT
+// Arguments:
 //
-// Used in place of directly calling Debug::Assert() in the code to ensure that
-// it won't fire for RELEASE builds.  C++/CLI does not define the necessary DEBUG
-// ConditionalAttribute to suppress it
+//	device			- Pointer to the unmanaged device information
 
-#ifdef _DEBUG
-#define CLRASSERT(condition, ...) System::Diagnostics::Debug::Assert(condition, ##__VA_ARGS__)
-#else
-#define CLRASSERT(condition, ...)
-#endif
+StorageDevice::StorageDevice(struct hdhomerun_discover_device_v3_t const* device) : Device(device)
+{
+	CLRASSERT(device != nullptr);
 
-//---------------------------------------------------------------------------
-// Win32 Declarations
-
-#define WINVER				_WIN32_WINNT_WIN10
-#define	_WIN32_WINNT		_WIN32_WINNT_WIN10
-#define	_WIN32_IE			_WIN32_IE_IE110
-
-#include <WinSock2.h>
-#include <Windows.h>
+	// TODO: Assign local properties here
+}
 
 //---------------------------------------------------------------------------
-// libhdhomerun
+// StorageDevice::Create (internal)
+//
+// Creates a new StorageDevice instance
+//
+// Arguments:
+//
+//	device			- Pointer to the unmanaged device information
 
-#include <hdhomerun.h>				// Include HDHomeRun declarations
+StorageDevice^ StorageDevice::Create(struct hdhomerun_discover_device_v3_t const* device)
+{
+	return gcnew StorageDevice(device);
+}
+
+//---------------------------------------------------------------------------
+// StorageDevice::StorageID::get
+//
+// Gets the storage device identifier
+
+String^ StorageDevice::StorageID::get(void)
+{
+	return m_storageid;
+}
+
+//---------------------------------------------------------------------------
+// StorageDevice::StorageURL::get
+//
+// Gets the storage device data URL
+
+String^ StorageDevice::StorageURL::get(void)
+{
+	return m_storageurl;
+}
 
 //---------------------------------------------------------------------------
 
-#endif	// __STDAFX_H_
+} // zuki::hdhomeruntray::interop
+
+#pragma warning(pop)

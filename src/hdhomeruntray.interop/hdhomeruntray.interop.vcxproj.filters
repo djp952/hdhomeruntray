@@ -74,6 +74,27 @@
     <ClInclude Include="..\..\depends\libhdhomerun\hdhomerun_video.h">
       <Filter>External Libraries\libhdhomerun\Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="DiscoveryMethod.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ReadOnlyListEnumerator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DeviceCollection.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Device.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DeviceType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TunerDevice.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="StorageDevice.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AssemblyInfo.cpp">
@@ -117,6 +138,21 @@
     </ClCompile>
     <ClCompile Include="..\..\depends\libhdhomerun\hdhomerun_video.c">
       <Filter>External Libraries\libhdhomerun\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ReadOnlyListEnumerator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DeviceCollection.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Device.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="StorageDevice.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TunerDevice.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
