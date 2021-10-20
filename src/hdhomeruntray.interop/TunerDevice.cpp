@@ -33,13 +33,14 @@ namespace zuki::hdhomeruntray::interop {
 //
 // Arguments:
 //
-//	device			- Pointer to the unmanaged device information
+//	device			- Reference to the unmanaged device information
 
-TunerDevice::TunerDevice(struct hdhomerun_discover_device_v3_t const* device) : Device(device)
+TunerDevice::TunerDevice(struct hdhomerun_discover_device_v3_t const& device) : Device(device)
 {
-	CLRASSERT(device != nullptr);
-
-	// TODO: Assign local properties here
+	m_deviceid = device.device_id.ToString("00000000");
+	m_islegacy = device.is_legacy;
+	m_lineupurl = gcnew String(device.lineup_url);
+	m_tunercount = device.tuner_count;
 }
 
 //---------------------------------------------------------------------------
@@ -49,9 +50,9 @@ TunerDevice::TunerDevice(struct hdhomerun_discover_device_v3_t const* device) : 
 //
 // Arguments:
 //
-//	device			- Pointer to the unmanaged device information
+//	device			- Reference to the unmanaged device information
 
-TunerDevice^ TunerDevice::Create(struct hdhomerun_discover_device_v3_t const* device)
+TunerDevice^ TunerDevice::Create(struct hdhomerun_discover_device_v3_t const& device)
 {
 	return gcnew TunerDevice(device);
 }
@@ -74,6 +75,16 @@ String^ TunerDevice::DeviceID::get(void)
 bool TunerDevice::IsLegacy::get(void)
 {
 	return m_islegacy;
+}
+
+//---------------------------------------------------------------------------
+// TunerDevice::LineupURL
+//
+// Gets the tuner lineup discovery URL
+
+String^ TunerDevice::LineupURL::get(void)
+{
+	return m_lineupurl;
 }
 
 //---------------------------------------------------------------------------

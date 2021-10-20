@@ -74,7 +74,7 @@ protected:
 
 	// Instance Constructor
 	//
-	Device(struct hdhomerun_discover_device_v3_t const* device);
+	Device(struct hdhomerun_discover_device_v3_t const& device);
 
 	//-----------------------------------------------------------------------
 	// Member Variables

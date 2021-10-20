@@ -21,6 +21,7 @@
 //---------------------------------------------------------------------------
 
 using System.Windows.Forms;
+using zuki.hdhomeruntray.interop;
 
 namespace hdhomeruntray
 {
@@ -29,6 +30,12 @@ namespace hdhomeruntray
 		public MainForm()
 		{
 			InitializeComponent();
+		}
+
+		private void button1_Click(object sender, System.EventArgs e)
+		{
+			// remove me; exercising the collection
+			DeviceCollection devices = DeviceCollection.Create();
 		}
 	}
 }

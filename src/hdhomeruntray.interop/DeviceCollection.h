@@ -47,6 +47,12 @@ public:
 	//-----------------------------------------------------------------------
 	// Member Functions
 
+	// Create (static)
+	//
+	// Creates a new DeviceCollection instance
+	static DeviceCollection^ Create(void);
+	static DeviceCollection^ Create(DiscoveryMethod method);
+
 	// GetEnumerator
 	//
 	// Returns a generic IEnumerator<T> for the member collection
@@ -74,20 +80,11 @@ public:
 internal:
 
 	//-----------------------------------------------------------------------
-	// Internal Member Functions
-
-	// Discover (static)
-	//
-	// Creates a new DeviceCollection instance
-	static DeviceCollection^ Discover(void);
-	static DeviceCollection^ Discover(DiscoveryMethod method);
-
-	//-----------------------------------------------------------------------
 	// Internal Fields
 
 	// Empty (static)
 	//
-	// Returns an empty profile collection instance
+	// Returns an empty device collection instance
 	static initonly DeviceCollection^ Empty = gcnew DeviceCollection(gcnew List<Device^>());
 
 private:
@@ -98,6 +95,16 @@ private:
 
 	//-----------------------------------------------------------------------
 	// Private Member Functions
+
+	// DiscoverBroadcast (static)
+	//
+	// Executes a broadcast device discovery
+	static DeviceCollection^ DiscoverBroadcast(void);
+
+	// DiscoverHttp (static)
+	//
+	// Executes an HTTP device discovery
+	static DeviceCollection^ DiscoverHttp(void);
 
 	// GetEnumerator (IEnumerable)
 	//

@@ -22,8 +22,12 @@
 
 #include "stdafx.h"
 
+#include <memory>
+
 #include "DeviceCollection.h"
 #include "ReadOnlyListEnumerator.h"
+#include "StorageDevice.h"
+#include "TunerDevice.h"
 
 #pragma warning(push, 4)
 
@@ -38,7 +42,7 @@ namespace zuki::hdhomeruntray::interop {
 
 DeviceCollection::DeviceCollection(List<Device^>^ devices) : m_devices(devices)
 {
-	if(Object::ReferenceEquals(devices, nullptr)) throw gcnew ArgumentNullException("profiles");
+	if(Object::ReferenceEquals(devices, nullptr)) throw gcnew ArgumentNullException("devices");
 }
 
 //---------------------------------------------------------------------------
@@ -62,7 +66,7 @@ int DeviceCollection::Count::get(void)
 }
 
 //---------------------------------------------------------------------------
-// DeviceCollection::Discover (static, internal)
+// DeviceCollection::Create (static)
 //
 // Creates a new DeviceCollection instance by executing a discovery
 //
@@ -70,13 +74,13 @@ int DeviceCollection::Count::get(void)
 //
 //  NONE
 
-DeviceCollection^ DeviceCollection::Discover(void)
+DeviceCollection^ DeviceCollection::Create(void)
 {
-	return Discover(DiscoveryMethod::Broadcast);
+	return Create(DiscoveryMethod::Broadcast);
 }
 
 //---------------------------------------------------------------------------
-// DeviceCollection::Discover (static, internal)
+// DeviceCollection::Create (static)
 //
 // Creates a new DeviceCollection instance by executing a discovery
 //
@@ -84,9 +88,56 @@ DeviceCollection^ DeviceCollection::Discover(void)
 //
 //  method		- Discovery method to be used
 
-DeviceCollection^ DeviceCollection::Discover(DiscoveryMethod method)
+DeviceCollection^ DeviceCollection::Create(DiscoveryMethod method)
 {
-	return nullptr;
+	if(method == DiscoveryMethod::Broadcast) return DiscoverBroadcast();
+	else if(method == DiscoveryMethod::Http) return DiscoverHttp();
+	else throw gcnew ArgumentOutOfRangeException("method");
+}
+
+//---------------------------------------------------------------------------
+// DeviceCollection::DiscoverBroadcast (static, private)
+//
+// Executes a broadcast device discovery
+//
+// Arguments:
+//
+//	NONE
+
+DeviceCollection^ DeviceCollection::DiscoverBroadcast(void)
+{
+	List<Device^>^ discovered = gcnew List<Device^>();				// Collection of discovered devices
+
+	// Allocate enough heap storage to hold up to 64 enumerated devices on the network
+	std::unique_ptr<struct hdhomerun_discover_device_v3_t[]> devices(new struct hdhomerun_discover_device_v3_t[64]);
+
+	// Use the libhdhomerun broadcast discovery mechanism to find all devices on the local network
+	int result = hdhomerun_discover_find_devices_custom_v3(0, HDHOMERUN_DEVICE_TYPE_WILDCARD,
+		HDHOMERUN_DEVICE_ID_WILDCARD, &devices[0], 64);
+	if(result == -1) throw gcnew Exception("hdhomerun_discover_find_devices_custom_v3 failed");
+
+	for(int index = 0; index < result; index++) {
+
+		// Create the appropriate device object type based on the reported device type
+		if(devices[index].device_type == HDHOMERUN_DEVICE_TYPE_TUNER) discovered->Add(TunerDevice::Create(devices[index]));
+		else if(devices[index].device_type == HDHOMERUN_DEVICE_TYPE_STORAGE) discovered->Add(StorageDevice::Create(devices[index]));
+	}
+
+	return gcnew DeviceCollection(discovered);
+}
+
+//---------------------------------------------------------------------------
+// DeviceCollection::DiscoverHttp (static, private)
+//
+// Executes an HTTP device discovery
+//
+// Arguments:
+//
+//	NONE
+
+DeviceCollection^ DeviceCollection::DiscoverHttp(void)
+{
+	return DeviceCollection::Empty;
 }
 
 //---------------------------------------------------------------------------

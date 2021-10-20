@@ -33,13 +33,13 @@ namespace zuki::hdhomeruntray::interop {
 //
 // Arguments:
 //
-//	device			- Pointer to the unmanaged device information
+//	device			- Reference to the unmanaged device information
 
-Device::Device(struct hdhomerun_discover_device_v3_t const* device)
+Device::Device(struct hdhomerun_discover_device_v3_t const& device)
 {
-	CLRASSERT(device != nullptr);
-
-	// TODO: Assign local properties here
+	m_baseurl = gcnew String(device.base_url);
+	m_devicetype = static_cast<zuki::hdhomeruntray::interop::DeviceType>(device.device_type);
+	m_ipaddress = gcnew System::Net::IPAddress(static_cast<uint32_t>(System::Net::IPAddress::HostToNetworkOrder(static_cast<int32_t>(device.ip_addr))));
 }
 
 //---------------------------------------------------------------------------

@@ -20,32 +20,47 @@
 // SOFTWARE.
 //---------------------------------------------------------------------------
 
-#ifndef __DEVICETYPE_H_
-#define __DEVICETYPE_H_
-#pragma once
+#include <WinSock2.h>
+#include <Windows.h>
 
-#pragma warning(push, 4)				// Enable maximum compiler warnings
+#ifdef __CLR_VER
+#error dllmain.cpp cannot be compiled with Common Language Runtime (CLR) support
+#endif
 
-using namespace System;
-
-namespace zuki::hdhomeruntray::interop {
+#pragma warning(push, 4)
 
 //---------------------------------------------------------------------------
-// Enum DeviceType
+// DllMain
 //
-// Indicates the type of a HDHomeRun device
-//---------------------------------------------------------------------------
+// Dynamic link library entry point
+//
+// Arguments:
+//
+//	instance		- Module base address
+//	reason			- Reason DllMain is being invoked
+//	context			- Load context information
 
-public enum class DeviceType
+extern "C" int APIENTRY DllMain(HINSTANCE /*instance*/, DWORD reason, LPVOID /*context*/)
 {
-	Tuner		= HDHOMERUN_DEVICE_TYPE_TUNER,		// Tuner device
-	Storage		= HDHOMERUN_DEVICE_TYPE_STORAGE,	// Storage (DVR) device
-};
+	WSADATA wsadata = {};				// Windows sockets startup structure
+
+	switch(reason) {
+
+		case DLL_PROCESS_ATTACH:
+
+			WSAStartup(MAKEWORD(2, 2), &wsadata);
+			break;
+
+		case DLL_PROCESS_DETACH:
+
+			WSACleanup();
+			break;
+	}
+
+	return TRUE;
+}
 
 //---------------------------------------------------------------------------
-
-} // zuki::hdomeruntray::interop
 
 #pragma warning(pop)
 
-#endif	// __DEVICETYPE_H_

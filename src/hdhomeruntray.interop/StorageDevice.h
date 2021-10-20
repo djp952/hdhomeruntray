@@ -70,13 +70,13 @@ internal:
 	// Create
 	//
 	// Creates a new StorageDevice instance
-	static StorageDevice^ Create(struct hdhomerun_discover_device_v3_t const* device);
+	static StorageDevice^ Create(struct hdhomerun_discover_device_v3_t const& device);
 
 private:
 
 	// Instance Constructor
 	//
-	StorageDevice(struct hdhomerun_discover_device_v3_t const* device);
+	StorageDevice(struct hdhomerun_discover_device_v3_t const& device);
 
 	//-----------------------------------------------------------------------
 	// Member Variables

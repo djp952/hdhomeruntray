@@ -62,6 +62,14 @@ public:
 		bool get(void);
 	}
 
+	// LineupURL
+	//
+	// Gets the tuner lineup discovery URL
+	property String^ LineupURL
+	{
+		String^ get(void);
+	}
+
 	// TunerCount
 	//
 	// Gets the number of individual device tuners on the device
@@ -78,19 +86,20 @@ internal:
 	// Create
 	//
 	// Creates a new TunerDevice instance
-	static TunerDevice^ Create(struct hdhomerun_discover_device_v3_t const* device);
+	static TunerDevice^ Create(struct hdhomerun_discover_device_v3_t const& device);
 
 private:
 
 	// Instance Constructor
 	//
-	TunerDevice(struct hdhomerun_discover_device_v3_t const* device);
+	TunerDevice(struct hdhomerun_discover_device_v3_t const& device);
 
 	//-----------------------------------------------------------------------
 	// Member Variables
 
 	String^					m_deviceid;			// Tuner device identifier
 	bool					m_islegacy;			// Legacy tuner device flag
+	String^					m_lineupurl;		// URL to lineup discovery data
 	int						m_tunercount;		// Number of device tuners
 };
 

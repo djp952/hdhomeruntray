@@ -33,13 +33,12 @@ namespace zuki::hdhomeruntray::interop {
 //
 // Arguments:
 //
-//	device			- Pointer to the unmanaged device information
+//	device			- Reference to the unmanaged device information
 
-StorageDevice::StorageDevice(struct hdhomerun_discover_device_v3_t const* device) : Device(device)
+StorageDevice::StorageDevice(struct hdhomerun_discover_device_v3_t const& device) : Device(device)
 {
-	CLRASSERT(device != nullptr);
-
-	// TODO: Assign local properties here
+	m_storageid = gcnew String(device.storage_id);
+	m_storageurl = gcnew String(device.storage_url);
 }
 
 //---------------------------------------------------------------------------
@@ -49,9 +48,9 @@ StorageDevice::StorageDevice(struct hdhomerun_discover_device_v3_t const* device
 //
 // Arguments:
 //
-//	device			- Pointer to the unmanaged device information
+//	device			- Reference to the unmanaged device information
 
-StorageDevice^ StorageDevice::Create(struct hdhomerun_discover_device_v3_t const* device)
+StorageDevice^ StorageDevice::Create(struct hdhomerun_discover_device_v3_t const& device)
 {
 	return gcnew StorageDevice(device);
 }
