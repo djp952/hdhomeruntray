@@ -39,7 +39,22 @@ Device::Device(struct hdhomerun_discover_device_v3_t const& device)
 {
 	m_baseurl = gcnew String(device.base_url);
 	m_devicetype = static_cast<zuki::hdhomeruntray::interop::DeviceType>(device.device_type);
-	m_ipaddress = gcnew System::Net::IPAddress(static_cast<uint32_t>(System::Net::IPAddress::HostToNetworkOrder(static_cast<int32_t>(device.ip_addr))));
+}
+
+//---------------------------------------------------------------------------
+// Device Constructor (protected)
+//
+// Arguments:
+//
+//	device		- Reference to the JSON discovery data for the device
+//	type		- Type of device being constructed
+
+Device::Device(JObject^ device, zuki::hdhomeruntray::interop::DeviceType type) : m_devicetype(type)
+{
+	if(Object::ReferenceEquals(device, nullptr)) throw gcnew ArgumentNullException("device");
+
+	JToken^ baseurl = device->GetValue("BaseURL", StringComparison::OrdinalIgnoreCase);
+	if(!Object::ReferenceEquals(baseurl, nullptr)) m_baseurl = baseurl->ToString();
 }
 
 //---------------------------------------------------------------------------
@@ -60,16 +75,6 @@ String^ Device::BaseURL::get(void)
 zuki::hdhomeruntray::interop::DeviceType Device::DeviceType::get(void)
 {
 	return m_devicetype;
-}
-
-//---------------------------------------------------------------------------
-// Device::IPAddress::get
-//
-// Get the IPv4 address of the device
-
-System::Net::IPAddress^ Device::IPAddress::get(void)
-{
-	return m_ipaddress;
 }
 
 //---------------------------------------------------------------------------

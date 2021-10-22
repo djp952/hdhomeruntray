@@ -44,6 +44,28 @@ TunerDevice::TunerDevice(struct hdhomerun_discover_device_v3_t const& device) : 
 }
 
 //---------------------------------------------------------------------------
+// TunerDevice Constructor (private)
+//
+// Arguments:
+//
+//	device		- Reference to the JSON discovery data for the device
+
+TunerDevice::TunerDevice(JObject^ device) : Device(device, zuki::hdhomeruntray::interop::DeviceType::Tuner)
+{
+	if(Object::ReferenceEquals(device, nullptr)) throw gcnew ArgumentNullException("device");
+
+	JToken^ deviceid = device->GetValue("DeviceID", StringComparison::OrdinalIgnoreCase);
+	JToken^ islegacy = device->GetValue("Legacy", StringComparison::OrdinalIgnoreCase);
+	JToken^ lineupurl = device->GetValue("LineupURL", StringComparison::OrdinalIgnoreCase);
+	JToken^ tunercount = device->GetValue("TunerCount", StringComparison::OrdinalIgnoreCase);
+
+	if(!Object::ReferenceEquals(deviceid, nullptr)) m_deviceid = deviceid->ToObject<String^>();
+	m_islegacy = (!Object::ReferenceEquals(islegacy, nullptr) && (islegacy->ToObject<int>() == 1));
+	if(!Object::ReferenceEquals(lineupurl, nullptr)) m_lineupurl = lineupurl->ToObject<String^>();
+	m_tunercount = (!Object::ReferenceEquals(tunercount, nullptr)) ? tunercount->ToObject<int>() : 0;
+}
+
+//---------------------------------------------------------------------------
 // TunerDevice::Create (internal)
 //
 // Creates a new TunerDevice instance
@@ -54,6 +76,21 @@ TunerDevice::TunerDevice(struct hdhomerun_discover_device_v3_t const& device) : 
 
 TunerDevice^ TunerDevice::Create(struct hdhomerun_discover_device_v3_t const& device)
 {
+	return gcnew TunerDevice(device);
+}
+
+//---------------------------------------------------------------------------
+// StorageDevice::Create (internal)
+//
+// Creates a new StorageDevice instance
+//
+// Arguments:
+//
+//	device		- Reference to the JSON discovery data for the device
+
+TunerDevice^ TunerDevice::Create(JObject^ device)
+{
+	if(Object::ReferenceEquals(device, nullptr)) throw gcnew ArgumentNullException();
 	return gcnew TunerDevice(device);
 }
 

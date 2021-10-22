@@ -35,7 +35,7 @@ namespace hdhomeruntray
 		private void button1_Click(object sender, System.EventArgs e)
 		{
 			// remove me; exercising the collection
-			DeviceCollection devices = DeviceCollection.Create();
+			DeviceCollection devices = DeviceCollection.Create(DiscoveryMethod.Http);
 		}
 	}
 }

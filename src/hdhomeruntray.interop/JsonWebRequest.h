@@ -20,49 +20,66 @@
 // SOFTWARE.
 //---------------------------------------------------------------------------
 
-#ifndef __STDAFX_H_
-#define __STDAFX_H_
+#ifndef __JSONWEBREQUEST_H_
+#define __JSONWEBREQUEST_H_
 #pragma once
 
+#pragma warning(push, 4)
+
+using namespace System;
+using namespace System::Net::Http;
+using namespace System::Threading;
+
+using namespace Newtonsoft::Json;
+using namespace Newtonsoft::Json::Linq;
+
 //---------------------------------------------------------------------------
-// CHECK_DISPOSED
+// Class JsonWebRequest (internal)
 //
-// Used throughout to make object disposed exceptions easier to read and not
-// require hard-coding a class name into the statement.  This will throw the
-// function name, but that's actually better in my opinion
-
-#define CHECK_DISPOSED(__flag) \
-	if(__flag) throw gcnew ObjectDisposedException(gcnew String(__FUNCTION__));
-
-//-----------------------------------------------------------------------------
-// CLRASSERT
-//
-// Used in place of directly calling Debug::Assert() in the code to ensure that
-// it won't fire for RELEASE builds.  C++/CLI does not define the necessary DEBUG
-// ConditionalAttribute to suppress it
-
-#ifdef _DEBUG
-#define CLRASSERT(condition, ...) System::Diagnostics::Debug::Assert(condition, ##__VA_ARGS__)
-#else
-#define CLRASSERT(condition, ...)
-#endif
-
-//---------------------------------------------------------------------------
-// Win32 Declarations
-
-#define	WINVER				_WIN32_WINNT_WIN10
-#define	_WIN32_WINNT		_WIN32_WINNT_WIN10
-#define	_WIN32_IE			_WIN32_IE_IE110
-
-#include <WinSock2.h>				// Include Windows Sockets declarations
-#include <Windows.h>				// Include main Windows declarations
-#include <msclr\auto_handle.h>		// Include msclr::auto_handle<>
-
-//---------------------------------------------------------------------------
-// libhdhomerun
-
-#include <hdhomerun.h>				// Include HDHomeRun declarations
-
+// Helper class to read JSON data over HTTP
 //---------------------------------------------------------------------------
 
-#endif	// __STDAFX_H_
+public ref class JsonWebRequest
+{
+public:
+
+	//-----------------------------------------------------------------------
+	// Member Functions
+
+	// GetArray (static)
+	//
+	// Retrieves a JSON array from the provided URI
+	static JArray^ GetArray(String^ uri);
+	static JArray^ GetArray(String^ uri, CancellationToken cancel);
+
+	// GetObject (static)
+	//
+	// Retrieves a JSON object from the provided URI
+	static JObject^ GetObject(String^ uri);
+	static JObject^ GetObject(String^ uri, CancellationToken cancel);
+
+private:
+
+	// Static Constructor
+	//
+	static JsonWebRequest::JsonWebRequest();
+
+	//-----------------------------------------------------------------------
+	// Private Member Functions
+
+	// Get
+	//
+	// Generic implementation of the GetX functions
+	generic<class T> static T Get(String^ uri, CancellationToken cancel);
+
+	//-----------------------------------------------------------------------
+	// Member Variables
+
+	static HttpClient^	s_httpclient;		// Underlying HttpClient instance
+};
+
+//---------------------------------------------------------------------------
+
+#pragma warning(pop)
+
+#endif	// __JSONWEBREQUEST_H_

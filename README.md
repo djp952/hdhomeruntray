@@ -3,6 +3,7 @@
 Copyright (C)2021 Michael G. Brehm    
 [MIT LICENSE](https://opensource.org/licenses/MIT)   
    
+[__JSON.NET__](https://www.newtonsoft.com/json) - Copyright (C)2007 Newtonsoft   
 [__LIBHDHOMERUN__](https://github.com/Silicondust/libhdhomerun) - Copyright (C)2005-2018 Silicondust USA Inc   
    
 ## ADDITIONAL LICENSE INFORMATION

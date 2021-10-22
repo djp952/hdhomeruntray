@@ -95,6 +95,9 @@
     <ClInclude Include="StorageDevice.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="JsonWebRequest.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AssemblyInfo.cpp">
@@ -155,6 +158,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="dllmain.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="JsonWebRequest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

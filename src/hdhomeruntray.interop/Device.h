@@ -31,6 +31,9 @@
 using namespace System;
 using namespace System::Net;
 
+using namespace Newtonsoft::Json;
+using namespace Newtonsoft::Json::Linq;
+
 namespace zuki::hdhomeruntray::interop {
 
 //---------------------------------------------------------------------------
@@ -62,26 +65,18 @@ public:
 		zuki::hdhomeruntray::interop::DeviceType get(void);
 	}
 
-	// IPAddress
-	//
-	// Get the IPv4 address of the device
-	property System::Net::IPAddress^ IPAddress
-	{
-		System::Net::IPAddress^ get(void);
-	}
-
 protected:
 
-	// Instance Constructor
+	// Instance Constructors
 	//
 	Device(struct hdhomerun_discover_device_v3_t const& device);
+	Device(JObject^ device, zuki::hdhomeruntray::interop::DeviceType type);
 
 	//-----------------------------------------------------------------------
 	// Member Variables
 
 	String^										m_baseurl;		// Device base URL string
 	zuki::hdhomeruntray::interop::DeviceType	m_devicetype;	// Device type flag
-	System::Net::IPAddress^						m_ipaddress;	// Device IPv4 address
 };
 
 //---------------------------------------------------------------------------

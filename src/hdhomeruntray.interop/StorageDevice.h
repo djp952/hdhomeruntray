@@ -31,6 +31,9 @@
 using namespace System;
 using namespace System::Net;
 
+using namespace Newtonsoft::Json;
+using namespace Newtonsoft::Json::Linq;
+
 namespace zuki::hdhomeruntray::interop {
 
 //---------------------------------------------------------------------------
@@ -71,12 +74,14 @@ internal:
 	//
 	// Creates a new StorageDevice instance
 	static StorageDevice^ Create(struct hdhomerun_discover_device_v3_t const& device);
+	static StorageDevice^ Create(JObject^ device);
 
 private:
 
 	// Instance Constructor
 	//
 	StorageDevice(struct hdhomerun_discover_device_v3_t const& device);
+	StorageDevice(JObject^ device);
 
 	//-----------------------------------------------------------------------
 	// Member Variables

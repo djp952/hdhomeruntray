@@ -42,6 +42,24 @@ StorageDevice::StorageDevice(struct hdhomerun_discover_device_v3_t const& device
 }
 
 //---------------------------------------------------------------------------
+// StorageDevice Constructor (private)
+//
+// Arguments:
+//
+//	device		- Reference to the JSON discovery data for the device
+
+StorageDevice::StorageDevice(JObject^ device) : Device(device, zuki::hdhomeruntray::interop::DeviceType::Storage)
+{
+	if(Object::ReferenceEquals(device, nullptr)) throw gcnew ArgumentNullException("device");
+
+	JToken^ storageid = device->GetValue("StorageID", StringComparison::OrdinalIgnoreCase);
+	JToken^ storageurl = device->GetValue("StorageURL", StringComparison::OrdinalIgnoreCase);
+
+	if(!Object::ReferenceEquals(storageid, nullptr)) m_storageid = storageid->ToObject<String^>();
+	if(!Object::ReferenceEquals(storageurl, nullptr)) m_storageurl = storageurl->ToObject<String^>();
+}
+
+//---------------------------------------------------------------------------
 // StorageDevice::Create (internal)
 //
 // Creates a new StorageDevice instance
@@ -52,6 +70,21 @@ StorageDevice::StorageDevice(struct hdhomerun_discover_device_v3_t const& device
 
 StorageDevice^ StorageDevice::Create(struct hdhomerun_discover_device_v3_t const& device)
 {
+	return gcnew StorageDevice(device);
+}
+
+//---------------------------------------------------------------------------
+// StorageDevice::Create (internal)
+//
+// Creates a new StorageDevice instance
+//
+// Arguments:
+//
+//	device		- Reference to the JSON discovery data for the device
+
+StorageDevice^ StorageDevice::Create(JObject^ device)
+{
+	if(Object::ReferenceEquals(device, nullptr)) throw gcnew ArgumentNullException();
 	return gcnew StorageDevice(device);
 }
 

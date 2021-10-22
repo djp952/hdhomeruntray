@@ -5,6 +5,10 @@
   <!-- Set to the platform-specific \bin path  for the project -->
   <?define ProjectBinFolder = $(var.ProjectDir)..\..\bin\$(var.Configuration)\ ?>
 
+  <!-- ProjectPackagesFolder -->
+  <!-- Set to the root \packages path for the project -->
+  <?define ProjectPackagesFolder = $(var.ProjectDir)..\..\packages\ ?>
+
   <!-- ProjectSourceFolder -->
   <!-- Set to the root \src path for the project -->
   <?define ProjectSourceFolder = $(var.ProjectDir)..\..\src\ ?>

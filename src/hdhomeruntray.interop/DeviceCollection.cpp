@@ -25,9 +25,13 @@
 #include <memory>
 
 #include "DeviceCollection.h"
+#include "JsonWebRequest.h"
 #include "ReadOnlyListEnumerator.h"
 #include "StorageDevice.h"
 #include "TunerDevice.h"
+
+using namespace Newtonsoft::Json;
+using namespace Newtonsoft::Json::Linq;
 
 #pragma warning(push, 4)
 
@@ -137,7 +141,39 @@ DeviceCollection^ DeviceCollection::DiscoverBroadcast(void)
 
 DeviceCollection^ DeviceCollection::DiscoverHttp(void)
 {
-	return DeviceCollection::Empty;
+	List<Device^>^ discovered = gcnew List<Device^>();				// Collection of discovered devices
+
+	// TODO: CancellationSource/token
+
+	// The discovery JSON is returned as an array consisting of individual device objects
+	JArray^ devices = JsonWebRequest::GetArray("https://ipv4-api.hdhomerun.com/discover");
+	if(!Object::ReferenceEquals(devices, nullptr)) {
+
+		for each(JObject^ device in devices) {
+
+			// Gather enough information from the discovery data to determine how to proceed
+			JToken^ deviceid = device->GetValue("DeviceID", StringComparison::OrdinalIgnoreCase);
+			JToken^ storageid = device->GetValue("StorageID", StringComparison::OrdinalIgnoreCase);
+			JToken^ discoverurl = device->GetValue("DiscoverURL", StringComparison::OrdinalIgnoreCase);
+
+			// Retrieve the individual device discovery data
+			// TODO: Cancellation / Exceptions
+			if(!Object::ReferenceEquals(discoverurl, nullptr)) {
+
+				JObject^ discovery = JsonWebRequest::GetObject(discoverurl->ToObject<String^>());
+				if(!Object::ReferenceEquals(discovery, nullptr)) {
+
+					// A single device may report both tuners and storage so check for both types and
+					// process them as distinct device instances
+					if(!Object::ReferenceEquals(nullptr, deviceid)) discovered->Add(TunerDevice::Create(discovery));
+					if(!Object::ReferenceEquals(nullptr, storageid)) discovered->Add(StorageDevice::Create(discovery));
+				}
+			}
+		}
+	}
+
+	// Return the generated List<> as a new DeviceCollection instance
+	return gcnew DeviceCollection(discovered);
 }
 
 //---------------------------------------------------------------------------

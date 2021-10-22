@@ -31,6 +31,9 @@
 using namespace System;
 using namespace System::Net;
 
+using namespace Newtonsoft::Json;
+using namespace Newtonsoft::Json::Linq;
+
 namespace zuki::hdhomeruntray::interop {
 
 //---------------------------------------------------------------------------
@@ -87,12 +90,14 @@ internal:
 	//
 	// Creates a new TunerDevice instance
 	static TunerDevice^ Create(struct hdhomerun_discover_device_v3_t const& device);
+	static TunerDevice^ Create(JObject^ device);
 
 private:
 
-	// Instance Constructor
+	// Instance Constructors
 	//
 	TunerDevice(struct hdhomerun_discover_device_v3_t const& device);
+	TunerDevice(JObject^ device);
 
 	//-----------------------------------------------------------------------
 	// Member Variables

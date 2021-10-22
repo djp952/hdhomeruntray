@@ -68,6 +68,7 @@
     <ComponentGroup Id="componentgroup_hdhomeruntray">
       <ComponentRef Id="hdhomeruntray_exe"/>
       <ComponentRef Id="hdhomeruntray_interop_dll"/>
+      <ComponentRef Id="newtonsoft_json_dll"/>
     </ComponentGroup>
 
     <Component Id="hdhomeruntray_exe" Directory="ZukiSoftBinFolder" Guid="16F99373-B2BB-49C0-907C-08A6AF1CBE83">
@@ -77,6 +78,11 @@
 
     <Component Id="hdhomeruntray_interop_dll" Directory="ZukiSoftBinFolder" Guid="3A95EABB-D8FD-4945-89A3-918253AF419A">
       <File Id="hdhomeruntray.interop.dll" Source="$(var.ProjectBinFolder)hdhomeruntray.interop.dll" Vital="yes" KeyPath="yes">
+      </File>
+    </Component>
+
+    <Component Id="newtonsoft_json_dll" Directory="ZukiSoftBinFolder" Guid="26A88C3C-864D-4043-80B2-E49550877C93">
+      <File Id="Newtonsoft.Json.dll" Source="$(var.ProjectPackagesFolder)Newtonsoft.Json.13.0.1\lib\net45\Newtonsoft.Json.dll" Vital="yes" KeyPath="yes">
       </File>
     </Component>
 
