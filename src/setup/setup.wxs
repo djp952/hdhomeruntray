@@ -33,15 +33,15 @@
     <!-- DISALLOW CHANGE OPTION -->
     <Property Id="ARPNOMODIFY" Value="1" />
 
-    <!-- ENVIRONMENTAL CONDITION: Windows 10 or higher -->
-    <Condition Message='HDHomeRun System Tray requires Microsoft Windows 10 (or higher).'>
-      (VersionNT >= A00)
+    <!-- ENVIRONMENTAL CONDITION: Windows 7 or higher -->
+    <Condition Message='HDHomeRun System Tray requires Microsoft Windows 7 (or higher).'>
+      (VersionNT >= 601)
     </Condition>
 
-    <!-- ENVIRONMENTAL CONDITION: Microsoft .NET 4.7.2 -->
-    <PropertyRef Id="WIX_IS_NETFRAMEWORK_472_OR_LATER_INSTALLED"/>
-    <Condition Message="The Microsoft .NET Framework version 4.7.2 is not installed. Please install before installing HDHomeRun System Tray.">
-      <![CDATA[Installed OR WIX_IS_NETFRAMEWORK_472_OR_LATER_INSTALLED]]>
+    <!-- ENVIRONMENTAL CONDITION: Microsoft .NET 4.6.2 -->
+    <PropertyRef Id="WIX_IS_NETFRAMEWORK_462_OR_LATER_INSTALLED"/>
+    <Condition Message="The Microsoft .NET Framework version 4.6.2 is not installed. Please install before installing HDHomeRun System Tray.">
+      <![CDATA[Installed OR WIX_IS_NETFRAMEWORK_462_OR_LATER_INSTALLED]]>
     </Condition>
 
     <Directory Id="TARGETDIR" Name="SourceDir">

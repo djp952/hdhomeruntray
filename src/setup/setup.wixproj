@@ -26,7 +26,6 @@
     <Compile Include="..\..\tmp\msm\vcmergemods.wxs">
       <Link>vcmergemods.wxs</Link>
     </Compile>
-    <Compile Include="net472.wxs" />
     <Compile Include="setup.wxs" />
   </ItemGroup>
   <ItemGroup>

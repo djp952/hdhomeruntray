@@ -50,9 +50,8 @@
 //---------------------------------------------------------------------------
 // Win32 Declarations
 
-#define	WINVER				_WIN32_WINNT_WIN10
-#define	_WIN32_WINNT		_WIN32_WINNT_WIN10
-#define	_WIN32_IE			_WIN32_IE_IE110
+#define	WINVER				_WIN32_WINNT_WIN7
+#define	_WIN32_WINNT		_WIN32_WINNT_WIN7
 
 #include <WinSock2.h>				// Include Windows Sockets declarations
 #include <Windows.h>				// Include main Windows declarations
