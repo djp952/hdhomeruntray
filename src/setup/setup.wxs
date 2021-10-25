@@ -67,6 +67,7 @@
 
     <ComponentGroup Id="componentgroup_hdhomeruntray">
       <ComponentRef Id="hdhomeruntray_exe"/>
+      <ComponentRef Id="hdhomeruntray_exe_config"/>
       <ComponentRef Id="hdhomeruntray_interop_dll"/>
       <ComponentRef Id="newtonsoft_json_dll"/>
     </ComponentGroup>
@@ -74,6 +75,10 @@
     <Component Id="hdhomeruntray_exe" Directory="ZukiSoftBinFolder" Guid="16F99373-B2BB-49C0-907C-08A6AF1CBE83">
       <File Id="hdhomeruntray.exe" Source="$(var.ProjectBinFolder)hdhomeruntray.exe" Vital="yes" KeyPath="yes"/>
       <Shortcut Id="hdhomeruntray_exe_shortcut" Directory="ProgramMenuFolder" Advertise="yes" Name="HDHomeRun System Tray" Description="HDHomeRun System Tray" WorkingDirectory="ZukiSoftBinFolder"/>
+    </Component>
+
+    <Component Id="hdhomeruntray_exe_config" Directory="ZukiSoftBinFolder" Guid="CE1EC7A4-507C-487E-96BE-EC36964A9CB5">
+      <File Id="hdhomeruntray.exe.config" Source="$(var.ProjectBinFolder)hdhomeruntray.exe.config" Vital="yes" KeyPath="yes"/>
     </Component>
 
     <Component Id="hdhomeruntray_interop_dll" Directory="ZukiSoftBinFolder" Guid="3A95EABB-D8FD-4945-89A3-918253AF419A">
