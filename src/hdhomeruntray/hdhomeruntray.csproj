@@ -54,6 +54,7 @@
     <Compile Include="..\..\tmp\version\version.cs">
       <Link>version.cs</Link>
     </Compile>
+    <Compile Include="MainApplication.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -62,19 +63,21 @@
     </Compile>
     <Compile Include="main.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="StatusIcons.cs" />
+    <Compile Include="StatusIconType.cs" />
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Resources.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-    </Compile>
     <None Include="app.manifest" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
@@ -95,6 +98,24 @@
       <Project>{717d3b61-e1fd-4960-8188-0b2215f6a7fb}</Project>
       <Name>hdhomeruntray.interop</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\trayicon-gray-dark.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\trayicon-gray-light.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\trayicon-green-dark.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\trayicon-green-light.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\trayicon-red-dark.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\trayicon-red-light.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

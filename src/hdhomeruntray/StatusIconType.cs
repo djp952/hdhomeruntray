@@ -20,22 +20,18 @@
 // SOFTWARE.
 //---------------------------------------------------------------------------
 
-using System;
-using System.Windows.Forms;
-
 namespace hdhomeruntray
 {
-	static class main
+	//-----------------------------------------------------------------------
+	// StatusIconType (internal)
+	//
+	// Enumeration defining the status icon types
+	//-----------------------------------------------------------------------
+
+	enum StatusIconType
 	{
-		/// <summary>
-		/// The main entry point for the application.
-		/// </summary>
-		[STAThread]
-		static void Main()
-		{
-			Application.EnableVisualStyles();
-			Application.SetCompatibleTextRenderingDefault(false);
-			Application.Run(new MainApplication());
-		}
-	}
+		Active = 0,					// At least one tuner is active
+		Idle = 1,					// All tuners are idle
+		Recording = 2,				// At least one recording is active
+	};
 }

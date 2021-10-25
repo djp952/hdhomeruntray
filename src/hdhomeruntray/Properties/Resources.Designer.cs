@@ -59,5 +59,65 @@ namespace hdhomeruntray.Properties {
                 resourceCulture = value;
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        internal static System.Drawing.Icon trayicon_gray_dark {
+            get {
+                object obj = ResourceManager.GetObject("trayicon_gray_dark", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        internal static System.Drawing.Icon trayicon_gray_light {
+            get {
+                object obj = ResourceManager.GetObject("trayicon_gray_light", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        internal static System.Drawing.Icon trayicon_green_dark {
+            get {
+                object obj = ResourceManager.GetObject("trayicon_green_dark", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        internal static System.Drawing.Icon trayicon_green_light {
+            get {
+                object obj = ResourceManager.GetObject("trayicon_green_light", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        internal static System.Drawing.Icon trayicon_red_dark {
+            get {
+                object obj = ResourceManager.GetObject("trayicon_red_dark", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        internal static System.Drawing.Icon trayicon_red_light {
+            get {
+                object obj = ResourceManager.GetObject("trayicon_red_light", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
     }
 }

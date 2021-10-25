@@ -20,6 +20,7 @@
 // SOFTWARE.
 //---------------------------------------------------------------------------
 
+using System.Drawing;
 using System.Windows.Forms;
 using zuki.hdhomeruntray.interop;
 
