@@ -55,53 +55,82 @@ namespace hdhomeruntray
 		// Initializes all of the Windows Forms components and object
 		private void InitializeComponent()
 		{
-			// Create the tray icon instance and set a default icon
-			m_notifyicon = new NotifyIcon();
+			// Create and initialize the ShellNotifyIcon instance
+			m_notifyicon = new ShellNotifyIcon();
+			m_notifyicon.ClosePopup += new EventHandler(this.OnNotifyIconClosePopup);
+			m_notifyicon.OpenPopup += new EventHandler(this.OnNotifyIconOpenPopup);
+			m_notifyicon.Selected += new EventHandler(this.OnNotifyIconSelected);
 			m_notifyicon.Icon = StatusIcons.Get(StatusIconType.Idle);
 
-			// Work in progress, the standard meno looks like garbage
-
-
-			m_contextmenu = new ContextMenuStrip();
-			CloseMenuItem = new ToolStripMenuItem();
+			// Create the context menu
+			m_contextmenu = new ContextMenuStrip
+			{
+				Name = "m_contextmenu"
+			};
 			m_contextmenu.SuspendLayout();
 
-			// 
-			// TrayIconContextMenu
-			// 
-			this.m_contextmenu.Items.AddRange(new ToolStripItem[] {
-			this.CloseMenuItem});
-			this.m_contextmenu.Name = "TrayIconContextMenu";
-			this.m_contextmenu.Size = new Size(153, 70);
-			// 
-			// CloseMenuItem
-			// 
-			this.CloseMenuItem.Name = "CloseMenuItem";
-			this.CloseMenuItem.Size = new Size(152, 22);
-			this.CloseMenuItem.Text = "Exit";
-			this.CloseMenuItem.Click += new EventHandler(this.CloseMenuItem_Click);
+			// Exit
+			var menuitem_exit = new ToolStripMenuItem
+			{
+				Name = "menuitem_exit",
+				Text = "Exit"
+			};
+			menuitem_exit.Click += new EventHandler(this.OnMenuItemExit);
 
+			// Complete the context menu and associate it with the ShellNotifyIcon
+			m_contextmenu.Items.AddRange(new ToolStripItem[] { menuitem_exit });
 			m_contextmenu.ResumeLayout(false);
 			m_notifyicon.ContextMenuStrip = m_contextmenu;
 		}
 
+		//-------------------------------------------------------------------
+		// Event Handlers
+		//-------------------------------------------------------------------
+
+		// OnApplicationExit
+		//
+		// Invoked when the application is exiting
 		private void OnApplicationExit(object sender, EventArgs args)
 		{
-			// Hide the tray icon on exit
-			m_notifyicon.Visible = false;
+			m_notifyicon.Visible = false;		// Remove the tray icon
 		}
 
-		private void CloseMenuItem_Click(object sender, EventArgs args)
+		// OnMenuItemExit
+		//
+		// Invoked via the "Exit" menu item
+		private void OnMenuItemExit(object sender, EventArgs args)
 		{
 			Application.Exit();
+		}
+
+		// OnNotifyIconClosePopup
+		//
+		// Invoked when the hover popup window should be closed
+		private void OnNotifyIconClosePopup(object sender, EventArgs args)
+		{
+			// NOTE: will not fire on Windows 11
+		}
+
+		// OnNotifyIconOpenPopup
+		//
+		// Invoked when the hover popup window should be opened
+		private void OnNotifyIconOpenPopup(object sender, EventArgs args)
+		{
+			// NOTE: will not fire on Windows 11
+		}
+
+		// OnNotifyIconSelected
+		//
+		// Invoked when the notify icon has been selected (clicked on)
+		private void OnNotifyIconSelected(object sender, EventArgs args)
+		{
 		}
 
 		//-------------------------------------------------------------------
 		// Member Variables
 		//-------------------------------------------------------------------
 
-		private NotifyIcon m_notifyicon;
+		private ShellNotifyIcon m_notifyicon;
 		private ContextMenuStrip m_contextmenu;
-		private ToolStripMenuItem CloseMenuItem;
 	}
 }
