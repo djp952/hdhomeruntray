@@ -23,11 +23,10 @@
 namespace hdhomeruntray
 {
 	//-----------------------------------------------------------------------
-	// StatusIconType (internal)
+	// Enum StatusIconType (internal)
 	//
 	// Enumeration defining the status icon types
-	//-----------------------------------------------------------------------
-
+	
 	enum StatusIconType
 	{
 		Active = 0,					// At least one tuner is active

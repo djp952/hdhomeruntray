@@ -38,9 +38,9 @@ namespace hdhomeruntray
 		}
 		#endregion
 
-		/// <summary>
-		/// The main entry point for the application.
-		/// </summary>
+		// Main
+		//
+		// Application entry point
 		[STAThread]
 		static void Main()
 		{

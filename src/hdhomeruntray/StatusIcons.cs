@@ -27,11 +27,10 @@ using System.Windows.Forms;
 namespace hdhomeruntray
 {
 	//-----------------------------------------------------------------------
-	// StatusIcons (internal)
+	// Class StatusIcons (internal)
 	//
 	// Helper class used to load the proper system tray icons for the system
-	//-----------------------------------------------------------------------
-
+	
 	class StatusIcons
 	{
 		// Static Constructor
