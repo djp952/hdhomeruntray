@@ -27,12 +27,25 @@ namespace hdhomeruntray
 {
 	static class main
 	{
+		#region Win32 API Declarations
+		/// <summary>
+		/// Win32 API Declarations
+		/// </summary>
+		private static class NativeMethods
+		{
+			[System.Runtime.InteropServices.DllImport("user32.dll")]
+			public static extern bool SetProcessDPIAware();
+		}
+		#endregion
+
 		/// <summary>
 		/// The main entry point for the application.
 		/// </summary>
 		[STAThread]
 		static void Main()
 		{
+			if(Environment.OSVersion.Version.Major >= 6) NativeMethods.SetProcessDPIAware(); 
+			
 			Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);
 			Application.Run(new MainApplication());
