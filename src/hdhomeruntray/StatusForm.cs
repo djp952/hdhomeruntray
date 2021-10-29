@@ -29,7 +29,7 @@ namespace hdhomeruntray
 	//-----------------------------------------------------------------------
 	// Class StatusForm (internal)
 	//
-	// Implements the "" form that appears when the user hovers over the
+	// Implements the form that appears when the user hovers over the
 	// system tray icon; provides read-only device status information
 	
 	partial class StatusForm : Form

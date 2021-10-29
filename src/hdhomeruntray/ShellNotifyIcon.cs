@@ -121,6 +121,24 @@ namespace hdhomeruntray
 				public IntPtr hBalloonIcon;
 			}
 
+			[StructLayout(LayoutKind.Sequential)]
+			public struct NOTIFYICONIDENTIFIER
+			{
+				public uint cbSize;
+				public IntPtr hWnd;
+				public uint uID;
+				public Guid guidItem;
+			}
+
+			[StructLayout(LayoutKind.Sequential)]
+			public struct RECT
+			{
+				public int left;
+				public int top;
+				public int right;
+				public int bottom;
+			}
+
 			public interface IHandle
 			{
 				IntPtr Handle { get; }
@@ -155,7 +173,10 @@ namespace hdhomeruntray
 				return result;
 			}
 
-			[DllImport("shell32.dll", CharSet = CharSet.Unicode, ExactSpelling = true)]
+			[DllImport("shell32.dll", ExactSpelling = true)]
+			public static extern int Shell_NotifyIconGetRect(ref NOTIFYICONIDENTIFIER identifier, out RECT iconLocation);
+
+			[DllImport("shell32.dll", ExactSpelling = true)]
 			public static extern int Shell_NotifyIconW(uint dwMessage, ref NOTIFYICONDATAW lpData);
 		}
 		#endregion
@@ -367,6 +388,30 @@ namespace hdhomeruntray
 		//-------------------------------------------------------------------
 		// Member Functions
 		//-------------------------------------------------------------------
+
+		// GetRectangle
+		//
+		// Gets the bounding rectangle for the tray icon
+		public Rectangle GetRectangle()
+		{
+			// If the tray icon has not been created or we are in design mode, bail out
+			if(!m_created || DesignMode) return Rectangle.Empty;
+
+			// Create and initialize the required unmanaged structures
+			NativeMethods.NOTIFYICONIDENTIFIER identifer = new NativeMethods.NOTIFYICONIDENTIFIER
+			{
+				cbSize = (uint)Marshal.SizeOf(typeof(NativeMethods.NOTIFYICONIDENTIFIER)),
+				hWnd = m_backingwindow.Handle,
+				guidItem = m_guid,
+			};
+
+			// Attempt to retrive the bounding rectangle for the notify icon
+			if(NativeMethods.Shell_NotifyIconGetRect(ref identifer, out NativeMethods.RECT rect) == 0)     // S_OK
+				return Rectangle.FromLTRB(rect.left, rect.top, rect.right - rect.left, rect.bottom - rect.top);
+
+			// The operation failed; return a default bounding rectangle
+			return Rectangle.Empty;
+		}
 
 		// ShowNotification
 		//
