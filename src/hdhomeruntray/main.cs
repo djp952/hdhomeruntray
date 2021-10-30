@@ -23,7 +23,7 @@
 using System;
 using System.Windows.Forms;
 
-namespace hdhomeruntray
+namespace zuki.hdhomeruntray
 {
 	static class main
 	{

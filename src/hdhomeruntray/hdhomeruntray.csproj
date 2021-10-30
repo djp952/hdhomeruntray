@@ -6,7 +6,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{FE5B686C-C64D-4E48-9B9E-0529897E682E}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>hdhomeruntray</RootNamespace>
+    <RootNamespace>zuki.hdhomeruntray</RootNamespace>
     <AssemblyName>hdhomeruntray</AssemblyName>
     <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>

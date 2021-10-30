@@ -29,7 +29,7 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
-namespace hdhomeruntray
+namespace zuki.hdhomeruntray
 {
 	//-----------------------------------------------------------------------
 	// Class ShellNotifyIcon (internal)

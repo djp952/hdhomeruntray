@@ -20,7 +20,7 @@
 // SOFTWARE.
 //---------------------------------------------------------------------------
 
-namespace hdhomeruntray
+namespace zuki.hdhomeruntray
 {
 	//-----------------------------------------------------------------------
 	// Enum StatusIconType (internal)
