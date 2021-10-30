@@ -23,6 +23,8 @@
 using System;
 using System.Windows.Forms;
 
+using zuki.hdhomeruntray.discovery;
+
 namespace zuki.hdhomeruntray
 {
 	//-----------------------------------------------------------------------
@@ -42,6 +44,12 @@ namespace zuki.hdhomeruntray
 
 			// Show the tray icon after initialization
 			m_notifyicon.Visible = true;
+
+			// Invoke an initial refresh of the device discovery data
+			OnTimerTick(this, EventArgs.Empty);
+
+			// Start the periodic timer
+			m_timer.Enabled = true;
 		}
 
 		//-------------------------------------------------------------------
@@ -79,6 +87,11 @@ namespace zuki.hdhomeruntray
 			m_contextmenu.Items.AddRange(new ToolStripItem[] { menuitem_exit });
 			m_contextmenu.ResumeLayout(false);
 			m_notifyicon.ContextMenuStrip = m_contextmenu;
+
+			// Create the periodic timer object
+			m_timer = new Timer();
+			m_timer.Interval = 30000;       // TODO: Configurable
+			m_timer.Tick += new EventHandler(this.OnTimerTick);
 		}
 
 		//-------------------------------------------------------------------
@@ -90,6 +103,9 @@ namespace zuki.hdhomeruntray
 		// Invoked when the application is exiting
 		private void OnApplicationExit(object sender, EventArgs args)
 		{
+			// TODO: cancel any async operations
+
+			m_timer.Enabled = false;			// Stop the timer
 			m_notifyicon.Visible = false;		// Remove the tray icon
 		}
 
@@ -122,11 +138,57 @@ namespace zuki.hdhomeruntray
 		{
 		}
 
+		// OnTimerTick
+		//
+		// Invoked when the timer object has come due
+		private void OnTimerTick(object sender, EventArgs args)
+		{
+			// TODO: I want this to not lock up the entire process if it
+			// doesn't work quickly; create an async version
+			DeviceList devices = DeviceList.Create();
+
+			// Update the tray icon
+			UpdateNotifyIcon(devices);
+		}
+
+		// UpdateNotifyIcon
+		//
+		// Updates the state of the notify icon after a discovery
+		private void UpdateNotifyIcon(DeviceList devices)
+		{
+			if(devices == null) throw new ArgumentNullException("devices");
+
+			bool isactive = false;			// Active tuners flag
+			bool isrecording = false;       // Active recordings flag
+
+			foreach(Device device in devices)
+			{
+				if(device is TunerDevice tuner)
+				{
+					for(int index = 0; index < tuner.TunerCount; index++)
+					{
+						// TODO: get tuner status when it exists
+					}
+				}
+
+				else if(device is StorageDevice storage)
+				{
+					// TODO: get storage status when it exists
+				}
+			}
+
+			// Update the tray icon accordingly
+			if(isrecording) m_notifyicon.Icon = StatusIcons.Get(StatusIconType.Recording);
+			else if(isactive) m_notifyicon.Icon = StatusIcons.Get(StatusIconType.Active);
+			else m_notifyicon.Icon = StatusIcons.Get(StatusIconType.Idle);
+		}
+
 		//-------------------------------------------------------------------
 		// Member Variables
 		//-------------------------------------------------------------------
 
 		private ShellNotifyIcon m_notifyicon;
 		private ContextMenuStrip m_contextmenu;
+		private Timer m_timer;
 	}
 }

@@ -57,20 +57,28 @@ public:
 		String^ get(void);
 	}
 
+	// FriendlyName
+	//
+	// Gets the device friendly name
+	property String^ FriendlyName
+	{
+		virtual String^ get(void) override;
+	}
+
+	// Name
+	//
+	// Gets the device name (device/storage id)
+	property String^ Name
+	{
+		virtual String^ get(void) override;
+	}
+
 	// IsLegacy
 	//
 	// Get a flag indicating if the tuner device is a legacy device
 	property bool IsLegacy
 	{
 		bool get(void);
-	}
-
-	// LineupURL
-	//
-	// Gets the tuner lineup discovery URL
-	property String^ LineupURL
-	{
-		String^ get(void);
 	}
 
 	// TunerCount
@@ -89,22 +97,20 @@ internal:
 	// Create
 	//
 	// Creates a new TunerDevice instance
-	static TunerDevice^ Create(struct hdhomerun_discover_device_v3_t const& device);
 	static TunerDevice^ Create(JObject^ device);
 
 private:
 
 	// Instance Constructors
 	//
-	TunerDevice(struct hdhomerun_discover_device_v3_t const& device);
 	TunerDevice(JObject^ device);
 
 	//-----------------------------------------------------------------------
 	// Member Variables
 
 	String^					m_deviceid;			// Tuner device identifier
+	String^					m_friendlyname;		// Tuner device friendly name
 	bool					m_islegacy;			// Legacy tuner device flag
-	String^					m_lineupurl;		// URL to lineup discovery data
 	int						m_tunercount;		// Number of device tuners
 };
 

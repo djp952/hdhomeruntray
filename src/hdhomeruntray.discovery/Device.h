@@ -57,10 +57,26 @@ public:
 		String^ get(void);
 	}
 
+	// FriendlyName
+	//
+	// Gets the device friendly name
+	property String^ FriendlyName
+	{
+		virtual String^ get(void) abstract;
+	}
+
+	// Name
+	//
+	// Gets the device name (device/storage id)
+	property String^ Name
+	{
+		virtual String^ get(void) abstract;
+	}
+
 	// DeviceType
 	//
 	// Gets the device type identifier
-	property zuki::hdhomeruntray::discovery::DeviceType DeviceType
+	property zuki::hdhomeruntray::discovery::DeviceType Type
 	{
 		zuki::hdhomeruntray::discovery::DeviceType get(void);
 	}
@@ -69,7 +85,6 @@ protected:
 
 	// Instance Constructors
 	//
-	Device(struct hdhomerun_discover_device_v3_t const& device);
 	Device(JObject^ device, zuki::hdhomeruntray::discovery::DeviceType type);
 
 	//-----------------------------------------------------------------------

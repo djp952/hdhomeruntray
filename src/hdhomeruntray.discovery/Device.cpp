@@ -33,19 +33,6 @@ namespace zuki::hdhomeruntray::discovery {
 //
 // Arguments:
 //
-//	device			- Reference to the unmanaged device information
-
-Device::Device(struct hdhomerun_discover_device_v3_t const& device)
-{
-	m_baseurl = gcnew String(device.base_url);
-	m_devicetype = static_cast<zuki::hdhomeruntray::discovery::DeviceType>(device.device_type);
-}
-
-//---------------------------------------------------------------------------
-// Device Constructor (protected)
-//
-// Arguments:
-//
 //	device		- Reference to the JSON discovery data for the device
 //	type		- Type of device being constructed
 
@@ -68,11 +55,11 @@ String^ Device::BaseURL::get(void)
 }
 
 //---------------------------------------------------------------------------
-// Device::DeviceType::get
+// Device::Type::get
 //
 // Gets the device type identifier
 
-zuki::hdhomeruntray::discovery::DeviceType Device::DeviceType::get(void)
+zuki::hdhomeruntray::discovery::DeviceType Device::Type::get(void)
 {
 	return m_devicetype;
 }

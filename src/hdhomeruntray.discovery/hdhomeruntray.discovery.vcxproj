@@ -99,7 +99,7 @@
     <ClInclude Include="..\..\depends\libhdhomerun\hdhomerun_types.h" />
     <ClInclude Include="..\..\depends\libhdhomerun\hdhomerun_video.h" />
     <ClInclude Include="Device.h" />
-    <ClInclude Include="DeviceCollection.h" />
+    <ClInclude Include="DeviceList.h" />
     <ClInclude Include="DeviceType.h" />
     <ClInclude Include="DiscoveryMethod.h" />
     <ClInclude Include="ReadOnlyListEnumerator.h" />
@@ -178,7 +178,7 @@
     <ClCompile Include="..\..\tmp\version\version.cpp" />
     <ClCompile Include="AssemblyInfo.cpp" />
     <ClCompile Include="Device.cpp" />
-    <ClCompile Include="DeviceCollection.cpp" />
+    <ClCompile Include="DeviceList.cpp" />
     <ClCompile Include="dllmain.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>

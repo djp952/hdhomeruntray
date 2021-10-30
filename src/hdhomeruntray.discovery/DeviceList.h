@@ -20,8 +20,8 @@
 // SOFTWARE.
 //---------------------------------------------------------------------------
 
-#ifndef __DEVICECOLLECTION_H_
-#define __DEVICECOLLECTION_H_
+#ifndef __DEVICELIST_H_
+#define __DEVICELIST_H_
 #pragma once
 
 #include "Device.h"
@@ -35,12 +35,12 @@ using namespace System::Collections::Generic;
 namespace zuki::hdhomeruntray::discovery {
 
 //---------------------------------------------------------------------------
-// Class DeviceCollection
+// Class DeviceList
 //
 // Implements an IReadOnlyList<> based enumerable collection of devices
 //---------------------------------------------------------------------------
 
-public ref class DeviceCollection : public IReadOnlyList<Device^>
+public ref class DeviceList : public IReadOnlyList<Device^>
 {
 public:
 
@@ -49,9 +49,9 @@ public:
 
 	// Create (static)
 	//
-	// Creates a new DeviceCollection instance
-	static DeviceCollection^ Create(void);
-	static DeviceCollection^ Create(DiscoveryMethod method);
+	// Creates a new DeviceList instance
+	static DeviceList^ Create(void);
+	static DeviceList^ Create(DiscoveryMethod method);
 
 	// GetEnumerator
 	//
@@ -85,13 +85,13 @@ internal:
 	// Empty (static)
 	//
 	// Returns an empty device collection instance
-	static initonly DeviceCollection^ Empty = gcnew DeviceCollection(gcnew List<Device^>());
+	static initonly DeviceList^ Empty = gcnew DeviceList(gcnew List<Device^>());
 
 private:
 
 	// Instance Constructor
 	//
-	DeviceCollection(List<Device^>^ devices);
+	DeviceList(List<Device^>^ devices);
 
 	//-----------------------------------------------------------------------
 	// Private Member Functions
@@ -99,12 +99,12 @@ private:
 	// DiscoverBroadcast (static)
 	//
 	// Executes a broadcast device discovery
-	static DeviceCollection^ DiscoverBroadcast(void);
+	static DeviceList^ DiscoverBroadcast(void);
 
 	// DiscoverHttp (static)
 	//
 	// Executes an HTTP device discovery
-	static DeviceCollection^ DiscoverHttp(void);
+	static DeviceList^ DiscoverHttp(void);
 
 	// GetEnumerator (IEnumerable)
 	//
@@ -123,4 +123,4 @@ private:
 
 #pragma warning(pop)
 
-#endif	// __DEVICECOLLECTION_H_
+#endif	// __DEVICELIST_H_

@@ -49,6 +49,22 @@ public:
 	//-----------------------------------------------------------------------
 	// Properties
 
+	// FriendlyName
+	//
+	// Gets the device friendly name
+	property String^ FriendlyName
+	{
+		virtual String^ get(void) override;
+	}
+
+	// Name
+	//
+	// Gets the device name (device/storage id)
+	property String^ Name
+	{
+		virtual String^ get(void) override;
+	}
+
 	// StorageID
 	//
 	// Gets the storage device identifier
@@ -73,19 +89,18 @@ internal:
 	// Create
 	//
 	// Creates a new StorageDevice instance
-	static StorageDevice^ Create(struct hdhomerun_discover_device_v3_t const& device);
 	static StorageDevice^ Create(JObject^ device);
 
 private:
 
 	// Instance Constructor
 	//
-	StorageDevice(struct hdhomerun_discover_device_v3_t const& device);
 	StorageDevice(JObject^ device);
 
 	//-----------------------------------------------------------------------
 	// Member Variables
 
+	String^					m_friendlyname;		// Storage device friendly name
 	String^					m_storageid;		// Storage device identifier
 	String^					m_storageurl;		// Storage device data URL
 };

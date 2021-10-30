@@ -33,44 +33,19 @@ namespace zuki::hdhomeruntray::discovery {
 //
 // Arguments:
 //
-//	device			- Reference to the unmanaged device information
-
-StorageDevice::StorageDevice(struct hdhomerun_discover_device_v3_t const& device) : Device(device)
-{
-	m_storageid = gcnew String(device.storage_id);
-	m_storageurl = gcnew String(device.storage_url);
-}
-
-//---------------------------------------------------------------------------
-// StorageDevice Constructor (private)
-//
-// Arguments:
-//
 //	device		- Reference to the JSON discovery data for the device
 
 StorageDevice::StorageDevice(JObject^ device) : Device(device, zuki::hdhomeruntray::discovery::DeviceType::Storage)
 {
 	if(Object::ReferenceEquals(device, nullptr)) throw gcnew ArgumentNullException("device");
 
+	JToken^ friendlyname = device->GetValue("FriendlyName", StringComparison::OrdinalIgnoreCase);
 	JToken^ storageid = device->GetValue("StorageID", StringComparison::OrdinalIgnoreCase);
 	JToken^ storageurl = device->GetValue("StorageURL", StringComparison::OrdinalIgnoreCase);
 
+	if(!Object::ReferenceEquals(friendlyname, nullptr)) m_friendlyname = friendlyname->ToObject<String^>();
 	if(!Object::ReferenceEquals(storageid, nullptr)) m_storageid = storageid->ToObject<String^>();
 	if(!Object::ReferenceEquals(storageurl, nullptr)) m_storageurl = storageurl->ToObject<String^>();
-}
-
-//---------------------------------------------------------------------------
-// StorageDevice::Create (internal)
-//
-// Creates a new StorageDevice instance
-//
-// Arguments:
-//
-//	device			- Reference to the unmanaged device information
-
-StorageDevice^ StorageDevice::Create(struct hdhomerun_discover_device_v3_t const& device)
-{
-	return gcnew StorageDevice(device);
 }
 
 //---------------------------------------------------------------------------
@@ -86,6 +61,26 @@ StorageDevice^ StorageDevice::Create(JObject^ device)
 {
 	if(Object::ReferenceEquals(device, nullptr)) throw gcnew ArgumentNullException();
 	return gcnew StorageDevice(device);
+}
+
+//---------------------------------------------------------------------------
+// StorageDevice::FriendlyName::get
+//
+// Gets the storage device friendly name
+
+String^ StorageDevice::FriendlyName::get(void)
+{
+	return m_friendlyname;
+}
+
+//---------------------------------------------------------------------------
+// StorageDevice::Name::get
+//
+// Gets the storage device name
+
+String^ StorageDevice::Name::get(void)
+{
+	return m_storageid;
 }
 
 //---------------------------------------------------------------------------

@@ -24,7 +24,7 @@
 
 #include <memory>
 
-#include "DeviceCollection.h"
+#include "DeviceList.h"
 #include "JsonWebRequest.h"
 #include "ReadOnlyListEnumerator.h"
 #include "StorageDevice.h"
@@ -38,61 +38,61 @@ using namespace Newtonsoft::Json::Linq;
 namespace zuki::hdhomeruntray::discovery {
 
 //---------------------------------------------------------------------------
-// DeviceCollection Constructor (private)
+// DeviceList Constructor (private)
 //
 // Arguments:
 //
 //	devices		- List<> containing the devices
 
-DeviceCollection::DeviceCollection(List<Device^>^ devices) : m_devices(devices)
+DeviceList::DeviceList(List<Device^>^ devices) : m_devices(devices)
 {
 	if(Object::ReferenceEquals(devices, nullptr)) throw gcnew ArgumentNullException("devices");
 }
 
 //---------------------------------------------------------------------------
-// DeviceCollection::default[int]::get
+// DeviceList::default[int]::get
 //
 // Gets the element at the specified index in the read-only list
 
-Device^ DeviceCollection::default::get(int index)
+Device^ DeviceList::default::get(int index)
 {
 	return m_devices[index];
 }
 
 //---------------------------------------------------------------------------
-// DeviceCollection::Count::get
+// DeviceList::Count::get
 //
 // Gets the number of elements in the collection
 
-int DeviceCollection::Count::get(void)
+int DeviceList::Count::get(void)
 {
 	return m_devices->Count;
 }
 
 //---------------------------------------------------------------------------
-// DeviceCollection::Create (static)
+// DeviceList::Create (static)
 //
-// Creates a new DeviceCollection instance by executing a discovery
+// Creates a new DeviceList instance by executing a discovery
 //
 // Arguments:
 //
 //  NONE
 
-DeviceCollection^ DeviceCollection::Create(void)
+DeviceList^ DeviceList::Create(void)
 {
 	return Create(DiscoveryMethod::Broadcast);
 }
 
 //---------------------------------------------------------------------------
-// DeviceCollection::Create (static)
+// DeviceList::Create (static)
 //
-// Creates a new DeviceCollection instance by executing a discovery
+// Creates a new DeviceList instance by executing a discovery
 //
 // Arguments:
 //
 //  method		- Discovery method to be used
 
-DeviceCollection^ DeviceCollection::Create(DiscoveryMethod method)
+DeviceList^ DeviceList::Create(DiscoveryMethod method)
 {
 	if(method == DiscoveryMethod::Broadcast) return DiscoverBroadcast();
 	else if(method == DiscoveryMethod::Http) return DiscoverHttp();
@@ -100,7 +100,7 @@ DeviceCollection^ DeviceCollection::Create(DiscoveryMethod method)
 }
 
 //---------------------------------------------------------------------------
-// DeviceCollection::DiscoverBroadcast (static, private)
+// DeviceList::DiscoverBroadcast (static, private)
 //
 // Executes a broadcast device discovery
 //
@@ -108,7 +108,7 @@ DeviceCollection^ DeviceCollection::Create(DiscoveryMethod method)
 //
 //	NONE
 
-DeviceCollection^ DeviceCollection::DiscoverBroadcast(void)
+DeviceList^ DeviceList::DiscoverBroadcast(void)
 {
 	List<Device^>^ discovered = gcnew List<Device^>();				// Collection of discovered devices
 
@@ -122,16 +122,27 @@ DeviceCollection^ DeviceCollection::DiscoverBroadcast(void)
 
 	for(int index = 0; index < result; index++) {
 
-		// Create the appropriate device object type based on the reported device type
-		if(devices[index].device_type == HDHOMERUN_DEVICE_TYPE_TUNER) discovered->Add(TunerDevice::Create(devices[index]));
-		else if(devices[index].device_type == HDHOMERUN_DEVICE_TYPE_STORAGE) discovered->Add(StorageDevice::Create(devices[index]));
+		// Use the discovery JSON reported by the device as opposed to the data returned from UDP
+		String^ discoverurl = String::Concat(gcnew String(devices[index].base_url), "/discover.json");
+		JObject^ discovery = JsonWebRequest::GetObject(discoverurl);
+		if(!Object::ReferenceEquals(discovery, nullptr)) {
+
+			// Gather enough information from the discovery data to determine how to proceed
+			JToken^ deviceid = discovery->GetValue("DeviceID", StringComparison::OrdinalIgnoreCase);
+			JToken^ storageid = discovery->GetValue("StorageID", StringComparison::OrdinalIgnoreCase);
+
+			// A single device may report both tuners and storage so check for both types and
+			// process them as distinct device instances
+			if(!Object::ReferenceEquals(nullptr, deviceid)) discovered->Add(TunerDevice::Create(discovery));
+			if(!Object::ReferenceEquals(nullptr, storageid)) discovered->Add(StorageDevice::Create(discovery));
+		}
 	}
 
-	return gcnew DeviceCollection(discovered);
+	return gcnew DeviceList(discovered);
 }
 
 //---------------------------------------------------------------------------
-// DeviceCollection::DiscoverHttp (static, private)
+// DeviceList::DiscoverHttp (static, private)
 //
 // Executes an HTTP device discovery
 //
@@ -139,7 +150,7 @@ DeviceCollection^ DeviceCollection::DiscoverBroadcast(void)
 //
 //	NONE
 
-DeviceCollection^ DeviceCollection::DiscoverHttp(void)
+DeviceList^ DeviceList::DiscoverHttp(void)
 {
 	List<Device^>^ discovered = gcnew List<Device^>();				// Collection of discovered devices
 
@@ -172,12 +183,12 @@ DeviceCollection^ DeviceCollection::DiscoverHttp(void)
 		}
 	}
 
-	// Return the generated List<> as a new DeviceCollection instance
-	return gcnew DeviceCollection(discovered);
+	// Return the generated List<> as a new DeviceList instance
+	return gcnew DeviceList(discovered);
 }
 
 //---------------------------------------------------------------------------
-// DeviceCollection::GetEnumerator
+// DeviceList::GetEnumerator
 //
 // Returns a generic IEnumerator<T> for the member collection
 //
@@ -185,13 +196,13 @@ DeviceCollection^ DeviceCollection::DiscoverHttp(void)
 //
 //	NONE
 
-IEnumerator<Device^>^ DeviceCollection::GetEnumerator(void)
+IEnumerator<Device^>^ DeviceList::GetEnumerator(void)
 {
 	return gcnew ReadOnlyListEnumerator<Device^>(this);
 }
 
 //---------------------------------------------------------------------------
-// DeviceCollection::IEnumerable_GetEnumerator
+// DeviceList::IEnumerable_GetEnumerator
 //
 // Returns a non-generic IEnumerator for the member collection
 //
@@ -199,7 +210,7 @@ IEnumerator<Device^>^ DeviceCollection::GetEnumerator(void)
 //
 //	NONE
 
-System::Collections::IEnumerator^ DeviceCollection::IEnumerable_GetEnumerator(void)
+System::Collections::IEnumerator^ DeviceList::IEnumerable_GetEnumerator(void)
 {
 	return GetEnumerator();
 }

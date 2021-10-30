@@ -80,7 +80,7 @@
     <ClInclude Include="ReadOnlyListEnumerator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="DeviceCollection.h">
+    <ClInclude Include="DeviceList.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Device.h">
@@ -145,7 +145,7 @@
     <ClCompile Include="ReadOnlyListEnumerator.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="DeviceCollection.cpp">
+    <ClCompile Include="DeviceList.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Device.cpp">

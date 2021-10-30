@@ -33,21 +33,6 @@ namespace zuki::hdhomeruntray::discovery {
 //
 // Arguments:
 //
-//	device			- Reference to the unmanaged device information
-
-TunerDevice::TunerDevice(struct hdhomerun_discover_device_v3_t const& device) : Device(device)
-{
-	m_deviceid = device.device_id.ToString("00000000");
-	m_islegacy = device.is_legacy;
-	m_lineupurl = gcnew String(device.lineup_url);
-	m_tunercount = device.tuner_count;
-}
-
-//---------------------------------------------------------------------------
-// TunerDevice Constructor (private)
-//
-// Arguments:
-//
 //	device		- Reference to the JSON discovery data for the device
 
 TunerDevice::TunerDevice(JObject^ device) : Device(device, zuki::hdhomeruntray::discovery::DeviceType::Tuner)
@@ -55,28 +40,14 @@ TunerDevice::TunerDevice(JObject^ device) : Device(device, zuki::hdhomeruntray::
 	if(Object::ReferenceEquals(device, nullptr)) throw gcnew ArgumentNullException("device");
 
 	JToken^ deviceid = device->GetValue("DeviceID", StringComparison::OrdinalIgnoreCase);
+	JToken^ friendlyname = device->GetValue("FriendlyName", StringComparison::OrdinalIgnoreCase);
 	JToken^ islegacy = device->GetValue("Legacy", StringComparison::OrdinalIgnoreCase);
-	JToken^ lineupurl = device->GetValue("LineupURL", StringComparison::OrdinalIgnoreCase);
 	JToken^ tunercount = device->GetValue("TunerCount", StringComparison::OrdinalIgnoreCase);
 
 	if(!Object::ReferenceEquals(deviceid, nullptr)) m_deviceid = deviceid->ToObject<String^>();
+	if(!Object::ReferenceEquals(friendlyname, nullptr)) m_friendlyname = friendlyname->ToObject<String^>();
 	m_islegacy = (!Object::ReferenceEquals(islegacy, nullptr) && (islegacy->ToObject<int>() == 1));
-	if(!Object::ReferenceEquals(lineupurl, nullptr)) m_lineupurl = lineupurl->ToObject<String^>();
 	m_tunercount = (!Object::ReferenceEquals(tunercount, nullptr)) ? tunercount->ToObject<int>() : 0;
-}
-
-//---------------------------------------------------------------------------
-// TunerDevice::Create (internal)
-//
-// Creates a new TunerDevice instance
-//
-// Arguments:
-//
-//	device			- Reference to the unmanaged device information
-
-TunerDevice^ TunerDevice::Create(struct hdhomerun_discover_device_v3_t const& device)
-{
-	return gcnew TunerDevice(device);
 }
 
 //---------------------------------------------------------------------------
@@ -105,6 +76,26 @@ String^ TunerDevice::DeviceID::get(void)
 }
 
 //---------------------------------------------------------------------------
+// TunerDevice::FriendlyName::get
+//
+// Gets the tuner device friendly name
+
+String^ TunerDevice::FriendlyName::get(void)
+{
+	return m_friendlyname;
+}
+
+//---------------------------------------------------------------------------
+// TunerDevice::Name::get
+//
+// Gets the tuner device name
+
+String^ TunerDevice::Name::get(void)
+{
+	return m_deviceid;
+}
+
+//---------------------------------------------------------------------------
 // TunerDevice::IsLegacy::get
 //
 // Get a flag indicating if the tuner device is a legacy device
@@ -112,16 +103,6 @@ String^ TunerDevice::DeviceID::get(void)
 bool TunerDevice::IsLegacy::get(void)
 {
 	return m_islegacy;
-}
-
-//---------------------------------------------------------------------------
-// TunerDevice::LineupURL
-//
-// Gets the tuner lineup discovery URL
-
-String^ TunerDevice::LineupURL::get(void)
-{
-	return m_lineupurl;
 }
 
 //---------------------------------------------------------------------------
