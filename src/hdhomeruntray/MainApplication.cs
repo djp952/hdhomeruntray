@@ -80,10 +80,6 @@ namespace hdhomeruntray
 			m_contextmenu.Items.AddRange(new ToolStripItem[] { menuitem_exit });
 			m_contextmenu.ResumeLayout(false);
 			m_notifyicon.ContextMenuStrip = m_contextmenu;
-
-			// TODO: TESTING
-			m_mainform = new StatusForm();
-			m_popupform = new StatusPopupForm();
 		}
 
 		//-------------------------------------------------------------------
@@ -111,7 +107,6 @@ namespace hdhomeruntray
 		// Invoked when the hover popup window should be closed
 		private void OnNotifyIconClosePopup(object sender, EventArgs args)
 		{
-			// NOTE: will not fire on Windows 11
 		}
 
 		// OnNotifyIconOpenPopup
@@ -119,7 +114,6 @@ namespace hdhomeruntray
 		// Invoked when the hover popup window should be opened
 		private void OnNotifyIconOpenPopup(object sender, EventArgs args)
 		{
-			// NOTE: will not fire on Windows 11
 		}
 
 		// OnNotifyIconSelected
@@ -127,8 +121,6 @@ namespace hdhomeruntray
 		// Invoked when the notify icon has been selected (clicked on)
 		private void OnNotifyIconSelected(object sender, EventArgs args)
 		{
-			// TODO: TESTING
-			if(!m_mainform.Visible) m_mainform.Show();
 		}
 
 		//-------------------------------------------------------------------
@@ -137,9 +129,5 @@ namespace hdhomeruntray
 
 		private ShellNotifyIcon m_notifyicon;
 		private ContextMenuStrip m_contextmenu;
-
-		// TODO: TESTING
-		private StatusForm m_mainform;
-		private StatusPopupForm m_popupform;
 	}
 }
