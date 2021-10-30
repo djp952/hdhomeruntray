@@ -20,32 +20,32 @@
 // SOFTWARE.
 //---------------------------------------------------------------------------
 
-#ifndef __DEVICETYPE_H_
-#define __DEVICETYPE_H_
+#ifndef __DISCOVERYMETHOD_H_
+#define __DISCOVERYMETHOD_H_
 #pragma once
 
 #pragma warning(push, 4)				// Enable maximum compiler warnings
 
 using namespace System;
 
-namespace zuki::hdhomeruntray::interop {
+namespace zuki::hdhomeruntray::discovery {
 
 //---------------------------------------------------------------------------
-// Enum DeviceType
+// Enum DiscoveryMethod
 //
-// Indicates the type of a HDHomeRun device
+// Indicates the discovery method to use for finding the devices
 //---------------------------------------------------------------------------
 
-public enum class DeviceType
+public enum class DiscoveryMethod
 {
-	Tuner		= HDHOMERUN_DEVICE_TYPE_TUNER,		// Tuner device
-	Storage		= HDHOMERUN_DEVICE_TYPE_STORAGE,	// Storage (DVR) device
+	Broadcast	= 0,		// UDP broadcast discovery
+	Http		= 1,		// HTTP cloud discovery
 };
 
 //---------------------------------------------------------------------------
 
-} // zuki::hdomeruntray::interop
+} // zuki::hdhomeruntray::discovery
 
 #pragma warning(pop)
 
-#endif	// __DEVICETYPE_H_
+#endif	// __DISCOVERYMETHOD_H_

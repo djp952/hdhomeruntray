@@ -34,7 +34,7 @@ using namespace System::Net;
 using namespace Newtonsoft::Json;
 using namespace Newtonsoft::Json::Linq;
 
-namespace zuki::hdhomeruntray::interop {
+namespace zuki::hdhomeruntray::discovery {
 
 //---------------------------------------------------------------------------
 // Class TunerDevice
@@ -110,7 +110,7 @@ private:
 
 //---------------------------------------------------------------------------
 
-} // zuki::hdhomeruntray::interop
+} // zuki::hdhomeruntray::discovery
 
 #pragma warning(pop)
 

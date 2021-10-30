@@ -28,7 +28,7 @@ using namespace System::Runtime::CompilerServices;
 using namespace System::Runtime::InteropServices;
 using namespace System::Security::Permissions;
 
-[assembly:AssemblyTitleAttribute(L"hdhomeruntrayinterop")];
+[assembly:AssemblyTitleAttribute(L"hdhomeruntray.discovery")];
 [assembly:AssemblyDescriptionAttribute(L"")];
 [assembly:AssemblyConfigurationAttribute(L"")];
 [assembly:AssemblyTrademarkAttribute(L"")];

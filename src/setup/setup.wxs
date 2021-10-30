@@ -68,7 +68,7 @@
     <ComponentGroup Id="componentgroup_hdhomeruntray">
       <ComponentRef Id="hdhomeruntray_exe"/>
       <ComponentRef Id="hdhomeruntray_exe_config"/>
-      <ComponentRef Id="hdhomeruntray_interop_dll"/>
+      <ComponentRef Id="hdhomeruntray_discovery_dll"/>
       <ComponentRef Id="newtonsoft_json_dll"/>
     </ComponentGroup>
 
@@ -81,8 +81,8 @@
       <File Id="hdhomeruntray.exe.config" Source="$(var.ProjectBinFolder)hdhomeruntray.exe.config" Vital="yes" KeyPath="yes"/>
     </Component>
 
-    <Component Id="hdhomeruntray_interop_dll" Directory="HDHomeRunTrayBinFolder" Guid="3A95EABB-D8FD-4945-89A3-918253AF419A">
-      <File Id="hdhomeruntray.interop.dll" Source="$(var.ProjectBinFolder)hdhomeruntray.interop.dll" Vital="yes" KeyPath="yes">
+    <Component Id="hdhomeruntray_discovery_dll" Directory="HDHomeRunTrayBinFolder" Guid="3A95EABB-D8FD-4945-89A3-918253AF419A">
+      <File Id="hdhomeruntray.discovery.dll" Source="$(var.ProjectBinFolder)hdhomeruntray.discovery.dll" Vital="yes" KeyPath="yes">
       </File>
     </Component>
 

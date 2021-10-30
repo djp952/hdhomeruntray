@@ -26,7 +26,7 @@
 
 #pragma warning(push, 4)
 
-namespace zuki::hdhomeruntray::interop {
+namespace zuki::hdhomeruntray::discovery {
 
 //---------------------------------------------------------------------------
 // StorageDevice Constructor (private)
@@ -48,7 +48,7 @@ StorageDevice::StorageDevice(struct hdhomerun_discover_device_v3_t const& device
 //
 //	device		- Reference to the JSON discovery data for the device
 
-StorageDevice::StorageDevice(JObject^ device) : Device(device, zuki::hdhomeruntray::interop::DeviceType::Storage)
+StorageDevice::StorageDevice(JObject^ device) : Device(device, zuki::hdhomeruntray::discovery::DeviceType::Storage)
 {
 	if(Object::ReferenceEquals(device, nullptr)) throw gcnew ArgumentNullException("device");
 
@@ -110,6 +110,6 @@ String^ StorageDevice::StorageURL::get(void)
 
 //---------------------------------------------------------------------------
 
-} // zuki::hdhomeruntray::interop
+} // zuki::hdhomeruntray::discovery
 
 #pragma warning(pop)

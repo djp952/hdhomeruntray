@@ -35,7 +35,7 @@ using namespace Newtonsoft::Json::Linq;
 
 #pragma warning(push, 4)
 
-namespace zuki::hdhomeruntray::interop {
+namespace zuki::hdhomeruntray::discovery {
 
 //---------------------------------------------------------------------------
 // DeviceCollection Constructor (private)
@@ -206,6 +206,6 @@ System::Collections::IEnumerator^ DeviceCollection::IEnumerable_GetEnumerator(vo
 
 //---------------------------------------------------------------------------
 
-} // zuki::hdhomeruntray::interop
+} // zuki::hdhomeruntray::discovery
 
 #pragma warning(pop)

@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.31729.503
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "version", "src\version\version.vcxproj", "{8E478C96-0ECF-4A19-AE53-9940E1635D1C}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "hdhomeruntray.interop", "src\hdhomeruntray.interop\hdhomeruntray.interop.vcxproj", "{717D3B61-E1FD-4960-8188-0B2215F6A7FB}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "hdhomeruntray.discovery", "src\hdhomeruntray.discovery\hdhomeruntray.discovery.vcxproj", "{717D3B61-E1FD-4960-8188-0B2215F6A7FB}"
 	ProjectSection(ProjectDependencies) = postProject
 		{8E478C96-0ECF-4A19-AE53-9940E1635D1C} = {8E478C96-0ECF-4A19-AE53-9940E1635D1C}
 	EndProjectSection

@@ -20,65 +20,69 @@
 // SOFTWARE.
 //---------------------------------------------------------------------------
 
-#include "stdafx.h"
+#ifndef __DEVICE_H_
+#define __DEVICE_H_
+#pragma once
 
-#include "Device.h"
+#include "DeviceType.h"
 
 #pragma warning(push, 4)
 
-namespace zuki::hdhomeruntray::interop {
+using namespace System;
+using namespace System::Net;
+
+using namespace Newtonsoft::Json;
+using namespace Newtonsoft::Json::Linq;
+
+namespace zuki::hdhomeruntray::discovery {
 
 //---------------------------------------------------------------------------
-// Device Constructor (protected)
+// Class Device (abstract)
 //
-// Arguments:
-//
-//	device			- Reference to the unmanaged device information
+// Describes an individual HDHomeRun device
+//---------------------------------------------------------------------------
 
-Device::Device(struct hdhomerun_discover_device_v3_t const& device)
+public ref class Device abstract
 {
-	m_baseurl = gcnew String(device.base_url);
-	m_devicetype = static_cast<zuki::hdhomeruntray::interop::DeviceType>(device.device_type);
-}
+public:
 
-//---------------------------------------------------------------------------
-// Device Constructor (protected)
-//
-// Arguments:
-//
-//	device		- Reference to the JSON discovery data for the device
-//	type		- Type of device being constructed
+	//-----------------------------------------------------------------------
+	// Properties
 
-Device::Device(JObject^ device, zuki::hdhomeruntray::interop::DeviceType type) : m_devicetype(type)
-{
-	if(Object::ReferenceEquals(device, nullptr)) throw gcnew ArgumentNullException("device");
+	// BaseURL
+	//
+	// Gets the device web interface base URL
+	property String^ BaseURL
+	{
+		String^ get(void);
+	}
 
-	JToken^ baseurl = device->GetValue("BaseURL", StringComparison::OrdinalIgnoreCase);
-	if(!Object::ReferenceEquals(baseurl, nullptr)) m_baseurl = baseurl->ToString();
-}
+	// DeviceType
+	//
+	// Gets the device type identifier
+	property zuki::hdhomeruntray::discovery::DeviceType DeviceType
+	{
+		zuki::hdhomeruntray::discovery::DeviceType get(void);
+	}
 
-//---------------------------------------------------------------------------
-// Device::BaseURL::get
-//
-// Gets the device web interface base URL
+protected:
 
-String^ Device::BaseURL::get(void)
-{
-	return m_baseurl;
-}
+	// Instance Constructors
+	//
+	Device(struct hdhomerun_discover_device_v3_t const& device);
+	Device(JObject^ device, zuki::hdhomeruntray::discovery::DeviceType type);
 
-//---------------------------------------------------------------------------
-// Device::DeviceType::get
-//
-// Gets the device type identifier
+	//-----------------------------------------------------------------------
+	// Member Variables
 
-zuki::hdhomeruntray::interop::DeviceType Device::DeviceType::get(void)
-{
-	return m_devicetype;
-}
+	String^										m_baseurl;		// Device base URL string
+	zuki::hdhomeruntray::discovery::DeviceType	m_devicetype;	// Device type flag
+};
 
 //---------------------------------------------------------------------------
 
-} // zuki::hdhomeruntray::interop
+} // zuki::hdhomeruntray::discovery
 
 #pragma warning(pop)
+
+#endif	// __DEVICE_H_

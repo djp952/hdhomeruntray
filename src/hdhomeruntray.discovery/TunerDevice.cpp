@@ -26,7 +26,7 @@
 
 #pragma warning(push, 4)
 
-namespace zuki::hdhomeruntray::interop {
+namespace zuki::hdhomeruntray::discovery {
 
 //---------------------------------------------------------------------------
 // TunerDevice Constructor (private)
@@ -50,7 +50,7 @@ TunerDevice::TunerDevice(struct hdhomerun_discover_device_v3_t const& device) : 
 //
 //	device		- Reference to the JSON discovery data for the device
 
-TunerDevice::TunerDevice(JObject^ device) : Device(device, zuki::hdhomeruntray::interop::DeviceType::Tuner)
+TunerDevice::TunerDevice(JObject^ device) : Device(device, zuki::hdhomeruntray::discovery::DeviceType::Tuner)
 {
 	if(Object::ReferenceEquals(device, nullptr)) throw gcnew ArgumentNullException("device");
 
@@ -136,6 +136,6 @@ int TunerDevice::TunerCount::get(void)
 
 //---------------------------------------------------------------------------
 
-} // zuki::hdhomeruntray::interop
+} // zuki::hdhomeruntray::discovery
 
 #pragma warning(pop)

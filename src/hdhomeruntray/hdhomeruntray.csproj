@@ -90,9 +90,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\hdhomeruntray.interop\hdhomeruntray.interop.vcxproj">
+    <ProjectReference Include="..\hdhomeruntray.discovery\hdhomeruntray.discovery.vcxproj">
       <Project>{717d3b61-e1fd-4960-8188-0b2215f6a7fb}</Project>
-      <Name>hdhomeruntray.interop</Name>
+      <Name>hdhomeruntray.discovery</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

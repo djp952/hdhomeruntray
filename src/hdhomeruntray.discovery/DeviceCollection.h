@@ -32,7 +32,7 @@
 using namespace System;
 using namespace System::Collections::Generic;
 
-namespace zuki::hdhomeruntray::interop {
+namespace zuki::hdhomeruntray::discovery {
 
 //---------------------------------------------------------------------------
 // Class DeviceCollection
@@ -119,7 +119,7 @@ private:
 
 //---------------------------------------------------------------------------
 
-} // zuki::hdhomeruntray::interop
+} // zuki::hdhomeruntray::discovery
 
 #pragma warning(pop)
 

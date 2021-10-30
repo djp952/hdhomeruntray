@@ -20,32 +20,65 @@
 // SOFTWARE.
 //---------------------------------------------------------------------------
 
-#ifndef __DISCOVERYMETHOD_H_
-#define __DISCOVERYMETHOD_H_
-#pragma once
+#include "stdafx.h"
 
-#pragma warning(push, 4)				// Enable maximum compiler warnings
+#include "Device.h"
 
-using namespace System;
+#pragma warning(push, 4)
 
-namespace zuki::hdhomeruntray::interop {
+namespace zuki::hdhomeruntray::discovery {
 
 //---------------------------------------------------------------------------
-// Enum DiscoveryMethod
+// Device Constructor (protected)
 //
-// Indicates the discovery method to use for finding the devices
-//---------------------------------------------------------------------------
+// Arguments:
+//
+//	device			- Reference to the unmanaged device information
 
-public enum class DiscoveryMethod
+Device::Device(struct hdhomerun_discover_device_v3_t const& device)
 {
-	Broadcast	= 0,		// UDP broadcast discovery
-	Http		= 1,		// HTTP cloud discovery
-};
+	m_baseurl = gcnew String(device.base_url);
+	m_devicetype = static_cast<zuki::hdhomeruntray::discovery::DeviceType>(device.device_type);
+}
+
+//---------------------------------------------------------------------------
+// Device Constructor (protected)
+//
+// Arguments:
+//
+//	device		- Reference to the JSON discovery data for the device
+//	type		- Type of device being constructed
+
+Device::Device(JObject^ device, zuki::hdhomeruntray::discovery::DeviceType type) : m_devicetype(type)
+{
+	if(Object::ReferenceEquals(device, nullptr)) throw gcnew ArgumentNullException("device");
+
+	JToken^ baseurl = device->GetValue("BaseURL", StringComparison::OrdinalIgnoreCase);
+	if(!Object::ReferenceEquals(baseurl, nullptr)) m_baseurl = baseurl->ToString();
+}
+
+//---------------------------------------------------------------------------
+// Device::BaseURL::get
+//
+// Gets the device web interface base URL
+
+String^ Device::BaseURL::get(void)
+{
+	return m_baseurl;
+}
+
+//---------------------------------------------------------------------------
+// Device::DeviceType::get
+//
+// Gets the device type identifier
+
+zuki::hdhomeruntray::discovery::DeviceType Device::DeviceType::get(void)
+{
+	return m_devicetype;
+}
 
 //---------------------------------------------------------------------------
 
-} // zuki::hdomeruntray::interop
+} // zuki::hdhomeruntray::discovery
 
 #pragma warning(pop)
-
-#endif	// __DISCOVERYMETHOD_H_

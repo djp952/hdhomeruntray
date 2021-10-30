@@ -20,69 +20,32 @@
 // SOFTWARE.
 //---------------------------------------------------------------------------
 
-#ifndef __DEVICE_H_
-#define __DEVICE_H_
+#ifndef __DEVICETYPE_H_
+#define __DEVICETYPE_H_
 #pragma once
 
-#include "DeviceType.h"
-
-#pragma warning(push, 4)
+#pragma warning(push, 4)				// Enable maximum compiler warnings
 
 using namespace System;
-using namespace System::Net;
 
-using namespace Newtonsoft::Json;
-using namespace Newtonsoft::Json::Linq;
-
-namespace zuki::hdhomeruntray::interop {
+namespace zuki::hdhomeruntray::discovery {
 
 //---------------------------------------------------------------------------
-// Class Device (abstract)
+// Enum DeviceType
 //
-// Describes an individual HDHomeRun device
+// Indicates the type of a HDHomeRun device
 //---------------------------------------------------------------------------
 
-public ref class Device abstract
+public enum class DeviceType
 {
-public:
-
-	//-----------------------------------------------------------------------
-	// Properties
-
-	// BaseURL
-	//
-	// Gets the device web interface base URL
-	property String^ BaseURL
-	{
-		String^ get(void);
-	}
-
-	// DeviceType
-	//
-	// Gets the device type identifier
-	property zuki::hdhomeruntray::interop::DeviceType DeviceType
-	{
-		zuki::hdhomeruntray::interop::DeviceType get(void);
-	}
-
-protected:
-
-	// Instance Constructors
-	//
-	Device(struct hdhomerun_discover_device_v3_t const& device);
-	Device(JObject^ device, zuki::hdhomeruntray::interop::DeviceType type);
-
-	//-----------------------------------------------------------------------
-	// Member Variables
-
-	String^										m_baseurl;		// Device base URL string
-	zuki::hdhomeruntray::interop::DeviceType	m_devicetype;	// Device type flag
+	Tuner		= HDHOMERUN_DEVICE_TYPE_TUNER,		// Tuner device
+	Storage		= HDHOMERUN_DEVICE_TYPE_STORAGE,	// Storage (DVR) device
 };
 
 //---------------------------------------------------------------------------
 
-} // zuki::hdhomeruntray::interop
+} // zuki::hdhomeruntray::discovery
 
 #pragma warning(pop)
 
-#endif	// __DEVICE_H_
+#endif	// __DEVICETYPE_H_

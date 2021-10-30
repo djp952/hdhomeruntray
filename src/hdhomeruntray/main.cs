@@ -21,6 +21,7 @@
 //---------------------------------------------------------------------------
 
 using System;
+using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
 namespace zuki.hdhomeruntray
@@ -33,7 +34,7 @@ namespace zuki.hdhomeruntray
 		/// </summary>
 		private static class NativeMethods
 		{
-			[System.Runtime.InteropServices.DllImport("user32.dll")]
+			[DllImport("user32.dll", ExactSpelling = true)]
 			public static extern bool SetProcessDPIAware();
 		}
 		#endregion
