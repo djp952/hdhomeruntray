@@ -174,7 +174,7 @@ namespace zuki.hdhomeruntray
 
 				else if(device is StorageDevice storagedevice)
 				{
-					// TODO: get storage status when it exists
+					if(storagedevice.Recordings.Count > 0) isrecording = true;
 				}
 			}
 
@@ -188,8 +188,8 @@ namespace zuki.hdhomeruntray
 		// Member Variables
 		//-------------------------------------------------------------------
 
-		private ShellNotifyIcon m_notifyicon;
-		private ContextMenuStrip m_contextmenu;
-		private Timer m_timer;
+		private ShellNotifyIcon			m_notifyicon;
+		private ContextMenuStrip		m_contextmenu;
+		private Timer					m_timer;
 	}
 }

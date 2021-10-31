@@ -20,89 +20,60 @@
 // SOFTWARE.
 //---------------------------------------------------------------------------
 
-#ifndef __TUNERLIST_H_
-#define __TUNERLIST_H_
+#ifndef __RECORDING_H_
+#define __RECORDING_H_
 #pragma once
-
-#include "Tuner.h"
 
 #pragma warning(push, 4)
 
 using namespace System;
-using namespace System::Collections::Generic;
+
+using namespace Newtonsoft::Json;
+using namespace Newtonsoft::Json::Linq;
 
 namespace zuki::hdhomeruntray::discovery {
 
 //---------------------------------------------------------------------------
-// Class TunerList
+// Class Recording
 //
-// Implements an IReadOnlyList<> based enumerable collection of tuners
+// Describes an individual HDHomeRun recording
 //---------------------------------------------------------------------------
 
-public ref class TunerList : public IReadOnlyList<Tuner^>
+public ref class Recording
 {
 public:
 
 	//-----------------------------------------------------------------------
-	// Member Functions
-
-	// Create (static)
-	//
-	// Creates a new TunerList instance
-	static TunerList^ Create(String^ statusurl);
-
-	// GetEnumerator
-	//
-	// Returns a generic IEnumerator<T> for the member collection
-	virtual IEnumerator<Tuner^>^ GetEnumerator(void);
-
-	//-----------------------------------------------------------------------
 	// Properties
 
-	// default[int]
+	// Name
 	//
-	// Gets the element at the specified index in the read-only list
-	property Tuner^ default[int]
+	// Gets the name of the recording
+	property String^ Name
 	{
-		virtual Tuner^ get(int index);
-	}
-
-	// Count
-	//
-	// Gets the number of elements in the collection
-	property int Count
-	{
-		virtual int get();
+		String^ get(void);
 	}
 
 internal:
 
 	//-----------------------------------------------------------------------
-	// Internal Fields
+	// Internal Member Functions
 
-	// Empty (static)
+	// Create
 	//
-	// Returns an empty device collection instance
-	static initonly TunerList^ Empty = gcnew TunerList(gcnew List<Tuner^>());
+	// Creates a new Recording instance
+	static Recording^ Create(JObject^ recording);
 
 private:
 
 	// Instance Constructor
 	//
-	TunerList(List<Tuner^>^ tuners);
-
-	//-----------------------------------------------------------------------
-	// Private Member Functions
-
-	// GetEnumerator (IEnumerable)
-	//
-	// Returns a non-generic IEnumerator for the member collection
-	virtual System::Collections::IEnumerator^ IEnumerable_GetEnumerator(void) sealed = System::Collections::IEnumerable::GetEnumerator;
+	Recording(JObject^ tuner);
 
 	//-----------------------------------------------------------------------
 	// Member Variables
 
-	List<Tuner^>^		m_tuners;			// Underlying collection
+	String^			m_name;					// The recording name
 };
 
 //---------------------------------------------------------------------------
@@ -111,4 +82,4 @@ private:
 
 #pragma warning(pop)
 
-#endif	// __TUNERLIST_H_
+#endif	// __RECORDING_H_

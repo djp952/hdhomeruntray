@@ -33,7 +33,7 @@ namespace zuki::hdhomeruntray::discovery {
 //
 // Arguments:
 //
-//	NONE
+//	tuner		- Reference to the JSON status data for the tuner
 
 Tuner::Tuner(JObject^ tuner)
 {

@@ -20,11 +20,11 @@
 // SOFTWARE.
 //---------------------------------------------------------------------------
 
-#ifndef __TUNERLIST_H_
-#define __TUNERLIST_H_
+#ifndef __RECORDINGLIST_H_
+#define __RECORDINGLIST_H_
 #pragma once
 
-#include "Tuner.h"
+#include "Recording.h"
 
 #pragma warning(push, 4)
 
@@ -34,12 +34,12 @@ using namespace System::Collections::Generic;
 namespace zuki::hdhomeruntray::discovery {
 
 //---------------------------------------------------------------------------
-// Class TunerList
+// Class RecordingList
 //
-// Implements an IReadOnlyList<> based enumerable collection of tuners
+// Implements an IReadOnlyList<> based enumerable collection of recordings
 //---------------------------------------------------------------------------
 
-public ref class TunerList : public IReadOnlyList<Tuner^>
+public ref class RecordingList : public IReadOnlyList<Recording^>
 {
 public:
 
@@ -48,13 +48,13 @@ public:
 
 	// Create (static)
 	//
-	// Creates a new TunerList instance
-	static TunerList^ Create(String^ statusurl);
+	// Creates a new RecordingList instance
+	static RecordingList^ Create(String^ statusurl);
 
 	// GetEnumerator
 	//
 	// Returns a generic IEnumerator<T> for the member collection
-	virtual IEnumerator<Tuner^>^ GetEnumerator(void);
+	virtual IEnumerator<Recording^>^ GetEnumerator(void);
 
 	//-----------------------------------------------------------------------
 	// Properties
@@ -62,9 +62,9 @@ public:
 	// default[int]
 	//
 	// Gets the element at the specified index in the read-only list
-	property Tuner^ default[int]
+	property Recording^ default[int]
 	{
-		virtual Tuner^ get(int index);
+		virtual Recording^ get(int index);
 	}
 
 	// Count
@@ -83,13 +83,13 @@ internal:
 	// Empty (static)
 	//
 	// Returns an empty device collection instance
-	static initonly TunerList^ Empty = gcnew TunerList(gcnew List<Tuner^>());
+	static initonly RecordingList^ Empty = gcnew RecordingList(gcnew List<Recording^>());
 
 private:
 
 	// Instance Constructor
 	//
-	TunerList(List<Tuner^>^ tuners);
+	RecordingList(List<Recording^>^ recordings);
 
 	//-----------------------------------------------------------------------
 	// Private Member Functions
@@ -102,7 +102,7 @@ private:
 	//-----------------------------------------------------------------------
 	// Member Variables
 
-	List<Tuner^>^		m_tuners;			// Underlying collection
+	List<Recording^>^		m_recordings;		// Underlying collection
 };
 
 //---------------------------------------------------------------------------
@@ -111,4 +111,4 @@ private:
 
 #pragma warning(pop)
 
-#endif	// __TUNERLIST_H_
+#endif	// __RECORDINGLIST_H_

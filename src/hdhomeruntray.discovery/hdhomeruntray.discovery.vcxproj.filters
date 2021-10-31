@@ -104,6 +104,12 @@
     <ClInclude Include="Tuner.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Recording.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RecordingList.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AssemblyInfo.cpp">
@@ -173,6 +179,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="TunerList.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Recording.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RecordingList.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

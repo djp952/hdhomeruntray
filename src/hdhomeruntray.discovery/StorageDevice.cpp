@@ -46,6 +46,8 @@ StorageDevice::StorageDevice(JObject^ device) : Device(device, zuki::hdhomeruntr
 	m_friendlyname = (!Object::ReferenceEquals(friendlyname, nullptr)) ? friendlyname->ToObject<String^>() : String::Empty;
 	m_storageid = (!Object::ReferenceEquals(storageid, nullptr)) ? storageid->ToObject<String^>() : String::Empty;
 	m_storageurl = (!Object::ReferenceEquals(storageurl, nullptr)) ? storageurl->ToObject<String^>() : String::Empty;
+
+	m_recordings = RecordingList::Create(String::Concat(m_baseurl, "/status.json"));
 }
 
 //---------------------------------------------------------------------------
@@ -81,6 +83,18 @@ String^ StorageDevice::FriendlyName::get(void)
 String^ StorageDevice::Name::get(void)
 {
 	return m_storageid;
+}
+
+//---------------------------------------------------------------------------
+// StorageDevice::Recordings::get
+//
+// Gets the collection of active recordings
+
+RecordingList^ StorageDevice::Recordings::get(void)
+{
+	CLRASSERT(!Object::ReferenceEquals(m_recordings, nullptr));
+
+	return m_recordings;
 }
 
 //---------------------------------------------------------------------------
