@@ -161,17 +161,18 @@ namespace zuki.hdhomeruntray
 			bool isactive = false;			// Active tuners flag
 			bool isrecording = false;       // Active recordings flag
 
+			// Iterate over all the devices to determine what status should be shown
 			foreach(Device device in devices)
 			{
-				if(device is TunerDevice tuner)
+				if(device is TunerDevice tunerdevice)
 				{
-					for(int index = 0; index < tuner.TunerCount; index++)
+					foreach(Tuner tuner in tunerdevice.Tuners)
 					{
-						// TODO: get tuner status when it exists
+						if(tuner.IsActive) isactive = true;
 					}
 				}
 
-				else if(device is StorageDevice storage)
+				else if(device is StorageDevice storagedevice)
 				{
 					// TODO: get storage status when it exists
 				}

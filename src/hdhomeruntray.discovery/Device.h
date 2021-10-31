@@ -83,7 +83,7 @@ public:
 
 protected:
 
-	// Instance Constructors
+	// Instance Constructor
 	//
 	Device(JObject^ device, zuki::hdhomeruntray::discovery::DeviceType type);
 

@@ -44,16 +44,33 @@ TunerDevice::TunerDevice(JObject^ device) : Device(device, zuki::hdhomeruntray::
 	JToken^ islegacy = device->GetValue("Legacy", StringComparison::OrdinalIgnoreCase);
 	JToken^ tunercount = device->GetValue("TunerCount", StringComparison::OrdinalIgnoreCase);
 
-	if(!Object::ReferenceEquals(deviceid, nullptr)) m_deviceid = deviceid->ToObject<String^>();
-	if(!Object::ReferenceEquals(friendlyname, nullptr)) m_friendlyname = friendlyname->ToObject<String^>();
+	m_deviceid = (!Object::ReferenceEquals(deviceid, nullptr)) ? deviceid->ToObject<String^>() : String::Empty;
+	m_friendlyname = (!Object::ReferenceEquals(friendlyname, nullptr)) ? friendlyname->ToObject<String^>() : String::Empty;
 	m_islegacy = (!Object::ReferenceEquals(islegacy, nullptr) && (islegacy->ToObject<int>() == 1));
 	m_tunercount = (!Object::ReferenceEquals(tunercount, nullptr)) ? tunercount->ToObject<int>() : 0;
+
+	// Legacy devices require tuner discovery using libhdhomerun
+	if(m_islegacy) {
+
+		// TODO
+		m_tuners = TunerList::Empty;
+	}
+
+	// Modern devices are able to discover tuner status with a JSON web request
+	else {
+
+		CLRASSERT(!String::IsNullOrEmpty(m_baseurl));
+		m_tuners = TunerList::Create(String::Concat(m_baseurl, "/status.json"));
+	}
+
+	// Precaution against unhandled exceptions
+	if(Object::ReferenceEquals(m_tuners, nullptr)) m_tuners = TunerList::Empty;
 }
 
 //---------------------------------------------------------------------------
-// StorageDevice::Create (internal)
+// TunerDevice::Create (internal)
 //
-// Creates a new StorageDevice instance
+// Creates a new TunerDevice instance
 //
 // Arguments:
 //
@@ -106,13 +123,15 @@ bool TunerDevice::IsLegacy::get(void)
 }
 
 //---------------------------------------------------------------------------
-// TunerDevice::TunerCount::get
+// TunerDevice::Tuners::get
 //
-// Gets the number of individual device tuners on the device
+// Accesses the collection of tuner objects
 
-int TunerDevice::TunerCount::get(void)
+TunerList^ TunerDevice::Tuners::get(void)
 {
-	return m_tunercount;
+	CLRASSERT(!Object::ReferenceEquals(m_tuners, nullptr));
+
+	return m_tuners;
 }
 
 //---------------------------------------------------------------------------

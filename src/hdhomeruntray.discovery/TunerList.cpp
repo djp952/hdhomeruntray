@@ -22,85 +22,103 @@
 
 #include "stdafx.h"
 
-#include "StorageDevice.h"
+#include <memory>
+
+#include "JsonWebRequest.h"
+#include "TunerList.h"
+#include "ReadOnlyListEnumerator.h"
+
+using namespace Newtonsoft::Json;
+using namespace Newtonsoft::Json::Linq;
 
 #pragma warning(push, 4)
 
 namespace zuki::hdhomeruntray::discovery {
 
 //---------------------------------------------------------------------------
-// StorageDevice Constructor (private)
+// TunerList Constructor (private)
 //
 // Arguments:
 //
-//	device		- Reference to the JSON discovery data for the device
+//	tuners		- List<> containing the tuners
 
-StorageDevice::StorageDevice(JObject^ device) : Device(device, zuki::hdhomeruntray::discovery::DeviceType::Storage)
+TunerList::TunerList(List<Tuner^>^ tuners) : m_tuners(tuners)
 {
-	if(Object::ReferenceEquals(device, nullptr)) throw gcnew ArgumentNullException("device");
-
-	JToken^ friendlyname = device->GetValue("FriendlyName", StringComparison::OrdinalIgnoreCase);
-	JToken^ storageid = device->GetValue("StorageID", StringComparison::OrdinalIgnoreCase);
-	JToken^ storageurl = device->GetValue("StorageURL", StringComparison::OrdinalIgnoreCase);
-
-	m_friendlyname = (!Object::ReferenceEquals(friendlyname, nullptr)) ? friendlyname->ToObject<String^>() : String::Empty;
-	m_storageid = (!Object::ReferenceEquals(storageid, nullptr)) ? storageid->ToObject<String^>() : String::Empty;
-	m_storageurl = (!Object::ReferenceEquals(storageurl, nullptr)) ? storageurl->ToObject<String^>() : String::Empty;
+	if(Object::ReferenceEquals(tuners, nullptr)) throw gcnew ArgumentNullException("tuners");
 }
 
 //---------------------------------------------------------------------------
-// StorageDevice::Create (internal)
+// TunerList::default[int]::get
 //
-// Creates a new StorageDevice instance
+// Gets the element at the specified index in the read-only list
+
+Tuner^ TunerList::default::get(int index)
+{
+	return m_tuners[index];
+}
+
+//---------------------------------------------------------------------------
+// TunerList::Count::get
+//
+// Gets the number of elements in the collection
+
+int TunerList::Count::get(void)
+{
+	return m_tuners->Count;
+}
+
+//---------------------------------------------------------------------------
+// TunerList::Create (static)
+//
+// Creates a new TunerList instance by executing a discovery
 //
 // Arguments:
 //
-//	device		- Reference to the JSON discovery data for the device
+//  statusurl		- URL of the status JSON for the tuner device
 
-StorageDevice^ StorageDevice::Create(JObject^ device)
+TunerList^ TunerList::Create(String^ statusurl)
 {
-	if(Object::ReferenceEquals(device, nullptr)) throw gcnew ArgumentNullException();
-	return gcnew StorageDevice(device);
+	if(Object::ReferenceEquals(statusurl, nullptr)) throw gcnew ArgumentNullException("statusurl");
+
+	List<Tuner^>^ discovered = gcnew List<Tuner^>();			// Collection of discovered tuners
+
+	JArray^ tuners = JsonWebRequest::GetArray(statusurl);
+	if(!Object::ReferenceEquals(tuners, nullptr)) {
+
+		// Create a Tuner object for each individual array object
+		for each(JObject^ tuner in tuners) discovered->Add(Tuner::Create(tuner));
+	}
+
+	// Return the generated List<> as a new TunerList instance
+	return gcnew TunerList(discovered);
 }
 
 //---------------------------------------------------------------------------
-// StorageDevice::FriendlyName::get
+// TunerList::GetEnumerator
 //
-// Gets the storage device friendly name
+// Returns a generic IEnumerator<T> for the member collection
+//
+// Arguments:
+//
+//	NONE
 
-String^ StorageDevice::FriendlyName::get(void)
+IEnumerator<Tuner^>^ TunerList::GetEnumerator(void)
 {
-	return m_friendlyname;
+	return gcnew ReadOnlyListEnumerator<Tuner^>(this);
 }
 
 //---------------------------------------------------------------------------
-// StorageDevice::Name::get
+// TunerList::IEnumerable_GetEnumerator
 //
-// Gets the storage device name
-
-String^ StorageDevice::Name::get(void)
-{
-	return m_storageid;
-}
-
-//---------------------------------------------------------------------------
-// StorageDevice::StorageID::get
+// Returns a non-generic IEnumerator for the member collection
 //
-// Gets the storage device identifier
-
-String^ StorageDevice::StorageID::get(void)
-{
-	return m_storageid;
-}
-
-//---------------------------------------------------------------------------
-// StorageDevice::StorageURL::get
+// Arguments:
 //
-// Gets the storage device data URL
+//	NONE
 
-String^ StorageDevice::StorageURL::get(void)
+System::Collections::IEnumerator^ TunerList::IEnumerable_GetEnumerator(void)
 {
-	return m_storageurl;
+	return GetEnumerator();
 }
 
 //---------------------------------------------------------------------------

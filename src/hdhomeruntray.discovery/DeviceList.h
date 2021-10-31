@@ -37,7 +37,7 @@ namespace zuki::hdhomeruntray::discovery {
 //---------------------------------------------------------------------------
 // Class DeviceList
 //
-// Implements an IReadOnlyList<> based enumerable collection of devices
+// Implements an IReadOnlyList<> based enumerable list of devices
 //---------------------------------------------------------------------------
 
 public ref class DeviceList : public IReadOnlyList<Device^>

@@ -20,17 +20,13 @@
 // SOFTWARE.
 //---------------------------------------------------------------------------
 
-#ifndef __TUNERDEVICE_H_
-#define __TUNERDEVICE_H_
+#ifndef __TUNER_H_
+#define __TUNER_H_
 #pragma once
-
-#include "Device.h"
-#include "TunerList.h"
 
 #pragma warning(push, 4)
 
 using namespace System;
-using namespace System::Net;
 
 using namespace Newtonsoft::Json;
 using namespace Newtonsoft::Json::Linq;
@@ -38,56 +34,32 @@ using namespace Newtonsoft::Json::Linq;
 namespace zuki::hdhomeruntray::discovery {
 
 //---------------------------------------------------------------------------
-// Class TunerDevice
+// Class Tuner
 //
-// Describes a HDHomeRun tuner device
+// Describes an individual HDHomeRun tuner
 //---------------------------------------------------------------------------
 
-public ref class TunerDevice : Device
+public ref class Tuner
 {
 public:
 
 	//-----------------------------------------------------------------------
 	// Properties
 
-	// DeviceID
+	// Index
 	//
-	// Gets the tuner device identifier
-	property String^ DeviceID
+	// Gets the resource index of the tuner instance
+	property int Index
 	{
-		String^ get(void);
+		int get(void);
 	}
 
-	// FriendlyName
+	// IsActive
 	//
-	// Gets the device friendly name
-	property String^ FriendlyName
-	{
-		virtual String^ get(void) override;
-	}
-
-	// Name
-	//
-	// Gets the device name (device/storage id)
-	property String^ Name
-	{
-		virtual String^ get(void) override;
-	}
-
-	// IsLegacy
-	//
-	// Get a flag indicating if the tuner device is a legacy device
-	property bool IsLegacy
+	// Gets a flag indicating if the tuner is active or not
+	property bool IsActive
 	{
 		bool get(void);
-	}
-
-	// Tuners
-	//
-	// Accesses the collection of Tuner objects
-	property TunerList^ Tuners
-	{
-		TunerList^ get(void);
 	}
 
 internal:
@@ -97,23 +69,21 @@ internal:
 
 	// Create
 	//
-	// Creates a new TunerDevice instance
-	static TunerDevice^ Create(JObject^ device);
+	// Creates a new Tuner instance
+	static Tuner^ Create(JObject^ tuner);
 
 private:
 
-	// Instance Constructors
+	// Instance Constructor
 	//
-	TunerDevice(JObject^ device);
+	Tuner(JObject^ tuner);
 
 	//-----------------------------------------------------------------------
 	// Member Variables
 
-	String^					m_deviceid;			// Tuner device identifier
-	String^					m_friendlyname;		// Tuner device friendly name
-	bool					m_islegacy;			// Legacy tuner device flag
-	int						m_tunercount;		// Number of tuner instances
-	TunerList^				m_tuners;			// List<> of tuner instances
+	int				m_index = -1;			// The tuner index number
+	__int64			m_frequency;			// Frequency that is tuned
+	String^			m_targetip;				// Target IP address of the tuner
 };
 
 //---------------------------------------------------------------------------
@@ -122,4 +92,4 @@ private:
 
 #pragma warning(pop)
 
-#endif	// __TUNERDEVICE_H_
+#endif	// __TUNER_H_

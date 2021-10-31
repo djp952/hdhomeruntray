@@ -98,6 +98,12 @@
     <ClInclude Include="JsonWebRequest.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="TunerList.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Tuner.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AssemblyInfo.cpp">
@@ -161,6 +167,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="JsonWebRequest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Tuner.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TunerList.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

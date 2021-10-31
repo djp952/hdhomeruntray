@@ -20,100 +20,89 @@
 // SOFTWARE.
 //---------------------------------------------------------------------------
 
-#ifndef __TUNERDEVICE_H_
-#define __TUNERDEVICE_H_
+#ifndef __TUNERLIST_H_
+#define __TUNERLIST_H_
 #pragma once
 
-#include "Device.h"
-#include "TunerList.h"
+#include "Tuner.h"
 
 #pragma warning(push, 4)
 
 using namespace System;
-using namespace System::Net;
-
-using namespace Newtonsoft::Json;
-using namespace Newtonsoft::Json::Linq;
+using namespace System::Collections::Generic;
 
 namespace zuki::hdhomeruntray::discovery {
 
 //---------------------------------------------------------------------------
-// Class TunerDevice
+// Class TunerList
 //
-// Describes a HDHomeRun tuner device
+// Implements an IReadOnlyList<> based enumerable collection of tuners
 //---------------------------------------------------------------------------
 
-public ref class TunerDevice : Device
+public ref class TunerList : public IReadOnlyList<Tuner^>
 {
 public:
 
 	//-----------------------------------------------------------------------
+	// Member Functions
+
+	// Create (static)
+	//
+	// Creates a new TunerList instance
+	static TunerList^ Create(String^ statusurl);
+
+	// GetEnumerator
+	//
+	// Returns a generic IEnumerator<T> for the member collection
+	virtual IEnumerator<Tuner^>^ GetEnumerator(void);
+
+	//-----------------------------------------------------------------------
 	// Properties
 
-	// DeviceID
+	// default[int]
 	//
-	// Gets the tuner device identifier
-	property String^ DeviceID
+	// Gets the element at the specified index in the read-only list
+	property Tuner^ default[int]
 	{
-		String^ get(void);
+		virtual Tuner^ get(int index);
 	}
 
-	// FriendlyName
+	// Count
 	//
-	// Gets the device friendly name
-	property String^ FriendlyName
+	// Gets the number of elements in the collection
+	property int Count
 	{
-		virtual String^ get(void) override;
-	}
-
-	// Name
-	//
-	// Gets the device name (device/storage id)
-	property String^ Name
-	{
-		virtual String^ get(void) override;
-	}
-
-	// IsLegacy
-	//
-	// Get a flag indicating if the tuner device is a legacy device
-	property bool IsLegacy
-	{
-		bool get(void);
-	}
-
-	// Tuners
-	//
-	// Accesses the collection of Tuner objects
-	property TunerList^ Tuners
-	{
-		TunerList^ get(void);
+		virtual int get();
 	}
 
 internal:
 
 	//-----------------------------------------------------------------------
-	// Internal Member Functions
+	// Internal Fields
 
-	// Create
+	// Empty (static)
 	//
-	// Creates a new TunerDevice instance
-	static TunerDevice^ Create(JObject^ device);
+	// Returns an empty device collection instance
+	static initonly TunerList^ Empty = gcnew TunerList(gcnew List<Tuner^>());
 
 private:
 
-	// Instance Constructors
+	// Instance Constructor
 	//
-	TunerDevice(JObject^ device);
+	TunerList(List<Tuner^>^ tuners);
+
+	//-----------------------------------------------------------------------
+	// Private Member Functions
+
+	// GetEnumerator (IEnumerable)
+	//
+	// Returns a non-generic IEnumerator for the member collection
+	virtual System::Collections::IEnumerator^ IEnumerable_GetEnumerator(void) sealed = System::Collections::IEnumerable::GetEnumerator;
 
 	//-----------------------------------------------------------------------
 	// Member Variables
 
-	String^					m_deviceid;			// Tuner device identifier
-	String^					m_friendlyname;		// Tuner device friendly name
-	bool					m_islegacy;			// Legacy tuner device flag
-	int						m_tunercount;		// Number of tuner instances
-	TunerList^				m_tuners;			// List<> of tuner instances
+	List<Tuner^>^ m_tuners;			// Underlying collection
 };
 
 //---------------------------------------------------------------------------
@@ -122,4 +111,4 @@ private:
 
 #pragma warning(pop)
 
-#endif	// __TUNERDEVICE_H_
+#endif	// __TUNERLIST_H_

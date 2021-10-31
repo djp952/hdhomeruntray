@@ -105,8 +105,10 @@
     <ClInclude Include="ReadOnlyListEnumerator.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="StorageDevice.h" />
+    <ClInclude Include="Tuner.h" />
     <ClInclude Include="TunerDevice.h" />
     <ClInclude Include="JsonWebRequest.h" />
+    <ClInclude Include="TunerList.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\depends\libhdhomerun\hdhomerun_channels.c">
@@ -191,8 +193,10 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="StorageDevice.cpp" />
+    <ClCompile Include="Tuner.cpp" />
     <ClCompile Include="TunerDevice.cpp" />
     <ClCompile Include="JsonWebRequest.cpp" />
+    <ClCompile Include="TunerList.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json">
