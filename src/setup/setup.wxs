@@ -18,14 +18,8 @@
     <Package InstallerVersion="405" Compressed="yes" InstallPrivileges="elevated" InstallScope="perMachine"/>
     <Media Id="1" Cabinet="hdhomeruntray.cab" EmbedCab="yes" />
 
-    <Upgrade Id='E9655935-8B9E-4BB4-A452-302EF25F0232'>
-      <UpgradeVersion OnlyDetect="no" Property="PATCHFOUND" IncludeMinimum="yes" IncludeMaximum="no"
-        Minimum="0.0.0.1" Maximum="$(var.ProjectVersion.4)"/>
-    </Upgrade>
-
-    <!-- DISALLOW DOWNGRADES -->
-    <MajorUpgrade AllowDowngrades="no" DowngradeErrorMessage="A newer version of HDHomeRun System Tray has been installed. Please remove that version before running HDHomeRun System Tray setup."
-			MigrateFeatures="no" Schedule="afterInstallValidate"/>
+    <!-- UPGRADES -->
+    <MajorUpgrade DowngradeErrorMessage="A later version of HDHomeRun System Tray has been installed. Please uninstall that version before running HDHomeRun System Tray setup."/>
 
     <!-- DISALLOW ADVERTISED SHORTCUTS -->
     <Property Id="DISABLEADVTSHORTCUTS" Value="1" />
