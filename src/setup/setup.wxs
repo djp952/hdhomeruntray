@@ -7,13 +7,12 @@
   <!-- Build Environment -->
   <?include $(var.ProjectDir)buildenv.wxi ?>
 
-  <Product Id="*"
-    Name="HDHomeRun System Tray $(var.ProjectVersion.4)"
+  <Product Id="$(var.ProjectGuid)"
+    Name="HDHomeRun System Tray $(var.ProjectVersion.3)"
     Language="1033"
     Version="$(var.ProjectVersion.4)"
     Manufacturer="ZukiSoft"
-    UpgradeCode="E9655935-8B9E-4BB4-A452-302EF25F0232">
-    <!-- NEVER CHANGE THE UPGRADE CODE -->
+    UpgradeCode="E9655935-8B9E-4BB4-A452-302EF25F0232"> <!-- NEVER CHANGE THE UPGRADE CODE -->
 
     <Package InstallerVersion="405" Compressed="yes" InstallPrivileges="elevated" InstallScope="perMachine"/>
     <Media Id="1" Cabinet="hdhomeruntray.cab" EmbedCab="yes" />
