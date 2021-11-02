@@ -25,17 +25,15 @@ using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
-using zuki.hdhomeruntray.discovery;
-
 namespace zuki.hdhomeruntray
 {
 	//-----------------------------------------------------------------------
-	// Class PopupForm
+	// Class MainForm
 	//
-	// Form displayed as the popup from the notify icon, provides a display
-	// of each discovered device and the status of the tuners/recordings
+	// Implements the main device status form that provides real-time
+	// information about all HDHomeRun devices detected on the network
 
-	internal partial class PopupForm : Form
+	internal partial class MainForm : Form
 	{
 		#region Win32 API Declarations
 		/// <summary>
@@ -54,30 +52,9 @@ namespace zuki.hdhomeruntray
 
 		// Instance Constructor
 		//
-		public PopupForm()
+		public MainForm()
 		{
 			InitializeComponent();
-		}
-
-		// Instance Constructor
-		//
-		public PopupForm(DeviceList devices) : this()
-		{
-			if(devices == null) throw new ArgumentNullException();
-
-			// If no devices were detected, place a dummy item in the list
-			if(devices.Count == 0)
-			{
-				m_layoutpanel.Controls.Add(PopupItemControl.NoDevices());
-				return;
-			}
-
-			// Add each device as a PopupItemControl into the layout panel
-			foreach(Device device in devices)
-			{
-				if(device is TunerDevice tuner) m_layoutpanel.Controls.Add(new PopupItemControl(tuner));
-				else if(device is StorageDevice storage) m_layoutpanel.Controls.Add(new PopupItemControl(storage));
-			}
 		}
 
 		// Dispose
@@ -118,16 +95,13 @@ namespace zuki.hdhomeruntray
 			// in .NET 4.7 and/or Windows 10/11 to figure out how to scale this value
 			float scalefactor = ((float)SystemInformation.SmallIconSize.Height / 16.0F);
 
-			// Move the form to the desired position before showing it; it should be right-aligned
-			// with the right edge of the icon and sit above the taskbar
+			// Move the form to the desired position before showing it; for now let's put
+			// this into the lower right-hand corner of the screen
 			var top = screen.WorkingArea.Height - this.Size.Height - (int)(12.0F * scalefactor);
-			//this.Location = new Point(iconbounds.Right - this.Size.Width, top);
-
-			// TODO: testing if I like this better; lower right corner of the screen
 			var left = screen.WorkingArea.Width - this.Size.Width - (int)(12.0F * scalefactor);
 			this.Location = new Point(left, top);
 
-			this.Show();					// Show the form at the calculated position
+			this.Show();                    // Show the form at the calculated position
 		}
 
 		//-------------------------------------------------------------------
@@ -153,6 +127,7 @@ namespace zuki.hdhomeruntray
 		// Member Variables
 		//-------------------------------------------------------------------
 
-		private IntPtr m_hrgn;					// Unmanaged HRGN object
+		private IntPtr m_hrgn;                  // Unmanaged HRGN object
 	}
+
 }

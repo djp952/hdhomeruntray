@@ -105,10 +105,21 @@ namespace zuki.hdhomeruntray
 		// Invoked when the application is exiting
 		private void OnApplicationExit(object sender, EventArgs args)
 		{
-			// TODO: cancel any async operations
+			// Ensure all windows are closed
+			if(m_popupform != null) m_popupform.Close();
+			if(m_mainform != null) m_mainform.Close();
 
 			m_timer.Enabled = false;			// Stop the timer
 			m_notifyicon.Visible = false;		// Remove the tray icon
+		}
+
+		// OnMainFormClosed
+		//
+		// Invoked when the main form has been closed
+		private new void OnMainFormClosed(object sender, EventArgs args)
+		{
+			m_mainform.Dispose();
+			m_mainform = null;
 		}
 
 		// OnMenuItemExit
@@ -137,7 +148,8 @@ namespace zuki.hdhomeruntray
 		// Invoked when the hover popup window should be opened
 		private void OnNotifyIconOpenPopup(object sender, EventArgs args)
 		{
-			if(m_popupform == null)
+			// Do not show the popup window if the main window is open
+			if((m_mainform == null) && (m_popupform == null))
 			{
 				m_popupform = new PopupForm(DeviceList.Create());
 				m_popupform.ShowFromNotifyIcon(m_notifyicon);
@@ -149,9 +161,18 @@ namespace zuki.hdhomeruntray
 		// Invoked when the notify icon has been selected (clicked on)
 		private void OnNotifyIconSelected(object sender, EventArgs args)
 		{
-			// TESTING
-			PopupForm popup = new PopupForm(DeviceList.Create());
-			popup.ShowFromNotifyIcon(m_notifyicon);
+			// Close the popup window if it's open
+			OnNotifyIconClosePopup(this, EventArgs.Empty);
+
+			// This action can be used to toggle the state of the main form
+			if(m_mainform == null)
+			{
+				m_mainform = new MainForm();
+				m_mainform.FormClosed += new FormClosedEventHandler(this.OnMainFormClosed);
+				m_mainform.ShowFromNotifyIcon(m_notifyicon);
+			}
+
+			else m_mainform.Close();
 		}
 
 		// OnTimerTick
@@ -217,5 +238,6 @@ namespace zuki.hdhomeruntray
 		private ContextMenuStrip m_contextmenu;
 		private Timer m_timer;
 		private PopupForm m_popupform;
+		private MainForm m_mainform;
 	}
 }
