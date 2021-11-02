@@ -27,6 +27,7 @@
       <Link>vcmergemods.wxs</Link>
     </Compile>
     <Compile Include="setup.wxs" />
+    <Compile Include="ui.wxs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="..\..\tmp\version\version.wxi">
@@ -36,6 +37,10 @@
     <Content Include="buildenv.wxi" />
   </ItemGroup>
   <ItemGroup>
+    <WixExtension Include="WixUIExtension">
+      <HintPath>$(WixExtDir)\WixUIExtension.dll</HintPath>
+      <Name>WixUIExtension</Name>
+    </WixExtension>
     <WixExtension Include="WixNetFxExtension">
       <HintPath>$(WixExtDir)\WixNetFxExtension.dll</HintPath>
       <Name>WixNetFxExtension</Name>

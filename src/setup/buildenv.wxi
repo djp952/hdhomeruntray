@@ -3,6 +3,10 @@
 
   <!-- ProjectBinFolder -->
   <!-- Set to the platform-specific \bin path  for the project -->
+  <?define ProjectAssetsFolder = $(var.ProjectDir)..\..\assets\ ?>
+
+  <!-- ProjectBinFolder -->
+  <!-- Set to the platform-specific \bin path  for the project -->
   <?define ProjectBinFolder = $(var.ProjectDir)..\..\bin\$(var.Configuration)\ ?>
 
   <!-- ProjectPackagesFolder -->

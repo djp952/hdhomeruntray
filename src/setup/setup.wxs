@@ -8,7 +8,7 @@
   <?include $(var.ProjectDir)buildenv.wxi ?>
 
   <Product Id="$(var.ProjectGuid)"
-    Name="HDHomeRun System Tray $(var.ProjectVersion.3)"
+    Name="HDHomeRun System Tray"
     Language="1033"
     Version="$(var.ProjectVersion.4)"
     Manufacturer="ZukiSoft"
@@ -84,6 +84,11 @@
       </File>
     </Component>
 
+    <Icon Id="app_ico" SourceFile="$(var.ProjectAssetsFolder)\app.ico"/>
+    <Property Id="ARPPRODUCTICON" Value="app_ico" />
+
+    <UIRef Id="WixUI_hdhomeruntray" />
+  
   </Product>
 
 </Wix>
