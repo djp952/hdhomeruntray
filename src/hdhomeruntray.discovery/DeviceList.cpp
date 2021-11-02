@@ -37,6 +37,40 @@ using namespace Newtonsoft::Json::Linq;
 
 namespace zuki::hdhomeruntray::discovery {
 
+// Class CompareDeviceById
+//
+// Helper class used to sort a List<Device^> by DeviceID
+ref class CompareDeviceById : Comparer<Device^>
+{
+public:
+
+	virtual int Compare(Device^ lhs, Device^ rhs) override
+	{
+		if(CLRISNULL(lhs) && CLRISNULL(rhs)) return 0;
+
+		// safe_cast<> the objects into either of the underlying types
+		TunerDevice^ lhstuner = dynamic_cast<TunerDevice^>(lhs);
+		TunerDevice^ rhstuner = dynamic_cast<TunerDevice^>(rhs);
+		StorageDevice^ lhsstorage = dynamic_cast<StorageDevice^>(lhs);
+		StorageDevice^ rhsstorage = dynamic_cast<StorageDevice^>(rhs);
+
+		// Make sure that particular assumption was valid
+		CLRASSERT(CLRISNOTNULL(lhstuner) || CLRISNOTNULL(lhsstorage));
+		CLRASSERT(CLRISNOTNULL(rhstuner) || CLRISNOTNULL(rhsstorage));
+
+		// If both Devices are TunerDevices, compare the DeviceID
+		if(CLRISNOTNULL(lhstuner) && CLRISNOTNULL(rhstuner))
+			return String::Compare(lhstuner->DeviceID, rhstuner->DeviceID, StringComparison::OrdinalIgnoreCase);
+
+		// If both Devices are StorageDevices, compare the StorageID
+		if(CLRISNOTNULL(lhsstorage) && CLRISNOTNULL(rhsstorage))
+			return String::Compare(lhsstorage->StorageID, rhsstorage->StorageID, StringComparison::OrdinalIgnoreCase);
+
+		if(CLRISNOTNULL(lhstuner)) return -1;			// Tuner < Storage
+		else return 1;									// Storage > Tuner
+	}
+};
+
 //---------------------------------------------------------------------------
 // DeviceList Constructor (private)
 //
@@ -138,6 +172,9 @@ DeviceList^ DeviceList::DiscoverBroadcast(void)
 		}
 	}
 
+	// Sort the list of discovered devices prior to generating the DeviceList instance
+	discovered->Sort(gcnew CompareDeviceById());
+
 	return gcnew DeviceList(discovered);
 }
 
@@ -183,7 +220,9 @@ DeviceList^ DeviceList::DiscoverHttp(void)
 		}
 	}
 
-	// Return the generated List<> as a new DeviceList instance
+	// Sort the list of discovered devices prior to generating the DeviceList instance
+	discovered->Sort(gcnew CompareDeviceById());
+
 	return gcnew DeviceList(discovered);
 }
 

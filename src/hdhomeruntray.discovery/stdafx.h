@@ -48,6 +48,14 @@
 #endif
 
 //---------------------------------------------------------------------------
+// CLRISNULL / CLRISNOTNULL
+//
+// Shorthand macros for the often-used Object::ReferenceEquals(o, nullptr)
+
+#define CLRISNULL(__object) (Object::ReferenceEquals(__object, nullptr))
+#define CLRISNOTNULL(__object) (!Object::ReferenceEquals(__object, nullptr))
+
+//---------------------------------------------------------------------------
 // Win32 Declarations
 
 #define	WINVER				_WIN32_WINNT_WIN7
