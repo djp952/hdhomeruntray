@@ -58,6 +58,18 @@
     </Compile>
     <Compile Include="MainApplication.cs" />
     <Compile Include="main.cs" />
+    <Compile Include="PopupForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="PopupForm.Designer.cs">
+      <DependentUpon>PopupForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PopupItemControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="PopupItemControl.Designer.cs">
+      <DependentUpon>PopupItemControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="ShellNotifyIcon.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -69,6 +81,12 @@
     </Compile>
     <Compile Include="StatusIcons.cs" />
     <Compile Include="StatusIconType.cs" />
+    <EmbeddedResource Include="PopupForm.resx">
+      <DependentUpon>PopupForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PopupItemControl.resx">
+      <DependentUpon>PopupItemControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <SubType>Designer</SubType>

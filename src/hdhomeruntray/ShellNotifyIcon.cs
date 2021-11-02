@@ -46,7 +46,7 @@ namespace zuki.hdhomeruntray
 	// TODO: 64-bit NativeMethods and WndProc implementations
 	// TODO: Solution for lack of NIN_POPUPOPEN and NIN_POPUPCLOSE messages on Windows 11
 	
-	class ShellNotifyIcon : Component
+	class ShellNotifyIcon : Component, IWin32Window
 	{
 		#region Win32 API Declarations
 		/// <summary>
@@ -321,6 +321,11 @@ namespace zuki.hdhomeruntray
 			set { m_contextmenu = value; }
 		}
 
+		// Handle (IWin32Window)
+		//
+		// Exposes the window handle of the NativeWindow
+		public IntPtr Handle => ((IWin32Window)m_backingwindow).Handle;
+
 		// Icon
 		//
 		// Gets or sets the icon to show in the tray
@@ -389,10 +394,10 @@ namespace zuki.hdhomeruntray
 		// Member Functions
 		//-------------------------------------------------------------------
 
-		// GetRectangle
+		// GetBounds
 		//
 		// Gets the bounding rectangle for the tray icon
-		public Rectangle GetRectangle()
+		public Rectangle GetBounds()
 		{
 			// If the tray icon has not been created or we are in design mode, bail out
 			if(!m_created || DesignMode) return Rectangle.Empty;
@@ -407,7 +412,7 @@ namespace zuki.hdhomeruntray
 
 			// Attempt to retrive the bounding rectangle for the notify icon
 			if(NativeMethods.Shell_NotifyIconGetRect(ref identifer, out NativeMethods.RECT rect) == 0)     // S_OK
-				return Rectangle.FromLTRB(rect.left, rect.top, rect.right - rect.left, rect.bottom - rect.top);
+				return Rectangle.FromLTRB(rect.left, rect.top, rect.right, rect.bottom);
 
 			// The operation failed; return a default bounding rectangle
 			return Rectangle.Empty;

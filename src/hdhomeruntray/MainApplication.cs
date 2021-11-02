@@ -122,6 +122,12 @@ namespace zuki.hdhomeruntray
 		// Invoked when the hover popup window should be closed
 		private void OnNotifyIconClosePopup(object sender, EventArgs args)
 		{
+			if(m_popupform != null)
+			{
+				m_popupform.Close();
+				m_popupform.Dispose();
+				m_popupform = null;
+			}
 		}
 
 		// OnNotifyIconOpenPopup
@@ -129,6 +135,11 @@ namespace zuki.hdhomeruntray
 		// Invoked when the hover popup window should be opened
 		private void OnNotifyIconOpenPopup(object sender, EventArgs args)
 		{
+			if(m_popupform == null)
+			{
+				m_popupform = new PopupForm(DeviceList.Create(DiscoveryMethod.Http));
+				m_popupform.ShowFromNotifyIcon(m_notifyicon);
+			}
 		}
 
 		// OnNotifyIconSelected
@@ -136,6 +147,9 @@ namespace zuki.hdhomeruntray
 		// Invoked when the notify icon has been selected (clicked on)
 		private void OnNotifyIconSelected(object sender, EventArgs args)
 		{
+			// TESTING
+			PopupForm popup = new PopupForm(DeviceList.Create());
+			popup.ShowFromNotifyIcon(m_notifyicon);
 		}
 
 		// OnTimerTick
@@ -150,6 +164,10 @@ namespace zuki.hdhomeruntray
 			// Update the tray icon
 			UpdateNotifyIcon(devices);
 		}
+
+		//-------------------------------------------------------------------
+		// Private Member Functions
+		//-------------------------------------------------------------------
 
 		// UpdateNotifyIcon
 		//
@@ -188,8 +206,9 @@ namespace zuki.hdhomeruntray
 		// Member Variables
 		//-------------------------------------------------------------------
 
-		private ShellNotifyIcon			m_notifyicon;
-		private ContextMenuStrip		m_contextmenu;
-		private Timer					m_timer;
+		private ShellNotifyIcon	m_notifyicon;
+		private ContextMenuStrip m_contextmenu;
+		private Timer m_timer;
+		private PopupForm m_popupform;
 	}
 }
