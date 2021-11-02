@@ -8,11 +8,9 @@
   -->
 
   <MergeRef Id="Microsoft_VC142_CRT_x86"/>
-  <MergeRef Id="Microsoft_VC142_MFC_x86"/>
 
   <?if $(var.Configuration) = "Debug" ?>
   <MergeRef Id="Microsoft_VC142_DebugCRT_x86"/>
-  <MergeRef Id="Microsoft_VC142_DebugMFC_x86"/>
   <?endif?>
 
 </Include>

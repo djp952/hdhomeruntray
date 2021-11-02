@@ -49,17 +49,17 @@
     <OutDir>$(ProjectDir)..\..\bin\$(Configuration)\</OutDir>
     <TargetName>$(RootNamespace)</TargetName>
     <IntDir>obj\$(Configuration)\</IntDir>
-    <NMakeBuildCommandLine>"$(OutDir)findvcmsms" "$(VCInstallDir)\" -ver:$(VCToolsRedistVersion) -filter:CRT_x86;MFC_x86;DebugCRT_x86;DebugMFC_x86 "-out:$(ProjectDir)..\..\tmp\msm\vcmergemods.wxs"</NMakeBuildCommandLine>
+    <NMakeBuildCommandLine>"$(OutDir)findvcmsms" "$(VCInstallDir)\" -ver:$(VCToolsRedistVersion) -filter:CRT_x86;DebugCRT_x86 "-out:$(ProjectDir)..\..\tmp\msm\vcmergemods.wxs"</NMakeBuildCommandLine>
     <NMakeOutput>$(ProjectDir)..\..\tmp\msm\vcmergemods.wxs</NMakeOutput>
-    <NMakeReBuildCommandLine>"$(OutDir)findvcmsms" "$(VCInstallDir)\" -ver:$(VCToolsRedistVersion) -filter:CRT_x86;MFC_x86;DebugCRT_x86;DebugMFC_x86 "-out:$(ProjectDir)..\..\tmp\msm\vcmergemods.wxs"</NMakeReBuildCommandLine>
+    <NMakeReBuildCommandLine>"$(OutDir)findvcmsms" "$(VCInstallDir)\" -ver:$(VCToolsRedistVersion) -filter:CRT_x86;DebugCRT_x86 "-out:$(ProjectDir)..\..\tmp\msm\vcmergemods.wxs"</NMakeReBuildCommandLine>
     <NMakeCleanCommandLine>if exist "$(ProjectDir)..\..\tmp\msm\vcmergemods.wxs" del "$(ProjectDir)..\..\tmp\msm\vcmergemods.wxs"</NMakeCleanCommandLine>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>$(ProjectDir)..\..\bin\$(Configuration)\</OutDir>
     <TargetName>$(RootNamespace)</TargetName>
     <IntDir>obj\$(Configuration)\</IntDir>
-    <NMakeBuildCommandLine>"$(OutDir)findvcmsms" "$(VCInstallDir)\" -ver:$(VCToolsRedistVersion) -filter:CRT_x86;MFC_x86 "-out:$(ProjectDir)..\..\tmp\msm\vcmergemods.wxs"</NMakeBuildCommandLine>
-    <NMakeReBuildCommandLine>"$(OutDir)findvcmsms" "$(VCInstallDir)\" -ver:$(VCToolsRedistVersion) -filter:CRT_x86;MFC_x86 "-out:$(ProjectDir)..\..\tmp\msm\vcmergemods.wxs"</NMakeReBuildCommandLine>
+    <NMakeBuildCommandLine>"$(OutDir)findvcmsms" "$(VCInstallDir)\" -ver:$(VCToolsRedistVersion) -filter:CRT_x86 "-out:$(ProjectDir)..\..\tmp\msm\vcmergemods.wxs"</NMakeBuildCommandLine>
+    <NMakeReBuildCommandLine>"$(OutDir)findvcmsms" "$(VCInstallDir)\" -ver:$(VCToolsRedistVersion) -filter:CRT_x86 "-out:$(ProjectDir)..\..\tmp\msm\vcmergemods.wxs"</NMakeReBuildCommandLine>
     <NMakeCleanCommandLine>if exist "$(ProjectDir)..\..\tmp\msm\vcmergemods.wxs" del "$(ProjectDir)..\..\tmp\msm\vcmergemods.wxs"</NMakeCleanCommandLine>
     <NMakeOutput>$(ProjectDir)..\..\tmp\msm\vcmergemods.wxs</NMakeOutput>
   </PropertyGroup>
