@@ -89,8 +89,10 @@ namespace zuki.hdhomeruntray
 			m_notifyicon.ContextMenuStrip = m_contextmenu;
 
 			// Create the periodic timer object
-			m_timer = new Timer();
-			m_timer.Interval = 30000;       // TODO: Configurable
+			m_timer = new Timer
+			{
+				Interval = 30000       // TODO: Configurable
+			};
 			m_timer.Tick += new EventHandler(this.OnTimerTick);
 		}
 
@@ -137,7 +139,7 @@ namespace zuki.hdhomeruntray
 		{
 			if(m_popupform == null)
 			{
-				m_popupform = new PopupForm(DeviceList.Create(DiscoveryMethod.Http));
+				m_popupform = new PopupForm(DeviceList.Create());
 				m_popupform.ShowFromNotifyIcon(m_notifyicon);
 			}
 		}
@@ -176,8 +178,8 @@ namespace zuki.hdhomeruntray
 		{
 			if(devices == null) throw new ArgumentNullException("devices");
 
-			bool isactive = false;			// Active tuners flag
-			bool isrecording = false;       // Active recordings flag
+			int numactive = 0;              // Count of active tuners
+			int numrecording = 0;			// Count of active recordings
 
 			// Iterate over all the devices to determine what status should be shown
 			foreach(Device device in devices)
@@ -186,19 +188,23 @@ namespace zuki.hdhomeruntray
 				{
 					foreach(Tuner tuner in tunerdevice.Tuners)
 					{
-						if(tuner.IsActive) isactive = true;
+						if(tuner.IsActive) numactive++;
 					}
 				}
 
 				else if(device is StorageDevice storagedevice)
 				{
-					if(storagedevice.Recordings.Count > 0) isrecording = true;
+					numrecording += storagedevice.Recordings.Count;
 				}
 			}
 
-			// Update the tray icon accordingly
-			if(isrecording) m_notifyicon.Icon = StatusIcons.Get(StatusIconType.Recording);
-			else if(isactive) m_notifyicon.Icon = StatusIcons.Get(StatusIconType.Active);
+			// Update the tool tip text; this must be set to something otherwise the
+			// NIN_POPUP messages will not be sent to the application
+			m_notifyicon.ToolTip = String.Format("{0} active tuner{1}", numactive, (numactive == 1) ? "" : "s");
+
+			// Update the icon image based on the overall status
+			if(numrecording > 0) m_notifyicon.Icon = StatusIcons.Get(StatusIconType.Recording);
+			else if(numactive > 0) m_notifyicon.Icon = StatusIcons.Get(StatusIconType.Active);
 			else m_notifyicon.Icon = StatusIcons.Get(StatusIconType.Idle);
 		}
 
