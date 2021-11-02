@@ -121,5 +121,23 @@ namespace zuki.hdhomeruntray
 			dot.Visible = true;
 			m_layoutpanel.Controls.Add(dot);
 		}
+
+		public static PopupItemControl NoDevices()
+		{
+			PopupItemControl nodevices = new PopupItemControl();
+			var name = new Label
+			{
+				AutoSize = true,
+				Size = new Size(1, 1),
+				Text = "No HDHomeRun devices detected",
+				TextAlign = ContentAlignment.MiddleCenter,
+				Dock = DockStyle.Left,
+				Font = new Font("Segoe UI Semibold", nodevices.Font.Size, FontStyle.Regular),
+				Visible = true
+			};
+			nodevices.m_layoutpanel.Controls.Add(name);
+
+			return nodevices;
+		}
 	}
 }

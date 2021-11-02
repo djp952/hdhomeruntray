@@ -63,6 +63,15 @@ namespace zuki.hdhomeruntray
 		//
 		public PopupForm(DeviceList devices) : this()
 		{
+			if(devices == null) throw new ArgumentNullException();
+
+			// If no devices were detected, place a dummy item in the list
+			if(devices.Count == 0)
+			{
+				m_layoutpanel.Controls.Add(PopupItemControl.NoDevices());
+				return;
+			}
+
 			// Add each device as a PopupItemControl into the layout panel
 			foreach(Device device in devices)
 			{

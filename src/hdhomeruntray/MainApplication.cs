@@ -198,9 +198,10 @@ namespace zuki.hdhomeruntray
 				}
 			}
 
-			// Update the tool tip text; this must be set to something otherwise the
-			// NIN_POPUP messages will not be sent to the application
-			m_notifyicon.ToolTip = String.Format("{0} active tuner{1}", numactive, (numactive == 1) ? "" : "s");
+			// Update the tool tip text; this must be set to something otherwise the NIN_POPUP
+			// messages will not be sent to the application. Keep it basic here.
+			if(devices.Count > 0) m_notifyicon.ToolTip = String.Format("{0} active tuner{1}", numactive, (numactive == 1) ? "" : "s");
+			else m_notifyicon.ToolTip = "No devices detected";
 
 			// Update the icon image based on the overall status
 			if(numrecording > 0) m_notifyicon.Icon = StatusIcons.Get(StatusIconType.Recording);
