@@ -407,7 +407,7 @@ namespace zuki.hdhomeruntray
 			{
 				cbSize = (uint)Marshal.SizeOf(typeof(NativeMethods.NOTIFYICONIDENTIFIER)),
 				hWnd = m_backingwindow.Handle,
-				guidItem = m_guid,
+				guidItem = s_guid,
 			};
 
 			// Attempt to retrive the bounding rectangle for the notify icon
@@ -456,7 +456,7 @@ namespace zuki.hdhomeruntray
 				cbSize = (uint)Marshal.SizeOf(typeof(NativeMethods.NOTIFYICONDATAW)),
 				uFlags = NativeMethods.NIF_INFO | NativeMethods.NIF_GUID,
 				dwInfoFlags = (uint)type,
-				guidItem = m_guid,
+				guidItem = s_guid,
 			};
 
 			// Ensure the backing window object has been created
@@ -646,7 +646,7 @@ namespace zuki.hdhomeruntray
 					uFlags = NativeMethods.NIF_MESSAGE | NativeMethods.NIF_GUID,
 					hWnd = m_backingwindow.Handle,
 					uCallbackMessage = WM_TRAYICONMESSAGE,
-					guidItem = m_guid,
+					guidItem = s_guid,
 				};
 
 				// NIF_ICON
@@ -788,7 +788,6 @@ namespace zuki.hdhomeruntray
 		//-------------------------------------------------------------------
 
 		private readonly object m_lock = new object();		// Synchronziation object
-		private readonly Guid m_guid = Guid.NewGuid();      // Instance GUID
 		private BackingWindow m_backingwindow = null;		// Backing window
 		private bool m_created = false;						// Creation flag
 
@@ -798,8 +797,12 @@ namespace zuki.hdhomeruntray
 		private Icon m_icon = null;							// .Icon
 		private object m_tag = null;						// .Tag
 		private string m_tooltip = String.Empty;			// .ToolTip
-		private bool m_visible = false;						// .Visible
+		private bool m_visible = false;                     // .Visible
 
+		// GUIDs
+		//
+		private static readonly Guid s_guid = Guid.Parse("{E9DD6790-E032-4CAE-9140-CC0FB55FC210}");
+		
 		// Component Event objects
 		//
 		private static readonly object EVENT_BALLOONTIPSHOWN = new object();
