@@ -5,5 +5,5 @@
 	path = depends/build
 	url = https://github.com/djp952/build.git
 [submodule "msfonts"]
-	path = depends\\msfonts
+	path = depends/msfonts
 	url = https://github.com/microsoft/fonts.git
