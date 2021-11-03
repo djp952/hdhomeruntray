@@ -1,13 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Include>
 
-  <!-- ProjectBinFolder -->
-  <!-- Set to the platform-specific \bin path  for the project -->
+  <!-- ProjectAssetsFolder -->
+  <!-- Set to the root \assets path  for the project -->
   <?define ProjectAssetsFolder = $(var.ProjectDir)..\..\assets\ ?>
 
   <!-- ProjectBinFolder -->
   <!-- Set to the platform-specific \bin path  for the project -->
   <?define ProjectBinFolder = $(var.ProjectDir)..\..\bin\$(var.Configuration)\ ?>
+
+  <!-- ProjectDependsFolder -->
+  <!-- Set to the root \depends path for the project -->
+  <?define ProjectDependsFolder = $(var.ProjectDir)..\..\depends\ ?>
 
   <!-- ProjectPackagesFolder -->
   <!-- Set to the root \packages path for the project -->

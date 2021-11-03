@@ -46,6 +46,9 @@
         </Directory>
       </Directory>
 
+      <!-- Fonts -->
+      <Directory Id="FontsFolder"/>
+
       <!-- Start Menu -->
       <Directory Id="ProgramMenuFolder"/>
 
@@ -63,6 +66,7 @@
       <ComponentRef Id="hdhomeruntray_exe_config"/>
       <ComponentRef Id="hdhomeruntray_discovery_dll"/>
       <ComponentRef Id="newtonsoft_json_dll"/>
+      <ComponentRef Id="winjs_symbols_ttf"/>
     </ComponentGroup>
 
     <Component Id="hdhomeruntray_exe" Directory="HDHomeRunTrayBinFolder" Guid="16F99373-B2BB-49C0-907C-08A6AF1CBE83">
@@ -84,7 +88,11 @@
       </File>
     </Component>
 
-    <Icon Id="app_ico" SourceFile="$(var.ProjectAssetsFolder)\app.ico"/>
+    <Component Id="winjs_symbols_ttf" Directory="FontsFolder" Guid="FC564FF7-9D04-49D2-B2E9-44422B19DD57">
+      <File Id="winjs_symbols.ttf" Name="winjs-symbols.ttf" KeyPath="yes" TrueType="yes" Source="$(var.ProjectDependsFolder)msfonts\Symbols\winjs-symbols.ttf" />
+    </Component>
+    
+    <Icon Id="app_ico" SourceFile="$(var.ProjectAssetsFolder)app.ico"/>
     <Property Id="ARPPRODUCTICON" Value="app_ico" />
 
     <UIRef Id="WixUI_hdhomeruntray" />
