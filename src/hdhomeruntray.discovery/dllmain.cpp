@@ -42,18 +42,19 @@
 
 extern "C" int APIENTRY DllMain(HINSTANCE /*instance*/, DWORD reason, LPVOID /*context*/)
 {
+	static int wsaresult = 0;			// Result from WSAStartup
 	WSADATA wsadata = {};				// Windows sockets startup structure
 
 	switch(reason) {
 
 		case DLL_PROCESS_ATTACH:
 
-			WSAStartup(MAKEWORD(2, 2), &wsadata);
+			wsaresult = WSAStartup(MAKEWORD(2, 2), &wsadata);
 			break;
 
 		case DLL_PROCESS_DETACH:
 
-			WSACleanup();
+			if(wsaresult == 0) WSACleanup();
 			break;
 	}
 
