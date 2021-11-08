@@ -219,10 +219,16 @@ namespace zuki.hdhomeruntray
 				}
 			}
 
-			// Update the tool tip text; this must be set to something otherwise the NIN_POPUP
-			// messages will not be sent to the application. Keep it basic here.
-			if(devices.Count > 0) m_notifyicon.ToolTip = String.Format("{0} active tuner{1}", numactive, (numactive == 1) ? "" : "s");
-			else m_notifyicon.ToolTip = "No devices detected";
+			// Windows 11 doesn't support NIN_POPUPOPEN/NIN_POPUPCLOSE, at least not yet, so the custom
+			// hover implementation must be used on that platform
+			if(VersionHelper.IsWindows11OrGreater())
+			{
+				m_notifyicon.ToolTip = String.Empty;
+				m_notifyicon.HoverInterval = 1000;			// TODO: Get default from registry or something
+			}
+
+			// For NIN_POPUPOPEN/NIN_POPUPCLOSE to be fired the tool tip text must be set to something
+			else m_notifyicon.ToolTip = "HDHomeRun System Tray";
 
 			// Update the icon image based on the overall status
 			if(numrecording > 0) m_notifyicon.Icon = StatusIcons.Get(StatusIconType.Recording);

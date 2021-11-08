@@ -38,9 +38,6 @@ namespace zuki.hdhomeruntray
 	internal partial class PopupForm : Form
 	{
 		#region Win32 API Declarations
-		/// <summary>
-		/// Win32 API Declarations
-		/// </summary>
 		private static class NativeMethods
 		{
 			[DllImport("gdi32.dll", ExactSpelling = true)]

@@ -96,6 +96,7 @@ namespace zuki.hdhomeruntray
 			public const uint WM_CONTEXTMENU = 0x007B;
 			public const uint WM_DESTROY = 0x0002;
 			public const uint WM_INITMENUPOPUP = 0x0117;
+			public const uint WM_MOUSEMOVE = 0x0200;
 			public const uint WM_USER = 0x0400;
 
 			[StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
@@ -144,6 +145,26 @@ namespace zuki.hdhomeruntray
 				IntPtr Handle { get; }
 			}
 
+			public static short GET_X_LPARAM(IntPtr value)
+			{
+				return unchecked((short)(long)value);
+			}
+
+			public static short GET_Y_LPARAM(IntPtr value)
+			{
+				return unchecked((short)((long)value >> 16));
+			}
+
+			public static ushort HIWORD(IntPtr value)
+			{
+				return unchecked((ushort)((ulong)value >> 16));
+			}
+
+			public static ushort LOWORD(IntPtr value)
+			{
+				return unchecked((ushort)(ulong)value);
+			}
+
 			// NOTE: 32-bit version
 			[DllImport("user32.dll", CharSet = CharSet.Unicode, ExactSpelling = true)]
 			public static extern int GetCursorPos(out Point pt);
@@ -186,6 +207,9 @@ namespace zuki.hdhomeruntray
 		public ShellNotifyIcon()
 		{
 			m_backingwindow = new BackingWindow(this);
+			m_hovertimer = new Timer();
+			m_hovertimer.Tick += new EventHandler(OnHoverTimer);
+
 			UpdateIcon(m_visible);
 		}
 
@@ -338,6 +362,23 @@ namespace zuki.hdhomeruntray
 				if(m_icon != value)
 				{
 					m_icon = value;
+					UpdateIcon(m_visible);
+				}
+			}
+		}
+
+		// HoverInterval
+		//
+		// Gets or sets a custom hover interval (disables NIN_POPUPxxx messages)
+		[DefaultValue(0)]
+		public int HoverInterval
+		{
+			get { return m_hoverinterval; }
+			set
+			{
+				if(m_hoverinterval != value)
+				{
+					m_hoverinterval = value;
 					UpdateIcon(m_visible);
 				}
 			}
@@ -539,8 +580,8 @@ namespace zuki.hdhomeruntray
 				m_component.WndProc(ref message);
 			}
 
-			private ShellNotifyIcon m_component;    // Owning ShellNotifyIcon component
-			private GCHandle m_gchandle;			// Handle to prevent Garbage collection
+			private readonly ShellNotifyIcon m_component;	// Owning ShellNotifyIcon component
+			private GCHandle m_gchandle;					// Handle to prevent Garbage collection
 		}
 
 		//-------------------------------------------------------------------
@@ -595,6 +636,36 @@ namespace zuki.hdhomeruntray
 
 			// Set the context menu strip to be topmost, allowing it to overlap the system tray
 			s_contextmenustrip_showintaskbar.Invoke(m_contextmenu, new Object[] { cursorpos.X, cursorpos.Y });
+		}
+
+		// OnHoverTimer
+		//
+		// Invoked when the pseduo-hover event timer has come due
+		private void OnHoverTimer(object sender, EventArgs args)
+		{
+			// Check if the mouse cursor is still in the icon boundaries
+			if(GetBounds().Contains(Cursor.Position))
+			{
+				// If the hover isn't active yet, open the popup window and change
+				// the timer period to a short interval to close the popup quickly
+				// regardless of the initial delay to open it
+				if(!m_hoveractive)
+				{
+					m_hovertimer.Interval = 10;			// ms
+					OnOpenPopup();
+				}
+
+				m_hoveractive = true;				// Hover is (still) active
+			}
+
+			else
+			{
+				// Mouse has left the boundaries of the icon; close the popup window
+				// and disable the timer
+				OnClosePopup();
+				m_hoveractive = false;
+				m_hovertimer.Enabled = false;
+			}
 		}
 
 		// OnOpenPopup
@@ -656,11 +727,11 @@ namespace zuki.hdhomeruntray
 					data.hIcon = m_icon.Handle;
 				}
 
-				// NIF_TIP
-				if(m_tooltip != null)
+				// NIF_TIP (disabled with custom hover interval)
+				if((m_tooltip != null) && (m_hoverinterval > 0))
 				{
 					data.uFlags |= NativeMethods.NIF_TIP;
-					data.szTip = string.Concat(m_tooltip.Take(MAX_INFO));
+					data.szTip = string.Concat(m_tooltip.Take(MAX_TOOLTIP));
 				}
 
 				// Create or update the system tray icon
@@ -718,7 +789,7 @@ namespace zuki.hdhomeruntray
 				// Message from the shell directed at the tray icon
 				case WM_TRAYICONMESSAGE:
 
-					switch((uint)unchecked((short)message.LParam.ToInt32()))
+					switch((uint)NativeMethods.LOWORD(message.LParam))
 					{
 						case NativeMethods.NIN_BALLOONUSERCLICK:
 							OnBalloonTipClicked();
@@ -741,15 +812,30 @@ namespace zuki.hdhomeruntray
 							break;
 
 						case NativeMethods.NIN_POPUPOPEN:
-							OnOpenPopup();
+
+							// If this event comes in when a custom hover interval has been set, ignore it
+							if(m_hoverinterval > 0) OnOpenPopup();
 							break;
 
 						case NativeMethods.NIN_SELECT:
+						case NativeMethods.NIN_KEYSELECT:
 							OnSelected();
 							break;
 
 						case NativeMethods.WM_CONTEXTMENU:
 							OnContextMenu();
+							break;
+
+						case NativeMethods.WM_MOUSEMOVE:
+
+							// If we are not already in a 'hovering' state and the mouse pointer is actually in 
+							// the boundaries of the icon, start the timer to fake NIN_POPUPOPEN and NIN_POPUPCLOSE
+							if(!m_hovertimer.Enabled && GetBounds().Contains(NativeMethods.GET_X_LPARAM(message.WParam), NativeMethods.GET_Y_LPARAM(message.WParam)))
+							{
+								m_hovertimer.Interval = 1000;			// TODO: Configurable
+								m_hovertimer.Enabled = true;
+							}
+
 							break;
 					}
 					break;
@@ -790,6 +876,9 @@ namespace zuki.hdhomeruntray
 		private readonly object m_lock = new object();		// Synchronziation object
 		private BackingWindow m_backingwindow = null;		// Backing window
 		private bool m_created = false;						// Creation flag
+		private readonly Timer m_hovertimer;				// Pseudo-hover timer
+		private int m_hoverinterval = 0;					// Pesudo-hover interval
+		private bool m_hoveractive = false;					// Flag for pesudo-hover popup
 
 		// Property backing variables
 		//

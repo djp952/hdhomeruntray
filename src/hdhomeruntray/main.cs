@@ -29,9 +29,6 @@ namespace zuki.hdhomeruntray
 	static class main
 	{
 		#region Win32 API Declarations
-		/// <summary>
-		/// Win32 API Declarations
-		/// </summary>
 		private static class NativeMethods
 		{
 			[DllImport("user32.dll", ExactSpelling = true)]
