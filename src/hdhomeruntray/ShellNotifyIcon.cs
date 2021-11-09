@@ -828,12 +828,16 @@ namespace zuki.hdhomeruntray
 
 						case NativeMethods.WM_MOUSEMOVE:
 
-							// If we are not already in a 'hovering' state and the mouse pointer is actually in 
-							// the boundaries of the icon, start the timer to fake NIN_POPUPOPEN and NIN_POPUPCLOSE
-							if(!m_hovertimer.Enabled && GetBounds().Contains(NativeMethods.GET_X_LPARAM(message.WParam), NativeMethods.GET_Y_LPARAM(message.WParam)))
+							// This is only applicable if a custom hover interval has been set
+							if(m_hoverinterval > 0)
 							{
-								m_hovertimer.Interval = 1000;			// TODO: Configurable
-								m_hovertimer.Enabled = true;
+								// If we are not already in a 'hovering' state and the mouse pointer is actually in 
+								// the boundaries of the icon, start the timer to fake NIN_POPUPOPEN and NIN_POPUPCLOSE
+								if(!m_hovertimer.Enabled && GetBounds().Contains(NativeMethods.GET_X_LPARAM(message.WParam), NativeMethods.GET_Y_LPARAM(message.WParam)))
+								{
+									m_hovertimer.Interval = 1000;           // TODO: Configurable
+									m_hovertimer.Enabled = true;
+								}
 							}
 
 							break;
