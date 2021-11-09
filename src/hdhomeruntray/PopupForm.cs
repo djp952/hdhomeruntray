@@ -40,12 +40,25 @@ namespace zuki.hdhomeruntray
 		#region Win32 API Declarations
 		private static class NativeMethods
 		{
-			[DllImport("gdi32.dll", ExactSpelling = true)]
-			public static extern IntPtr CreateRoundRectRgn(int x1, int y1, int x2, int y2, int w, int h);
+			public enum DWMWINDOWATTRIBUTE
+			{
+				DWMWA_WINDOW_CORNER_PREFERENCE = 33
+			}
+
+			public enum DWM_WINDOW_CORNER_PREFERENCE
+			{
+				DWMWCP_DEFAULT = 0,
+				DWMWCP_DONOTROUND = 1,
+				DWMWCP_ROUND = 2,
+				DWMWCP_ROUNDSMALL = 3
+			}
 
 			[DllImport("gdi32.dll", ExactSpelling = true)]
 			[return: System.Runtime.InteropServices.MarshalAs(System.Runtime.InteropServices.UnmanagedType.Bool)]
 			public static extern bool DeleteObject(IntPtr hObject);
+
+			[DllImport("dwmapi.dll", CharSet = CharSet.Unicode, SetLastError = true)]
+			public static extern long DwmSetWindowAttribute(IntPtr hwnd, DWMWINDOWATTRIBUTE attribute, ref DWM_WINDOW_CORNER_PREFERENCE pvAttribute, uint cbAttribute);
 		}
 		#endregion
 
@@ -54,6 +67,16 @@ namespace zuki.hdhomeruntray
 		public PopupForm()
 		{
 			InitializeComponent();
+
+			// WINDOWS 11
+			//
+			if(VersionHelper.IsWindows11OrGreater())
+			{
+				// Apply rounded corners to the application
+				var attribute = NativeMethods.DWMWINDOWATTRIBUTE.DWMWA_WINDOW_CORNER_PREFERENCE;
+				var preference = NativeMethods.DWM_WINDOW_CORNER_PREFERENCE.DWMWCP_ROUND;
+				NativeMethods.DwmSetWindowAttribute(this.Handle, attribute, ref preference, sizeof(uint));
+			}
 		}
 
 		// Instance Constructor
@@ -77,23 +100,6 @@ namespace zuki.hdhomeruntray
 			}
 		}
 
-		// Dispose
-		//
-		// Releases unmanaged resources and optionally releases managed resources
-		protected override void Dispose(bool disposing)
-		{
-			// Dispose managed state
-			if(disposing && (components != null))
-			{
-				components.Dispose();
-			}
-
-			// Dispose unmanaged state
-			if(m_hrgn != IntPtr.Zero) NativeMethods.DeleteObject(m_hrgn);
-
-			base.Dispose(disposing);
-		}
-
 		//-------------------------------------------------------------------
 		// Member Functions
 		//-------------------------------------------------------------------
@@ -115,41 +121,13 @@ namespace zuki.hdhomeruntray
 			// in .NET 4.7 and/or Windows 10/11 to figure out how to scale this value
 			float scalefactor = ((float)SystemInformation.SmallIconSize.Height / 16.0F);
 
-			// Move the form to the desired position before showing it; it should be right-aligned
-			// with the right edge of the icon and sit above the taskbar
+			// Move the form to the desired position before showing it; it should be aligned
+			// to the lower-right corner of the work area
 			var top = screen.WorkingArea.Height - this.Size.Height - (int)(12.0F * scalefactor);
-			//this.Location = new Point(iconbounds.Right - this.Size.Width, top);
-
-			// TODO: testing if I like this better; lower right corner of the screen
 			var left = screen.WorkingArea.Width - this.Size.Width - (int)(12.0F * scalefactor);
 			this.Location = new Point(left, top);
 
 			this.Show();					// Show the form at the calculated position
 		}
-
-		//-------------------------------------------------------------------
-		// Event Handlers
-		//-------------------------------------------------------------------
-
-		// OnSizeChanged
-		//
-		// Invoked when the size of the form has changed
-		private void OnSizeChanged(object sender, EventArgs args)
-		{
-			IntPtr hrgnprev = m_hrgn;           // Save previous HRGN
-
-			// Create a new region for the form based on the new width and height
-			m_hrgn = NativeMethods.CreateRoundRectRgn(0, 0, Width, Height, 20, 20);
-			Region = Region.FromHrgn(m_hrgn);
-
-			// Release the previously set HRGN if it wasn't NULL
-			if(hrgnprev != IntPtr.Zero) NativeMethods.DeleteObject(hrgnprev);
-		}
-
-		//-------------------------------------------------------------------
-		// Member Variables
-		//-------------------------------------------------------------------
-
-		private IntPtr m_hrgn;					// Unmanaged HRGN object
 	}
 }
