@@ -215,8 +215,8 @@ namespace zuki.hdhomeruntray
 					   NativeMethods.VER_MINORVERSION, NativeMethods.VER_GREATER_EQUAL),
 					   NativeMethods.VER_BUILDNUMBER, NativeMethods.VER_GREATER_EQUAL);
 
-			osvi.dwMajorVersion = NativeMethods._WIN32_WINNT_WINTHRESHOLD;
-			osvi.dwMinorVersion = NativeMethods._WIN32_WINNT_WINTHRESHOLD;
+			osvi.dwMajorVersion = NativeMethods.HIBYTE(NativeMethods._WIN32_WINNT_WINTHRESHOLD);
+			osvi.dwMinorVersion = NativeMethods.LOBYTE(NativeMethods._WIN32_WINNT_WINTHRESHOLD);
 			osvi.dwBuildNumber = 22000;
 
 			return NativeMethods.VerifyVersionInfoW(ref osvi, NativeMethods.VER_MAJORVERSION | NativeMethods.VER_MINORVERSION | NativeMethods.VER_BUILDNUMBER, dwlConditionMask) != NativeMethods.FALSE;
