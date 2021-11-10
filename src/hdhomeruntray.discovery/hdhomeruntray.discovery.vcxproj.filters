@@ -110,6 +110,12 @@
     <ClInclude Include="RecordingList.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Devices.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DiscoveryCompletedEventArgs.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AssemblyInfo.cpp">
@@ -185,6 +191,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="RecordingList.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DiscoveryCompletedEventArgs.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Devices.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

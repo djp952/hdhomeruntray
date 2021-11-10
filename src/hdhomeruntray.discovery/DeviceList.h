@@ -47,16 +47,18 @@ public:
 	//-----------------------------------------------------------------------
 	// Member Functions
 
-	// Create (static)
-	//
-	// Creates a new DeviceList instance
-	static DeviceList^ Create(void);
-	static DeviceList^ Create(DiscoveryMethod method);
-
 	// GetEnumerator
 	//
 	// Returns a generic IEnumerator<T> for the member collection
 	virtual IEnumerator<Device^>^ GetEnumerator(void);
+
+	//-----------------------------------------------------------------------
+	// Fields
+
+	// Empty (static)
+	//
+	// Returns an empty device collection instance
+	static initonly DeviceList^ Empty = gcnew DeviceList(gcnew List<Device^>());
 
 	//-----------------------------------------------------------------------
 	// Properties
@@ -79,13 +81,11 @@ public:
 
 internal:
 
-	//-----------------------------------------------------------------------
-	// Internal Fields
-
-	// Empty (static)
+	// Create (static)
 	//
-	// Returns an empty device collection instance
-	static initonly DeviceList^ Empty = gcnew DeviceList(gcnew List<Device^>());
+	// Creates a new DeviceList instance
+	static DeviceList^ Create(void);
+	static DeviceList^ Create(DiscoveryMethod method);
 
 private:
 

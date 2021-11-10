@@ -104,7 +104,7 @@ int DeviceList::Count::get(void)
 }
 
 //---------------------------------------------------------------------------
-// DeviceList::Create (static)
+// DeviceList::Create (static, internal)
 //
 // Creates a new DeviceList instance by executing a discovery
 //
@@ -118,7 +118,7 @@ DeviceList^ DeviceList::Create(void)
 }
 
 //---------------------------------------------------------------------------
-// DeviceList::Create (static)
+// DeviceList::Create (static, internal)
 //
 // Creates a new DeviceList instance by executing a discovery
 //

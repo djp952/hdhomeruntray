@@ -42,6 +42,10 @@ namespace zuki.hdhomeruntray
 			Application.ApplicationExit += new EventHandler(this.OnApplicationExit);
 			InitializeComponent();
 
+			// Create the wire up the device discovery object
+			m_devices = new Devices();
+			m_devices.DiscoveryCompleted += new DiscoveryCompletedEventHandler(this.OnDiscoveryCompleted);
+
 			// Show the tray icon after initialization
 			m_notifyicon.Visible = true;
 
@@ -113,6 +117,15 @@ namespace zuki.hdhomeruntray
 			m_notifyicon.Visible = false;		// Remove the tray icon
 		}
 
+		// OnDiscoveryCompleted
+		//
+		// Invoked when a discovery operation has completed
+		private void OnDiscoveryCompleted(object sender, DiscoveryCompletedEventArgs args)
+		{
+			m_devicelist = args.Devices;
+			UpdateNotifyIcon(m_devicelist);
+		}
+
 		// OnMainFormClosed
 		//
 		// Invoked when the main form has been closed
@@ -151,7 +164,7 @@ namespace zuki.hdhomeruntray
 			// Do not show the popup window if the main window is open
 			if((m_mainform == null) && (m_popupform == null))
 			{
-				m_popupform = new PopupForm(DeviceList.Create());
+				m_popupform = new PopupForm(m_devicelist);
 				m_popupform.ShowFromNotifyIcon(m_notifyicon);
 			}
 		}
@@ -180,12 +193,7 @@ namespace zuki.hdhomeruntray
 		// Invoked when the timer object has come due
 		private void OnTimerTick(object sender, EventArgs args)
 		{
-			// TODO: I want this to not lock up the entire process if it
-			// doesn't work quickly; create an async version
-			DeviceList devices = DeviceList.Create();
-
-			// Update the tray icon
-			UpdateNotifyIcon(devices);
+			m_devices.DiscoverAsync(DiscoveryMethod.Broadcast, this);
 		}
 
 		//-------------------------------------------------------------------
@@ -245,5 +253,7 @@ namespace zuki.hdhomeruntray
 		private Timer m_timer;
 		private PopupForm m_popupform;
 		private MainForm m_mainform;
+		private Devices m_devices;
+		private DeviceList m_devicelist = DeviceList.Empty;
 	}
 }
