@@ -22,5 +22,29 @@ namespace zuki.hdhomeruntray.Properties {
                 return defaultInstance;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int DiscoveryMethod {
+            get {
+                return ((int)(this["DiscoveryMethod"]));
+            }
+            set {
+                this["DiscoveryMethod"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("300000")]
+        public int DiscoveryInterval {
+            get {
+                return ((int)(this["DiscoveryInterval"]));
+            }
+            set {
+                this["DiscoveryInterval"] = value;
+            }
+        }
     }
 }

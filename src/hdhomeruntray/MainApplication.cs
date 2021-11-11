@@ -21,9 +21,11 @@
 //---------------------------------------------------------------------------
 
 using System;
+using System.ComponentModel;
 using System.Windows.Forms;
 
 using zuki.hdhomeruntray.discovery;
+using zuki.hdhomeruntray.Properties;
 
 namespace zuki.hdhomeruntray
 {
@@ -41,6 +43,9 @@ namespace zuki.hdhomeruntray
 		{
 			Application.ApplicationExit += new EventHandler(this.OnApplicationExit);
 			InitializeComponent();
+
+			// Wire up a handler to watch for property changes
+			Settings.Default.PropertyChanged += OnPropertyChanged;
 
 			// Create the wire up the device discovery object
 			m_devices = new Devices();
@@ -95,7 +100,7 @@ namespace zuki.hdhomeruntray
 			// Create the periodic timer object
 			m_timer = new Timer
 			{
-				Interval = 30000       // TODO: Configurable
+				Interval = Settings.Default.DiscoveryInterval,
 			};
 			m_timer.Tick += new EventHandler(this.OnTimerTick);
 		}
@@ -113,7 +118,8 @@ namespace zuki.hdhomeruntray
 			if(m_popupform != null) m_popupform.Close();
 			if(m_mainform != null) m_mainform.Close();
 
-			m_timer.Enabled = false;			// Stop the timer
+			m_timer.Enabled = false;            // Stop the timer
+			m_devices.CancelAsync(this);		// Cancel any operations
 			m_notifyicon.Visible = false;		// Remove the tray icon
 		}
 
@@ -122,6 +128,13 @@ namespace zuki.hdhomeruntray
 		// Invoked when a discovery operation has completed
 		private void OnDiscoveryCompleted(object sender, DiscoveryCompletedEventArgs args)
 		{
+			// If the operation was cancelled, don't do anything
+			if(args.Cancelled) return;
+
+			// If there was an exception during discovery, handle it
+			// TODO
+
+			// Swap the current device list with the updated one and refresh the icon
 			m_devicelist = args.Devices;
 			UpdateNotifyIcon(m_devicelist);
 		}
@@ -188,12 +201,38 @@ namespace zuki.hdhomeruntray
 			else m_mainform.Close();
 		}
 
+		// OnPropertyChanged
+		//
+		// Invoked when a settings property has been changed
+		private void OnPropertyChanged(object sender, PropertyChangedEventArgs args)
+		{
+			// DiscoveryInterval / DiscoveryMethod
+			if((args.PropertyName == nameof(Settings.Default.DiscoveryInterval)) ||
+				(args.PropertyName == nameof(Settings.Default.DiscoveryMethod)))
+			{
+				m_timer.Enabled = false;			// Stop the timer
+
+				// Reset the timer interval to the new value and force a new discovery
+				m_timer.Interval = Settings.Default.DiscoveryInterval;
+				OnTimerTick(this, EventArgs.Empty);
+
+				m_timer.Enabled = true;				// Restart the timer
+			}
+		}
+
 		// OnTimerTick
 		//
 		// Invoked when the timer object has come due
 		private void OnTimerTick(object sender, EventArgs args)
 		{
-			m_devices.DiscoverAsync(DiscoveryMethod.Broadcast, this);
+			DiscoveryMethod discoverymethod = DiscoveryMethod.Broadcast;
+
+			// The setting for discovery method is stored as an integer; make sure it's valid before using it
+			int method = Settings.Default.DiscoveryMethod;
+			if(Enum.IsDefined(typeof(DiscoveryMethod), method)) discoverymethod = (DiscoveryMethod)method;
+
+			m_devices.CancelAsync(this);
+			m_devices.DiscoverAsync(discoverymethod, this);
 		}
 
 		//-------------------------------------------------------------------
