@@ -110,20 +110,6 @@ int DeviceList::Count::get(void)
 //
 // Arguments:
 //
-//  NONE
-
-DeviceList^ DeviceList::Create(void)
-{
-	return Create(DiscoveryMethod::Broadcast);
-}
-
-//---------------------------------------------------------------------------
-// DeviceList::Create (static, internal)
-//
-// Creates a new DeviceList instance by executing a discovery
-//
-// Arguments:
-//
 //  method		- Discovery method to be used
 
 DeviceList^ DeviceList::Create(DiscoveryMethod method)

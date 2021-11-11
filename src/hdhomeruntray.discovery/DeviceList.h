@@ -84,7 +84,6 @@ internal:
 	// Create (static)
 	//
 	// Creates a new DeviceList instance
-	static DeviceList^ Create(void);
 	static DeviceList^ Create(DiscoveryMethod method);
 
 private:
