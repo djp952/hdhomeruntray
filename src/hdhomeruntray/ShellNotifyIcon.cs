@@ -728,7 +728,7 @@ namespace zuki.hdhomeruntray
 				}
 
 				// NIF_TIP (disabled with custom hover interval)
-				if((m_tooltip != null) && (m_hoverinterval > 0))
+				if((m_tooltip != null) && (m_hoverinterval <= 0))
 				{
 					data.uFlags |= NativeMethods.NIF_TIP;
 					data.szTip = string.Concat(m_tooltip.Take(MAX_TOOLTIP));
@@ -835,7 +835,7 @@ namespace zuki.hdhomeruntray
 								// the boundaries of the icon, start the timer to fake NIN_POPUPOPEN and NIN_POPUPCLOSE
 								if(!m_hovertimer.Enabled && GetBounds().Contains(NativeMethods.GET_X_LPARAM(message.WParam), NativeMethods.GET_Y_LPARAM(message.WParam)))
 								{
-									m_hovertimer.Interval = 1000;           // TODO: Configurable
+									m_hovertimer.Interval = m_hoverinterval;
 									m_hovertimer.Enabled = true;
 								}
 							}
