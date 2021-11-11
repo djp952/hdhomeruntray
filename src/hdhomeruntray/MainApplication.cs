@@ -23,6 +23,7 @@
 using System;
 using System.ComponentModel;
 using System.Windows.Forms;
+using Microsoft.Win32;
 
 using zuki.hdhomeruntray.discovery;
 using zuki.hdhomeruntray.Properties;
@@ -267,11 +268,19 @@ namespace zuki.hdhomeruntray
 			}
 
 			// Windows 11 doesn't support NIN_POPUPOPEN/NIN_POPUPCLOSE, at least not yet, so the custom
-			// hover implementation must be used on that platform
+			// hover implementation must always be used on that platform
 			if(VersionHelper.IsWindows11OrGreater())
 			{
+				int mousehovertimeout = 400;			// Default value to use on Windows 11 (ms)
+
+				// Use the default hover interval specified in HKEY_CURRENT_USER
+				object value = Registry.GetValue(@"HKEY_CURRENT_USER\Control Panel\Mouse", "MouseHoverTime", null);
+				if((value != null) && (value is string @string)) int.TryParse(@string, out mousehovertimeout);
+
+				// TODO: use the configured custom timeout if not set to default (0)
+
 				m_notifyicon.ToolTip = String.Empty;
-				m_notifyicon.HoverInterval = 1000;			// TODO: Get default from registry or something
+				m_notifyicon.HoverInterval = mousehovertimeout;
 			}
 
 			// For NIN_POPUPOPEN/NIN_POPUPCLOSE to be fired the tool tip text must be set to something

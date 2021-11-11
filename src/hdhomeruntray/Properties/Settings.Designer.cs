@@ -37,7 +37,7 @@ namespace zuki.hdhomeruntray.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("300000")]
+        [global::System.Configuration.DefaultSettingValueAttribute("120000")]
         public int DiscoveryInterval {
             get {
                 return ((int)(this["DiscoveryInterval"]));

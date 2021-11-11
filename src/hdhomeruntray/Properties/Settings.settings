@@ -6,7 +6,7 @@
       <Value Profile="(Default)">0</Value>
     </Setting>
     <Setting Name="DiscoveryInterval" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">300000</Value>
+      <Value Profile="(Default)">120000</Value>
     </Setting>
   </Settings>
 </SettingsFile>
