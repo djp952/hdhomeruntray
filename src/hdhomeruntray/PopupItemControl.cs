@@ -58,7 +58,7 @@ namespace zuki.hdhomeruntray
 				Text = device.FriendlyName,
 				TextAlign = ContentAlignment.MiddleCenter,
 				Dock = DockStyle.Left,
-				Font = new Font("Segoe UI Semibold", this.Font.Size, FontStyle.Regular),
+				Font = new Font("Segoe UI Semibold", 9F, FontStyle.Regular),
 				Visible = true
 			};
 			m_layoutpanel.Controls.Add(name);
@@ -74,7 +74,7 @@ namespace zuki.hdhomeruntray
 					Text = "⏺", // Segoe UI Symbol  U+23FA;
 					TextAlign = ContentAlignment.BottomCenter,
 					Dock = DockStyle.Left,
-					Font = new Font("Segoe UI Symbol", this.Font.Size, FontStyle.Bold)
+					Font = new Font("Segoe UI Symbol", 9F, FontStyle.Bold)
 				};
 
 				if(tuner.IsActive) dot.ForeColor = Color.FromArgb(0x18AD01);       // TODO: constant
@@ -98,7 +98,7 @@ namespace zuki.hdhomeruntray
 				Text = storage.FriendlyName,
 				TextAlign = ContentAlignment.MiddleCenter,
 				Dock = DockStyle.Left,
-				Font = new Font("Segoe UI Semibold", this.Font.Size, FontStyle.Regular),
+				Font = new Font("Segoe UI Semibold", 9F, FontStyle.Regular),
 				Visible = true
 			};
 			m_layoutpanel.Controls.Add(name);
@@ -112,7 +112,7 @@ namespace zuki.hdhomeruntray
 				Text = "⏺", // Segoe UI Symbol  (U+23FA);
 				TextAlign = ContentAlignment.BottomCenter,
 				Dock = DockStyle.Left,
-				Font = new Font("Segoe UI Symbol", this.Font.Size, FontStyle.Bold)
+				Font = new Font("Segoe UI Symbol", 9F, FontStyle.Bold)
 			};
 
 			if(storage.Recordings.Count > 0) dot.ForeColor = Color.FromArgb(0xAD0000);

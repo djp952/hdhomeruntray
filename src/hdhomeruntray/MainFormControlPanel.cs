@@ -42,12 +42,12 @@ namespace zuki.hdhomeruntray
 			// Windows 11 - Change glyph typeface to Segoe Fluent Icons
 			//
 			if(VersionHelper.IsWindows11OrGreater())
-				m_pinunpin.Font = m_devicelist.Font = m_options.Font = new Font("Segoe Fluent Icons", m_pinunpin.Font.Size, FontStyle.Regular);
+				m_pinunpin.Font = m_devicelist.Font = m_options.Font = new Font("Segoe Fluent Icons", m_pinunpin.Font.Size, FontStyle.Bold);
 
 			// Windows 10 - Change glyph typeface to Segoe MDL2 Assets
 			//
 			else if(VersionHelper.IsWindows10OrGreater())
-				m_pinunpin.Font = m_devicelist.Font = m_options.Font = new Font("Segoe MDL2 Assets", m_pinunpin.Font.Size, FontStyle.Regular);
+				m_pinunpin.Font = m_devicelist.Font = m_options.Font = new Font("Segoe MDL2 Assets", m_pinunpin.Font.Size, FontStyle.Bold);
 		}
 	}
 }
