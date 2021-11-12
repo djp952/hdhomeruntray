@@ -67,6 +67,18 @@
     <Compile Include="MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="MainFormControlPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="MainFormControlPanel.Designer.cs">
+      <DependentUpon>MainFormControlPanel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MainFormSettingsPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="MainFormSettingsPage.Designer.cs">
+      <DependentUpon>MainFormSettingsPage.cs</DependentUpon>
+    </Compile>
     <Compile Include="PopupForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -93,6 +105,12 @@
     <Compile Include="VersionHelper.cs" />
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MainFormControlPanel.resx">
+      <DependentUpon>MainFormControlPanel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MainFormSettingsPage.resx">
+      <DependentUpon>MainFormSettingsPage.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="PopupForm.resx">
       <DependentUpon>PopupForm.cs</DependentUpon>
