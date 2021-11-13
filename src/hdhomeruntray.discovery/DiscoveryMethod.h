@@ -27,6 +27,7 @@
 #pragma warning(push, 4)				// Enable maximum compiler warnings
 
 using namespace System;
+using namespace System::ComponentModel;
 
 namespace zuki::hdhomeruntray::discovery {
 
@@ -38,8 +39,11 @@ namespace zuki::hdhomeruntray::discovery {
 
 public enum class DiscoveryMethod
 {
-	Broadcast	= 0,		// UDP broadcast discovery
-	Http		= 1,		// HTTP cloud discovery
+	[Description("UDP Broadcast")]
+	Broadcast	= 0,
+
+	[Description("HTTP Cloud")]
+	Http		= 1,
 };
 
 //---------------------------------------------------------------------------

@@ -20,34 +20,53 @@
 // SOFTWARE.
 //---------------------------------------------------------------------------
 
-using System.Drawing;
+using System;
+using System.ComponentModel;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace zuki.hdhomeruntray
 {
-	//-----------------------------------------------------------------------
-	// Class MainFormControlPanel
-	//
-	// Implements the user control the provides the 'control panel' at the 
-	// bottom of the main form
+    //-----------------------------------------------------------------------
+    // Class Extensions
+    //
+    // Implements extension methods
 
-	internal partial class MainFormControlPanel : UserControl
-	{
-		// Instance Constructor
+    static class Extensions
+    {
+		//-------------------------------------------------------------------
+		// ComboBox.BindEnum
 		//
-		public MainFormControlPanel()
+		// Binds an enumeration type to a ComboBox using DescriptionAttribute
+		//
+		// Based on BindEnumToComboBox<T>:
+		// https://stackoverflow.com/questions/35935961/bind-combobox-with-enum-description/35936210
+		//
+		// Modified to sort by the integer value instead of the string representation of that value
+
+		public static void BindEnum<T>(this ComboBox combobox, T @default)
 		{
-			InitializeComponent();
+			var list = Enum.GetValues(typeof(T))
+				.Cast<T>()
+				.Select(value => new
+				{
+					Description = (Attribute.GetCustomAttribute(value.GetType().GetField(value.ToString()), typeof(DescriptionAttribute)) as DescriptionAttribute)?.Description ?? value.ToString(),
+					Value = value
+				})
+				.OrderBy(item => item.Value)		// MB: was item.Value.ToString()
+				.ToList();
 
-			// Windows 11 - Change glyph typeface to Segoe Fluent Icons
-			//
-			if(VersionHelper.IsWindows11OrGreater())
-				m_pinunpin.Font = m_devicelist.Font = m_options.Font = new Font("Segoe Fluent Icons", m_pinunpin.Font.Size, FontStyle.Regular);
+			combobox.DataSource = list;
+			combobox.DisplayMember = "Description";
+			combobox.ValueMember = "Value";
 
-			// Windows 10 - Change glyph typeface to Segoe MDL2 Assets
-			//
-			else if(VersionHelper.IsWindows10OrGreater())
-				m_pinunpin.Font = m_devicelist.Font = m_options.Font = new Font("Segoe MDL2 Assets", m_pinunpin.Font.Size, FontStyle.Regular);
+			foreach(var opts in list)
+			{
+				if(opts.Value.ToString() == @default.ToString())
+				{
+					combobox.SelectedItem = opts;
+				}
+			}
 		}
 	}
 }

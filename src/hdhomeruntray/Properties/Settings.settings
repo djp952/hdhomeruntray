@@ -2,11 +2,14 @@
 <SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="zuki.hdhomeruntray.Properties" GeneratedClassName="Settings">
   <Profiles />
   <Settings>
-    <Setting Name="DiscoveryMethod" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">0</Value>
+    <Setting Name="DiscoveryMethod" Type="zuki.hdhomeruntray.discovery.DiscoveryMethod" Scope="User">
+      <Value Profile="(Default)">Broadcast</Value>
     </Setting>
-    <Setting Name="DiscoveryInterval" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">120000</Value>
+    <Setting Name="DiscoveryInterval" Type="zuki.hdhomeruntray.DiscoveryInterval" Scope="User">
+      <Value Profile="(Default)">TwoMinutes</Value>
+    </Setting>
+    <Setting Name="TrayIconHoverDelay" Type="zuki.hdhomeruntray.TrayIconHoverDelay" Scope="User">
+      <Value Profile="(Default)">SystemDefault</Value>
     </Setting>
   </Settings>
 </SettingsFile>

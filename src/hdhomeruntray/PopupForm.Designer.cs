@@ -36,27 +36,27 @@ namespace zuki.hdhomeruntray
 			this.m_layoutpanel.AutoSize = true;
 			this.m_layoutpanel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
 			this.m_layoutpanel.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.m_layoutpanel.Location = new System.Drawing.Point(10, 10);
+			this.m_layoutpanel.Location = new System.Drawing.Point(12, 12);
 			this.m_layoutpanel.Name = "m_layoutpanel";
-			this.m_layoutpanel.Size = new System.Drawing.Size(560, 44);
+			this.m_layoutpanel.Size = new System.Drawing.Size(653, 50);
 			this.m_layoutpanel.TabIndex = 0;
 			this.m_layoutpanel.WrapContents = false;
 			// 
 			// PopupForm
 			// 
-			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.AutoSize = true;
 			this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-			this.ClientSize = new System.Drawing.Size(580, 64);
+			this.ClientSize = new System.Drawing.Size(677, 74);
 			this.ControlBox = false;
 			this.Controls.Add(this.m_layoutpanel);
-			this.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
 			this.Name = "PopupForm";
-			this.Padding = new System.Windows.Forms.Padding(10);
+			this.Padding = new System.Windows.Forms.Padding(12, 12, 12, 12);
 			this.ShowIcon = false;
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;

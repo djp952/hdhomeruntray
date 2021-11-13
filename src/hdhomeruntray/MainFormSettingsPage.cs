@@ -20,7 +20,11 @@
 // SOFTWARE.
 //---------------------------------------------------------------------------
 
+using System;
 using System.Windows.Forms;
+
+using zuki.hdhomeruntray.discovery;
+using zuki.hdhomeruntray.Properties;
 
 namespace zuki.hdhomeruntray
 {
@@ -30,13 +34,60 @@ namespace zuki.hdhomeruntray
 	// Implements the user control that provides the means to control the
 	// application settings
 
-	public partial class MainFormSettingsPage : UserControl
+	internal partial class MainFormSettingsPage : UserControl
 	{
 		// Instance Constructor
 		//
 		public MainFormSettingsPage()
 		{
 			InitializeComponent();
+
+			// Bind each of the ComboBox drop-downs to their enum class
+			m_discoverymethod.BindEnum(Settings.Default.DiscoveryMethod);
+			m_discoveryinterval.BindEnum(Settings.Default.DiscoveryInterval);
+			m_trayiconhoverdelay.BindEnum(Settings.Default.TrayIconHoverDelay);
+		}
+
+		//-------------------------------------------------------------------
+		// UserControl Overrides
+		//-------------------------------------------------------------------
+
+		// OnHandleDestroyed
+		//
+		// Invoked when the handle for the UserControl has been destroyed
+		protected override void OnHandleDestroyed(EventArgs args)
+		{
+			bool save = false;				// Flag to save the settings changes
+
+			// Pull out all of the values specified by the user while the control was active
+			DiscoveryInterval discoveryinterval = (DiscoveryInterval)m_discoveryinterval.SelectedValue;
+			DiscoveryMethod discoverymethod = (DiscoveryMethod)m_discoverymethod.SelectedValue;
+			TrayIconHoverDelay trayiconhoverdelay = (TrayIconHoverDelay)m_trayiconhoverdelay.SelectedValue;
+
+			// DiscoveryInterval
+			if(discoveryinterval != Settings.Default.DiscoveryInterval)
+			{
+				Settings.Default.DiscoveryInterval = discoveryinterval;
+				save = true;
+			}
+
+			// DiscoveryMethod
+			if(discoverymethod != Settings.Default.DiscoveryMethod)
+			{
+				Settings.Default.DiscoveryMethod = discoverymethod;
+				save = true;
+			}
+
+			// TrayIconHoverDelay
+			if(trayiconhoverdelay != Settings.Default.TrayIconHoverDelay)
+			{
+				Settings.Default.TrayIconHoverDelay = trayiconhoverdelay;
+				save = true;
+			}
+
+			if(save) Settings.Default.Save();		// Save any changes
+
+			base.OnHandleDestroyed(args);
 		}
 	}
 }

@@ -59,6 +59,9 @@
     <Compile Include="..\..\tmp\version\version.cs">
       <Link>version.cs</Link>
     </Compile>
+    <Compile Include="DiscoveryInterval.cs" />
+    <Compile Include="extensions.cs" />
+    <Compile Include="TrayIconHoverDelay.cs" />
     <Compile Include="MainApplication.cs" />
     <Compile Include="main.cs" />
     <Compile Include="MainForm.cs">

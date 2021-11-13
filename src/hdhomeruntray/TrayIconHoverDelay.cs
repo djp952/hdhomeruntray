@@ -20,34 +20,34 @@
 // SOFTWARE.
 //---------------------------------------------------------------------------
 
-using System.Drawing;
-using System.Windows.Forms;
+using System.ComponentModel;
 
 namespace zuki.hdhomeruntray
 {
 	//-----------------------------------------------------------------------
-	// Class MainFormControlPanel
+	// Enum TrayIconHoverDelay
 	//
-	// Implements the user control the provides the 'control panel' at the 
-	// bottom of the main form
+	// Defines constants that control how quickly the pop-up form will show
+	// when the user hovers the mouse over the tray icon.  Values are in ms
 
-	internal partial class MainFormControlPanel : UserControl
+	public enum TrayIconHoverDelay
 	{
-		// Instance Constructor
-		//
-		public MainFormControlPanel()
-		{
-			InitializeComponent();
+		[Description("System Default")]
+		SystemDefault = 0,
 
-			// Windows 11 - Change glyph typeface to Segoe Fluent Icons
-			//
-			if(VersionHelper.IsWindows11OrGreater())
-				m_pinunpin.Font = m_devicelist.Font = m_options.Font = new Font("Segoe Fluent Icons", m_pinunpin.Font.Size, FontStyle.Regular);
+		[Description("None")]
+		None = 1,
 
-			// Windows 10 - Change glyph typeface to Segoe MDL2 Assets
-			//
-			else if(VersionHelper.IsWindows10OrGreater())
-				m_pinunpin.Font = m_devicelist.Font = m_options.Font = new Font("Segoe MDL2 Assets", m_pinunpin.Font.Size, FontStyle.Regular);
-		}
+		[Description("250 Milliseconds")]
+		TwoHundredFiftyMilliseconds = 250,
+
+		[Description("500 Milliseconds")]
+		FiveHundredMilliseconds = 500,
+
+		[Description("1 Second")]
+		OneSecond = 1000,
+
+		[Description("2 Seconds")]
+		TwoSeconds = 2000,
 	}
 }

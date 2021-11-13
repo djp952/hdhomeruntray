@@ -25,10 +25,10 @@ namespace zuki.hdhomeruntray.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0")]
-        public int DiscoveryMethod {
+        [global::System.Configuration.DefaultSettingValueAttribute("Broadcast")]
+        public global::zuki.hdhomeruntray.discovery.DiscoveryMethod DiscoveryMethod {
             get {
-                return ((int)(this["DiscoveryMethod"]));
+                return ((global::zuki.hdhomeruntray.discovery.DiscoveryMethod)(this["DiscoveryMethod"]));
             }
             set {
                 this["DiscoveryMethod"] = value;
@@ -37,13 +37,25 @@ namespace zuki.hdhomeruntray.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("120000")]
-        public int DiscoveryInterval {
+        [global::System.Configuration.DefaultSettingValueAttribute("TwoMinutes")]
+        public global::zuki.hdhomeruntray.DiscoveryInterval DiscoveryInterval {
             get {
-                return ((int)(this["DiscoveryInterval"]));
+                return ((global::zuki.hdhomeruntray.DiscoveryInterval)(this["DiscoveryInterval"]));
             }
             set {
                 this["DiscoveryInterval"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("SystemDefault")]
+        public global::zuki.hdhomeruntray.TrayIconHoverDelay TrayIconHoverDelay {
+            get {
+                return ((global::zuki.hdhomeruntray.TrayIconHoverDelay)(this["TrayIconHoverDelay"]));
+            }
+            set {
+                this["TrayIconHoverDelay"] = value;
             }
         }
     }

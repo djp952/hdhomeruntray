@@ -20,34 +20,28 @@
 // SOFTWARE.
 //---------------------------------------------------------------------------
 
-using System.Drawing;
-using System.Windows.Forms;
+using System.ComponentModel;
 
 namespace zuki.hdhomeruntray
 {
 	//-----------------------------------------------------------------------
-	// Class MainFormControlPanel
+	// Enum DiscoveryInterval
 	//
-	// Implements the user control the provides the 'control panel' at the 
-	// bottom of the main form
+	// Defines constants that determine the available discovery intervals.
+	// Values are in milliseconds
 
-	internal partial class MainFormControlPanel : UserControl
+	public enum DiscoveryInterval
 	{
-		// Instance Constructor
-		//
-		public MainFormControlPanel()
-		{
-			InitializeComponent();
+		[Description("1 Minute")]
+		OneMinute = 60000,
 
-			// Windows 11 - Change glyph typeface to Segoe Fluent Icons
-			//
-			if(VersionHelper.IsWindows11OrGreater())
-				m_pinunpin.Font = m_devicelist.Font = m_options.Font = new Font("Segoe Fluent Icons", m_pinunpin.Font.Size, FontStyle.Regular);
+		[Description("2 Minutes")]
+		TwoMinutes = 120000,
 
-			// Windows 10 - Change glyph typeface to Segoe MDL2 Assets
-			//
-			else if(VersionHelper.IsWindows10OrGreater())
-				m_pinunpin.Font = m_devicelist.Font = m_options.Font = new Font("Segoe MDL2 Assets", m_pinunpin.Font.Size, FontStyle.Regular);
-		}
+		[Description("5 Minutes")]
+		FiveMinutes = 300000,
+
+		[Description("10 Minutes")]
+		TenMinutes = 600000,
 	}
 }

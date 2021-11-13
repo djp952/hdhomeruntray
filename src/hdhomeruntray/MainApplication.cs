@@ -101,7 +101,7 @@ namespace zuki.hdhomeruntray
 			// Create the periodic timer object
 			m_timer = new Timer
 			{
-				Interval = Settings.Default.DiscoveryInterval,
+				Interval = (int)Settings.Default.DiscoveryInterval,
 			};
 			m_timer.Tick += new EventHandler(this.OnTimerTick);
 		}
@@ -207,17 +207,24 @@ namespace zuki.hdhomeruntray
 		// Invoked when a settings property has been changed
 		private void OnPropertyChanged(object sender, PropertyChangedEventArgs args)
 		{
-			// DiscoveryInterval / DiscoveryMethod
+			// DiscoveryInterval
+			// DiscoveryMethod
 			if((args.PropertyName == nameof(Settings.Default.DiscoveryInterval)) ||
 				(args.PropertyName == nameof(Settings.Default.DiscoveryMethod)))
 			{
 				m_timer.Enabled = false;			// Stop the timer
 
 				// Reset the timer interval to the new value and force a new discovery
-				m_timer.Interval = Settings.Default.DiscoveryInterval;
+				m_timer.Interval = (int)Settings.Default.DiscoveryInterval;
 				OnTimerTick(this, EventArgs.Empty);
 
 				m_timer.Enabled = true;				// Restart the timer
+			}
+
+			// TrayIconHoverDelay
+			if(args.PropertyName == nameof(Settings.Default.TrayIconHoverDelay))
+			{
+				m_notifyicon.HoverInterval = (int)Settings.Default.TrayIconHoverDelay;
 			}
 		}
 
@@ -226,14 +233,8 @@ namespace zuki.hdhomeruntray
 		// Invoked when the timer object has come due
 		private void OnTimerTick(object sender, EventArgs args)
 		{
-			DiscoveryMethod discoverymethod = DiscoveryMethod.Broadcast;
-
-			// The setting for discovery method is stored as an integer; make sure it's valid before using it
-			int method = Settings.Default.DiscoveryMethod;
-			if(Enum.IsDefined(typeof(DiscoveryMethod), method)) discoverymethod = (DiscoveryMethod)method;
-
 			m_devices.CancelAsync(this);
-			m_devices.DiscoverAsync(discoverymethod, this);
+			m_devices.DiscoverAsync(Settings.Default.DiscoveryMethod, this);
 		}
 
 		//-------------------------------------------------------------------

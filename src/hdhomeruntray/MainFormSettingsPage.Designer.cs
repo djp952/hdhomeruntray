@@ -29,96 +29,120 @@ namespace zuki.hdhomeruntray
 		/// </summary>
 		private void InitializeComponent()
 		{
-			this.m_layoutPanel = new System.Windows.Forms.FlowLayoutPanel();
-			this.panel1 = new System.Windows.Forms.Panel();
-			this.label1 = new System.Windows.Forms.Label();
-			this.panel2 = new System.Windows.Forms.Panel();
-			this.label2 = new System.Windows.Forms.Label();
-			this.comboBox1 = new System.Windows.Forms.ComboBox();
+			System.Windows.Forms.Label m_discoverintervallabel;
+			System.Windows.Forms.Label m_discoverymethodlabel;
+			System.Windows.Forms.Label m_hoverintervallabel;
+			this.m_layoutPanel = new System.Windows.Forms.TableLayoutPanel();
+			this.m_discoverymethod = new System.Windows.Forms.ComboBox();
+			this.m_discoveryinterval = new System.Windows.Forms.ComboBox();
+			this.m_trayiconhoverdelay = new System.Windows.Forms.ComboBox();
+			m_discoverintervallabel = new System.Windows.Forms.Label();
+			m_discoverymethodlabel = new System.Windows.Forms.Label();
+			m_hoverintervallabel = new System.Windows.Forms.Label();
 			this.m_layoutPanel.SuspendLayout();
-			this.panel1.SuspendLayout();
-			this.panel2.SuspendLayout();
 			this.SuspendLayout();
+			// 
+			// m_discoverintervallabel
+			// 
+			m_discoverintervallabel.AutoSize = true;
+			m_discoverintervallabel.Dock = System.Windows.Forms.DockStyle.Left;
+			m_discoverintervallabel.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			m_discoverintervallabel.Location = new System.Drawing.Point(3, 0);
+			m_discoverintervallabel.Name = "m_discoverintervallabel";
+			m_discoverintervallabel.Size = new System.Drawing.Size(102, 29);
+			m_discoverintervallabel.TabIndex = 0;
+			m_discoverintervallabel.Text = "Discovery Interval";
+			m_discoverintervallabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// m_discoverymethodlabel
+			// 
+			m_discoverymethodlabel.AutoSize = true;
+			m_discoverymethodlabel.Dock = System.Windows.Forms.DockStyle.Left;
+			m_discoverymethodlabel.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			m_discoverymethodlabel.Location = new System.Drawing.Point(3, 29);
+			m_discoverymethodlabel.Name = "m_discoverymethodlabel";
+			m_discoverymethodlabel.Size = new System.Drawing.Size(104, 29);
+			m_discoverymethodlabel.TabIndex = 2;
+			m_discoverymethodlabel.Text = "Discovery Method";
+			m_discoverymethodlabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// m_hoverintervallabel
+			// 
+			m_hoverintervallabel.AutoSize = true;
+			m_hoverintervallabel.Dock = System.Windows.Forms.DockStyle.Left;
+			m_hoverintervallabel.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			m_hoverintervallabel.Location = new System.Drawing.Point(3, 58);
+			m_hoverintervallabel.Name = "m_hoverintervallabel";
+			m_hoverintervallabel.Size = new System.Drawing.Size(124, 29);
+			m_hoverintervallabel.TabIndex = 6;
+			m_hoverintervallabel.Text = "Tray Icon Hover Delay";
+			m_hoverintervallabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// m_layoutPanel
 			// 
 			this.m_layoutPanel.AutoSize = true;
 			this.m_layoutPanel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-			this.m_layoutPanel.Controls.Add(this.panel1);
-			this.m_layoutPanel.Controls.Add(this.panel2);
+			this.m_layoutPanel.ColumnCount = 2;
+			this.m_layoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+			this.m_layoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+			this.m_layoutPanel.Controls.Add(m_hoverintervallabel, 0, 2);
+			this.m_layoutPanel.Controls.Add(this.m_discoverymethod, 1, 1);
+			this.m_layoutPanel.Controls.Add(m_discoverymethodlabel, 0, 1);
+			this.m_layoutPanel.Controls.Add(m_discoverintervallabel, 0, 0);
+			this.m_layoutPanel.Controls.Add(this.m_discoveryinterval, 1, 0);
+			this.m_layoutPanel.Controls.Add(this.m_trayiconhoverdelay, 1, 2);
 			this.m_layoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.m_layoutPanel.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
-			this.m_layoutPanel.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.m_layoutPanel.Location = new System.Drawing.Point(0, 0);
 			this.m_layoutPanel.Name = "m_layoutPanel";
-			this.m_layoutPanel.Size = new System.Drawing.Size(414, 269);
+			this.m_layoutPanel.RowCount = 3;
+			this.m_layoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.m_layoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.m_layoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.m_layoutPanel.Size = new System.Drawing.Size(286, 87);
 			this.m_layoutPanel.TabIndex = 0;
 			// 
-			// panel1
+			// m_discoverymethod
 			// 
-			this.panel1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-			this.panel1.Controls.Add(this.comboBox1);
-			this.panel1.Controls.Add(this.label1);
-			this.panel1.Location = new System.Drawing.Point(3, 3);
-			this.panel1.Name = "panel1";
-			this.panel1.Size = new System.Drawing.Size(294, 100);
-			this.panel1.TabIndex = 0;
+			this.m_discoverymethod.Dock = System.Windows.Forms.DockStyle.Right;
+			this.m_discoverymethod.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.m_discoverymethod.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.m_discoverymethod.Location = new System.Drawing.Point(133, 32);
+			this.m_discoverymethod.Name = "m_discoverymethod";
+			this.m_discoverymethod.Size = new System.Drawing.Size(150, 23);
+			this.m_discoverymethod.TabIndex = 3;
 			// 
-			// label1
+			// m_discoveryinterval
 			// 
-			this.label1.AutoSize = true;
-			this.label1.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.label1.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.label1.Location = new System.Drawing.Point(0, 0);
-			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(37, 15);
-			this.label1.TabIndex = 0;
-			this.label1.Text = "label1";
+			this.m_discoveryinterval.Dock = System.Windows.Forms.DockStyle.Right;
+			this.m_discoveryinterval.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.m_discoveryinterval.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.m_discoveryinterval.Location = new System.Drawing.Point(133, 3);
+			this.m_discoveryinterval.Name = "m_discoveryinterval";
+			this.m_discoveryinterval.Size = new System.Drawing.Size(150, 23);
+			this.m_discoveryinterval.TabIndex = 1;
 			// 
-			// panel2
+			// m_trayiconhoverdelay
 			// 
-			this.panel2.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-			this.panel2.Controls.Add(this.label2);
-			this.panel2.Dock = System.Windows.Forms.DockStyle.Bottom;
-			this.panel2.Location = new System.Drawing.Point(3, 109);
-			this.panel2.Name = "panel2";
-			this.panel2.Size = new System.Drawing.Size(294, 74);
-			this.panel2.TabIndex = 1;
-			// 
-			// label2
-			// 
-			this.label2.AutoSize = true;
-			this.label2.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.label2.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.label2.Location = new System.Drawing.Point(0, 0);
-			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(39, 15);
-			this.label2.TabIndex = 0;
-			this.label2.Text = "label2";
-			// 
-			// comboBox1
-			// 
-			this.comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboBox1.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.comboBox1.FormattingEnabled = true;
-			this.comboBox1.Location = new System.Drawing.Point(134, 28);
-			this.comboBox1.Name = "comboBox1";
-			this.comboBox1.Size = new System.Drawing.Size(121, 23);
-			this.comboBox1.TabIndex = 1;
+			this.m_trayiconhoverdelay.Dock = System.Windows.Forms.DockStyle.Right;
+			this.m_trayiconhoverdelay.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.m_trayiconhoverdelay.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.m_trayiconhoverdelay.Location = new System.Drawing.Point(133, 61);
+			this.m_trayiconhoverdelay.Name = "m_trayiconhoverdelay";
+			this.m_trayiconhoverdelay.Size = new System.Drawing.Size(150, 23);
+			this.m_trayiconhoverdelay.TabIndex = 7;
 			// 
 			// MainFormSettingsPage
 			// 
-			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.AutoSize = true;
+			this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
 			this.Controls.Add(this.m_layoutPanel);
+			this.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.Name = "MainFormSettingsPage";
-			this.Size = new System.Drawing.Size(414, 269);
+			this.Size = new System.Drawing.Size(286, 87);
 			this.m_layoutPanel.ResumeLayout(false);
-			this.panel1.ResumeLayout(false);
-			this.panel1.PerformLayout();
-			this.panel2.ResumeLayout(false);
-			this.panel2.PerformLayout();
+			this.m_layoutPanel.PerformLayout();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -126,11 +150,9 @@ namespace zuki.hdhomeruntray
 
 		#endregion
 
-		private System.Windows.Forms.FlowLayoutPanel m_layoutPanel;
-		private System.Windows.Forms.Panel panel1;
-		private System.Windows.Forms.Label label1;
-		private System.Windows.Forms.Panel panel2;
-		private System.Windows.Forms.Label label2;
-		private System.Windows.Forms.ComboBox comboBox1;
+		private System.Windows.Forms.TableLayoutPanel m_layoutPanel;
+		private System.Windows.Forms.ComboBox m_discoverymethod;
+		private System.Windows.Forms.ComboBox m_discoveryinterval;
+		private System.Windows.Forms.ComboBox m_trayiconhoverdelay;
 	}
 }

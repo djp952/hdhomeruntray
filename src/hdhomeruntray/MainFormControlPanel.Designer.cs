@@ -91,7 +91,7 @@ namespace zuki.hdhomeruntray
 			this.AutoSize = true;
 			this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
 			this.Controls.Add(this.m_layoutPanel);
-			this.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.Name = "MainFormControlPanel";
 			this.Padding = new System.Windows.Forms.Padding(10);
 			this.Size = new System.Drawing.Size(80, 33);

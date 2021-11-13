@@ -42,9 +42,9 @@ namespace zuki.hdhomeruntray
 			this.m_layoutPanel.Controls.Add(this.mainFormControlPanel1);
 			this.m_layoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.m_layoutPanel.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
-			this.m_layoutPanel.Location = new System.Drawing.Point(10, 10);
+			this.m_layoutPanel.Location = new System.Drawing.Point(12, 12);
 			this.m_layoutPanel.Name = "m_layoutPanel";
-			this.m_layoutPanel.Size = new System.Drawing.Size(524, 269);
+			this.m_layoutPanel.Size = new System.Drawing.Size(611, 309);
 			this.m_layoutPanel.TabIndex = 0;
 			// 
 			// mainFormSettingsPage1
@@ -52,9 +52,10 @@ namespace zuki.hdhomeruntray
 			this.mainFormSettingsPage1.AutoSize = true;
 			this.mainFormSettingsPage1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
 			this.mainFormSettingsPage1.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.mainFormSettingsPage1.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.mainFormSettingsPage1.Location = new System.Drawing.Point(3, 3);
 			this.mainFormSettingsPage1.Name = "mainFormSettingsPage1";
-			this.mainFormSettingsPage1.Size = new System.Drawing.Size(506, 106);
+			this.mainFormSettingsPage1.Size = new System.Drawing.Size(159, 107);
 			this.mainFormSettingsPage1.TabIndex = 1;
 			// 
 			// mainFormControlPanel1
@@ -63,28 +64,28 @@ namespace zuki.hdhomeruntray
 			this.mainFormControlPanel1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
 			this.mainFormControlPanel1.Dock = System.Windows.Forms.DockStyle.Bottom;
 			this.mainFormControlPanel1.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.mainFormControlPanel1.Location = new System.Drawing.Point(3, 115);
+			this.mainFormControlPanel1.Location = new System.Drawing.Point(3, 116);
 			this.mainFormControlPanel1.Name = "mainFormControlPanel1";
-			this.mainFormControlPanel1.Padding = new System.Windows.Forms.Padding(10);
-			this.mainFormControlPanel1.Size = new System.Drawing.Size(506, 33);
+			this.mainFormControlPanel1.Padding = new System.Windows.Forms.Padding(12);
+			this.mainFormControlPanel1.Size = new System.Drawing.Size(159, 37);
 			this.mainFormControlPanel1.TabIndex = 0;
 			// 
 			// MainForm
 			// 
-			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.AutoSize = true;
 			this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-			this.ClientSize = new System.Drawing.Size(544, 289);
+			this.ClientSize = new System.Drawing.Size(635, 333);
 			this.ControlBox = false;
 			this.Controls.Add(this.m_layoutPanel);
-			this.Font = new System.Drawing.Font("Segoe UI", 8.25F);
+			this.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
-			this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+			this.Margin = new System.Windows.Forms.Padding(3, 5, 3, 5);
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
 			this.Name = "MainForm";
-			this.Padding = new System.Windows.Forms.Padding(10);
+			this.Padding = new System.Windows.Forms.Padding(12);
 			this.ShowIcon = false;
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
