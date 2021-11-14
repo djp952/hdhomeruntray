@@ -77,10 +77,8 @@ namespace zuki.hdhomeruntray
 					Font = new Font("Segoe UI Symbol", 9F, FontStyle.Bold)
 				};
 
-				if(tuner.IsActive) dot.ForeColor = Color.FromArgb(0x18AD01);       // TODO: constant
-				else dot.ForeColor = Color.FromArgb(0x999999);						// TODO: constant
-
-				// NOTE: red is 0xAD0000
+				if(tuner.IsActive) dot.ForeColor = Color.FromArgb(0x1EE500);       // TODO: constant
+				else dot.ForeColor = Color.FromArgb(0xC0C0C0);						// TODO: constant
 
 				dot.Visible = true;
 				m_layoutpanel.Controls.Add(dot);
@@ -115,8 +113,8 @@ namespace zuki.hdhomeruntray
 				Font = new Font("Segoe UI Symbol", 9F, FontStyle.Bold)
 			};
 
-			if(storage.Recordings.Count > 0) dot.ForeColor = Color.FromArgb(0xAD0000);
-			else dot.ForeColor = Color.FromArgb(0x999999);
+			if(storage.Recordings.Count > 0) dot.ForeColor = Color.FromArgb(0xE50000);
+			else dot.ForeColor = Color.FromArgb(0xC0C0C0);
 
 			dot.Visible = true;
 			m_layoutpanel.Controls.Add(dot);
