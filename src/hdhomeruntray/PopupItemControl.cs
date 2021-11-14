@@ -71,7 +71,7 @@ namespace zuki.hdhomeruntray
 					Size = new Size(1, 1),
 					//dot.Text = "●";	// Segoe UI
 					//dot.Text = "l";	// Wingdings
-					Text = "⏺", // Segoe UI Symbol  U+23FA;
+					Text = "●", // Segoe UI Symbol  U+25CF;
 					TextAlign = ContentAlignment.BottomCenter,
 					Dock = DockStyle.Left,
 					Font = new Font("Segoe UI Symbol", 9F, FontStyle.Bold)
@@ -107,7 +107,7 @@ namespace zuki.hdhomeruntray
 				Size = new Size(1, 1),
 				//dot.Text = "●";	// Segoe UI
 				//dot.Text = "l";	// Wingdings
-				Text = "⏺", // Segoe UI Symbol  (U+23FA);
+				Text = "●", // Segoe UI Symbol  (U+25CF);
 				TextAlign = ContentAlignment.BottomCenter,
 				Dock = DockStyle.Left,
 				Font = new Font("Segoe UI Symbol", 9F, FontStyle.Bold)
