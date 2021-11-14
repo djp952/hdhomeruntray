@@ -77,6 +77,8 @@ namespace zuki.hdhomeruntray
 			m_notifyicon.OpenPopup += new EventHandler(this.OnNotifyIconOpenPopup);
 			m_notifyicon.Selected += new EventHandler(this.OnNotifyIconSelected);
 			m_notifyicon.Icon = StatusIcons.Get(StatusIconType.Idle);
+			m_notifyicon.HoverInterval = GetHoverInterval(Settings.Default.TrayIconHoverDelay);
+			m_notifyicon.ToolTip = "HDHomeRun System Tray";
 
 			// Create the context menu
 			m_contextmenu = new ContextMenuStrip
@@ -224,7 +226,7 @@ namespace zuki.hdhomeruntray
 			// TrayIconHoverDelay
 			if(args.PropertyName == nameof(Settings.Default.TrayIconHoverDelay))
 			{
-				m_notifyicon.HoverInterval = (int)Settings.Default.TrayIconHoverDelay;
+				m_notifyicon.HoverInterval = GetHoverInterval(Settings.Default.TrayIconHoverDelay);
 			}
 		}
 
@@ -240,6 +242,24 @@ namespace zuki.hdhomeruntray
 		//-------------------------------------------------------------------
 		// Private Member Functions
 		//-------------------------------------------------------------------
+
+		// GetHoverInterval (static)
+		//
+		// Converts a TrayIconHoverDelay into milliseconds taking into consideration
+		// the running operation system limitations
+		private static int GetHoverInterval(TrayIconHoverDelay delay)
+		{
+			// No coersion is necessary for a non-default value or a default one outside of Windows 11
+			if((delay != TrayIconHoverDelay.SystemDefault) || (!VersionHelper.IsWindows11OrGreater())) return (int)delay;
+
+			int mousehovertimeout = 400;            // Default value to use on Windows 11 (ms)
+
+			// Use the default hover interval specified in HKEY_CURRENT_USER
+			object value = Registry.GetValue(@"HKEY_CURRENT_USER\Control Panel\Mouse", "MouseHoverTime", null);
+			if((value != null) && (value is string @string)) int.TryParse(@string, out mousehovertimeout);
+
+			return mousehovertimeout;
+		}
 
 		// UpdateNotifyIcon
 		//
@@ -267,25 +287,6 @@ namespace zuki.hdhomeruntray
 					numrecording += storagedevice.Recordings.Count;
 				}
 			}
-
-			// Windows 11 doesn't support NIN_POPUPOPEN/NIN_POPUPCLOSE, at least not yet, so the custom
-			// hover implementation must always be used on that platform
-			if(VersionHelper.IsWindows11OrGreater())
-			{
-				int mousehovertimeout = 400;			// Default value to use on Windows 11 (ms)
-
-				// Use the default hover interval specified in HKEY_CURRENT_USER
-				object value = Registry.GetValue(@"HKEY_CURRENT_USER\Control Panel\Mouse", "MouseHoverTime", null);
-				if((value != null) && (value is string @string)) int.TryParse(@string, out mousehovertimeout);
-
-				// TODO: use the configured custom timeout if not set to default (0)
-
-				m_notifyicon.ToolTip = String.Empty;
-				m_notifyicon.HoverInterval = mousehovertimeout;
-			}
-
-			// For NIN_POPUPOPEN/NIN_POPUPCLOSE to be fired the tool tip text must be set to something
-			else m_notifyicon.ToolTip = "HDHomeRun System Tray";
 
 			// Update the icon image based on the overall status
 			if(numrecording > 0) m_notifyicon.Icon = StatusIcons.Get(StatusIconType.Recording);

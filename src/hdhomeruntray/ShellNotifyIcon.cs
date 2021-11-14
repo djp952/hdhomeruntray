@@ -814,7 +814,7 @@ namespace zuki.hdhomeruntray
 						case NativeMethods.NIN_POPUPOPEN:
 
 							// If this event comes in when a custom hover interval has been set, ignore it
-							if(m_hoverinterval > 0) OnOpenPopup();
+							if(m_hoverinterval <= 0) OnOpenPopup();
 							break;
 
 						case NativeMethods.NIN_SELECT:
