@@ -51,17 +51,27 @@ namespace zuki.hdhomeruntray
 		//
 		public PopupItemControl(TunerDevice device) : this()
 		{
+			var devicepanel = new RoundedFlowLayoutPanel();
+			devicepanel.AutoSize = true;
+			devicepanel.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+			devicepanel.FlowDirection = FlowDirection.LeftToRight;
+			devicepanel.WrapContents = false;
+			devicepanel.BackColor = SystemColors.ControlLightLight;
+			devicepanel.Padding = new Padding(8);
+			devicepanel.Radius = 16;
+
 			var name = new Label
 			{
 				AutoSize = true,
 				Size = new Size(1, 1),
 				Text = device.FriendlyName,
-				TextAlign = ContentAlignment.MiddleCenter,
+				TextAlign = ContentAlignment.BottomCenter,
 				Dock = DockStyle.Left,
-				Font = new Font("Segoe UI Semibold", 9F, FontStyle.Regular),
+				Font = VersionHelper.IsWindows11OrGreater() ? new Font("Segoe UI Variable Display Semib", 9F, FontStyle.Regular) : new Font("Segoe UI Semibold", 9F, FontStyle.Regular),
 				Visible = true
 			};
-			m_layoutpanel.Controls.Add(name);
+			//m_layoutpanel.Controls.Add(name);
+			devicepanel.Controls.Add(name);
 
 			foreach(Tuner tuner in device.Tuners)
 			{
@@ -69,19 +79,19 @@ namespace zuki.hdhomeruntray
 				{
 					AutoSize = true,
 					Size = new Size(1, 1),
-					//dot.Text = "●";	// Segoe UI
-					//dot.Text = "l";	// Wingdings
 					Text = "●", // Segoe UI Symbol  U+25CF;
 					TextAlign = ContentAlignment.BottomCenter,
 					Dock = DockStyle.Left,
-					Font = new Font("Segoe UI Symbol", 9F, FontStyle.Bold)
+					Font = new Font("Segoe UI Symbol", 9F, FontStyle.Regular)
 				};
 
 				if(tuner.IsActive) dot.ForeColor = Color.FromArgb(0x1EE500);       // TODO: constant
-				else dot.ForeColor = Color.FromArgb(0xC0C0C0);						// TODO: constant
+				else dot.ForeColor = Color.FromArgb(0xC0C0C0);						// TODO: constant; should vary with dark/light themes
 
 				dot.Visible = true;
-				m_layoutpanel.Controls.Add(dot);
+				//m_layoutpanel.Controls.Add(dot);
+				devicepanel.Controls.Add(dot);
+				m_layoutpanel.Controls.Add(devicepanel);
 			}
 		}
 
@@ -89,51 +99,73 @@ namespace zuki.hdhomeruntray
 		//
 		public PopupItemControl(StorageDevice storage) : this()
 		{
+			var devicepanel = new RoundedFlowLayoutPanel();
+			devicepanel.AutoSize = true;
+			devicepanel.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+			devicepanel.FlowDirection = FlowDirection.LeftToRight;
+			devicepanel.WrapContents = false;
+			devicepanel.BackColor = SystemColors.ControlLightLight;
+			devicepanel.Padding = new Padding(8);
+			devicepanel.Radius = 16;
+
 			var name = new Label
 			{
 				AutoSize = true,
 				Size = new Size(1, 1),
 				Text = storage.FriendlyName,
-				TextAlign = ContentAlignment.MiddleCenter,
+				TextAlign = ContentAlignment.BottomCenter,
 				Dock = DockStyle.Left,
-				Font = new Font("Segoe UI Semibold", 9F, FontStyle.Regular),
+				Font = VersionHelper.IsWindows11OrGreater() ? new Font("Segoe UI Variable Display Semib", 9F, FontStyle.Regular) : new Font("Segoe UI Semibold", 9F, FontStyle.Regular),
 				Visible = true
 			};
-			m_layoutpanel.Controls.Add(name);
+			//m_layoutpanel.Controls.Add(name);
+			devicepanel.Controls.Add(name);
 
 			var dot = new Label
 			{
 				AutoSize = true,
 				Size = new Size(1, 1),
-				//dot.Text = "●";	// Segoe UI
-				//dot.Text = "l";	// Wingdings
 				Text = "●", // Segoe UI Symbol  (U+25CF);
 				TextAlign = ContentAlignment.BottomCenter,
 				Dock = DockStyle.Left,
-				Font = new Font("Segoe UI Symbol", 9F, FontStyle.Bold)
+				Font = new Font("Segoe UI Symbol", 9F, FontStyle.Regular),
 			};
 
 			if(storage.Recordings.Count > 0) dot.ForeColor = Color.FromArgb(0xE50000);
 			else dot.ForeColor = Color.FromArgb(0xC0C0C0);
 
 			dot.Visible = true;
-			m_layoutpanel.Controls.Add(dot);
+			//m_layoutpanel.Controls.Add(dot);
+			devicepanel.Controls.Add(dot);
+			m_layoutpanel.Controls.Add(devicepanel);
 		}
 
 		public static PopupItemControl NoDevices()
 		{
 			PopupItemControl nodevices = new PopupItemControl();
+
+			var devicepanel = new RoundedFlowLayoutPanel();
+			devicepanel.AutoSize = true;
+			devicepanel.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+			devicepanel.FlowDirection = FlowDirection.LeftToRight;
+			devicepanel.WrapContents = false;
+			devicepanel.BackColor = SystemColors.ControlLightLight;
+			devicepanel.Padding = new Padding(8);
+			devicepanel.Radius = 16;
+
 			var name = new Label
 			{
 				AutoSize = true,
 				Size = new Size(1, 1),
 				Text = "No HDHomeRun devices detected",
-				TextAlign = ContentAlignment.MiddleCenter,
+				TextAlign = ContentAlignment.BottomCenter,
 				Dock = DockStyle.Left,
-				Font = new Font("Segoe UI Semibold", nodevices.Font.Size, FontStyle.Regular),
+				Font = VersionHelper.IsWindows11OrGreater() ? new Font("Segoe UI Variable Display Semib", 9F, FontStyle.Regular) : new Font("Segoe UI Semibold", 9F, FontStyle.Regular),
 				Visible = true
 			};
-			nodevices.m_layoutpanel.Controls.Add(name);
+			devicepanel.Controls.Add(name);
+			//nodevices.m_layoutpanel.Controls.Add(name);
+			nodevices.m_layoutpanel.Controls.Add(devicepanel);
 
 			return nodevices;
 		}

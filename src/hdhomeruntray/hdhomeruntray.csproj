@@ -61,6 +61,9 @@
     </Compile>
     <Compile Include="DiscoveryInterval.cs" />
     <Compile Include="extensions.cs" />
+    <Compile Include="RoundedFlowLayoutPanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="TrayIconHoverDelay.cs" />
     <Compile Include="MainApplication.cs" />
     <Compile Include="main.cs" />

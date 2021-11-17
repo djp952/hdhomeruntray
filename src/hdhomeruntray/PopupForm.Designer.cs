@@ -36,9 +36,9 @@ namespace zuki.hdhomeruntray
 			this.m_layoutpanel.AutoSize = true;
 			this.m_layoutpanel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
 			this.m_layoutpanel.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.m_layoutpanel.Location = new System.Drawing.Point(12, 12);
+			this.m_layoutpanel.Location = new System.Drawing.Point(4, 4);
 			this.m_layoutpanel.Name = "m_layoutpanel";
-			this.m_layoutpanel.Size = new System.Drawing.Size(653, 50);
+			this.m_layoutpanel.Size = new System.Drawing.Size(669, 66);
 			this.m_layoutpanel.TabIndex = 0;
 			this.m_layoutpanel.WrapContents = false;
 			// 
@@ -56,7 +56,7 @@ namespace zuki.hdhomeruntray
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
 			this.Name = "PopupForm";
-			this.Padding = new System.Windows.Forms.Padding(12, 12, 12, 12);
+			this.Padding = new System.Windows.Forms.Padding(4);
 			this.ShowIcon = false;
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
