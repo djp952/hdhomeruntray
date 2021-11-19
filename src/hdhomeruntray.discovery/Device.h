@@ -65,6 +65,14 @@ public:
 		virtual String^ get(void) abstract;
 	}
 
+	// LocalIP
+	//
+	// Gets the device IP address
+	property IPAddress^ LocalIP
+	{
+		IPAddress^ get(void);
+	}
+
 	// Name
 	//
 	// Gets the device name (device/storage id)
@@ -85,12 +93,14 @@ protected:
 
 	// Instance Constructor
 	//
-	Device(JObject^ device, zuki::hdhomeruntray::discovery::DeviceType type);
+	Device(JObject^ device, IPAddress^ localip, zuki::hdhomeruntray::discovery::DeviceType type);
 
 	//-----------------------------------------------------------------------
 	// Member Variables
 
-	String^										m_baseurl;		// Device base URL string
+	String^						m_baseurl;		// Device base URL string
+	IPAddress^					m_localip;		// Device IP address
+
 	zuki::hdhomeruntray::discovery::DeviceType	m_devicetype;	// Device type flag
 };
 

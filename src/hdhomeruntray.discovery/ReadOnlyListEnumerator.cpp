@@ -36,7 +36,7 @@
 generic<typename T>
 ReadOnlyListEnumerator<T>::ReadOnlyListEnumerator(IReadOnlyList<T>^ collection) : m_collection(collection)
 {
-	if(Object::ReferenceEquals(collection, nullptr)) throw gcnew ArgumentNullException("collection");
+	if(CLRISNULL(collection)) throw gcnew ArgumentNullException("collection");
 }
 
 //---------------------------------------------------------------------------

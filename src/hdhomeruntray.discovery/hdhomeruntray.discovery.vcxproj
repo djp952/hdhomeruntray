@@ -113,6 +113,7 @@
     <ClInclude Include="TunerDevice.h" />
     <ClInclude Include="JsonWebRequest.h" />
     <ClInclude Include="TunerList.h" />
+    <ClInclude Include="TunerStatus.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\depends\libhdhomerun\hdhomerun_channels.c">
@@ -205,12 +206,14 @@
     <ClCompile Include="TunerDevice.cpp" />
     <ClCompile Include="JsonWebRequest.cpp" />
     <ClCompile Include="TunerList.cpp" />
+    <ClCompile Include="TunerStatus.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json">
       <HintPath>$(ProjectDir)..\..\packages\Newtonsoft.Json.13.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Net.Http" />
   </ItemGroup>
   <ItemGroup>

@@ -20,74 +20,88 @@
 // SOFTWARE.
 //---------------------------------------------------------------------------
 
-#ifndef __STORAGEDEVICE_H_
-#define __STORAGEDEVICE_H_
+#ifndef __TUNERSTATUS_H_
+#define __TUNERSTATUS_H_
 #pragma once
-
-#include "Device.h"
-#include "RecordingList.h"
 
 #pragma warning(push, 4)
 
 using namespace System;
-using namespace System::Net;
-
-using namespace Newtonsoft::Json;
-using namespace Newtonsoft::Json::Linq;
+using namespace System::Drawing;
 
 namespace zuki::hdhomeruntray::discovery {
 
-//---------------------------------------------------------------------------
-// Class StorageDevice
+// FORWARD DECLARATIONS
 //
-// Describes a HDHomeRun storage (DVR) device
+ref class TunerDevice;
+
+//---------------------------------------------------------------------------
+// Class TunerStatus
+//
+// Describes the status of an individual HDHomeRun device tuner
 //---------------------------------------------------------------------------
 
-public ref class StorageDevice : Device
+public ref class TunerStatus
 {
 public:
 
 	//-----------------------------------------------------------------------
 	// Properties
 
-	// FriendlyName
+	// Channel
 	//
-	// Gets the device friendly name
-	property String^ FriendlyName
-	{
-		virtual String^ get(void) override;
-	}
-
-	// Name
-	//
-	// Gets the device name (device/storage id)
-	property String^ Name
-	{
-		virtual String^ get(void) override;
-	}
-
-	// Recordings
-	//
-	// Gets the collection of in-progress recordings
-	property RecordingList^ Recordings
-	{
-		RecordingList^ get(void);
-	}
-
-	// StorageID
-	//
-	// Gets the storage device identifier
-	property String^ StorageID
+	// Gets the tuned channel string (modulation+frequency)
+	property String^ Channel
 	{
 		String^ get(void);
 	}
 
-	// StorageURL
+	// SignalQuality
 	//
-	// Gets the storage device data URL
-	property String^ StorageURL
+	// Gets the signal quality of the tuned channel
+	property int SignalQuality
 	{
-		String^ get(void);
+		int get(void);
+	}
+
+	// SignalQualityColor
+	//
+	// Gets the color code for the signal quality
+	property Color SignalQualityColor
+	{
+		Color get(void);
+	}
+
+	// SignalStrength
+	//
+	// Gets the signal strength of the tuned channel
+	property int SignalStrength
+	{
+		int get(void);
+	}
+
+	// SignalStrengthColor
+	//
+	// Gets the color code for the signal strength
+	property Color SignalStrengthColor
+	{
+		Color get(void);
+	}
+
+	// SymbolQuality
+	//
+	// Gets the symbol qualityh of the tuned channel
+	property int SymbolQuality
+	{
+		int get(void);
+	}
+
+	// SymbolQualityColor
+	//
+	// Gets the color code for the symbol quality
+	property Color SymbolQualityColor
+	{
+		Color get(void);
 	}
 
 internal:
@@ -97,22 +111,25 @@ internal:
 
 	// Create
 	//
-	// Creates a new StorageDevice instance
-	static StorageDevice^ Create(JObject^ device, IPAddress^ localip);
+	// Creates a new TunerStatus instance
+	static TunerStatus^ Create(TunerDevice^ tunerdevice, int index);
 
 private:
 
 	// Instance Constructor
 	//
-	StorageDevice(JObject^ device, IPAddress^ localip);
+	TunerStatus(struct hdhomerun_tuner_status_t const* status);
 
 	//-----------------------------------------------------------------------
 	// Member Variables
 
-	String^					m_friendlyname;		// Storage device friendly name
-	String^					m_storageid;		// Storage device identifier
-	String^					m_storageurl;		// Storage device data URL
-	RecordingList^			m_recordings;		// Active recordings
+	String^				m_channel;				// Tuned channel
+	int					m_signalquality;		// Signal quality
+	Color				m_signalqualitycolor;	// Signal quality color
+	int					m_signalstrength;		// Signal strength
+	Color				m_signalstrengthcolor;	// Signal strength color
+	int					m_symbolquality;		// Symbol quality
+	Color				m_symbolqualitycolor;	// Symbol quality color
 };
 
 //---------------------------------------------------------------------------
@@ -121,4 +138,4 @@ private:
 
 #pragma warning(pop)
 
-#endif	// __STORAGEDEVICE_H_
+#endif	// __TUNERSTATUS_H_

@@ -44,7 +44,7 @@ namespace zuki::hdhomeruntray::discovery {
 
 TunerList::TunerList(List<Tuner^>^ tuners) : m_tuners(tuners)
 {
-	if(Object::ReferenceEquals(tuners, nullptr)) throw gcnew ArgumentNullException("tuners");
+	if(CLRISNULL(tuners)) throw gcnew ArgumentNullException("tuners");
 }
 
 //---------------------------------------------------------------------------
@@ -78,12 +78,12 @@ int TunerList::Count::get(void)
 
 TunerList^ TunerList::Create(String^ statusurl)
 {
-	if(Object::ReferenceEquals(statusurl, nullptr)) throw gcnew ArgumentNullException("statusurl");
+	if(CLRISNULL(statusurl)) throw gcnew ArgumentNullException("statusurl");
 
 	List<Tuner^>^ discovered = gcnew List<Tuner^>();			// Collection of discovered tuners
 
 	JArray^ tuners = JsonWebRequest::GetArray(statusurl);
-	if(!Object::ReferenceEquals(tuners, nullptr)) {
+	if(CLRISNOTNULL(tuners)) {
 
 		// Create a Tuner object for each individual array object
 		for each(JObject^ tuner in tuners) discovered->Add(Tuner::Create(tuner));

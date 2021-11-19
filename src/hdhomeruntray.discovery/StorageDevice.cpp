@@ -34,18 +34,19 @@ namespace zuki::hdhomeruntray::discovery {
 // Arguments:
 //
 //	device		- Reference to the JSON discovery data for the device
+//	localip		- IP address of the storage device
 
-StorageDevice::StorageDevice(JObject^ device) : Device(device, zuki::hdhomeruntray::discovery::DeviceType::Storage)
+StorageDevice::StorageDevice(JObject^ device, IPAddress^ localip) : Device(device, localip, zuki::hdhomeruntray::discovery::DeviceType::Storage)
 {
-	if(Object::ReferenceEquals(device, nullptr)) throw gcnew ArgumentNullException("device");
+	if(CLRISNULL(device)) throw gcnew ArgumentNullException("device");
 
 	JToken^ friendlyname = device->GetValue("FriendlyName", StringComparison::OrdinalIgnoreCase);
 	JToken^ storageid = device->GetValue("StorageID", StringComparison::OrdinalIgnoreCase);
 	JToken^ storageurl = device->GetValue("StorageURL", StringComparison::OrdinalIgnoreCase);
 
-	m_friendlyname = (!Object::ReferenceEquals(friendlyname, nullptr)) ? friendlyname->ToObject<String^>() : String::Empty;
-	m_storageid = (!Object::ReferenceEquals(storageid, nullptr)) ? storageid->ToObject<String^>() : String::Empty;
-	m_storageurl = (!Object::ReferenceEquals(storageurl, nullptr)) ? storageurl->ToObject<String^>() : String::Empty;
+	m_friendlyname = CLRISNOTNULL(friendlyname) ? friendlyname->ToObject<String^>() : String::Empty;
+	m_storageid = CLRISNOTNULL(storageid) ? storageid->ToObject<String^>() : String::Empty;
+	m_storageurl = CLRISNOTNULL(storageurl) ? storageurl->ToObject<String^>() : String::Empty;
 
 	m_recordings = RecordingList::Create(String::Concat(m_baseurl, "/status.json"));
 }
@@ -58,11 +59,12 @@ StorageDevice::StorageDevice(JObject^ device) : Device(device, zuki::hdhomeruntr
 // Arguments:
 //
 //	device		- Reference to the JSON discovery data for the device
+//	localip		- IP address of the storage device
 
-StorageDevice^ StorageDevice::Create(JObject^ device)
+StorageDevice^ StorageDevice::Create(JObject^ device, IPAddress^ localip)
 {
-	if(Object::ReferenceEquals(device, nullptr)) throw gcnew ArgumentNullException();
-	return gcnew StorageDevice(device);
+	if(CLRISNULL(device)) throw gcnew ArgumentNullException("device");
+	return gcnew StorageDevice(device, localip);
 }
 
 //---------------------------------------------------------------------------
@@ -92,7 +94,7 @@ String^ StorageDevice::Name::get(void)
 
 RecordingList^ StorageDevice::Recordings::get(void)
 {
-	CLRASSERT(!Object::ReferenceEquals(m_recordings, nullptr));
+	CLRASSERT(CLRISNOTNULL(m_recordings));
 
 	return m_recordings;
 }

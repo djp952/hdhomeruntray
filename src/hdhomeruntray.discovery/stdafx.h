@@ -71,6 +71,9 @@
 
 #include <hdhomerun.h>				// Include HDHomeRun declarations
 
+struct hdhomerun_device_t {};		// LNK4248 : Unresolved typeref token
+struct hdhomerun_debug_t {};		// LNK4248 : Unresolved typeref token
+
 //---------------------------------------------------------------------------
 
 #endif	// __STDAFX_H_

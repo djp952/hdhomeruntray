@@ -37,7 +37,7 @@ namespace zuki::hdhomeruntray::discovery {
 
 Tuner::Tuner(JObject^ tuner)
 {
-	if(Object::ReferenceEquals(tuner, nullptr)) throw gcnew ArgumentNullException("tuner");
+	if(CLRISNULL(tuner)) throw gcnew ArgumentNullException("tuner");
 
 	// TODO: All of these tokens will need to be available at some point; need to check an ATSC tuner
 	// to make sure they will be available for every device ...
@@ -52,10 +52,10 @@ Tuner::Tuner(JObject^ tuner)
 
 	// The tuner index is presented in the JSON as "Resource":"tunerX", but the "X" is the value we want here,
 	// treat the token as a string that can be parsed into an int if the "tuner" portion is removed
-	if(!Object::ReferenceEquals(resource, nullptr)) int::TryParse(resource->ToObject<String^>()->Replace("tuner", ""), m_index);
+	if(CLRISNOTNULL(resource)) int::TryParse(resource->ToObject<String^>()->Replace("tuner", ""), m_index);
 
-	m_frequency = (!Object::ReferenceEquals(frequency, nullptr)) ? frequency->ToObject<__int64>() : -1;
-	m_targetip = (!Object::ReferenceEquals(targetip, nullptr)) ? targetip->ToObject<String^>() : String::Empty;
+	m_frequency = CLRISNOTNULL(frequency) ? frequency->ToObject<__int64>() : -1;
+	m_targetip = CLRISNOTNULL(targetip) ? targetip->ToObject<String^>() : String::Empty;
 }
 
 //---------------------------------------------------------------------------
@@ -69,7 +69,8 @@ Tuner::Tuner(JObject^ tuner)
 
 Tuner^ Tuner::Create(JObject^ tuner)
 {
-	if(Object::ReferenceEquals(tuner, nullptr)) throw gcnew ArgumentNullException("tuner");
+	if(CLRISNULL(tuner)) throw gcnew ArgumentNullException("tuner");
+
 	return gcnew Tuner(tuner);
 }
 

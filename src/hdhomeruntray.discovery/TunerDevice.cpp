@@ -34,20 +34,21 @@ namespace zuki::hdhomeruntray::discovery {
 // Arguments:
 //
 //	device		- Reference to the JSON discovery data for the device
+//	localip		- The IP address of the device
 
-TunerDevice::TunerDevice(JObject^ device) : Device(device, zuki::hdhomeruntray::discovery::DeviceType::Tuner)
+TunerDevice::TunerDevice(JObject^ device, IPAddress^ localip) : Device(device, localip, zuki::hdhomeruntray::discovery::DeviceType::Tuner)
 {
-	if(Object::ReferenceEquals(device, nullptr)) throw gcnew ArgumentNullException("device");
+	if(CLRISNULL(device)) throw gcnew ArgumentNullException("device");
 
 	JToken^ deviceid = device->GetValue("DeviceID", StringComparison::OrdinalIgnoreCase);
 	JToken^ friendlyname = device->GetValue("FriendlyName", StringComparison::OrdinalIgnoreCase);
 	JToken^ islegacy = device->GetValue("Legacy", StringComparison::OrdinalIgnoreCase);
 	JToken^ tunercount = device->GetValue("TunerCount", StringComparison::OrdinalIgnoreCase);
 
-	m_deviceid = (!Object::ReferenceEquals(deviceid, nullptr)) ? deviceid->ToObject<String^>() : String::Empty;
-	m_friendlyname = (!Object::ReferenceEquals(friendlyname, nullptr)) ? friendlyname->ToObject<String^>() : String::Empty;
-	m_islegacy = (!Object::ReferenceEquals(islegacy, nullptr) && (islegacy->ToObject<int>() == 1));
-	m_tunercount = (!Object::ReferenceEquals(tunercount, nullptr)) ? tunercount->ToObject<int>() : 0;
+	m_deviceid = CLRISNOTNULL(deviceid) ? deviceid->ToObject<String^>() : String::Empty;
+	m_friendlyname = CLRISNOTNULL(friendlyname) ? friendlyname->ToObject<String^>() : String::Empty;
+	m_islegacy = (CLRISNOTNULL(islegacy) && (islegacy->ToObject<int>() == 1));
+	m_tunercount = CLRISNOTNULL(tunercount) ? tunercount->ToObject<int>() : 0;
 
 	// Legacy devices require tuner discovery using libhdhomerun
 	if(m_islegacy) {
@@ -64,7 +65,7 @@ TunerDevice::TunerDevice(JObject^ device) : Device(device, zuki::hdhomeruntray::
 	}
 
 	// Precaution against unhandled exceptions
-	if(Object::ReferenceEquals(m_tuners, nullptr)) m_tuners = TunerList::Empty;
+	if(CLRISNULL(m_tuners)) m_tuners = TunerList::Empty;
 }
 
 //---------------------------------------------------------------------------
@@ -75,11 +76,12 @@ TunerDevice::TunerDevice(JObject^ device) : Device(device, zuki::hdhomeruntray::
 // Arguments:
 //
 //	device		- Reference to the JSON discovery data for the device
+//	localip		- The IP address of the device
 
-TunerDevice^ TunerDevice::Create(JObject^ device)
+TunerDevice^ TunerDevice::Create(JObject^ device, IPAddress^ localip)
 {
-	if(Object::ReferenceEquals(device, nullptr)) throw gcnew ArgumentNullException();
-	return gcnew TunerDevice(device);
+	if(CLRISNULL(device)) throw gcnew ArgumentNullException();
+	return gcnew TunerDevice(device, localip);
 }
 
 //---------------------------------------------------------------------------
@@ -100,6 +102,38 @@ String^ TunerDevice::DeviceID::get(void)
 String^ TunerDevice::FriendlyName::get(void)
 {
 	return m_friendlyname;
+}
+
+//---------------------------------------------------------------------------
+// TunerDevice::GetTunerStatus
+//
+// Gets the detailed status information for a tuner
+//
+// Arguments:
+//
+//	index		- Index of the tuner within the device
+
+TunerStatus^ TunerDevice::GetTunerStatus(int index)
+{
+	if((index < 0) || (index >= m_tunercount)) throw gcnew ArgumentOutOfRangeException("index");
+
+	return TunerStatus::Create(this, index);
+}
+
+//---------------------------------------------------------------------------
+// TunerDevice::GetTunerStatus
+//
+// Gets the detailed status information for a tuner
+//
+// Arguments:
+//
+//	tuner		- Tuner instance to get the index from
+
+TunerStatus^ TunerDevice::GetTunerStatus(Tuner^ tuner)
+{
+	if(CLRISNULL(tuner)) throw gcnew ArgumentNullException("tuner");
+	
+	return GetTunerStatus(tuner->Index);
 }
 
 //---------------------------------------------------------------------------
@@ -129,7 +163,7 @@ bool TunerDevice::IsLegacy::get(void)
 
 TunerList^ TunerDevice::Tuners::get(void)
 {
-	CLRASSERT(!Object::ReferenceEquals(m_tuners, nullptr));
+	CLRASSERT(CLRISNOTNULL(m_tuners));
 
 	return m_tuners;
 }

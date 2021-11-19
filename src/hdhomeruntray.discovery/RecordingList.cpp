@@ -44,7 +44,7 @@ namespace zuki::hdhomeruntray::discovery {
 
 RecordingList::RecordingList(List<Recording^>^ recordings) : m_recordings(recordings)
 {
-	if(Object::ReferenceEquals(recordings, nullptr)) throw gcnew ArgumentNullException("recordings");
+	if(CLRISNULL(recordings)) throw gcnew ArgumentNullException("recordings");
 }
 
 //---------------------------------------------------------------------------
@@ -78,7 +78,7 @@ int RecordingList::Count::get(void)
 
 RecordingList^ RecordingList::Create(String^ statusurl)
 {
-	if(Object::ReferenceEquals(statusurl, nullptr)) throw gcnew ArgumentNullException("statusurl");
+	if(CLRISNULL(statusurl)) throw gcnew ArgumentNullException("statusurl");
 
 	List<Recording^>^ discovered = gcnew List<Recording^>();			// Collection of discovered recordings
 
@@ -86,12 +86,12 @@ RecordingList^ RecordingList::Create(String^ statusurl)
 	// that represent active recordings has "Resource":"record".  The other type is
 	// a Live TV buffer, this is "Resource":"live"
 	JArray^ recordings = JsonWebRequest::GetArray(statusurl);
-	if(!Object::ReferenceEquals(recordings, nullptr)) {
+	if(CLRISNOTNULL(recordings)) {
 
 		for each(JObject^ recording in recordings) {
 
 			JToken^ resource = recording->GetValue("Resource", StringComparison::OrdinalIgnoreCase);
-			if((!Object::ReferenceEquals(resource, nullptr)) && (String::Compare(resource->ToObject<String^>(), "record",
+			if((CLRISNOTNULL(resource)) && (String::Compare(resource->ToObject<String^>(), "record",
 				StringComparison::OrdinalIgnoreCase) == 0)) discovered->Add(Recording::Create(recording));
 		}
 	}

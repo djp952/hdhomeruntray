@@ -121,7 +121,7 @@ generic<class T> T JsonWebRequest::Get(String^ uri, CancellationToken cancel)
 	gettask->Wait();
 
 	// If the returned data was of type application/json, access the stream data and deserialize it
-	if(!Object::ReferenceEquals(gettask->Result->Content, nullptr) && gettask->Result->Content->Headers->ContentType->MediaType == "application/json")
+	if(CLRISNOTNULL(gettask->Result->Content) && gettask->Result->Content->Headers->ContentType->MediaType == "application/json")
 	{
 		// TODO: Exception handling and cancellation logic (if available here)
 		Task<Stream^>^ streamtask = gettask->Result->Content->ReadAsStreamAsync();

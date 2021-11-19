@@ -37,11 +37,11 @@ namespace zuki::hdhomeruntray::discovery {
 
 Recording::Recording(JObject^ recording)
 {
-	if(Object::ReferenceEquals(recording, nullptr)) throw gcnew ArgumentNullException("recording");
+	if(CLRISNULL(recording)) throw gcnew ArgumentNullException("recording");
 
 	// The only thing in a recording is the name
 	JToken^ name = recording->GetValue("Name", StringComparison::OrdinalIgnoreCase);
-	m_name = (!Object::ReferenceEquals(name, nullptr)) ? name->ToObject<String^>() : String::Empty;
+	m_name = CLRISNOTNULL(name) ? name->ToObject<String^>() : String::Empty;
 }
 
 //---------------------------------------------------------------------------
@@ -55,7 +55,7 @@ Recording::Recording(JObject^ recording)
 
 Recording^ Recording::Create(JObject^ recording)
 {
-	if(Object::ReferenceEquals(recording, nullptr)) throw gcnew ArgumentNullException("recording");
+	if(CLRISNULL(recording)) throw gcnew ArgumentNullException("recording");
 	return gcnew Recording(recording);
 }
 

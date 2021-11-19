@@ -25,7 +25,9 @@
 #pragma once
 
 #include "Device.h"
+#include "Tuner.h"
 #include "TunerList.h"
+#include "TunerStatus.h"
 
 #pragma warning(push, 4)
 
@@ -46,6 +48,15 @@ namespace zuki::hdhomeruntray::discovery {
 public ref class TunerDevice : Device
 {
 public:
+
+	//-----------------------------------------------------------------------
+	// Member Functions
+
+	// GetTunerStatus
+	//
+	// Gets the detailed status information for a tuner
+	TunerStatus^ GetTunerStatus(int index);
+	TunerStatus^ GetTunerStatus(Tuner^ tuner);
 
 	//-----------------------------------------------------------------------
 	// Properties
@@ -98,13 +109,13 @@ internal:
 	// Create
 	//
 	// Creates a new TunerDevice instance
-	static TunerDevice^ Create(JObject^ device);
+	static TunerDevice^ Create(JObject^ device, IPAddress^ localip);
 
 private:
 
 	// Instance Constructors
 	//
-	TunerDevice(JObject^ device);
+	TunerDevice(JObject^ device, IPAddress^ localip);
 
 	//-----------------------------------------------------------------------
 	// Member Variables

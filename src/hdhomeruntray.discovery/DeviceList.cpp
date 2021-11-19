@@ -80,7 +80,7 @@ public:
 
 DeviceList::DeviceList(List<Device^>^ devices) : m_devices(devices)
 {
-	if(Object::ReferenceEquals(devices, nullptr)) throw gcnew ArgumentNullException("devices");
+	if(CLRISNULL(devices)) throw gcnew ArgumentNullException("devices");
 }
 
 //---------------------------------------------------------------------------
@@ -145,16 +145,21 @@ DeviceList^ DeviceList::DiscoverBroadcast(void)
 		// Use the discovery JSON reported by the device as opposed to the data returned from UDP
 		String^ discoverurl = String::Concat(gcnew String(devices[index].base_url), "/discover.json");
 		JObject^ discovery = JsonWebRequest::GetObject(discoverurl);
-		if(!Object::ReferenceEquals(discovery, nullptr)) {
+		if(CLRISNOTNULL(discovery)) {
 
 			// Gather enough information from the discovery data to determine how to proceed
 			JToken^ deviceid = discovery->GetValue("DeviceID", StringComparison::OrdinalIgnoreCase);
 			JToken^ storageid = discovery->GetValue("StorageID", StringComparison::OrdinalIgnoreCase);
 
+			// Convert the numeric IP address into an IPAddress instance
+			array<Byte>^ ipbytes = BitConverter::GetBytes(devices[index].ip_addr);
+			if(BitConverter::IsLittleEndian) Array::Reverse(ipbytes);
+			IPAddress^ ipaddress = gcnew IPAddress(ipbytes);
+
 			// A single device may report both tuners and storage so check for both types and
 			// process them as distinct device instances
-			if(!Object::ReferenceEquals(nullptr, deviceid)) discovered->Add(TunerDevice::Create(discovery));
-			if(!Object::ReferenceEquals(nullptr, storageid)) discovered->Add(StorageDevice::Create(discovery));
+			if(CLRISNOTNULL(deviceid)) discovered->Add(TunerDevice::Create(discovery, ipaddress));
+			if(CLRISNOTNULL(storageid)) discovered->Add(StorageDevice::Create(discovery, ipaddress));
 		}
 	}
 
@@ -177,11 +182,9 @@ DeviceList^ DeviceList::DiscoverHttp(void)
 {
 	List<Device^>^ discovered = gcnew List<Device^>();				// Collection of discovered devices
 
-	// TODO: CancellationSource/token
-
 	// The discovery JSON is returned as an array consisting of individual device objects
 	JArray^ devices = JsonWebRequest::GetArray("https://ipv4-api.hdhomerun.com/discover");
-	if(!Object::ReferenceEquals(devices, nullptr)) {
+	if(CLRISNOTNULL(devices)) {
 
 		for each(JObject^ device in devices) {
 
@@ -189,18 +192,27 @@ DeviceList^ DeviceList::DiscoverHttp(void)
 			JToken^ deviceid = device->GetValue("DeviceID", StringComparison::OrdinalIgnoreCase);
 			JToken^ storageid = device->GetValue("StorageID", StringComparison::OrdinalIgnoreCase);
 			JToken^ discoverurl = device->GetValue("DiscoverURL", StringComparison::OrdinalIgnoreCase);
+			JToken^ localip = device->GetValue("LocalIP", StringComparison::OrdinalIgnoreCase);
 
 			// Retrieve the individual device discovery data
-			// TODO: Cancellation / Exceptions
-			if(!Object::ReferenceEquals(discoverurl, nullptr)) {
+			if(CLRISNOTNULL(discoverurl) && CLRISNOTNULL(localip)) {
 
 				JObject^ discovery = JsonWebRequest::GetObject(discoverurl->ToObject<String^>());
-				if(!Object::ReferenceEquals(discovery, nullptr)) {
+				if(CLRISNOTNULL(discovery)) {
+
+					// Convert the LocalIP string into an IPAddress instance
+					IPAddress^ ipaddress = IPAddress::None;
+					if(CLRISNOTNULL(localip)) {
+
+						// Storage devices come in as IP:PORT, we only want the IP address
+						array<String^>^ parts = localip->ToObject<String^>()->Split(':');
+						if(parts->Length >= 1) IPAddress::TryParse(parts[0], ipaddress);
+					}
 
 					// A single device may report both tuners and storage so check for both types and
 					// process them as distinct device instances
-					if(!Object::ReferenceEquals(nullptr, deviceid)) discovered->Add(TunerDevice::Create(discovery));
-					if(!Object::ReferenceEquals(nullptr, storageid)) discovered->Add(StorageDevice::Create(discovery));
+					if(CLRISNOTNULL(deviceid)) discovered->Add(TunerDevice::Create(discovery, ipaddress));
+					if(CLRISNOTNULL(storageid)) discovered->Add(StorageDevice::Create(discovery, ipaddress));
 				}
 			}
 		}

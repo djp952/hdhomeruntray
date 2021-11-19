@@ -34,14 +34,18 @@ namespace zuki::hdhomeruntray::discovery {
 // Arguments:
 //
 //	device		- Reference to the JSON discovery data for the device
+//	localip		- The IP address of the device
 //	type		- Type of device being constructed
 
-Device::Device(JObject^ device, zuki::hdhomeruntray::discovery::DeviceType type) : m_devicetype(type)
+Device::Device(JObject^ device, IPAddress^ localip, zuki::hdhomeruntray::discovery::DeviceType type) : 
+	m_devicetype(type), m_localip(localip)
 {
-	if(Object::ReferenceEquals(device, nullptr)) throw gcnew ArgumentNullException("device");
+	if(CLRISNULL(device)) throw gcnew ArgumentNullException("device");
+	if(CLRISNULL(localip)) throw gcnew ArgumentNullException("localip");
 
 	JToken^ baseurl = device->GetValue("BaseURL", StringComparison::OrdinalIgnoreCase);
-	if(!Object::ReferenceEquals(baseurl, nullptr)) m_baseurl = baseurl->ToString();
+
+	if(CLRISNOTNULL(baseurl)) m_baseurl = baseurl->ToString();
 }
 
 //---------------------------------------------------------------------------
@@ -52,6 +56,16 @@ Device::Device(JObject^ device, zuki::hdhomeruntray::discovery::DeviceType type)
 String^ Device::BaseURL::get(void)
 {
 	return m_baseurl;
+}
+
+//---------------------------------------------------------------------------
+// Device::LocalIP::get
+//
+// Gets the device local IP address
+
+IPAddress^ Device::LocalIP::get(void)
+{
+	return m_localip;
 }
 
 //---------------------------------------------------------------------------
