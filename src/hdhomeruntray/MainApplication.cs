@@ -48,7 +48,7 @@ namespace zuki.hdhomeruntray
 			// Wire up a handler to watch for property changes
 			Settings.Default.PropertyChanged += OnPropertyChanged;
 
-			// Create the wire up the device discovery object
+			// Create and wire up the device discovery object
 			m_devices = new Devices();
 			m_devices.DiscoveryCompleted += new DiscoveryCompletedEventHandler(this.OnDiscoveryCompleted);
 

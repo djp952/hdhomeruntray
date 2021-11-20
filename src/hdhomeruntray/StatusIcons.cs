@@ -24,6 +24,8 @@ using System;
 using System.Drawing;
 using System.Windows.Forms;
 
+using Microsoft.Win32;
+
 namespace zuki.hdhomeruntray
 {
 	//-----------------------------------------------------------------------
@@ -55,12 +57,21 @@ namespace zuki.hdhomeruntray
 		// Retrieves the specified icon
 		public static Icon Get(StatusIconType type)
 		{
-			// TODO: Theme support
+			bool lighticon = false;
+
+			// On Windows 10 and above the icon should be appropriate for the system theme
+			if(VersionHelper.IsWindows10OrGreater())
+			{
+				// NOTE: Assume zero (dark taskbar / light icon) here if the value is missing
+				var value = Registry.GetValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize", "SystemUsesLightTheme", 0);
+				if((value is int @int) && (@int != 1)) lighticon = true;
+			}
+
 			switch(type)
 			{
-				case StatusIconType.Active: return s_active_dark;
-				case StatusIconType.Idle: return s_idle_dark;
-				case StatusIconType.Recording: return s_recording_dark;
+				case StatusIconType.Active: return (lighticon) ? s_active_light : s_active_dark;
+				case StatusIconType.Idle: return (lighticon) ? s_idle_light : s_idle_dark;
+				case StatusIconType.Recording: return (lighticon) ? s_recording_light : s_recording_dark;
 				default: throw new ArgumentOutOfRangeException("type");
 			}
 		}
