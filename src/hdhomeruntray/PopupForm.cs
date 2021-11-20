@@ -68,6 +68,21 @@ namespace zuki.hdhomeruntray
 		{
 			InitializeComponent();
 
+			// For some reason the padding for the form doesn't scale the way I expected
+			// and the ScaleControl() method always sends in a ratio of 1:1.  Use a DPI-based
+			// manual scaling of the padding to clean this up for now ...
+			float factorx = 1.0F;
+			float factory = 1.0F;
+			using(Graphics gr = Graphics.FromHwnd(this.Handle))
+			{
+				factorx = gr.DpiX / 96.0F;
+				factory = gr.DpiY / 96.0F;
+			}
+
+			// TODO: there has to be a better way
+			this.Padding = new Padding((int)(this.Padding.Left * factorx), (int)(this.Padding.Top * factory),
+				(int)(this.Padding.Right * factorx), (int)(this.Padding.Bottom * factory));
+
 			// WINDOWS 11
 			//
 			if(VersionHelper.IsWindows11OrGreater())
