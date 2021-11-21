@@ -23,12 +23,12 @@
 #include "stdafx.h"
 
 #include "TunerStatus.h"
+
 #include "TunerDevice.h"
 
 #pragma warning(push, 4)
 
 using namespace System::Globalization;
-using namespace System::Net::Sockets;
 
 namespace zuki::hdhomeruntray::discovery {
 
@@ -88,7 +88,7 @@ Color TunerStatus::ConvertHDHomeRunColor(uint32_t color)
 //---------------------------------------------------------------------------
 // TunerStatus::Create (internal)
 //
-// Creates a new Tuner instance
+// Creates a new TunerStatus instance
 //
 // Arguments:
 //
@@ -97,7 +97,7 @@ Color TunerStatus::ConvertHDHomeRunColor(uint32_t color)
 
 TunerStatus^ TunerStatus::Create(TunerDevice^ tunerdevice, int index)
 {
-	if(Object::ReferenceEquals(tunerdevice, nullptr)) throw gcnew ArgumentNullException("tunerdevice");
+	if(CLRISNULL(tunerdevice)) throw gcnew ArgumentNullException("tunerdevice");
 
 	// Convert the device ID into an unsigned 32-bit integer
 	uint32_t deviceid = 0;

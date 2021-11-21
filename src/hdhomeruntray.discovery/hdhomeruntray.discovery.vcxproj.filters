@@ -119,6 +119,9 @@
     <ClInclude Include="TunerStatus.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="StorageStatus.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AssemblyInfo.cpp">
@@ -203,6 +206,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="TunerStatus.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="StorageStatus.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

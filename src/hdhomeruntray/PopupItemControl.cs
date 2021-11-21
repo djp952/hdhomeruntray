@@ -198,10 +198,11 @@ namespace zuki.hdhomeruntray
 			//
 			else if(m_device is StorageDevice storagedevice)
 			{
-				// TODO: Get the color from "StorageStatus" when it's available;
-				// green for live TV, red for recording, gray if idle
-				if(storagedevice.Recordings.Count > 0) m_dots[0].ForeColor = Color.FromArgb(0xE50000);
-				else m_dots[0].ForeColor = Color.FromArgb(0xC0C0C0);
+				// Get the granular storage status from the device
+				StorageStatus status = storagedevice.GetStorageStatus();
+
+				// The storage device only gets one dot for the overall status
+				m_dots[0].ForeColor = status.StatusColor;
 			}
 
 			base.Refresh();

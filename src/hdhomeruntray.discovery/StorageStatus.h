@@ -20,83 +20,43 @@
 // SOFTWARE.
 //---------------------------------------------------------------------------
 
-#ifndef __STORAGEDEVICE_H_
-#define __STORAGEDEVICE_H_
+#ifndef __STORAGESTATUS_H_
+#define __STORAGESTATUS_H_
 #pragma once
 
-#include "Device.h"
-#include "RecordingList.h"
-#include "StorageStatus.h"
+#include "Recording.h"
 
 #pragma warning(push, 4)
 
 using namespace System;
-using namespace System::Net;
-
-using namespace Newtonsoft::Json;
-using namespace Newtonsoft::Json::Linq;
+using namespace System::Collections::Generic;
+using namespace System::Drawing;
 
 namespace zuki::hdhomeruntray::discovery {
 
-//---------------------------------------------------------------------------
-// Class StorageDevice
+// FORWARD DECLARATIONS
 //
-// Describes a HDHomeRun storage (DVR) device
+ref class StorageDevice;
+
+//---------------------------------------------------------------------------
+// Class StorageStatus
+//
+// Describes the status of an individual HDHomeRun RECORD engine
 //---------------------------------------------------------------------------
 
-public ref class StorageDevice : Device
+public ref class StorageStatus
 {
 public:
 
 	//-----------------------------------------------------------------------
-	// Member Functions
-
-	// GetStorageStatus
-	//
-	// Gets the detailed status information for a storage device
-	StorageStatus^ GetStorageStatus(void);
-
-	//-----------------------------------------------------------------------
 	// Properties
 
-	// FriendlyName
+	// StatusColor
 	//
-	// Gets the device friendly name
-	property String^ FriendlyName
+	// Gets the color code for the overall status
+	property Color StatusColor
 	{
-		virtual String^ get(void) override;
-	}
-
-	// Name
-	//
-	// Gets the device name (device/storage id)
-	property String^ Name
-	{
-		virtual String^ get(void) override;
-	}
-
-	// Recordings
-	//
-	// Gets the collection of in-progress recordings
-	property RecordingList^ Recordings
-	{
-		RecordingList^ get(void);
-	}
-
-	// StorageID
-	//
-	// Gets the storage device identifier
-	property String^ StorageID
-	{
-		String^ get(void);
-	}
-
-	// StorageURL
-	//
-	// Gets the storage device data URL
-	property String^ StorageURL
-	{
-		String^ get(void);
+		Color get(void);
 	}
 
 internal:
@@ -106,22 +66,29 @@ internal:
 
 	// Create
 	//
-	// Creates a new StorageDevice instance
-	static StorageDevice^ Create(JObject^ device, IPAddress^ localip);
+	// Creates a new StorageStatus instance
+	static StorageStatus^ Create(StorageDevice^ storagedevice);
 
 private:
 
 	// Instance Constructor
 	//
-	StorageDevice(JObject^ device, IPAddress^ localip);
+	StorageStatus(List<String^>^ livebuffers, List<Recording^>^ recordings);
+
+	//-----------------------------------------------------------------------
+	// Private Constants
+
+	// COLOR_XXXX
+	//
+	// Replacement colors for the default values from libhdhomerun
+	literal uint32_t COLOR_GREEN = 0xFF1EE500;
+	literal uint32_t COLOR_RED = 0xFFE50000;
+	literal uint32_t COLOR_GRAY = 0xFFC0C0C0;
 
 	//-----------------------------------------------------------------------
 	// Member Variables
 
-	String^					m_friendlyname;		// Storage device friendly name
-	String^					m_storageid;		// Storage device identifier
-	String^					m_storageurl;		// Storage device data URL
-	RecordingList^			m_recordings;		// Active recordings
+	uint32_t			m_statuscolor;			// Overall status color
 };
 
 //---------------------------------------------------------------------------
@@ -130,4 +97,4 @@ private:
 
 #pragma warning(pop)
 
-#endif	// __STORAGEDEVICE_H_
+#endif	// __STORAGESTATUS_H_

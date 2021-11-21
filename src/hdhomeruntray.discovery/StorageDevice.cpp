@@ -78,6 +78,19 @@ String^ StorageDevice::FriendlyName::get(void)
 }
 
 //---------------------------------------------------------------------------
+// StorageDevice::GetStorageStatus
+//
+// Gets the detailed status information for a storage device
+//
+// Arguments:
+//
+//	NONE
+
+StorageStatus^ StorageDevice::GetStorageStatus(void)
+{
+	return StorageStatus::Create(this);
+}
+//---------------------------------------------------------------------------
 // StorageDevice::Name::get
 //
 // Gets the storage device name
