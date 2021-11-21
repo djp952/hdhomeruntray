@@ -121,15 +121,34 @@ private:
 	TunerStatus(struct hdhomerun_tuner_status_t const* status);
 
 	//-----------------------------------------------------------------------
+	// Private Constants
+
+	// COLOR_XXXX
+	//
+	// Replacement colors for the default values from libhdhomerun
+	literal uint32_t COLOR_GREEN = 0xFF1EE500;
+	literal uint32_t COLOR_RED = 0xFFE50000;
+	literal uint32_t COLOR_YELLOW = 0xFFFFE900;
+	literal uint32_t COLOR_GRAY = 0xFFC0C0C0;
+
+	//-----------------------------------------------------------------------
+	// Private Member Functions
+
+	// ConvertHDHomeRunColor
+	//
+	// Converts the color code from libhdhomerun into the color I want to use
+	static Color ConvertHDHomeRunColor(uint32_t color);
+
+	//-----------------------------------------------------------------------
 	// Member Variables
 
 	String^				m_channel;				// Tuned channel
 	int					m_signalquality;		// Signal quality
-	Color				m_signalqualitycolor;	// Signal quality color
+	uint32_t			m_signalqualitycolor;	// Signal quality color
 	int					m_signalstrength;		// Signal strength
-	Color				m_signalstrengthcolor;	// Signal strength color
+	uint32_t			m_signalstrengthcolor;	// Signal strength color
 	int					m_symbolquality;		// Symbol quality
-	Color				m_symbolqualitycolor;	// Symbol quality color
+	uint32_t			m_symbolqualitycolor;	// Symbol quality color
 };
 
 //---------------------------------------------------------------------------

@@ -46,13 +46,13 @@ TunerStatus::TunerStatus(struct hdhomerun_tuner_status_t const* status)
 	m_channel = gcnew String(status->channel);
 	
 	m_signalstrength = static_cast<int>(status->signal_strength);
-	m_signalstrengthcolor = Color::FromArgb(hdhomerun_device_get_tuner_status_ss_color(const_cast<hdhomerun_tuner_status_t*>(status)));
+	m_signalstrengthcolor = hdhomerun_device_get_tuner_status_ss_color(const_cast<hdhomerun_tuner_status_t*>(status));
 	
 	m_signalquality = static_cast<int>(status->signal_to_noise_quality);
-	m_signalqualitycolor = Color::FromArgb(hdhomerun_device_get_tuner_status_snq_color(const_cast<hdhomerun_tuner_status_t*>(status)));
+	m_signalqualitycolor = hdhomerun_device_get_tuner_status_snq_color(const_cast<hdhomerun_tuner_status_t*>(status));
 		
 	m_symbolquality = static_cast<int>(status->symbol_error_quality);
-	m_symbolqualitycolor = Color::FromArgb(hdhomerun_device_get_tuner_status_seq_color(const_cast<hdhomerun_tuner_status_t*>(status)));
+	m_symbolqualitycolor = hdhomerun_device_get_tuner_status_seq_color(const_cast<hdhomerun_tuner_status_t*>(status));
 }
 
 //---------------------------------------------------------------------------
@@ -63,6 +63,26 @@ TunerStatus::TunerStatus(struct hdhomerun_tuner_status_t const* status)
 String^ TunerStatus::Channel::get(void)
 {
 	return m_channel;
+}
+
+//---------------------------------------------------------------------------
+// TunerStatus::ConvertHDHomeRunColor (private, static)
+//
+// Converts the color code from libhdhomerun into the color I want to use
+//
+// Arguments:
+//
+//	color		- The color code from libhdhomerun to convert
+
+Color TunerStatus::ConvertHDHomeRunColor(uint32_t color)
+{
+	if(color == HDHOMERUN_STATUS_COLOR_GREEN) return Color::FromArgb(COLOR_GREEN);
+	else if(color == HDHOMERUN_STATUS_COLOR_YELLOW) return Color::FromArgb(COLOR_YELLOW);
+	else if(color == HDHOMERUN_STATUS_COLOR_RED) return Color::FromArgb(COLOR_RED);
+
+	// HDHOMERUN_STATUS_COLOR_NEUTRAL is only used for devices that don't 
+	// support tuner locking; not sure what that's about so default to green
+	return Color::FromArgb(COLOR_GREEN);
 }
 
 //---------------------------------------------------------------------------
@@ -126,7 +146,9 @@ int TunerStatus::SignalQuality::get(void)
 
 Color TunerStatus::SignalQualityColor::get(void)
 {
-	return m_signalqualitycolor;
+	// If the tuner is inactive, return a gray color, otherwise the converted HDHomeRun color
+	if(String::Compare(m_channel, "none", StringComparison::OrdinalIgnoreCase) == 0) return Color::FromArgb(COLOR_GRAY);
+	return ConvertHDHomeRunColor(m_signalqualitycolor);
 }
 
 //---------------------------------------------------------------------------
@@ -146,7 +168,9 @@ int TunerStatus::SignalStrength::get(void)
 
 Color TunerStatus::SignalStrengthColor::get(void)
 {
-	return m_signalstrengthcolor;
+	// If the tuner is inactive, return a gray color, otherwise the converted HDHomeRun color
+	if(String::Compare(m_channel, "none", StringComparison::OrdinalIgnoreCase) == 0) return Color::FromArgb(COLOR_GRAY);
+	return ConvertHDHomeRunColor(m_signalstrengthcolor);
 }
 
 //---------------------------------------------------------------------------
@@ -166,7 +190,9 @@ int TunerStatus::SymbolQuality::get(void)
 
 Color TunerStatus::SymbolQualityColor::get(void)
 {
-	return m_symbolqualitycolor;
+	// If the tuner is inactive, return a gray color, otherwise the converted HDHomeRun color
+	if(String::Compare(m_channel, "none", StringComparison::OrdinalIgnoreCase) == 0) return Color::FromArgb(COLOR_GRAY);
+	return ConvertHDHomeRunColor(m_symbolqualitycolor);
 }
 
 //---------------------------------------------------------------------------

@@ -28,7 +28,9 @@ namespace zuki.hdhomeruntray
 		/// </summary>
 		private void InitializeComponent()
 		{
+			this.components = new System.ComponentModel.Container();
 			this.m_layoutpanel = new System.Windows.Forms.FlowLayoutPanel();
+			this.m_timer = new System.Windows.Forms.Timer(this.components);
 			this.SuspendLayout();
 			// 
 			// m_layoutpanel
@@ -41,6 +43,11 @@ namespace zuki.hdhomeruntray
 			this.m_layoutpanel.Size = new System.Drawing.Size(669, 66);
 			this.m_layoutpanel.TabIndex = 0;
 			this.m_layoutpanel.WrapContents = false;
+			// 
+			// m_timer
+			// 
+			this.m_timer.Interval = 5000;
+			this.m_timer.Tick += new System.EventHandler(this.OnTimerTick);
 			// 
 			// PopupForm
 			// 
@@ -62,6 +69,7 @@ namespace zuki.hdhomeruntray
 			this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
 			this.Text = "PopupForm";
 			this.TopMost = true;
+			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.OnFormClosing);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -70,5 +78,6 @@ namespace zuki.hdhomeruntray
 		#endregion
 
 		private System.Windows.Forms.FlowLayoutPanel m_layoutpanel;
+		private System.Windows.Forms.Timer m_timer;
 	}
 }

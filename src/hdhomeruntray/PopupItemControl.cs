@@ -32,127 +32,106 @@ namespace zuki.hdhomeruntray
 	//
 	// Implements the user control that displays the status of an individual
 	// HDHomeRun device in the pop-up status form
-	//
-	// TODO: Colors need to go into a ColorManager class (themes / OS differences)
-	// TODO: Fonts need to go into a FontManager class (themes / OS differences)
-	// TODO: "DOT" needs to be a constant somewhere, if Segoe UI Symbol isn't available
-	// this character will change
 
 	internal partial class PopupItemControl : UserControl
 	{
 		// Instance Constructor
 		//
-		public PopupItemControl()
+		private PopupItemControl()
 		{
 			InitializeComponent();
 		}
 
 		// Instance Constructor
 		//
-		public PopupItemControl(TunerDevice device) : this()
+		public PopupItemControl(Device device) : this()
 		{
-			var devicepanel = new RoundedFlowLayoutPanel();
-			devicepanel.AutoSize = true;
-			devicepanel.AutoSizeMode = AutoSizeMode.GrowAndShrink;
-			devicepanel.FlowDirection = FlowDirection.LeftToRight;
-			devicepanel.WrapContents = false;
-			devicepanel.BackColor = SystemColors.ControlLightLight;
-			devicepanel.Padding = new Padding(8);
-			devicepanel.Radius = 16;
+			m_device = device;
 
-			var name = new Label
+			// Create the panel control for the device
+			var devicepanel = new RoundedFlowLayoutPanel
+			{
+				AutoSize = true,
+				AutoSizeMode = AutoSizeMode.GrowAndShrink,
+				FlowDirection = FlowDirection.LeftToRight,
+				WrapContents = false,
+				BackColor = SystemColors.ControlLightLight,
+				Padding = new Padding(8),
+				Radius = 16
+			};
+
+			// Create the name label for the control
+			m_name = new Label
 			{
 				AutoSize = true,
 				Size = new Size(1, 1),
 				Text = device.FriendlyName,
 				TextAlign = ContentAlignment.BottomCenter,
 				Dock = DockStyle.Left,
-				Font = VersionHelper.IsWindows11OrGreater() ? new Font("Segoe UI Variable Display Semib", 9F, FontStyle.Regular) : new Font("Segoe UI Semibold", 9F, FontStyle.Regular),
+				Font = VersionHelper.IsWindows11OrGreater() ? new Font("Segoe UI Variable Display Semib", 9F, FontStyle.Regular) : 
+					new Font("Segoe UI Semibold", 9F, FontStyle.Regular),
 				Visible = true
 			};
-			//m_layoutpanel.Controls.Add(name);
-			devicepanel.Controls.Add(name);
 
-			foreach(Tuner tuner in device.Tuners)
+			// Add the device name label to the device panel
+			devicepanel.Controls.Add(m_name);
+
+			// Determine the number of dots to display; for tuners this will be the
+			// number of tuners within the device; otherwise just use one dot
+			int numdots = 1;
+			if(m_device is TunerDevice tunerdevice) numdots = tunerdevice.Tuners.Count;
+
+			// Create the dot labels
+			m_dots = new Label[numdots];
+			for(int index = 0; index < numdots; index++)
 			{
-				var dot = new Label
+				m_dots[index] = new Label
 				{
 					AutoSize = true,
 					Size = new Size(1, 1),
-					Text = "●", // Segoe UI Symbol  U+25CF;
+					Text = "●",                                 // U+25CF
 					TextAlign = ContentAlignment.BottomCenter,
+					ForeColor = SystemColors.GrayText,
 					Dock = DockStyle.Left,
-					Font = new Font("Segoe UI Symbol", 9F, FontStyle.Regular)
+					Font = new Font("Segoe UI Symbol", 9F, FontStyle.Regular),
+					Visible = true
 				};
 
-				if(tuner.IsActive) dot.ForeColor = Color.FromArgb(0x1EE500);       // TODO: constant
-				else dot.ForeColor = Color.FromArgb(0xC0C0C0);						// TODO: constant; should vary with dark/light themes
-
-				dot.Visible = true;
-				//m_layoutpanel.Controls.Add(dot);
-				devicepanel.Controls.Add(dot);
-				m_layoutpanel.Controls.Add(devicepanel);
+				// Add the dot label to the device panel
+				devicepanel.Controls.Add(m_dots[index]);
 			}
-		}
 
-		// Instance Constructor
-		//
-		public PopupItemControl(StorageDevice storage) : this()
-		{
-			var devicepanel = new RoundedFlowLayoutPanel();
-			devicepanel.AutoSize = true;
-			devicepanel.AutoSizeMode = AutoSizeMode.GrowAndShrink;
-			devicepanel.FlowDirection = FlowDirection.LeftToRight;
-			devicepanel.WrapContents = false;
-			devicepanel.BackColor = SystemColors.ControlLightLight;
-			devicepanel.Padding = new Padding(8);
-			devicepanel.Radius = 16;
-
-			var name = new Label
-			{
-				AutoSize = true,
-				Size = new Size(1, 1),
-				Text = storage.FriendlyName,
-				TextAlign = ContentAlignment.BottomCenter,
-				Dock = DockStyle.Left,
-				Font = VersionHelper.IsWindows11OrGreater() ? new Font("Segoe UI Variable Display Semib", 9F, FontStyle.Regular) : new Font("Segoe UI Semibold", 9F, FontStyle.Regular),
-				Visible = true
-			};
-			//m_layoutpanel.Controls.Add(name);
-			devicepanel.Controls.Add(name);
-
-			var dot = new Label
-			{
-				AutoSize = true,
-				Size = new Size(1, 1),
-				Text = "●", // Segoe UI Symbol  (U+25CF);
-				TextAlign = ContentAlignment.BottomCenter,
-				Dock = DockStyle.Left,
-				Font = new Font("Segoe UI Symbol", 9F, FontStyle.Regular),
-			};
-
-			if(storage.Recordings.Count > 0) dot.ForeColor = Color.FromArgb(0xE50000);
-			else dot.ForeColor = Color.FromArgb(0xC0C0C0);
-
-			dot.Visible = true;
-			//m_layoutpanel.Controls.Add(dot);
-			devicepanel.Controls.Add(dot);
+			// Add the completed panel to the layout panel
 			m_layoutpanel.Controls.Add(devicepanel);
+
+			this.Refresh();				// Perform an initial refresh to update the colors
 		}
 
+		//-------------------------------------------------------------------------
+		// Member Functions
+		//-------------------------------------------------------------------------
+
+		// NoDevices
+		//
+		// Returns a special instance of PopupItemControl that indicates there are
+		// no detected HDHomeRun devices
 		public static PopupItemControl NoDevices()
 		{
 			PopupItemControl nodevices = new PopupItemControl();
 
-			var devicepanel = new RoundedFlowLayoutPanel();
-			devicepanel.AutoSize = true;
-			devicepanel.AutoSizeMode = AutoSizeMode.GrowAndShrink;
-			devicepanel.FlowDirection = FlowDirection.LeftToRight;
-			devicepanel.WrapContents = false;
-			devicepanel.BackColor = SystemColors.ControlLightLight;
-			devicepanel.Padding = new Padding(8);
-			devicepanel.Radius = 16;
+			// Create the panel control for the static label
+			var devicepanel = new RoundedFlowLayoutPanel
+			{
+				AutoSize = true,
+				AutoSizeMode = AutoSizeMode.GrowAndShrink,
+				FlowDirection = FlowDirection.LeftToRight,
+				WrapContents = false,
+				BackColor = SystemColors.ControlLightLight,
+				Padding = new Padding(8),
+				Radius = 16
+			};
 
+			// Create the static label
 			var name = new Label
 			{
 				AutoSize = true,
@@ -160,14 +139,60 @@ namespace zuki.hdhomeruntray
 				Text = "No HDHomeRun devices detected",
 				TextAlign = ContentAlignment.BottomCenter,
 				Dock = DockStyle.Left,
-				Font = VersionHelper.IsWindows11OrGreater() ? new Font("Segoe UI Variable Display Semib", 9F, FontStyle.Regular) : new Font("Segoe UI Semibold", 9F, FontStyle.Regular),
+				Font = VersionHelper.IsWindows11OrGreater() ? new Font("Segoe UI Variable Display Semib", 9F, FontStyle.Regular) :
+					new Font("Segoe UI Semibold", 9F, FontStyle.Regular),
 				Visible = true
 			};
+
+			// Add the static label to the panel and the panel to the layout panel
 			devicepanel.Controls.Add(name);
-			//nodevices.m_layoutpanel.Controls.Add(name);
 			nodevices.m_layoutpanel.Controls.Add(devicepanel);
 
 			return nodevices;
 		}
+
+		//-------------------------------------------------------------------------
+		// Control Overrides
+		//-------------------------------------------------------------------------
+
+		// Refresh
+		//
+		// Overrides Control::Refresh
+		public override void Refresh()
+		{
+			// No device; this is a static "NoDevices" instance
+			if(m_device == null) return;
+
+			// TunerDevice
+			//
+			if(m_device is TunerDevice tunerdevice)
+			{
+				for(int index = 0; index < tunerdevice.Tuners.Count; index++)
+				{
+					TunerStatus status = tunerdevice.GetTunerStatus(index);
+					m_dots[index].ForeColor = status.SignalQualityColor;
+				}
+			}
+
+			// StorageDevice
+			//
+			else if(m_device is StorageDevice storagedevice)
+			{
+				// TODO: Get the color from "StorageStatus" when it's available;
+				// green for live TV, red for recording, gray if idle
+				if(storagedevice.Recordings.Count > 0) m_dots[0].ForeColor = Color.FromArgb(0xE50000);
+				else m_dots[0].ForeColor = Color.FromArgb(0xC0C0C0);
+			}
+
+			base.Refresh();
+		}
+
+		//-------------------------------------------------------------------
+		// Member Variables
+		//-------------------------------------------------------------------
+
+		private readonly Device		m_device = null;	// Referenced device object
+		private readonly Label		m_name;				// Device name label
+		private readonly Label[]	m_dots;				// Status dot labels
 	}
 }

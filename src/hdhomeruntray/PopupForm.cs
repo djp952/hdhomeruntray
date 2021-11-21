@@ -108,11 +108,7 @@ namespace zuki.hdhomeruntray
 			}
 
 			// Add each device as a PopupItemControl into the layout panel
-			foreach(Device device in devices)
-			{
-				if(device is TunerDevice tuner) m_layoutpanel.Controls.Add(new PopupItemControl(tuner));
-				else if(device is StorageDevice storage) m_layoutpanel.Controls.Add(new PopupItemControl(storage));
-			}
+			foreach(Device device in devices) m_layoutpanel.Controls.Add(new PopupItemControl(device));
 		}
 
 		//-------------------------------------------------------------------
@@ -142,7 +138,28 @@ namespace zuki.hdhomeruntray
 			var left = screen.WorkingArea.Width - this.Size.Width - (int)(12.0F * scalefactor);
 			this.Location = new Point(left, top);
 
-			this.Show();					// Show the form at the calculated position
+			this.Show();                    // Show the form at the calculated position
+			m_timer.Enabled = true;			// Enable the refresh timer
+		}
+
+		//-------------------------------------------------------------------
+		// Event Handlers
+		//-------------------------------------------------------------------
+
+		// OnTimerTick
+		//
+		// Invoked when the timer comes due
+		private void OnTimerTick(object sender, EventArgs args)
+		{
+			foreach(Control control in m_layoutpanel.Controls)
+			{
+				if(control is PopupItemControl) control.Refresh();
+			}
+		}
+
+		private void OnFormClosing(object sender, FormClosingEventArgs args)
+		{
+			m_timer.Enabled = false;
 		}
 	}
 }
