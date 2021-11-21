@@ -24,12 +24,8 @@
 
 #include <memory>
 
-#include "JsonWebRequest.h"
 #include "TunerList.h"
 #include "ReadOnlyListEnumerator.h"
-
-using namespace Newtonsoft::Json;
-using namespace Newtonsoft::Json::Linq;
 
 #pragma warning(push, 4)
 
@@ -68,29 +64,22 @@ int TunerList::Count::get(void)
 }
 
 //---------------------------------------------------------------------------
-// TunerList::Create (static)
+// TunerList::Create (internal, static)
 //
-// Creates a new TunerList instance by executing a discovery
+// Creates a new TunerList instance
 //
 // Arguments:
 //
-//  statusurl		- URL of the status JSON for the tuner device
+//  count		- Number of tuners to create
 
-TunerList^ TunerList::Create(String^ statusurl)
+TunerList^ TunerList::Create(int count)
 {
-	if(CLRISNULL(statusurl)) throw gcnew ArgumentNullException("statusurl");
+	List<Tuner^>^ tuners = gcnew List<Tuner^>();			// Collection of discovered tuners
 
-	List<Tuner^>^ discovered = gcnew List<Tuner^>();			// Collection of discovered tuners
+	// There is no need for a discovery here anymore, just assign the index
+	for(int index = 0; index < count; index++) tuners->Add(Tuner::Create(index));
 
-	JArray^ tuners = JsonWebRequest::GetArray(statusurl);
-	if(CLRISNOTNULL(tuners)) {
-
-		// Create a Tuner object for each individual array object
-		for each(JObject^ tuner in tuners) discovered->Add(Tuner::Create(tuner));
-	}
-
-	// Return the generated List<> as a new TunerList instance
-	return gcnew TunerList(discovered);
+	return gcnew TunerList(tuners);
 }
 
 //---------------------------------------------------------------------------

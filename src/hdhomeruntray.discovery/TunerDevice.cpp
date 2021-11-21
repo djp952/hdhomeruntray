@@ -50,22 +50,8 @@ TunerDevice::TunerDevice(JObject^ device, IPAddress^ localip) : Device(device, l
 	m_islegacy = (CLRISNOTNULL(islegacy) && (islegacy->ToObject<int>() == 1));
 	m_tunercount = CLRISNOTNULL(tunercount) ? tunercount->ToObject<int>() : 0;
 
-	// Legacy devices require tuner discovery using libhdhomerun
-	if(m_islegacy) {
-
-		// TODO
-		m_tuners = TunerList::Empty;
-	}
-
-	// Modern devices are able to discover tuner status with a JSON web request
-	else {
-
-		CLRASSERT(!String::IsNullOrEmpty(m_baseurl));
-		m_tuners = TunerList::Create(String::Concat(m_baseurl, "/status.json"));
-	}
-
-	// Precaution against unhandled exceptions
-	if(CLRISNULL(m_tuners)) m_tuners = TunerList::Empty;
+	// Create a collection from which the individual tuner objects can be accessed
+	m_tuners = TunerList::Create(m_tunercount);
 }
 
 //---------------------------------------------------------------------------

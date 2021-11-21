@@ -33,16 +33,10 @@ namespace zuki::hdhomeruntray::discovery {
 //
 // Arguments:
 //
-//	tuner		- Reference to the JSON status data for the tuner
+//	index		- Index to assign to the tuner object
 
-Tuner::Tuner(JObject^ tuner)
+Tuner::Tuner(int index) : m_index(index)
 {
-	if(CLRISNULL(tuner)) throw gcnew ArgumentNullException("tuner");
-
-	// The tuner index is presented in the JSON as "Resource":"tunerX", but the "X" is the value we want here,
-	// treat the token as a string that can be parsed into an int if the "tuner" portion is removed
-	JToken^ resource = tuner->GetValue("Resource", StringComparison::OrdinalIgnoreCase);
-	if(CLRISNOTNULL(resource)) int::TryParse(resource->ToObject<String^>()->Replace("tuner", ""), m_index);
 }
 
 //---------------------------------------------------------------------------
@@ -52,14 +46,11 @@ Tuner::Tuner(JObject^ tuner)
 //
 // Arguments:
 //
-//	tuner		- Reference to the JSON status data for the tuner
-//	index		- Index of the tuner
+//	index		- Index to assign to the tuner object
 
-Tuner^ Tuner::Create(JObject^ tuner)
+Tuner^ Tuner::Create(int index)
 {
-	if(CLRISNULL(tuner)) throw gcnew ArgumentNullException("tuner");
-
-	return gcnew Tuner(tuner);
+	return gcnew Tuner(index);
 }
 
 //---------------------------------------------------------------------------

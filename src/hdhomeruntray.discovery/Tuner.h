@@ -28,9 +28,6 @@
 
 using namespace System;
 
-using namespace Newtonsoft::Json;
-using namespace Newtonsoft::Json::Linq;
-
 namespace zuki::hdhomeruntray::discovery {
 
 //---------------------------------------------------------------------------
@@ -62,13 +59,13 @@ internal:
 	// Create
 	//
 	// Creates a new Tuner instance
-	static Tuner^ Create(JObject^ tuner);
+	static Tuner^ Create(int index);
 
 private:
 
 	// Instance Constructor
 	//
-	Tuner(JObject^ tuner);
+	Tuner(int index);
 
 	//-----------------------------------------------------------------------
 	// Member Variables

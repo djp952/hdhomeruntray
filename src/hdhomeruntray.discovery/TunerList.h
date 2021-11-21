@@ -46,11 +46,6 @@ public:
 	//-----------------------------------------------------------------------
 	// Member Functions
 
-	// Create (static)
-	//
-	// Creates a new TunerList instance
-	static TunerList^ Create(String^ statusurl);
-
 	// GetEnumerator
 	//
 	// Returns a generic IEnumerator<T> for the member collection
@@ -76,6 +71,14 @@ public:
 	}
 
 internal:
+
+	//-----------------------------------------------------------------------
+	// Internal Member Functions
+
+	// Create (static)
+	//
+	// Creates a new TunerList instance
+	static TunerList^ Create(int count);
 
 	//-----------------------------------------------------------------------
 	// Internal Fields
