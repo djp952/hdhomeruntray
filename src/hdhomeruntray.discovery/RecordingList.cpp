@@ -68,36 +68,19 @@ int RecordingList::Count::get(void)
 }
 
 //---------------------------------------------------------------------------
-// RecordingList::Create (static)
+// RecordingList::Create (internal, static)
 //
 // Creates a new RecordingList instance by executing a discovery
 //
 // Arguments:
 //
-//  statusurl		- URL of the status JSON for the tuner device
+//  recordings	- List<> of Recording instances to back the collection
 
-RecordingList^ RecordingList::Create(String^ statusurl)
+RecordingList^ RecordingList::Create(List<Recording^>^ recordings)
 {
-	if(CLRISNULL(statusurl)) throw gcnew ArgumentNullException("statusurl");
+	if(CLRISNULL(recordings)) throw gcnew ArgumentNullException("recordings");
 
-	List<Recording^>^ discovered = gcnew List<Recording^>();			// Collection of discovered recordings
-
-	// The status JSON from the RECORD engine contains two types of objects; objects
-	// that represent active recordings has "Resource":"record".  The other type is
-	// a Live TV buffer, this is "Resource":"live"
-	JArray^ recordings = JsonWebRequest::GetArray(statusurl);
-	if(CLRISNOTNULL(recordings)) {
-
-		for each(JObject^ recording in recordings) {
-
-			JToken^ resource = recording->GetValue("Resource", StringComparison::OrdinalIgnoreCase);
-			if((CLRISNOTNULL(resource)) && (String::Compare(resource->ToObject<String^>(), "record",
-				StringComparison::OrdinalIgnoreCase) == 0)) discovered->Add(Recording::Create(recording));
-		}
-	}
-
-	// Return the generated List<> as a new RecordingList instance
-	return gcnew RecordingList(discovered);
+	return gcnew RecordingList(recordings);
 }
 
 //---------------------------------------------------------------------------

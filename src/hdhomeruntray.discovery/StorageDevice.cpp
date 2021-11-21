@@ -47,8 +47,6 @@ StorageDevice::StorageDevice(JObject^ device, IPAddress^ localip) : Device(devic
 	m_friendlyname = CLRISNOTNULL(friendlyname) ? friendlyname->ToObject<String^>() : String::Empty;
 	m_storageid = CLRISNOTNULL(storageid) ? storageid->ToObject<String^>() : String::Empty;
 	m_storageurl = CLRISNOTNULL(storageurl) ? storageurl->ToObject<String^>() : String::Empty;
-
-	m_recordings = RecordingList::Create(String::Concat(m_baseurl, "/status.json"));
 }
 
 //---------------------------------------------------------------------------
@@ -98,18 +96,6 @@ StorageStatus^ StorageDevice::GetStorageStatus(void)
 String^ StorageDevice::Name::get(void)
 {
 	return m_storageid;
-}
-
-//---------------------------------------------------------------------------
-// StorageDevice::Recordings::get
-//
-// Gets the collection of active recordings
-
-RecordingList^ StorageDevice::Recordings::get(void)
-{
-	CLRASSERT(CLRISNOTNULL(m_recordings));
-
-	return m_recordings;
 }
 
 //---------------------------------------------------------------------------

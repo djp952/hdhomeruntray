@@ -42,13 +42,17 @@ namespace zuki::hdhomeruntray::discovery {
 //	livebuffers		- List<> if live buffers
 //	recordings		- List<> of active recordings
 
-StorageStatus::StorageStatus(List<String^>^ livebuffers, List<Recording^>^ recordings) : m_statuscolor(COLOR_GRAY)
+StorageStatus::StorageStatus(List<String^>^ livebuffers, RecordingList^ recordings) : 
+	m_statuscolor(COLOR_GRAY), m_livebuffers(livebuffers), m_recordings(recordings)
 {
+	if(CLRISNULL(livebuffers)) throw gcnew ArgumentNullException("livebuffers");
+	if(CLRISNULL(recordings)) throw gcnew ArgumentNullException("recordings");
+
 	// If there are live TV streams being buffered, report the status as green
-	if(livebuffers->Count > 0) m_statuscolor = COLOR_GREEN;
+	if(m_livebuffers->Count > 0) m_statuscolor = COLOR_GREEN;
 
 	// If there are active recordings in progress, report the status as red
-	if(recordings->Count > 0) m_statuscolor = COLOR_RED;
+	if(m_recordings->Count > 0) m_statuscolor = COLOR_RED;
 }
 
 //---------------------------------------------------------------------------
@@ -90,7 +94,18 @@ StorageStatus^ StorageStatus::Create(StorageDevice^ storagedevice)
 		}
 	}
 
-	return gcnew StorageStatus(livebuffers, recordings);
+	return gcnew StorageStatus(livebuffers, RecordingList::Create(recordings));
+}
+
+//---------------------------------------------------------------------------
+// StorageStatus::Recordings::get
+//
+// Gets the collection of active recoridings
+
+RecordingList^ StorageStatus::Recordings::get(void)
+{
+	CLRASSERT(CLRISNOTNULL(m_recordings));
+	return m_recordings;
 }
 
 //---------------------------------------------------------------------------

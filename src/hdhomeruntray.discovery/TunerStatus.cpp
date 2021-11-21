@@ -130,6 +130,16 @@ TunerStatus^ TunerStatus::Create(TunerDevice^ tunerdevice, int index)
 }
 
 //---------------------------------------------------------------------------
+// TunerStatus::IsActive::get
+//
+// Gets a flag indicating if the tuner is active or not
+
+bool TunerStatus::IsActive::get(void)
+{
+	return (String::Compare(m_channel, "none", StringComparison::OrdinalIgnoreCase) != 0);
+}
+
+//---------------------------------------------------------------------------
 // TunerStatus::SignalQuality::get
 //
 // Gets the signal quality of the tuned channel
@@ -146,9 +156,7 @@ int TunerStatus::SignalQuality::get(void)
 
 Color TunerStatus::SignalQualityColor::get(void)
 {
-	// If the tuner is inactive, return a gray color, otherwise the converted HDHomeRun color
-	if(String::Compare(m_channel, "none", StringComparison::OrdinalIgnoreCase) == 0) return Color::FromArgb(COLOR_GRAY);
-	return ConvertHDHomeRunColor(m_signalqualitycolor);
+	return this->IsActive ? ConvertHDHomeRunColor(m_signalqualitycolor) : Color::FromArgb(COLOR_GRAY);
 }
 
 //---------------------------------------------------------------------------
@@ -168,9 +176,7 @@ int TunerStatus::SignalStrength::get(void)
 
 Color TunerStatus::SignalStrengthColor::get(void)
 {
-	// If the tuner is inactive, return a gray color, otherwise the converted HDHomeRun color
-	if(String::Compare(m_channel, "none", StringComparison::OrdinalIgnoreCase) == 0) return Color::FromArgb(COLOR_GRAY);
-	return ConvertHDHomeRunColor(m_signalstrengthcolor);
+	return this->IsActive ? ConvertHDHomeRunColor(m_signalstrengthcolor) : Color::FromArgb(COLOR_GRAY);
 }
 
 //---------------------------------------------------------------------------
@@ -190,9 +196,7 @@ int TunerStatus::SymbolQuality::get(void)
 
 Color TunerStatus::SymbolQualityColor::get(void)
 {
-	// If the tuner is inactive, return a gray color, otherwise the converted HDHomeRun color
-	if(String::Compare(m_channel, "none", StringComparison::OrdinalIgnoreCase) == 0) return Color::FromArgb(COLOR_GRAY);
-	return ConvertHDHomeRunColor(m_symbolqualitycolor);
+	return this->IsActive ? ConvertHDHomeRunColor(m_symbolqualitycolor) : Color::FromArgb(COLOR_GRAY);
 }
 
 //---------------------------------------------------------------------------

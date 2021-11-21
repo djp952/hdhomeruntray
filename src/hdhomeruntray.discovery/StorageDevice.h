@@ -25,7 +25,6 @@
 #pragma once
 
 #include "Device.h"
-#include "RecordingList.h"
 #include "StorageStatus.h"
 
 #pragma warning(push, 4)
@@ -75,14 +74,6 @@ public:
 		virtual String^ get(void) override;
 	}
 
-	// Recordings
-	//
-	// Gets the collection of in-progress recordings
-	property RecordingList^ Recordings
-	{
-		RecordingList^ get(void);
-	}
-
 	// StorageID
 	//
 	// Gets the storage device identifier
@@ -121,7 +112,6 @@ private:
 	String^					m_friendlyname;		// Storage device friendly name
 	String^					m_storageid;		// Storage device identifier
 	String^					m_storageurl;		// Storage device data URL
-	RecordingList^			m_recordings;		// Active recordings
 };
 
 //---------------------------------------------------------------------------

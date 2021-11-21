@@ -54,14 +54,6 @@ public:
 		int get(void);
 	}
 
-	// IsActive
-	//
-	// Gets a flag indicating if the tuner is active or not
-	property bool IsActive
-	{
-		bool get(void);
-	}
-
 internal:
 
 	//-----------------------------------------------------------------------
@@ -82,8 +74,6 @@ private:
 	// Member Variables
 
 	int				m_index = -1;			// The tuner index number
-	__int64			m_frequency;			// Frequency that is tuned
-	String^			m_targetip;				// Target IP address of the tuner
 };
 
 //---------------------------------------------------------------------------

@@ -24,12 +24,11 @@
 #define __STORAGESTATUS_H_
 #pragma once
 
-#include "Recording.h"
+#include "RecordingList.h"
 
 #pragma warning(push, 4)
 
 using namespace System;
-using namespace System::Collections::Generic;
 using namespace System::Drawing;
 
 namespace zuki::hdhomeruntray::discovery {
@@ -50,6 +49,14 @@ public:
 
 	//-----------------------------------------------------------------------
 	// Properties
+
+	// Recordings
+	//
+	// Gets the collection of active recordings
+	property RecordingList^ Recordings
+	{
+		RecordingList^ get(void);
+	}
 
 	// StatusColor
 	//
@@ -73,7 +80,7 @@ private:
 
 	// Instance Constructor
 	//
-	StorageStatus(List<String^>^ livebuffers, List<Recording^>^ recordings);
+	StorageStatus(List<String^>^ livebuffers, RecordingList^ recordings);
 
 	//-----------------------------------------------------------------------
 	// Private Constants
@@ -89,6 +96,8 @@ private:
 	// Member Variables
 
 	uint32_t			m_statuscolor;			// Overall status color
+	List<String^>^		m_livebuffers;			// Active live buffers
+	RecordingList^		m_recordings;			// Active recordings
 };
 
 //---------------------------------------------------------------------------

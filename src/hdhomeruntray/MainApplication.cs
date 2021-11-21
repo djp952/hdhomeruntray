@@ -278,13 +278,15 @@ namespace zuki.hdhomeruntray
 				{
 					foreach(Tuner tuner in tunerdevice.Tuners)
 					{
-						if(tuner.IsActive) numactive++;
+						TunerStatus status = tunerdevice.GetTunerStatus(tuner);
+						if(status.IsActive) numactive++;
 					}
 				}
 
 				else if(device is StorageDevice storagedevice)
 				{
-					numrecording += storagedevice.Recordings.Count;
+					StorageStatus status = storagedevice.GetStorageStatus();
+					numrecording += status.Recordings.Count;
 				}
 			}
 
