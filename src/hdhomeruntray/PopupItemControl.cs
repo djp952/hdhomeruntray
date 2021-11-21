@@ -24,6 +24,7 @@ using System.Drawing;
 using System.Windows.Forms;
 
 using zuki.hdhomeruntray.discovery;
+using zuki.hdhomeruntray.Properties;
 
 namespace zuki.hdhomeruntray
 {
@@ -169,8 +170,27 @@ namespace zuki.hdhomeruntray
 			{
 				for(int index = 0; index < tunerdevice.Tuners.Count; index++)
 				{
+					// Get the granular tuner status from the device
 					TunerStatus status = tunerdevice.GetTunerStatus(index);
-					m_dots[index].ForeColor = status.SignalQualityColor;
+					
+					// Default to SignalQualityColor, but try to obey the setting
+					Color forecolor = status.SignalQualityColor;
+					switch(Settings.Default.TunerStatusColorSource)
+					{
+						case TunerStatusColorSource.SignalStrength:
+							forecolor = status.SignalStrengthColor;
+							break;
+
+						case TunerStatusColorSource.SignalQuality:
+							forecolor = status.SignalQualityColor;
+							break;
+
+						case TunerStatusColorSource.SymbolQuality:
+							forecolor = status.SymbolQualityColor;
+							break;							
+					}
+
+					m_dots[index].ForeColor = forecolor;
 				}
 			}
 

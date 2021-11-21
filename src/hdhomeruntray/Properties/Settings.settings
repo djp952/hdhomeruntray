@@ -11,5 +11,8 @@
     <Setting Name="TrayIconHoverDelay" Type="zuki.hdhomeruntray.TrayIconHoverDelay" Scope="User">
       <Value Profile="(Default)">SystemDefault</Value>
     </Setting>
+    <Setting Name="TunerStatusColorSource" Type="zuki.hdhomeruntray.TunerStatusColorSource" Scope="User">
+      <Value Profile="(Default)">SignalQuality</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

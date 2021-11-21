@@ -108,6 +108,7 @@
     </Compile>
     <Compile Include="StatusIcons.cs" />
     <Compile Include="StatusIconType.cs" />
+    <Compile Include="TunerStatusColorSource.cs" />
     <Compile Include="VersionHelper.cs" />
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>

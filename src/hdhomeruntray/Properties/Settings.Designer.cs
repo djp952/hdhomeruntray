@@ -58,5 +58,17 @@ namespace zuki.hdhomeruntray.Properties {
                 this["TrayIconHoverDelay"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("SignalQuality")]
+        public global::zuki.hdhomeruntray.TunerStatusColorSource TunerStatusColorSource {
+            get {
+                return ((global::zuki.hdhomeruntray.TunerStatusColorSource)(this["TunerStatusColorSource"]));
+            }
+            set {
+                this["TunerStatusColorSource"] = value;
+            }
+        }
     }
 }

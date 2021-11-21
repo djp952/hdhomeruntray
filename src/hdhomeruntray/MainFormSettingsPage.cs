@@ -46,6 +46,7 @@ namespace zuki.hdhomeruntray
 			m_discoverymethod.BindEnum(Settings.Default.DiscoveryMethod);
 			m_discoveryinterval.BindEnum(Settings.Default.DiscoveryInterval);
 			m_trayiconhoverdelay.BindEnum(Settings.Default.TrayIconHoverDelay);
+			m_tunerstatuscolorsource.BindEnum(Settings.Default.TunerStatusColorSource);
 		}
 
 		//-------------------------------------------------------------------
@@ -63,6 +64,7 @@ namespace zuki.hdhomeruntray
 			DiscoveryInterval discoveryinterval = (DiscoveryInterval)m_discoveryinterval.SelectedValue;
 			DiscoveryMethod discoverymethod = (DiscoveryMethod)m_discoverymethod.SelectedValue;
 			TrayIconHoverDelay trayiconhoverdelay = (TrayIconHoverDelay)m_trayiconhoverdelay.SelectedValue;
+			TunerStatusColorSource tunerstatuscolorsource = (TunerStatusColorSource)m_tunerstatuscolorsource.SelectedValue;
 
 			// DiscoveryInterval
 			if(discoveryinterval != Settings.Default.DiscoveryInterval)
@@ -82,6 +84,13 @@ namespace zuki.hdhomeruntray
 			if(trayiconhoverdelay != Settings.Default.TrayIconHoverDelay)
 			{
 				Settings.Default.TrayIconHoverDelay = trayiconhoverdelay;
+				save = true;
+			}
+
+			// TunerStatusColorSource
+			if(tunerstatuscolorsource != Settings.Default.TunerStatusColorSource)
+			{
+				Settings.Default.TunerStatusColorSource = tunerstatuscolorsource;
 				save = true;
 			}
 
