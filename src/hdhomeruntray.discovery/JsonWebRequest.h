@@ -39,7 +39,7 @@ using namespace Newtonsoft::Json::Linq;
 // Helper class to read JSON data over HTTP
 //---------------------------------------------------------------------------
 
-public ref class JsonWebRequest
+ref class JsonWebRequest
 {
 public:
 
