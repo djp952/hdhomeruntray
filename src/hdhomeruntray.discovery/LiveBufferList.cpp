@@ -22,7 +22,7 @@
 
 #include "stdafx.h"
 
-#include "RecordingList.h"
+#include "LiveBufferList.h"
 #include "ReadOnlyListEnumerator.h"
 
 #pragma warning(push, 4)
@@ -30,55 +30,55 @@
 namespace zuki::hdhomeruntray::discovery {
 
 //---------------------------------------------------------------------------
-// RecordingList Constructor (private)
+// LiveBufferList Constructor (private)
 //
 // Arguments:
 //
-//	recordings		- List<> containing the recordings
+//	livebuffers		- List<> containing the live buffers
 
-RecordingList::RecordingList(List<Recording^>^ recordings) : m_recordings(recordings)
+LiveBufferList::LiveBufferList(List<LiveBuffer^>^ livebuffers) : m_livebuffers(livebuffers)
 {
-	if(CLRISNULL(recordings)) throw gcnew ArgumentNullException("recordings");
+	if(CLRISNULL(livebuffers)) throw gcnew ArgumentNullException("livebuffers");
 }
 
 //---------------------------------------------------------------------------
-// RecordingList::default[int]::get
+// LiveBufferList::default[int]::get
 //
 // Gets the element at the specified index in the read-only list
 
-Recording^ RecordingList::default::get(int index)
+LiveBuffer^ LiveBufferList::default::get(int index)
 {
-	return m_recordings[index];
+	return m_livebuffers[index];
 }
 
 //---------------------------------------------------------------------------
-// RecordingList::Count::get
+// LiveBufferList::Count::get
 //
 // Gets the number of elements in the collection
 
-int RecordingList::Count::get(void)
+int LiveBufferList::Count::get(void)
 {
-	return m_recordings->Count;
+	return m_livebuffers->Count;
 }
 
 //---------------------------------------------------------------------------
-// RecordingList::Create (internal, static)
+// LiveBufferList::Create (internal, static)
 //
-// Creates a new RecordingList instance by executing a discovery
+// Creates a new LiveBufferList instance by executing a discovery
 //
 // Arguments:
 //
-//  recordings	- List<> of Recording instances to back the collection
+//  livebuffers	- List<> of LiveBuffer instances to back the collection
 
-RecordingList^ RecordingList::Create(List<Recording^>^ recordings)
+LiveBufferList^ LiveBufferList::Create(List<LiveBuffer^>^ livebuffers)
 {
-	if(CLRISNULL(recordings)) throw gcnew ArgumentNullException("recordings");
+	if(CLRISNULL(livebuffers)) throw gcnew ArgumentNullException("livebuffers");
 
-	return gcnew RecordingList(recordings);
+	return gcnew LiveBufferList(livebuffers);
 }
 
 //---------------------------------------------------------------------------
-// RecordingList::GetEnumerator
+// LiveBufferList::GetEnumerator
 //
 // Returns a generic IEnumerator<T> for the member collection
 //
@@ -86,13 +86,13 @@ RecordingList^ RecordingList::Create(List<Recording^>^ recordings)
 //
 //	NONE
 
-IEnumerator<Recording^>^ RecordingList::GetEnumerator(void)
+IEnumerator<LiveBuffer^>^ LiveBufferList::GetEnumerator(void)
 {
-	return gcnew ReadOnlyListEnumerator<Recording^>(this);
+	return gcnew ReadOnlyListEnumerator<LiveBuffer^>(this);
 }
 
 //---------------------------------------------------------------------------
-// RecordingList::IEnumerable_GetEnumerator
+// LiveBufferList::IEnumerable_GetEnumerator
 //
 // Returns a non-generic IEnumerator for the member collection
 //
@@ -100,7 +100,7 @@ IEnumerator<Recording^>^ RecordingList::GetEnumerator(void)
 //
 //	NONE
 
-System::Collections::IEnumerator^ RecordingList::IEnumerable_GetEnumerator(void)
+System::Collections::IEnumerator^ LiveBufferList::IEnumerable_GetEnumerator(void)
 {
 	return GetEnumerator();
 }

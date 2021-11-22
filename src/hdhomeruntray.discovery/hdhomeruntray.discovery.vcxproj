@@ -104,6 +104,8 @@
     <ClInclude Include="Devices.h" />
     <ClInclude Include="DiscoveryCompletedEventArgs.h" />
     <ClInclude Include="DiscoveryMethod.h" />
+    <ClInclude Include="LiveBufferList.h" />
+    <ClInclude Include="LiveBuffer.h" />
     <ClInclude Include="ReadOnlyListEnumerator.h" />
     <ClInclude Include="Recording.h" />
     <ClInclude Include="RecordingList.h" />
@@ -195,6 +197,8 @@
       <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</CompileAsManaged>
       <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</CompileAsManaged>
     </ClCompile>
+    <ClCompile Include="LiveBuffer.cpp" />
+    <ClCompile Include="LiveBufferList.cpp" />
     <ClCompile Include="ReadOnlyListEnumerator.cpp" />
     <ClCompile Include="Recording.cpp" />
     <ClCompile Include="RecordingList.cpp" />

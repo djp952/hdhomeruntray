@@ -20,59 +20,47 @@
 // SOFTWARE.
 //---------------------------------------------------------------------------
 
-#ifndef __STORAGESTATUS_H_
-#define __STORAGESTATUS_H_
+#ifndef __LIVEBUFFER_H_
+#define __LIVEBUFFER_H_
 #pragma once
-
-#include "LiveBufferList.h"
-#include "RecordingList.h"
 
 #pragma warning(push, 4)
 
 using namespace System;
-using namespace System::Drawing;
+using namespace System::Net;
+
+using namespace Newtonsoft::Json;
+using namespace Newtonsoft::Json::Linq;
 
 namespace zuki::hdhomeruntray::discovery {
 
-// FORWARD DECLARATIONS
-//
-ref class StorageDevice;
-
 //---------------------------------------------------------------------------
-// Class StorageStatus
+// Class LiveBuffer
 //
-// Describes the status of an individual HDHomeRun RECORD engine
+// Describes an individual HDHomeRun live buffer
 //---------------------------------------------------------------------------
 
-public ref class StorageStatus
+public ref class LiveBuffer
 {
 public:
 
 	//-----------------------------------------------------------------------
 	// Properties
 
-	// LiveBuffers
+	// Name
 	//
-	// Gets the collection of active live buffers
-	property LiveBufferList^ LiveBuffers
+	// Gets the name of the live buffer
+	property String^ Name
 	{
-		LiveBufferList^ get(void);
+		String^ get(void);
 	}
 
-	// Recordings
+	// TargetIP
 	//
-	// Gets the collection of active recordings
-	property RecordingList^ Recordings
+	// Gets the target IP address of the live buffer
+	property IPAddress^ TargetIP
 	{
-		RecordingList^ get(void);
-	}
-
-	// StatusColor
-	//
-	// Gets the color code for the overall status
-	property Color StatusColor
-	{
-		Color get(void);
+		IPAddress^ get(void);
 	}
 
 internal:
@@ -82,31 +70,20 @@ internal:
 
 	// Create
 	//
-	// Creates a new StorageStatus instance
-	static StorageStatus^ Create(StorageDevice^ storagedevice);
+	// Creates a new LiveBuffer instance
+	static LiveBuffer^ Create(JObject^ livebuffer);
 
 private:
 
 	// Instance Constructor
 	//
-	StorageStatus(LiveBufferList^ livebuffers, RecordingList^ recordings);
-
-	//-----------------------------------------------------------------------
-	// Private Constants
-
-	// COLOR_XXXX
-	//
-	// Replacement colors for the default values from libhdhomerun
-	literal uint32_t COLOR_GREEN = 0xFF1EE500;
-	literal uint32_t COLOR_RED = 0xFFE50000;
-	literal uint32_t COLOR_GRAY = 0xFFC0C0C0;
+	LiveBuffer(JObject^ livebuffer);
 
 	//-----------------------------------------------------------------------
 	// Member Variables
 
-	uint32_t			m_statuscolor;			// Overall status color
-	LiveBufferList^		m_livebuffers;			// Active live buffers
-	RecordingList^		m_recordings;			// Active recordings
+	String^				m_name;				// The live buffer name
+	IPAddress^			m_targetip;			// The target IP address
 };
 
 //---------------------------------------------------------------------------
@@ -115,4 +92,4 @@ private:
 
 #pragma warning(pop)
 
-#endif	// __STORAGESTATUS_H_
+#endif	// __LIVEBUFFER_H_

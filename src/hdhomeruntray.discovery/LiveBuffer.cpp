@@ -22,87 +22,64 @@
 
 #include "stdafx.h"
 
-#include "RecordingList.h"
-#include "ReadOnlyListEnumerator.h"
+#include "LiveBuffer.h"
 
 #pragma warning(push, 4)
 
 namespace zuki::hdhomeruntray::discovery {
 
 //---------------------------------------------------------------------------
-// RecordingList Constructor (private)
+// LiveBuffer Constructor (private)
 //
 // Arguments:
 //
-//	recordings		- List<> containing the recordings
+//	livebuffer		- Reference to the JSON status data for the live buffer
 
-RecordingList::RecordingList(List<Recording^>^ recordings) : m_recordings(recordings)
+LiveBuffer::LiveBuffer(JObject^ livebuffer) : m_targetip(IPAddress::None)
 {
-	if(CLRISNULL(recordings)) throw gcnew ArgumentNullException("recordings");
+	if(CLRISNULL(livebuffer)) throw gcnew ArgumentNullException("livebuffer");
+
+	// The only things in a live buffer are the name and target IP address
+	JToken^ name = livebuffer->GetValue("Name", StringComparison::OrdinalIgnoreCase);
+	JToken^ targetip = livebuffer->GetValue("TargetIP", StringComparison::OrdinalIgnoreCase);
+
+	m_name = CLRISNOTNULL(name) ? name->ToObject<String^>() : String::Empty;
+	if(CLRISNOTNULL(targetip)) IPAddress::TryParse(targetip->ToObject<String^>(), m_targetip);
 }
 
 //---------------------------------------------------------------------------
-// RecordingList::default[int]::get
+// LiveBuffer::Create (internal)
 //
-// Gets the element at the specified index in the read-only list
-
-Recording^ RecordingList::default::get(int index)
-{
-	return m_recordings[index];
-}
-
-//---------------------------------------------------------------------------
-// RecordingList::Count::get
-//
-// Gets the number of elements in the collection
-
-int RecordingList::Count::get(void)
-{
-	return m_recordings->Count;
-}
-
-//---------------------------------------------------------------------------
-// RecordingList::Create (internal, static)
-//
-// Creates a new RecordingList instance by executing a discovery
+// Creates a new LiveBuffer instance
 //
 // Arguments:
 //
-//  recordings	- List<> of Recording instances to back the collection
+//	livebuffer		- Reference to the JSON status data for the live buffer
 
-RecordingList^ RecordingList::Create(List<Recording^>^ recordings)
+LiveBuffer^ LiveBuffer::Create(JObject^ livebuffer)
 {
-	if(CLRISNULL(recordings)) throw gcnew ArgumentNullException("recordings");
-
-	return gcnew RecordingList(recordings);
+	if(CLRISNULL(livebuffer)) throw gcnew ArgumentNullException("livebuffer");
+	return gcnew LiveBuffer(livebuffer);
 }
 
 //---------------------------------------------------------------------------
-// RecordingList::GetEnumerator
+// LiveBuffer::Name::get
 //
-// Returns a generic IEnumerator<T> for the member collection
-//
-// Arguments:
-//
-//	NONE
+// Gets the name of the live buffer
 
-IEnumerator<Recording^>^ RecordingList::GetEnumerator(void)
+String^ LiveBuffer::Name::get(void)
 {
-	return gcnew ReadOnlyListEnumerator<Recording^>(this);
+	return m_name;
 }
 
 //---------------------------------------------------------------------------
-// RecordingList::IEnumerable_GetEnumerator
+// LiveBuffer::TargetIP::get
 //
-// Returns a non-generic IEnumerator for the member collection
-//
-// Arguments:
-//
-//	NONE
+// Gets the target IP address of the live buffer
 
-System::Collections::IEnumerator^ RecordingList::IEnumerable_GetEnumerator(void)
+IPAddress^ LiveBuffer::TargetIP::get(void)
 {
-	return GetEnumerator();
+	return m_targetip;
 }
 
 //---------------------------------------------------------------------------

@@ -20,59 +20,54 @@
 // SOFTWARE.
 //---------------------------------------------------------------------------
 
-#ifndef __STORAGESTATUS_H_
-#define __STORAGESTATUS_H_
+#ifndef __LIVEBUFFERLIST_H_
+#define __LIVEBUFFERLIST_H_
 #pragma once
 
-#include "LiveBufferList.h"
-#include "RecordingList.h"
+#include "LiveBuffer.h"
 
 #pragma warning(push, 4)
 
 using namespace System;
-using namespace System::Drawing;
+using namespace System::Collections::Generic;
 
 namespace zuki::hdhomeruntray::discovery {
 
-// FORWARD DECLARATIONS
-//
-ref class StorageDevice;
-
 //---------------------------------------------------------------------------
-// Class StorageStatus
+// Class LiveBufferList
 //
-// Describes the status of an individual HDHomeRun RECORD engine
+// Implements an IReadOnlyList<> based enumerable collection of live buffers
 //---------------------------------------------------------------------------
 
-public ref class StorageStatus
+public ref class LiveBufferList : public IReadOnlyList<LiveBuffer^>
 {
 public:
 
 	//-----------------------------------------------------------------------
+	// Member Functions
+
+	// GetEnumerator
+	//
+	// Returns a generic IEnumerator<T> for the member collection
+	virtual IEnumerator<LiveBuffer^>^ GetEnumerator(void);
+
+	//-----------------------------------------------------------------------
 	// Properties
 
-	// LiveBuffers
+	// default[int]
 	//
-	// Gets the collection of active live buffers
-	property LiveBufferList^ LiveBuffers
+	// Gets the element at the specified index in the read-only list
+	property LiveBuffer^ default[int]
 	{
-		LiveBufferList^ get(void);
+		virtual LiveBuffer^ get(int index);
 	}
 
-	// Recordings
+	// Count
 	//
-	// Gets the collection of active recordings
-	property RecordingList^ Recordings
+	// Gets the number of elements in the collection
+	property int Count
 	{
-		RecordingList^ get(void);
-	}
-
-	// StatusColor
-	//
-	// Gets the color code for the overall status
-	property Color StatusColor
-	{
-		Color get(void);
+		virtual int get();
 	}
 
 internal:
@@ -80,33 +75,37 @@ internal:
 	//-----------------------------------------------------------------------
 	// Internal Member Functions
 
-	// Create
+	// Create (static)
 	//
-	// Creates a new StorageStatus instance
-	static StorageStatus^ Create(StorageDevice^ storagedevice);
+	// Creates a new LiveBufferList instance
+	static LiveBufferList^ Create(List<LiveBuffer^>^ livebuffers);
+
+	//-----------------------------------------------------------------------
+	// Internal Fields
+
+	// Empty (static)
+	//
+	// Returns an empty device collection instance
+	static initonly LiveBufferList^ Empty = gcnew LiveBufferList(gcnew List<LiveBuffer^>());
 
 private:
 
 	// Instance Constructor
 	//
-	StorageStatus(LiveBufferList^ livebuffers, RecordingList^ recordings);
+	LiveBufferList(List<LiveBuffer^>^ livebuffers);
 
 	//-----------------------------------------------------------------------
-	// Private Constants
+	// Private Member Functions
 
-	// COLOR_XXXX
+	// GetEnumerator (IEnumerable)
 	//
-	// Replacement colors for the default values from libhdhomerun
-	literal uint32_t COLOR_GREEN = 0xFF1EE500;
-	literal uint32_t COLOR_RED = 0xFFE50000;
-	literal uint32_t COLOR_GRAY = 0xFFC0C0C0;
+	// Returns a non-generic IEnumerator for the member collection
+	virtual System::Collections::IEnumerator^ IEnumerable_GetEnumerator(void) sealed = System::Collections::IEnumerable::GetEnumerator;
 
 	//-----------------------------------------------------------------------
 	// Member Variables
 
-	uint32_t			m_statuscolor;			// Overall status color
-	LiveBufferList^		m_livebuffers;			// Active live buffers
-	RecordingList^		m_recordings;			// Active recordings
+	List<LiveBuffer^>^		m_livebuffers;		// Underlying collection
 };
 
 //---------------------------------------------------------------------------
@@ -115,4 +114,4 @@ private:
 
 #pragma warning(pop)
 
-#endif	// __STORAGESTATUS_H_
+#endif	// __LIVEBUFFERLIST_H_

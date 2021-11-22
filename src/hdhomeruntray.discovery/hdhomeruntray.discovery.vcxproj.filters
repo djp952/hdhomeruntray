@@ -122,6 +122,12 @@
     <ClInclude Include="StorageStatus.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="LiveBuffer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="LiveBufferList.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AssemblyInfo.cpp">
@@ -209,6 +215,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="StorageStatus.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LiveBuffer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LiveBufferList.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

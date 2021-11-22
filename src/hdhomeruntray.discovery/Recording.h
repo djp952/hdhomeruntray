@@ -68,7 +68,7 @@ private:
 
 	// Instance Constructor
 	//
-	Recording(JObject^ tuner);
+	Recording(JObject^ recording);
 
 	//-----------------------------------------------------------------------
 	// Member Variables
