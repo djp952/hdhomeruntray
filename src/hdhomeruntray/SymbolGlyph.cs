@@ -20,34 +20,21 @@
 // SOFTWARE.
 //---------------------------------------------------------------------------
 
-using System.Drawing;
-using System.Windows.Forms;
-
 namespace zuki.hdhomeruntray
 {
 	//-----------------------------------------------------------------------
-	// Class MainFormControlPanel
+	// Enum SymbolGlyphs (internal)
 	//
-	// Implements the user control the provides the 'control panel' at the 
-	// bottom of the main form
+	// Enumeration defining the character codes for button glyphs that use the
+	// Symbols/Segoe UI MDL2 Assets/Segoe Fluent Icons fonts
 
-	internal partial class MainFormControlPanel : UserControl
+	enum SymbolGlyph
 	{
-		// Instance Constructor
-		//
-		public MainFormControlPanel()
-		{
-			InitializeComponent();
-
-			// Windows 11 - Change glyph typeface to Segoe Fluent Icons
-			//
-			if(VersionHelper.IsWindows11OrGreater())
-				m_pinunpin.Font = m_devicelist.Font = m_options.Font = new Font("Segoe Fluent Icons", m_pinunpin.Font.Size, FontStyle.Regular);
-
-			// Windows 10 - Change glyph typeface to Segoe MDL2 Assets
-			//
-			else if(VersionHelper.IsWindows10OrGreater())
-				m_pinunpin.Font = m_devicelist.Font = m_options.Font = new Font("Segoe MDL2 Assets", m_pinunpin.Font.Size, FontStyle.Regular);
-		}
-	}
+		Details = 0xE8FD,			// Details icon		(U+E8FD)
+		Exit = 0xE711,				// X icon			(U+E711)
+		Expand = 0xE712,			// Ellipsis icon	(U+E712)
+		Pin = 0xE718,				// Pin icon			(U+E718)
+		Settings = 0xE713,			// Gear icon		(U+E713)
+		Unpin = 0xE77A,				// Unpin icon		(U+E77A)
+	};
 }

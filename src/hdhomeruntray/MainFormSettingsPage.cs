@@ -29,12 +29,12 @@ using zuki.hdhomeruntray.Properties;
 namespace zuki.hdhomeruntray
 {
 	//-----------------------------------------------------------------------
-	// Class MainFormSettingsPage
+	// Class MainFormSettingsPage (internal)
 	//
 	// Implements the user control that provides the means to control the
 	// application settings
 
-	internal partial class MainFormSettingsPage : UserControl
+	partial class MainFormSettingsPage : UserControl
 	{
 		// Instance Constructor
 		//

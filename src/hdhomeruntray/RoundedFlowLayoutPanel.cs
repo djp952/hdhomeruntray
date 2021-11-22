@@ -29,7 +29,7 @@ using System.Windows.Forms;
 namespace zuki.hdhomeruntray
 {
     //-----------------------------------------------------------------------
-    // Class RoundedFlowLayoutPanel
+    // Class RoundedFlowLayoutPanel (internal)
     //
     // Customization of the FlowLayoutPanel control to provide rounded corners
     //
@@ -39,7 +39,7 @@ namespace zuki.hdhomeruntray
     // TODO: Borders, the reference implementation above didn't work well at all,
     // what I want is a nice Windows-11-esque faint drop shadow here
 
-    internal class RoundedFlowLayoutPanel : FlowLayoutPanel
+    class RoundedFlowLayoutPanel : FlowLayoutPanel
     {
         // Instance Constructor
         //
@@ -89,7 +89,6 @@ namespace zuki.hdhomeruntray
             // This only works if a non-zero radius has been specified
             if(m_radius > 0)
             {
-
                 // Set an anti-alised smoothing mode
                 args.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
 

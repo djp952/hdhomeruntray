@@ -45,6 +45,7 @@ namespace zuki.hdhomeruntray
 	//
 	// TODO: 64-bit NativeMethods and WndProc implementations
 	// TODO: Solution for lack of NIN_POPUPOPEN and NIN_POPUPCLOSE messages on Windows 11
+	// TODO: Revisit use of System.Windows.Forms.Timer and the custom hover logic
 	
 	class ShellNotifyIcon : Component, IWin32Window
 	{

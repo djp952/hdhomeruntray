@@ -20,6 +20,8 @@
 // SOFTWARE.
 //---------------------------------------------------------------------------
 
+using System;
+using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -29,40 +31,28 @@ using zuki.hdhomeruntray.Properties;
 namespace zuki.hdhomeruntray
 {
 	//-----------------------------------------------------------------------
-	// Class PopupItemControl
+	// Class PopupItemControl (internal)
 	//
 	// Implements the user control that displays the status of an individual
 	// HDHomeRun device in the pop-up status form
+	//
+	// TODO: clean up
+	// TODO: refactor into two separate classes (PopupItemDeviceControl / PopupItemGlyphControl)
 
-	internal partial class PopupItemControl : UserControl
+	partial class PopupItemControl : UserControl
 	{
-		// Instance Constructor
-		//
-		private PopupItemControl()
+		public PopupItemControl(Device device) : this(device, PopupItemControlType.Static)
 		{
-			InitializeComponent();
 		}
 
-		// Instance Constructor
+		// Instance Constructor (Device)
 		//
-		public PopupItemControl(Device device) : this()
+		public PopupItemControl(Device device, PopupItemControlType type) : this(type)
 		{
 			m_device = device;
 
-			// Create the panel control for the device
-			var devicepanel = new RoundedFlowLayoutPanel
-			{
-				AutoSize = true,
-				AutoSizeMode = AutoSizeMode.GrowAndShrink,
-				FlowDirection = FlowDirection.LeftToRight,
-				WrapContents = false,
-				BackColor = SystemColors.ControlLightLight,
-				Padding = new Padding(8),
-				Radius = 16
-			};
-
 			// Create the name label for the control
-			m_name = new Label
+			var name = new PassthroughLabelControl
 			{
 				AutoSize = true,
 				Size = new Size(1, 1),
@@ -75,7 +65,7 @@ namespace zuki.hdhomeruntray
 			};
 
 			// Add the device name label to the device panel
-			devicepanel.Controls.Add(m_name);
+			m_layoutpanel.Controls.Add(name);
 
 			// Determine the number of dots to display; for tuners this will be the
 			// number of tuners within the device; otherwise just use one dot
@@ -86,7 +76,7 @@ namespace zuki.hdhomeruntray
 			m_dots = new Label[numdots];
 			for(int index = 0; index < numdots; index++)
 			{
-				m_dots[index] = new Label
+				m_dots[index] = new PassthroughLabelControl
 				{
 					AutoSize = true,
 					Size = new Size(1, 1),
@@ -99,14 +89,59 @@ namespace zuki.hdhomeruntray
 				};
 
 				// Add the dot label to the device panel
-				devicepanel.Controls.Add(m_dots[index]);
+				m_layoutpanel.Controls.Add(m_dots[index]);
 			}
-
-			// Add the completed panel to the layout panel
-			m_layoutpanel.Controls.Add(devicepanel);
 
 			this.Refresh();				// Perform an initial refresh to update the colors
 		}
+
+		public PopupItemControl(SymbolGlyph glyph) : this(glyph, PopupItemControlType.Static)
+		{
+		}
+
+		// Instance Constructor (SymbolGlyph)
+		//
+		public PopupItemControl(SymbolGlyph glyph, PopupItemControlType type) : this(type)
+		{
+			var label = new PassthroughLabelControl
+			{
+				AutoSize = true,
+				Size = new Size(1, 1),
+				Text = new string((char)glyph, 1),
+				TextAlign = ContentAlignment.BottomCenter,
+				Dock = DockStyle.Left,
+				Font = new Font("Symbols", 11.25F, FontStyle.Regular),
+				Visible = true
+			};
+
+			// TODO: Figure out how to do semibold, probably need an unmanaged HFONT here.
+			//       These "Regular" weights are too thin compared to the device instances
+			//       (http://www.pinvoke.net/default.aspx/gdi32.createfont)
+			
+			// Windows 11 - Change glyph typeface to Segoe Fluent Icons
+			//
+			if(VersionHelper.IsWindows11OrGreater())
+				label.Font = new Font("Segoe Fluent Icons", label.Font.Size, FontStyle.Regular);
+
+			// Windows 10 - Change glyph typeface to Segoe MDL2 Assets
+			//
+			else if(VersionHelper.IsWindows10OrGreater())
+				label.Font = new Font("Segoe MDL2 Assets", label.Font.Size, FontStyle.Regular);
+
+			// Add the device name label to the device panel
+			m_layoutpanel.Controls.Add(label);
+
+			this.Refresh();             // Perform an initial refresh to update the colors
+		}
+
+		//-------------------------------------------------------------------------
+		// Events
+		//-------------------------------------------------------------------------
+
+		// Selected
+		//
+		// Invoked when a non-static PopupItemControl has been selected
+		public event PopupItemSelectedEventHandler Selected;
 
 		//-------------------------------------------------------------------------
 		// Member Functions
@@ -147,7 +182,7 @@ namespace zuki.hdhomeruntray
 
 			// Add the static label to the panel and the panel to the layout panel
 			devicepanel.Controls.Add(name);
-			nodevices.m_layoutpanel.Controls.Add(devicepanel);
+			nodevices.m_controlspanel.Controls.Add(devicepanel);
 
 			return nodevices;
 		}
@@ -161,7 +196,7 @@ namespace zuki.hdhomeruntray
 		// Overrides Control::Refresh
 		public override void Refresh()
 		{
-			// No device; this is a static "NoDevices" instance
+			// No device; this is a static or glyph instance
 			if(m_device == null) return;
 
 			// TunerDevice
@@ -209,11 +244,142 @@ namespace zuki.hdhomeruntray
 		}
 
 		//-------------------------------------------------------------------
+		// Event Handlers
+		//-------------------------------------------------------------------
+
+		// OnMouseClickButton
+		//
+		// Handles the MouseClick event for button-type controls
+		private void OnMouseClickButton(object sender, EventArgs args)
+		{
+			Selected?.Invoke(this, new PopupItemSelectedEventArgs());
+		}
+
+		// OnMouseEnterButton
+		//
+		// Handles the MouseEnter event for button-type controls
+		private void OnMouseEnterButton(object sender, EventArgs args)
+		{
+			Debug.Assert(sender is RoundedFlowLayoutPanel);
+			RoundedFlowLayoutPanel panel = (RoundedFlowLayoutPanel)sender;
+
+			panel.ForeColor = Color.White;
+			panel.BackColor = SystemColors.ControlDark;
+		}
+
+		// OnMouseLeaveButton
+		//
+		// Handles the MouseLeave event for button-type controls
+		private void OnMouseLeaveButton(object sender, EventArgs args)
+		{
+			Debug.Assert(sender is RoundedFlowLayoutPanel);
+			RoundedFlowLayoutPanel panel = (RoundedFlowLayoutPanel)sender;
+
+			panel.ForeColor = Color.Black;
+			panel.BackColor = SystemColors.ControlLightLight;
+		}
+
+		// OnMouseClickToggle
+		//
+		// Handles the MouseClick event for toggle-type controls
+		private void OnMouseClickToggle(object sender, EventArgs args)
+		{
+			m_toggled = !m_toggled;             // Invert the toggle state
+			OnMouseLeaveToggle(sender, args);	// Update the toggle state
+		}
+
+		// OnMouseEnterToggle
+		//
+		// Handles the MouseEnter event for toggle-type controls
+		private void OnMouseEnterToggle(object sender, EventArgs args)
+		{
+			Debug.Assert(sender is RoundedFlowLayoutPanel);
+			RoundedFlowLayoutPanel panel = (RoundedFlowLayoutPanel)sender;
+
+			panel.ForeColor = Color.White;
+			panel.BackColor = SystemColors.ControlDark;
+		}
+
+		// OnMouseLeaveToggle
+		//
+		// Handles the MosueLeave event for toggle-type controls
+		private void OnMouseLeaveToggle(object sender, EventArgs args)
+		{
+			Debug.Assert(sender is RoundedFlowLayoutPanel);
+			RoundedFlowLayoutPanel panel = (RoundedFlowLayoutPanel)sender;
+
+			if(!m_toggled)
+			{
+				panel.ForeColor = Color.Black;
+				panel.BackColor = SystemColors.ControlLightLight;
+			}
+			else
+			{
+				panel.ForeColor = Color.White;
+				panel.BackColor = SystemColors.ControlDark;
+			}
+		}
+
+		//-------------------------------------------------------------------
+		// Private Member Functions
+		//-------------------------------------------------------------------
+
+		// Instance Constructor (private)
+		//
+		private PopupItemControl()
+		{
+			InitializeComponent();
+		}
+
+		// Instance Constructor (private)
+		//
+		private PopupItemControl(PopupItemControlType type) : this()
+		{
+			m_type = type;			// Store the type of control being created
+
+			// Create the inner RoundedFlowLayoutPanel control
+			m_layoutpanel = new RoundedFlowLayoutPanel
+			{
+				AutoSize = true,
+				AutoSizeMode = AutoSizeMode.GrowAndShrink,
+				FlowDirection = FlowDirection.LeftToRight,
+				WrapContents = false,
+				ForeColor = Color.Black,
+				BackColor = SystemColors.ControlLightLight,
+				Padding = new Padding(8),
+				Radius = 16,
+			};
+
+			// Button type
+			if(m_type == PopupItemControlType.Button)
+			{
+				m_layoutpanel.MouseClick += OnMouseClickButton;
+				m_layoutpanel.MouseEnter += OnMouseEnterButton;
+				m_layoutpanel.MouseLeave += OnMouseLeaveButton;
+			}
+
+			// Toggle type
+			else if(m_type == PopupItemControlType.Toggle)
+			{
+				m_layoutpanel.MouseClick += OnMouseClickToggle;
+				m_layoutpanel.MouseEnter += OnMouseEnterToggle;
+				m_layoutpanel.MouseLeave += OnMouseLeaveToggle;
+			}
+
+			// Add the inner RoundedFlowLayoutPanel to the output FlowLayoutPanel
+			m_controlspanel.Controls.Add(m_layoutpanel);
+		}
+
+		//-------------------------------------------------------------------
 		// Member Variables
 		//-------------------------------------------------------------------
 
+		private readonly PopupItemControlType	m_type;				// Control type
+		private readonly RoundedFlowLayoutPanel m_layoutpanel;		// Layout panel
+		private bool							m_toggled = false;	// Toggled flag
+
+
 		private readonly Device		m_device = null;	// Referenced device object
-		private readonly Label		m_name;				// Device name label
 		private readonly Label[]	m_dots;				// Status dot labels
 	}
 }

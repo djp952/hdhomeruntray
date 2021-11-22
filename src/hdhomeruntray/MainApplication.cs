@@ -22,6 +22,9 @@
 
 using System;
 using System.ComponentModel;
+using System.Diagnostics;
+using System.Threading;
+using System.Timers;
 using System.Windows.Forms;
 using Microsoft.Win32;
 
@@ -42,6 +45,10 @@ namespace zuki.hdhomeruntray
 		//
 		public MainApplication()
 		{
+			// Create a WindowsFormsSynchronizationContext on which event handlers
+			// can be invoked without causing weird threading issues
+			m_context = new WindowsFormsSynchronizationContext();
+
 			Application.ApplicationExit += new EventHandler(this.OnApplicationExit);
 			InitializeComponent();
 
@@ -56,10 +63,10 @@ namespace zuki.hdhomeruntray
 			m_notifyicon.Visible = true;
 
 			// Invoke an initial refresh of the device discovery data
-			OnTimerTick(this, EventArgs.Empty);
+			ExecuteDiscovery();
 
 			// Start the periodic timer
-			m_timer.Enabled = true;
+			m_timer.Start();
 		}
 
 		//-------------------------------------------------------------------
@@ -80,32 +87,13 @@ namespace zuki.hdhomeruntray
 			m_notifyicon.HoverInterval = GetHoverInterval(Settings.Default.TrayIconHoverDelay);
 			m_notifyicon.ToolTip = "HDHomeRun System Tray";
 
-			// Create the context menu
-			m_contextmenu = new ContextMenuStrip
-			{
-				Name = "m_contextmenu"
-			};
-			m_contextmenu.SuspendLayout();
-
-			// Exit
-			var menuitem_exit = new ToolStripMenuItem
-			{
-				Name = "menuitem_exit",
-				Text = "Exit"
-			};
-			menuitem_exit.Click += new EventHandler(this.OnMenuItemExit);
-
-			// Complete the context menu and associate it with the ShellNotifyIcon
-			m_contextmenu.Items.AddRange(new ToolStripItem[] { menuitem_exit });
-			m_contextmenu.ResumeLayout(false);
-			m_notifyicon.ContextMenuStrip = m_contextmenu;
-
 			// Create the periodic timer object
-			m_timer = new Timer
+			m_timer = new System.Timers.Timer
 			{
-				Interval = (int)Settings.Default.DiscoveryInterval,
+				AutoReset = true,
+				Interval = (double)Settings.Default.DiscoveryInterval,
 			};
-			m_timer.Tick += new EventHandler(this.OnTimerTick);
+			m_timer.Elapsed += new ElapsedEventHandler(this.OnTimerElapsed);
 		}
 
 		//-------------------------------------------------------------------
@@ -117,13 +105,16 @@ namespace zuki.hdhomeruntray
 		// Invoked when the application is exiting
 		private void OnApplicationExit(object sender, EventArgs args)
 		{
-			// Ensure all windows are closed
-			if(m_popupform != null) m_popupform.Close();
-			if(m_mainform != null) m_mainform.Close();
+			m_context.Post(new SendOrPostCallback((o) =>
+			{
+				// Ensure all windows are closed
+				if(m_popupform != null) m_popupform.Close();
+
+			}), null);
 
 			m_timer.Enabled = false;            // Stop the timer
-			m_devices.CancelAsync(this);		// Cancel any operations
-			m_notifyicon.Visible = false;		// Remove the tray icon
+			m_devices.CancelAsync(this);        // Cancel any operations
+			m_notifyicon.Visible = false;       // Remove the tray icon
 		}
 
 		// OnDiscoveryCompleted
@@ -142,34 +133,19 @@ namespace zuki.hdhomeruntray
 			UpdateNotifyIcon(m_devicelist);
 		}
 
-		// OnMainFormClosed
-		//
-		// Invoked when the main form has been closed
-		private new void OnMainFormClosed(object sender, EventArgs args)
-		{
-			m_mainform.Dispose();
-			m_mainform = null;
-		}
-
-		// OnMenuItemExit
-		//
-		// Invoked via the "Exit" menu item
-		private void OnMenuItemExit(object sender, EventArgs args)
-		{
-			Application.Exit();
-		}
-
 		// OnNotifyIconClosePopup
 		//
 		// Invoked when the hover popup window should be closed
 		private void OnNotifyIconClosePopup(object sender, EventArgs args)
 		{
-			if(m_popupform != null)
+			m_context.Post(new SendOrPostCallback((o) =>
 			{
-				m_popupform.Close();
-				m_popupform.Dispose();
-				m_popupform = null;
-			}
+				if(m_popupform == null) return;
+
+				// Only close the popup window if it did not become pinned
+				if(!m_popupform.Pinned) m_popupform.Close();
+
+			}), null);
 		}
 
 		// OnNotifyIconOpenPopup
@@ -177,12 +153,17 @@ namespace zuki.hdhomeruntray
 		// Invoked when the hover popup window should be opened
 		private void OnNotifyIconOpenPopup(object sender, EventArgs args)
 		{
-			// Do not show the popup window if the main window is open
-			if((m_mainform == null) && (m_popupform == null))
+			m_context.Post(new SendOrPostCallback((o) =>
 			{
-				m_popupform = new PopupForm(m_devicelist);
-				m_popupform.ShowFromNotifyIcon(m_notifyicon);
-			}
+				// Show the popup window if it's not already shown
+				if(m_popupform == null)
+				{
+					m_popupform = new PopupForm(m_devicelist);
+					m_popupform.FormClosed += new FormClosedEventHandler(this.OnPopupFormClosed);
+					m_popupform.ShowFromNotifyIcon(m_notifyicon);
+				}
+
+			}), null);
 		}
 
 		// OnNotifyIconSelected
@@ -190,18 +171,41 @@ namespace zuki.hdhomeruntray
 		// Invoked when the notify icon has been selected (clicked on)
 		private void OnNotifyIconSelected(object sender, EventArgs args)
 		{
-			// Close the popup window if it's open
-			OnNotifyIconClosePopup(this, EventArgs.Empty);
-
-			// This action can be used to toggle the state of the main form
-			if(m_mainform == null)
+			m_context.Post(new SendOrPostCallback((o) =>
 			{
-				m_mainform = new MainForm();
-				m_mainform.FormClosed += new FormClosedEventHandler(this.OnMainFormClosed);
-				m_mainform.ShowFromNotifyIcon(m_notifyicon);
-			}
+				// If the popup form is already open, pin or close it
+				if(m_popupform != null)
+				{
+					if(m_popupform.Pinned) m_popupform.Close();
+					else m_popupform.Pin();
+				}
 
-			else m_mainform.Close();
+				// Otherwise create a new popup form in a pinned state
+				else
+				{
+					m_popupform = new PopupForm(m_devicelist, true);
+					m_popupform.FormClosed += new FormClosedEventHandler(this.OnPopupFormClosed);
+					m_popupform.ShowFromNotifyIcon(m_notifyicon);
+				}
+
+			}), null);
+		}
+
+		// OnPopupFormClosed
+		//
+		// Invoked when the popup form has been closed
+		private void OnPopupFormClosed(object sender, EventArgs args)
+		{
+			m_context.Post(new SendOrPostCallback((o) =>
+			{
+				Debug.Assert(m_popupform != null);
+				if(m_popupform != null)
+				{
+					m_popupform.Dispose();
+					m_popupform = null;
+				}
+
+			}), null);
 		}
 
 		// OnPropertyChanged
@@ -214,13 +218,13 @@ namespace zuki.hdhomeruntray
 			if((args.PropertyName == nameof(Settings.Default.DiscoveryInterval)) ||
 				(args.PropertyName == nameof(Settings.Default.DiscoveryMethod)))
 			{
-				m_timer.Enabled = false;			// Stop the timer
+				m_timer.Enabled = false;            // Stop the timer
 
 				// Reset the timer interval to the new value and force a new discovery
 				m_timer.Interval = (int)Settings.Default.DiscoveryInterval;
-				OnTimerTick(this, EventArgs.Empty);
+				ExecuteDiscovery();
 
-				m_timer.Enabled = true;				// Restart the timer
+				m_timer.Enabled = true;             // Restart the timer
 			}
 
 			// TrayIconHoverDelay
@@ -230,13 +234,12 @@ namespace zuki.hdhomeruntray
 			}
 		}
 
-		// OnTimerTick
+		// OnTimerElapsed
 		//
 		// Invoked when the timer object has come due
-		private void OnTimerTick(object sender, EventArgs args)
+		private void OnTimerElapsed(object sender, ElapsedEventArgs args)
 		{
-			m_devices.CancelAsync(this);
-			m_devices.DiscoverAsync(Settings.Default.DiscoveryMethod, this);
+			ExecuteDiscovery();
 		}
 
 		//-------------------------------------------------------------------
@@ -259,6 +262,15 @@ namespace zuki.hdhomeruntray
 			if((value != null) && (value is string @string)) int.TryParse(@string, out mousehovertimeout);
 
 			return mousehovertimeout;
+		}
+
+		// ExecuteDiscovery
+		//
+		// Executes the asynchronous discovery operation
+		private void ExecuteDiscovery()
+		{
+			m_devices.CancelAsync(this);
+			m_devices.DiscoverAsync(Settings.Default.DiscoveryMethod, this);
 		}
 
 		// UpdateNotifyIcon
@@ -300,12 +312,11 @@ namespace zuki.hdhomeruntray
 		// Member Variables
 		//-------------------------------------------------------------------
 
-		private ShellNotifyIcon	m_notifyicon;
-		private ContextMenuStrip m_contextmenu;
-		private Timer m_timer;
-		private PopupForm m_popupform;
-		private MainForm m_mainform;
-		private Devices m_devices;
+		private readonly WindowsFormsSynchronizationContext m_context;
+		private ShellNotifyIcon m_notifyicon;
+		private System.Timers.Timer	m_timer;
+		private PopupForm m_popupform = null;
+		private readonly Devices m_devices;
 		private DeviceList m_devicelist = DeviceList.Empty;
 	}
 }
