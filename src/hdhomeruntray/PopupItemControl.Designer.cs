@@ -52,9 +52,8 @@ namespace zuki.hdhomeruntray
 			this.DoubleBuffered = true;
 			this.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.Name = "PopupItemControl";
-			this.Size = new System.Drawing.Size(0, 3);
+			this.Size = new System.Drawing.Size(0, 0);
 			this.ResumeLayout(false);
-			this.PerformLayout();
 
 		}
 

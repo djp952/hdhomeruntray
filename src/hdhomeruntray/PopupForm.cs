@@ -68,20 +68,8 @@ namespace zuki.hdhomeruntray
 		{
 			InitializeComponent();
 
-			// For some reason the padding for the form doesn't scale the way I expected
-			// and the ScaleControl() method always sends in a ratio of 1:1.  Use a DPI-based
-			// manual scaling of the padding to clean this up for now ...
-			float factorx = 1.0F;
-			float factory = 1.0F;
-			using(Graphics gr = Graphics.FromHwnd(this.Handle))
-			{
-				factorx = gr.DpiX / 96.0F;
-				factory = gr.DpiY / 96.0F;
-			}
-
-			// TODO: there has to be a better way
-			this.Padding = new Padding((int)(this.Padding.Left * factorx), (int)(this.Padding.Top * factory),
-				(int)(this.Padding.Right * factorx), (int)(this.Padding.Bottom * factory));
+			// Scale the padding based on the form DPI
+			this.Padding = this.Padding.ScaleDPI(this.Handle);
 
 			// WINDOWS 11
 			//
@@ -109,12 +97,12 @@ namespace zuki.hdhomeruntray
 			// If no devices were detected, place a dummy item in the list
 			if(devices.Count == 0)
 			{
-				m_layoutpanel.Controls.Add(PopupItemControl.NoDevices());
+				m_layoutpanel.Controls.Add(new PopupItemLabelControl("No HDHomeRun devices detected"));
 				return;
 			}
 
 			// Add each device as a PopupItemControl into the layout panel
-			foreach(Device device in devices) m_layoutpanel.Controls.Add(new PopupItemControl(device));
+			foreach(Device device in devices) m_layoutpanel.Controls.Add(new PopupItemDeviceControl(device));
 
 			// If the window is supposed to be pinned, pin it
 			if(pinned) Pin();
@@ -137,15 +125,15 @@ namespace zuki.hdhomeruntray
 			if(m_pinned) return;
 
 			// Create the settings toggle
-			var settings = new PopupItemControl(SymbolGlyph.Settings, PopupItemControlType.Toggle);
-			settings.Selected += new PopupItemSelectedEventHandler(this.OnSettingsSelected);
+			var settings = new PopupItemGlyphControl(SymbolGlyph.Settings, PopupItemControlType.Toggle);
+			settings.Selected += new EventHandler(this.OnSettingsSelected);
 
 			// Crate the unpin button
-			var unpin = new PopupItemControl(SymbolGlyph.Unpin, PopupItemControlType.Button);
-			unpin.Selected += new PopupItemSelectedEventHandler(this.OnUnpinSelected);
+			var unpin = new PopupItemGlyphControl(SymbolGlyph.Unpin, PopupItemControlType.Button);
+			unpin.Selected += new EventHandler(this.OnUnpinSelected);
 
-			var exit = new PopupItemControl(SymbolGlyph.Exit, PopupItemControlType.Button);
-			exit.Selected += new PopupItemSelectedEventHandler(this.OnExitSelected);
+			var exit = new PopupItemGlyphControl(SymbolGlyph.Exit, PopupItemControlType.Button);
+			exit.Selected += new EventHandler(this.OnExitSelected);
 
 			// Add the glyph items to the outer layout panel
 			m_layoutpanel.Controls.Add(settings);
@@ -183,7 +171,7 @@ namespace zuki.hdhomeruntray
 		// OnExitSelected
 		//
 		// Invoked when the exit button has been clicked
-		private void OnExitSelected(object sender, PopupItemSelectedEventArgs args)
+		private void OnExitSelected(object sender, EventArgs args)
 		{
 			Application.Exit();				// Exit the application
 		}
@@ -199,8 +187,10 @@ namespace zuki.hdhomeruntray
 		// OnSettingsSelected
 		//
 		// Invoked when the settings toggle has been activated
-		private void OnSettingsSelected(object sender, PopupItemSelectedEventArgs args)
+		private void OnSettingsSelected(object sender, EventArgs args)
 		{
+			m_settingsform = new SettingsForm();
+			m_settingsform.ShowFromPopupItem(this, (PopupItemControl)sender);
 		}
 
 		// OnTimerTick
@@ -214,7 +204,7 @@ namespace zuki.hdhomeruntray
 			{
 				foreach(Control control in m_layoutpanel.Controls)
 				{
-					if(control is PopupItemControl) control.Refresh();
+					if(control is PopupItemDeviceControl devicecontrol) devicecontrol.Refresh();
 				}
 			}
 		}
@@ -222,7 +212,7 @@ namespace zuki.hdhomeruntray
 		// OnUnpinSelected
 		//
 		// Invoked when the unpin button has been selected
-		private void OnUnpinSelected(object sender, PopupItemSelectedEventArgs args)
+		private void OnUnpinSelected(object sender, EventArgs args)
 		{
 			this.Close();				// Close this form
 		}
@@ -253,5 +243,6 @@ namespace zuki.hdhomeruntray
 		//-------------------------------------------------------------------
 
 		private bool m_pinned = false;
+		private SettingsForm m_settingsform = null;
 	}
 }

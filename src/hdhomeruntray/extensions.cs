@@ -22,6 +22,7 @@
 
 using System;
 using System.ComponentModel;
+using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 
@@ -67,6 +68,28 @@ namespace zuki.hdhomeruntray
 					combobox.SelectedItem = opts;
 				}
 			}
+		}
+
+		//-------------------------------------------------------------------
+		// Padding.ScaleDPI
+		//
+		// Scales a Padding value based on the DPI of the system
+
+		public static Padding ScaleDPI(this Padding padding, IntPtr handle)
+		{
+			float factorx = 1.0F;			// Assume no horizontal scaling
+			float factory = 1.0F;			// Assume no vertical scaling
+
+			// Use a Graphics instance to determine the control's DPI factor
+			using(Graphics gr = Graphics.FromHwnd(handle))
+			{
+				factorx = gr.DpiX / 96.0F;
+				factory = gr.DpiY / 96.0F;
+			}
+
+			// Create a new Padding instance with the scaling factors applied
+			return new Padding((int)(padding.Left * factorx), (int)(padding.Top * factory),
+				(int)(padding.Right * factorx), (int)(padding.Bottom * factory));
 		}
 	}
 }

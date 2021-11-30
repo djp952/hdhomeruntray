@@ -20,12 +20,44 @@
 // SOFTWARE.
 //---------------------------------------------------------------------------
 
+using System;
+using System.Drawing;
+using System.Windows.Forms;
+
 namespace zuki.hdhomeruntray
 {
-	//-----------------------------------------------------------------------
-	// Delegate PopupItemSelectedEventHandler (internal)
+	//--------------------------------------------------------------------------
+	// Class PopupItemLabelControl
 	//
-	// Delegate type for the PopupItem::Selected event
+	// Implements a static label popup item control
 
-	delegate void PopupItemSelectedEventHandler(object sender, PopupItemSelectedEventArgs args);
+	class PopupItemLabelControl : PopupItemControl
+	{
+		// Instance Constructor
+		//
+		public PopupItemLabelControl(string text) : base(PopupItemControlType.Static)
+		{
+			if(text == null) throw new ArgumentNullException("text");
+
+			// Create the label control for the text
+			var label = new PassthroughLabelControl
+			{
+				AutoSize = true,
+				Size = new Size(1, 1),
+				Text = text,
+				TextAlign = ContentAlignment.BottomCenter,
+				Dock = DockStyle.Left,
+				Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold),
+				Visible = true
+			};
+
+			// Windows 11 - Change label typeface to Segoe UI Variable Display Semib
+			//
+			if(VersionHelper.IsWindows11OrGreater())
+				label.Font = new Font("Segoe UI Variable Display Semib", label.Font.Size, label.Font.Style);
+
+			// Add the label to the layout panel
+			base.LayoutPanel.Controls.Add(label);
+		}
+	}
 }

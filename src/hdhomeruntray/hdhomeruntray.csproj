@@ -62,9 +62,28 @@
     <Compile Include="PassthroughLabelControl.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="PopupItemControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="PopupItemControl.Designer.cs">
+      <DependentUpon>PopupItemControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="PopupItemControlType.cs" />
-    <Compile Include="PopupItemSelectedEventArgs.cs" />
-    <Compile Include="PopupItemSelectedEventHandler.cs" />
+    <Compile Include="PopupItemDeviceControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="PopupItemGlyphControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="PopupItemLabelControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="SettingsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SettingsForm.Designer.cs">
+      <DependentUpon>SettingsForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="SymbolGlyph.cs" />
     <Compile Include="DiscoveryInterval.cs" />
     <Compile Include="extensions.cs" />
@@ -85,12 +104,6 @@
     </Compile>
     <Compile Include="PopupForm.Designer.cs">
       <DependentUpon>PopupForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="PopupItemControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="PopupItemControl.Designer.cs">
-      <DependentUpon>PopupItemControl.cs</DependentUpon>
     </Compile>
     <Compile Include="ShellNotifyIcon.cs">
       <SubType>Component</SubType>
@@ -118,6 +131,9 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <SubType>Designer</SubType>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SettingsForm.resx">
+      <DependentUpon>SettingsForm.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="app.manifest" />
     <None Include="packages.config" />
