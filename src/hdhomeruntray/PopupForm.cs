@@ -53,11 +53,7 @@ namespace zuki.hdhomeruntray
 				DWMWCP_ROUNDSMALL = 3
 			}
 
-			[DllImport("gdi32.dll", ExactSpelling = true)]
-			[return: System.Runtime.InteropServices.MarshalAs(System.Runtime.InteropServices.UnmanagedType.Bool)]
-			public static extern bool DeleteObject(IntPtr hObject);
-
-			[DllImport("dwmapi.dll", CharSet = CharSet.Unicode, SetLastError = true)]
+			[DllImport("dwmapi.dll")]
 			public static extern long DwmSetWindowAttribute(IntPtr hwnd, DWMWINDOWATTRIBUTE attribute, ref DWM_WINDOW_CORNER_PREFERENCE pvAttribute, uint cbAttribute);
 		}
 		#endregion

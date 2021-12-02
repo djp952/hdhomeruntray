@@ -31,7 +31,8 @@ namespace zuki.hdhomeruntray
 		#region Win32 API Declarations
 		private static class NativeMethods
 		{
-			[DllImport("user32.dll", ExactSpelling = true)]
+			[DllImport("user32.dll")]
+			[return: MarshalAs(UnmanagedType.Bool)]
 			public static extern bool SetProcessDPIAware();
 		}
 		#endregion

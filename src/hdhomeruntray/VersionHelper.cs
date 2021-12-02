@@ -90,7 +90,8 @@ namespace zuki.hdhomeruntray
 			[DllImport("kernel32.dll")]
 			public static extern ulong VerSetConditionMask(ulong ConditionMask, uint TypeMask, byte Condition);
 
-			[DllImport("kernel32.dll")]
+			[DllImport("kernel32.dll", CharSet = CharSet.Unicode, ExactSpelling = true)]
+			[return: MarshalAs(UnmanagedType.Bool)]
 			public static extern bool VerifyVersionInfoW(ref OSVERSIONINFOEXW lpVersionInformation, uint dwTypeMask, ulong dwlConditionMask);
 
 			[StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]

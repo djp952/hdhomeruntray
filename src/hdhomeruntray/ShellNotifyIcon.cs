@@ -166,18 +166,17 @@ namespace zuki.hdhomeruntray
 				return unchecked((ushort)(ulong)value);
 			}
 
-			// NOTE: 32-bit version
-			[DllImport("user32.dll", CharSet = CharSet.Unicode, ExactSpelling = true)]
-			public static extern int GetCursorPos(out Point pt);
+			[DllImport("user32.dll")]
+			[return: MarshalAs(UnmanagedType.Bool)]
+			public static extern bool GetCursorPos(out Point pt);
 
-			// NOTE: 32-bit version
 			[DllImport("user32.dll", CharSet = CharSet.Unicode, ExactSpelling = true)]
-			public static extern int PostMessageW(IntPtr hWnd, uint Msg, int wParam = default, int lParam = default);
+			[return: MarshalAs(UnmanagedType.Bool)]
+			private static extern bool PostMessageW(IntPtr hWnd, uint Msg, IntPtr wParam = default, IntPtr lParam = default);
 
-			// NOTE: 32-bit version
-			public static int PostMessageW(IHandle hWnd, uint Msg, int wParam = default, int lParam = default)
+			public static bool PostMessageW(IHandle hWnd, uint Msg, IntPtr wParam = default, IntPtr lParam = default)
 			{
-				int result = PostMessageW(hWnd.Handle, Msg, wParam, lParam);
+				bool result = PostMessageW(hWnd.Handle, Msg, wParam, lParam);
 				GC.KeepAlive(hWnd);
 				return result;
 			}
@@ -185,21 +184,23 @@ namespace zuki.hdhomeruntray
 			[DllImport("user32.dll", CharSet = CharSet.Unicode, ExactSpelling = true)]
 			public static extern uint RegisterWindowMessageW(string lpString);
 
-			[DllImport("user32.dll", CharSet = CharSet.Unicode, ExactSpelling = true)]
-			public static extern int SetForegroundWindow(IntPtr hWnd);
+			[DllImport("user32.dll")]
+			[return: MarshalAs(UnmanagedType.Bool)]
+			private static extern bool SetForegroundWindow(IntPtr hWnd);
 
-			public static int SetForegroundWindow(IHandle hWnd)
+			public static bool SetForegroundWindow(IHandle hWnd)
 			{
-				int result = SetForegroundWindow(hWnd.Handle);
+				bool result = SetForegroundWindow(hWnd.Handle);
 				GC.KeepAlive(hWnd);
 				return result;
 			}
 
-			[DllImport("shell32.dll", ExactSpelling = true)]
+			[DllImport("shell32.dll")]
 			public static extern int Shell_NotifyIconGetRect(ref NOTIFYICONIDENTIFIER identifier, out RECT iconLocation);
 
-			[DllImport("shell32.dll", ExactSpelling = true)]
-			public static extern int Shell_NotifyIconW(uint dwMessage, ref NOTIFYICONDATAW lpData);
+			[DllImport("shell32.dll", CharSet = CharSet.Unicode, ExactSpelling = true)]
+			[return: MarshalAs(UnmanagedType.Bool)]
+			public static extern bool Shell_NotifyIconW(uint dwMessage, ref NOTIFYICONDATAW lpData);
 		}
 		#endregion
 
