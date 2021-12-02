@@ -21,6 +21,7 @@
 //---------------------------------------------------------------------------
 
 using System;
+using System.Diagnostics;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
@@ -58,14 +59,15 @@ namespace zuki.hdhomeruntray
 		}
 		#endregion
 
-		// Instance Constructor
+		// Instance Constructor (private)
 		//
-		public PopupForm()
+		private PopupForm()
 		{
 			InitializeComponent();
 
 			// Scale the padding based on the form DPI
 			this.Padding = this.Padding.ScaleDPI(this.Handle);
+			this.m_layoutpanel.Padding = this.m_layoutpanel.Padding.ScaleDPI(this.Handle);
 
 			// WINDOWS 11
 			//
@@ -175,10 +177,25 @@ namespace zuki.hdhomeruntray
 		// Invoked when a device toggle state has been changed
 		private void OnDeviceToggled(object sender, PopupItemToggledEventArgs args)
 		{
-			// TODO: placeholder; just untoggle anything else toggled
 			if(args.Toggled)
 			{
 				UntoggleOthers(sender);     // Untoggle any other toggled control
+
+				Debug.Assert(sender is PopupItemDeviceControl);
+				PopupItemDeviceControl devicecontrol = (PopupItemDeviceControl)sender;
+
+				if(m_deviceform == null)
+				{
+					m_deviceform = new DeviceForm(devicecontrol.Device);
+					m_deviceform.ShowFromPopupItem(this, devicecontrol);
+				}
+			}
+
+			else if(m_deviceform != null)
+			{
+				m_deviceform.Close();
+				m_deviceform.Dispose();
+				m_deviceform = null;
 			}
 		}
 
@@ -196,11 +213,20 @@ namespace zuki.hdhomeruntray
 		// Invoked when the form is closing
 		private void OnFormClosing(object sender, FormClosingEventArgs args)
 		{
+			// Close and destory the device form if active
+			if(m_deviceform != null)
+			{
+				m_deviceform.Close();
+				m_deviceform.Dispose();
+				m_deviceform = null;
+			}
+
 			// Close and destroy the settings form if active
 			if(m_settingsform != null)
 			{
 				m_settingsform.Close();
 				m_settingsform.Dispose();
+				m_settingsform = null;
 			}
 
 			m_timer.Enabled = false;		// Kill the timer
@@ -211,17 +237,18 @@ namespace zuki.hdhomeruntray
 		// Invoked when the settings toggle state has been changed
 		private void OnSettingsToggled(object sender, PopupItemToggledEventArgs args)
 		{
-			// If the toggle is active, show the settings form
-			if(args.Toggled && m_settingsform == null)
+			if(args.Toggled)
 			{
-				UntoggleOthers(sender);		// Untoggle any other toggled control
+				UntoggleOthers(sender);
 
-				m_settingsform = new SettingsForm();
-				m_settingsform.ShowFromPopupItem(this, (PopupItemControl)sender);
+				if(m_settingsform == null)
+				{
+					m_settingsform = new SettingsForm();
+					m_settingsform.ShowFromPopupItem(this, (PopupItemControl)sender);
+				}
 			}
 
-			// If the toggle is inactive, close the settings form
-			else if(!args.Toggled && m_settingsform != null)
+			else if(m_settingsform != null)
 			{
 				m_settingsform.Close();
 				m_settingsform.Dispose();
@@ -300,6 +327,7 @@ namespace zuki.hdhomeruntray
 		//-------------------------------------------------------------------
 
 		private bool m_pinned = false;
+		private DeviceForm m_deviceform = null;
 		private SettingsForm m_settingsform = null;
 	}
 }

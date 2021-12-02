@@ -23,7 +23,7 @@
 namespace zuki.hdhomeruntray
 {
 	//-----------------------------------------------------------------------
-	// Enum SymbolGlyphs (internal)
+	// Enum SymbolGlyph (internal)
 	//
 	// Enumeration defining the character codes for button glyphs that use the
 	// Symbols/Segoe UI MDL2 Assets/Segoe Fluent Icons fonts

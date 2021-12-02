@@ -59,6 +59,12 @@
     <Compile Include="..\..\tmp\version\version.cs">
       <Link>version.cs</Link>
     </Compile>
+    <Compile Include="DeviceForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DeviceForm.Designer.cs">
+      <DependentUpon>DeviceForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="PassthroughLabelControl.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -114,6 +120,9 @@
     <Compile Include="StatusIconType.cs" />
     <Compile Include="TunerStatusColorSource.cs" />
     <Compile Include="VersionHelper.cs" />
+    <EmbeddedResource Include="DeviceForm.resx">
+      <DependentUpon>DeviceForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="PopupForm.resx">
       <DependentUpon>PopupForm.cs</DependentUpon>
     </EmbeddedResource>

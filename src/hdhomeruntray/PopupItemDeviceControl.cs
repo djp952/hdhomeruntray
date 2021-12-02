@@ -40,9 +40,7 @@ namespace zuki.hdhomeruntray
 		//
 		public PopupItemDeviceControl(Device device) : base(PopupItemControlType.Toggle)
 		{
-			if(device == null) throw new ArgumentNullException("device");
-
-			m_device = device;				// Save a reference to the device instance
+			m_device = device ?? throw new ArgumentNullException("device");
 
 			// Create the name label for the control
 			var name = new PassthroughLabelControl
@@ -89,7 +87,19 @@ namespace zuki.hdhomeruntray
 				base.LayoutPanel.Controls.Add(m_dots[index]);
 			}
 
-			this.Refresh();					// Perform the initial refresh
+			this.Refresh();                 // Perform the initial refresh
+		}
+
+		//-------------------------------------------------------------------------
+		// Properties
+		//-------------------------------------------------------------------------
+
+		// Device
+		//
+		// Gets a reference to the device instance associated with this item
+		public Device Device
+		{
+			get { return m_device; }
 		}
 
 		//-------------------------------------------------------------------------
