@@ -30,11 +30,11 @@ namespace zuki.hdhomeruntray
 
 	enum SymbolGlyph
 	{
-		Details = 0xE8FD,			// Details icon		(U+E8FD)
-		Exit = 0xE711,				// X icon			(U+E711)
-		Expand = 0xE712,			// Ellipsis icon	(U+E712)
-		Pin = 0xE718,				// Pin icon			(U+E718)
-		Settings = 0xE713,			// Gear icon		(U+E713)
-		Unpin = 0xE77A,				// Unpin icon		(U+E77A)
+		Details = 0xE179,			// Details icon		(U+E179)
+		Exit = 0xE10A,				// X icon			(U+E10A)
+		Expand = 0xE10C,			// Ellipsis icon	(U+E10C)
+		Pin = 0xE141,				// Pin icon			(U+E141)
+		Settings = 0xE115,			// Gear icon		(U+E115)
+		Unpin = 0xE196,				// Unpin icon		(U+E196)
 	};
 }
