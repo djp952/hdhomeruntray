@@ -95,6 +95,24 @@ namespace zuki.hdhomeruntray
 		public event PopupItemToggledEventHandler Toggled;
 
 		//-------------------------------------------------------------------
+		// Member Functions
+		//-------------------------------------------------------------------
+
+		// Toggle
+		//
+		// Forces the state of a toggle-type control
+		public void Toggle(bool toggled)
+		{
+			// If the desired state does not match the current state, force
+			// a change by invoking the mouse click handler for the layout panel
+			// (The mouse events are pass-through to that control)
+			if((m_type == PopupItemControlType.Toggle) && (toggled != m_toggled))
+			{
+				OnMouseClickToggle(this.LayoutPanel, EventArgs.Empty);
+			}
+		}
+
+		//-------------------------------------------------------------------
 		// Properties
 		//-------------------------------------------------------------------
 
@@ -104,6 +122,14 @@ namespace zuki.hdhomeruntray
 		public PopupItemControlType ControlType
 		{
 			get { return m_type; }
+		}
+
+		// IsToggled
+		//
+		// Exposes the toggled state of a toggle-type control
+		public bool IsToggled
+		{
+			get { return m_toggled; }
 		}
 
 		//-------------------------------------------------------------------

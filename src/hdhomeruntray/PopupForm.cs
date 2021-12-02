@@ -98,7 +98,12 @@ namespace zuki.hdhomeruntray
 			}
 
 			// Add each device as a PopupItemControl into the layout panel
-			foreach(Device device in devices) m_layoutpanel.Controls.Add(new PopupItemDeviceControl(device));
+			foreach(Device device in devices)
+			{
+				PopupItemDeviceControl devicecontrol = new PopupItemDeviceControl(device);
+				devicecontrol.Toggled += new PopupItemToggledEventHandler(this.OnDeviceToggled);
+				m_layoutpanel.Controls.Add(devicecontrol);
+			}
 
 			// If the window is supposed to be pinned, pin it
 			if(pinned) Pin();
@@ -128,6 +133,7 @@ namespace zuki.hdhomeruntray
 			var unpin = new PopupItemGlyphControl(SymbolGlyph.Unpin, PopupItemControlType.Button);
 			unpin.Selected += new EventHandler(this.OnUnpinSelected);
 
+			// Create the exit button
 			var exit = new PopupItemGlyphControl(SymbolGlyph.Exit, PopupItemControlType.Button);
 			exit.Selected += new EventHandler(this.OnExitSelected);
 
@@ -164,6 +170,18 @@ namespace zuki.hdhomeruntray
 		// Event Handlers
 		//-------------------------------------------------------------------
 
+		// OnDeviceToggled
+		//
+		// Invoked when a device toggle state has been changed
+		private void OnDeviceToggled(object sender, PopupItemToggledEventArgs args)
+		{
+			// TODO: placeholder; just untoggle anything else toggled
+			if(args.Toggled)
+			{
+				UntoggleOthers(sender);     // Untoggle any other toggled control
+			}
+		}
+
 		// OnExitSelected
 		//
 		// Invoked when the exit button has been clicked
@@ -188,7 +206,7 @@ namespace zuki.hdhomeruntray
 			m_timer.Enabled = false;		// Kill the timer
 		}
 
-		// OnSettingsSelected
+		// OnSettingsToggled
 		//
 		// Invoked when the settings toggle state has been changed
 		private void OnSettingsToggled(object sender, PopupItemToggledEventArgs args)
@@ -196,6 +214,8 @@ namespace zuki.hdhomeruntray
 			// If the toggle is active, show the settings form
 			if(args.Toggled && m_settingsform == null)
 			{
+				UntoggleOthers(sender);		// Untoggle any other toggled control
+
 				m_settingsform = new SettingsForm();
 				m_settingsform.ShowFromPopupItem(this, (PopupItemControl)sender);
 			}
@@ -252,6 +272,27 @@ namespace zuki.hdhomeruntray
 			var top = screen.WorkingArea.Height - this.Size.Height - (int)(12.0F * scalefactor);
 			var left = screen.WorkingArea.Width - this.Size.Width - (int)(12.0F * scalefactor);
 			this.Location = new Point(left, top);
+		}
+
+		// UntoggleOthers
+		//
+		// Untoggles any toggle-type popup items that aren't the new active one
+		private void UntoggleOthers(object toggled)
+		{
+			foreach(Control control in m_layoutpanel.Controls)
+			{
+				if(control is PopupItemControl popupitemcontrol)
+				{
+					if(popupitemcontrol.ControlType == PopupItemControlType.Toggle)
+					{
+						//if(!Object.ReferenceEquals(popupitemcontrol, toggled))
+						if(popupitemcontrol != toggled && popupitemcontrol.IsToggled)
+						{
+							popupitemcontrol.Toggle(false);
+						}
+					}
+				}
+			}
 		}
 
 		//-------------------------------------------------------------------
