@@ -124,6 +124,7 @@ namespace zuki.hdhomeruntray
 			this.m_tunerstatuscolorsource.Name = "m_tunerstatuscolorsource";
 			this.m_tunerstatuscolorsource.Size = new System.Drawing.Size(150, 23);
 			this.m_tunerstatuscolorsource.TabIndex = 8;
+			this.m_tunerstatuscolorsource.SelectionChangeCommitted += new System.EventHandler(this.OnTunerStatusColorSourceCommitted);
 			// 
 			// m_discoverymethod
 			// 
@@ -133,6 +134,7 @@ namespace zuki.hdhomeruntray
 			this.m_discoverymethod.Name = "m_discoverymethod";
 			this.m_discoverymethod.Size = new System.Drawing.Size(150, 23);
 			this.m_discoverymethod.TabIndex = 3;
+			this.m_discoverymethod.SelectionChangeCommitted += new System.EventHandler(this.OnDiscoveryMethodCommitted);
 			// 
 			// m_discoveryinterval
 			// 
@@ -141,6 +143,7 @@ namespace zuki.hdhomeruntray
 			this.m_discoveryinterval.Name = "m_discoveryinterval";
 			this.m_discoveryinterval.Size = new System.Drawing.Size(150, 23);
 			this.m_discoveryinterval.TabIndex = 1;
+			this.m_discoveryinterval.SelectionChangeCommitted += new System.EventHandler(this.OnDiscoveryIntervalCommitted);
 			// 
 			// m_trayiconhoverdelay
 			// 
@@ -150,6 +153,7 @@ namespace zuki.hdhomeruntray
 			this.m_trayiconhoverdelay.Name = "m_trayiconhoverdelay";
 			this.m_trayiconhoverdelay.Size = new System.Drawing.Size(150, 23);
 			this.m_trayiconhoverdelay.TabIndex = 7;
+			this.m_trayiconhoverdelay.SelectionChangeCommitted += new System.EventHandler(this.OnTrayIconHoverDelayCommitted);
 			// 
 			// SettingsForm
 			// 

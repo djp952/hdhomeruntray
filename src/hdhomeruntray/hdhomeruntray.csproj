@@ -78,6 +78,8 @@
     <Compile Include="PopupItemLabelControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="PopupItemToggledEventArgs.cs" />
+    <Compile Include="PopupItemToggledEventHandler.cs" />
     <Compile Include="SettingsForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -93,12 +95,6 @@
     <Compile Include="TrayIconHoverDelay.cs" />
     <Compile Include="MainApplication.cs" />
     <Compile Include="main.cs" />
-    <Compile Include="MainFormSettingsPage.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="MainFormSettingsPage.Designer.cs">
-      <DependentUpon>MainFormSettingsPage.cs</DependentUpon>
-    </Compile>
     <Compile Include="PopupForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -118,9 +114,6 @@
     <Compile Include="StatusIconType.cs" />
     <Compile Include="TunerStatusColorSource.cs" />
     <Compile Include="VersionHelper.cs" />
-    <EmbeddedResource Include="MainFormSettingsPage.resx">
-      <DependentUpon>MainFormSettingsPage.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="PopupForm.resx">
       <DependentUpon>PopupForm.cs</DependentUpon>
     </EmbeddedResource>

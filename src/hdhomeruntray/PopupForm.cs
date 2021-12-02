@@ -122,7 +122,7 @@ namespace zuki.hdhomeruntray
 
 			// Create the settings toggle
 			var settings = new PopupItemGlyphControl(SymbolGlyph.Settings, PopupItemControlType.Toggle);
-			settings.Selected += new EventHandler(this.OnSettingsSelected);
+			settings.Toggled += new PopupItemToggledEventHandler(this.OnSettingsToggled);
 
 			// Crate the unpin button
 			var unpin = new PopupItemGlyphControl(SymbolGlyph.Unpin, PopupItemControlType.Button);
@@ -169,6 +169,7 @@ namespace zuki.hdhomeruntray
 		// Invoked when the exit button has been clicked
 		private void OnExitSelected(object sender, EventArgs args)
 		{
+			this.Close();					// Close this form
 			Application.Exit();				// Exit the application
 		}
 
@@ -177,16 +178,35 @@ namespace zuki.hdhomeruntray
 		// Invoked when the form is closing
 		private void OnFormClosing(object sender, FormClosingEventArgs args)
 		{
+			// Close and destroy the settings form if active
+			if(m_settingsform != null)
+			{
+				m_settingsform.Close();
+				m_settingsform.Dispose();
+			}
+
 			m_timer.Enabled = false;		// Kill the timer
 		}
 
 		// OnSettingsSelected
 		//
-		// Invoked when the settings toggle has been activated
-		private void OnSettingsSelected(object sender, EventArgs args)
+		// Invoked when the settings toggle state has been changed
+		private void OnSettingsToggled(object sender, PopupItemToggledEventArgs args)
 		{
-			m_settingsform = new SettingsForm();
-			m_settingsform.ShowFromPopupItem(this, (PopupItemControl)sender);
+			// If the toggle is active, show the settings form
+			if(args.Toggled && m_settingsform == null)
+			{
+				m_settingsform = new SettingsForm();
+				m_settingsform.ShowFromPopupItem(this, (PopupItemControl)sender);
+			}
+
+			// If the toggle is inactive, close the settings form
+			else if(!args.Toggled && m_settingsform != null)
+			{
+				m_settingsform.Close();
+				m_settingsform.Dispose();
+				m_settingsform = null;
+			}
 		}
 
 		// OnTimerTick

@@ -42,6 +42,7 @@ namespace zuki.hdhomeruntray
 
 			// Adjust the padding after initialization
 			this.Padding = this.Padding.ScaleDPI(this.Handle);
+			this.m_controlspanel.Margin = this.m_controlspanel.Margin.ScaleDPI(this.Handle);
 
 			// Save the type of control being implemented
 			m_type = type;
@@ -91,7 +92,7 @@ namespace zuki.hdhomeruntray
 		// Toggled
 		//
 		// Invoked when a toggle-type PopupItemControl has been toggled
-		public event EventHandler Toggled;
+		public event PopupItemToggledEventHandler Toggled;
 
 		//-------------------------------------------------------------------
 		// Properties
@@ -161,7 +162,7 @@ namespace zuki.hdhomeruntray
 			m_toggled = !m_toggled;             // Invert the toggle state
 			OnMouseLeaveToggle(sender, args);   // Update the toggle state
 			
-			Toggled?.Invoke(this, EventArgs.Empty);
+			Toggled?.Invoke(this, new PopupItemToggledEventArgs(m_toggled));
 		}
 
 		// OnMouseEnterToggle
