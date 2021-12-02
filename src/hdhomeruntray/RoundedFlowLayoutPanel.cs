@@ -65,7 +65,7 @@ namespace zuki.hdhomeruntray
 			}
 			set
 			{
-                if(value < 0) throw new ArgumentOutOfRangeException("value");
+                if(value < 0) throw new ArgumentOutOfRangeException(nameof(value));
                 else if(value != m_radius)
                 {
                     m_radius = value;

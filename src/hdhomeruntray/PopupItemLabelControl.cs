@@ -37,7 +37,7 @@ namespace zuki.hdhomeruntray
 		//
 		public PopupItemLabelControl(string text) : base(PopupItemControlType.Static)
 		{
-			if(text == null) throw new ArgumentNullException("text");
+			if(text == null) throw new ArgumentNullException(nameof(text));
 
 			// Create the label control for the text
 			var label = new PassthroughLabelControl

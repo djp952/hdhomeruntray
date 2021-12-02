@@ -90,7 +90,7 @@ namespace zuki.hdhomeruntray
 		//
 		public PopupForm(DeviceList devices, bool pinned) : this()
 		{
-			if(devices == null) throw new ArgumentNullException();
+			if(devices == null) throw new ArgumentNullException(nameof(devices));
 
 			// If no devices were detected, place a dummy item in the list
 			if(devices.Count == 0)
@@ -157,7 +157,7 @@ namespace zuki.hdhomeruntray
 		// bounding rectangle of the notify icon instance
 		public void ShowFromNotifyIcon(ShellNotifyIcon icon)
 		{
-			if(icon == null) throw new ArgumentNullException("icon");
+			if(icon == null) throw new ArgumentNullException(nameof(icon));
 
 			// Get the boundaries of the notify icon and the associated Screen
 			Rectangle iconbounds = icon.GetBounds();

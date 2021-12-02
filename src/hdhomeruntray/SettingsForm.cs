@@ -98,8 +98,8 @@ namespace zuki.hdhomeruntray
 		// bounding rectangle of the notify icon instance
 		public void ShowFromPopupItem(PopupForm form, PopupItemControl item)
 		{
-			if(form == null) throw new ArgumentNullException("form");
-			if(item == null) throw new ArgumentNullException("item");
+			if(form == null) throw new ArgumentNullException(nameof(form));
+			if(item == null) throw new ArgumentNullException(nameof(item));
 
 			// Set the window position based on the form and item
 			SetWindowPosition(form.Bounds, item.Bounds);

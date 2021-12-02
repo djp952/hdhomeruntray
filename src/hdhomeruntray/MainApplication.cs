@@ -259,7 +259,7 @@ namespace zuki.hdhomeruntray
 
 			// Use the default hover interval specified in HKEY_CURRENT_USER
 			object value = Registry.GetValue(@"HKEY_CURRENT_USER\Control Panel\Mouse", "MouseHoverTime", null);
-			if((value != null) && (value is string @string)) int.TryParse(@string, out mousehovertimeout);
+			if((value != null) && (value is string @string)) _ = int.TryParse(@string, out mousehovertimeout);
 
 			return mousehovertimeout;
 		}
@@ -278,7 +278,7 @@ namespace zuki.hdhomeruntray
 		// Updates the state of the notify icon after a discovery
 		private void UpdateNotifyIcon(DeviceList devices)
 		{
-			if(devices == null) throw new ArgumentNullException("devices");
+			if(devices == null) throw new ArgumentNullException(nameof(devices));
 
 			int numactive = 0;              // Count of active tuners
 			int numrecording = 0;			// Count of active recordings

@@ -40,7 +40,7 @@ namespace zuki.hdhomeruntray
 		//
 		public PopupItemDeviceControl(Device device) : base(PopupItemControlType.Toggle)
 		{
-			m_device = device ?? throw new ArgumentNullException("device");
+			m_device = device ?? throw new ArgumentNullException(nameof(device));
 
 			// Create the name label for the control
 			var name = new PassthroughLabelControl

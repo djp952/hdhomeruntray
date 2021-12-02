@@ -26,7 +26,7 @@ using System.Windows.Forms;
 
 namespace zuki.hdhomeruntray
 {
-	static class main
+	static class Program
 	{
 		#region Win32 API Declarations
 		private static class NativeMethods

@@ -72,7 +72,7 @@ namespace zuki.hdhomeruntray
 				case StatusIconType.Active: return (lighticon) ? s_active_light : s_active_dark;
 				case StatusIconType.Idle: return (lighticon) ? s_idle_light : s_idle_dark;
 				case StatusIconType.Recording: return (lighticon) ? s_recording_light : s_recording_dark;
-				default: throw new ArgumentOutOfRangeException("type");
+				default: throw new ArgumentOutOfRangeException(nameof(type));
 			}
 		}
 
