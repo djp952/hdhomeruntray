@@ -39,20 +39,39 @@ namespace zuki::hdhomeruntray::discovery {
 //
 //	status		- Pointer to the unmanaged hdhomerun_tuner_status_t struct
 
-TunerStatus::TunerStatus(struct hdhomerun_tuner_status_t const* status)
+TunerStatus::TunerStatus(struct hdhomerun_tuner_status_t const* status) : m_hasvirtualchannel(false)
 {
 	if(status == nullptr) throw gcnew ArgumentNullException("status");
 
 	m_channel = gcnew String(status->channel);
-	
+
 	m_signalstrength = static_cast<int>(status->signal_strength);
 	m_signalstrengthcolor = hdhomerun_device_get_tuner_status_ss_color(const_cast<hdhomerun_tuner_status_t*>(status));
-	
+
 	m_signalquality = static_cast<int>(status->signal_to_noise_quality);
 	m_signalqualitycolor = hdhomerun_device_get_tuner_status_snq_color(const_cast<hdhomerun_tuner_status_t*>(status));
-		
+
 	m_symbolquality = static_cast<int>(status->symbol_error_quality);
 	m_symbolqualitycolor = hdhomerun_device_get_tuner_status_seq_color(const_cast<hdhomerun_tuner_status_t*>(status));
+}
+		
+//---------------------------------------------------------------------------
+// TunerStatus Constructor (private)
+//
+// Arguments:
+//
+//	status		- Pointer to the unmanaged hdhomerun_tuner_status_t struct
+//	vstatus		- Pointer to the unmanaged hdhomerun_tuner_vstatus_t struct
+
+TunerStatus::TunerStatus(struct hdhomerun_tuner_status_t const* status, struct hdhomerun_tuner_vstatus_t const* vstatus) : TunerStatus(status)
+{
+	if(status == nullptr) throw gcnew ArgumentNullException("status");
+	if(vstatus == nullptr) throw gcnew ArgumentNullException("vstatus");
+
+	m_virtualchannelnum = gcnew String(vstatus->vchannel);
+	m_virtualchannelname = gcnew String(vstatus->name);
+
+	m_hasvirtualchannel = true;			// Virtual channel info is present
 }
 
 //---------------------------------------------------------------------------
@@ -114,12 +133,14 @@ TunerStatus^ TunerStatus::Create(TunerDevice^ tunerdevice, int index)
 
 	try {
 
-		// Try to acquire the status of the tuner from the legacy API
-		struct hdhomerun_tuner_status_t status = {};
+		struct hdhomerun_tuner_status_t status = {};			// Legacy status
+		struct hdhomerun_tuner_vstatus_t vstatus = {};			// Virtual channel status
+
 		int result = hdhomerun_device_get_tuner_status(device, nullptr, &status);
+		if((result == 1) && (!tunerdevice->IsLegacy)) result = hdhomerun_device_get_tuner_vstatus(device, nullptr, &vstatus);
 		
 		// 1 == success; 0 == rejected; -1 = communication failure
-		if(result == 1) return gcnew TunerStatus(&status);
+		if(result == 1) return (tunerdevice->IsLegacy) ? gcnew TunerStatus(&status) : gcnew TunerStatus(&status, &vstatus);
 		else if(result == 0) throw gcnew Exception("Tuner device rejected the request");
 		else if(result == -1) throw gcnew Exception("There was a communication failure accessing the tuner device");
 		else throw gcnew Exception("An unknown error occurred accessing the tuner device");
@@ -127,6 +148,16 @@ TunerStatus^ TunerStatus::Create(TunerDevice^ tunerdevice, int index)
 
 	// Ensure destruction of the hdhomerun_device_t instance
 	finally { hdhomerun_device_destroy(device); }
+}
+
+//---------------------------------------------------------------------------
+// TunerStatus::HasVirtualChannel::get
+//
+// Gets a flag indicating if the virtual channel data is available
+
+bool TunerStatus::HasVirtualChannel::get(void)
+{
+	return m_hasvirtualchannel;
 }
 
 //---------------------------------------------------------------------------
@@ -197,6 +228,26 @@ int TunerStatus::SymbolQuality::get(void)
 Color TunerStatus::SymbolQualityColor::get(void)
 {
 	return this->IsActive ? ConvertHDHomeRunColor(m_symbolqualitycolor) : Color::FromArgb(COLOR_GRAY);
+}
+
+//---------------------------------------------------------------------------
+// TunerStatus::VirtualChannelName::get
+//
+// Gets the tuned virtual channel name
+
+String^ TunerStatus::VirtualChannelName::get(void)
+{
+	return m_virtualchannelname;
+}
+
+//---------------------------------------------------------------------------
+// TunerStatus::VirtualChannelNumber::get
+//
+// Gets the tuned virtual channel number
+
+String^ TunerStatus::VirtualChannelNumber::get(void)
+{
+	return m_virtualchannelnum;
 }
 
 //---------------------------------------------------------------------------

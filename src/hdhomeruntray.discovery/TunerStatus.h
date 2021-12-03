@@ -56,6 +56,14 @@ public:
 		String^ get(void);
 	}
 
+	// HasVirtualChannel
+	//
+	// Gets a flag indicating if the virtual channel is set or not
+	property bool HasVirtualChannel
+	{
+		bool get(void);
+	}
+
 	// IsActive
 	//
 	// Gets a flag indicating if the tuner is active or not
@@ -112,6 +120,22 @@ public:
 		Color get(void);
 	}
 
+	// VirtualChannelName
+	//
+	// Gets the tuned virtual channel name
+	property String^ VirtualChannelName
+	{
+		String^ get(void);
+	}
+
+	// VirtualChannelNumber
+	//
+	// Gets the tuned virtual channel number
+	property String^ VirtualChannelNumber
+	{
+		String^ get(void);
+	}
+
 internal:
 
 	//-----------------------------------------------------------------------
@@ -127,6 +151,7 @@ private:
 	// Instance Constructor
 	//
 	TunerStatus(struct hdhomerun_tuner_status_t const* status);
+	TunerStatus(struct hdhomerun_tuner_status_t const* status, struct hdhomerun_tuner_vstatus_t const* vstatus);
 
 	//-----------------------------------------------------------------------
 	// Private Constants
@@ -157,6 +182,9 @@ private:
 	uint32_t			m_signalstrengthcolor;	// Signal strength color
 	int					m_symbolquality;		// Symbol quality
 	uint32_t			m_symbolqualitycolor;	// Symbol quality color
+	bool				m_hasvirtualchannel;	// Flag if virtual channel present
+	String^				m_virtualchannelnum;	// Virtual channel number
+	String^				m_virtualchannelname;	// Virtual channel name
 };
 
 //---------------------------------------------------------------------------
