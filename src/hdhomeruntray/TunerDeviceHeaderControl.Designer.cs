@@ -29,37 +29,37 @@ namespace zuki.hdhomeruntray
 		/// </summary>
 		private void InitializeComponent()
 		{
-			this.m_layoutPanel = new zuki.hdhomeruntray.RoundedTableLayoutPanel();
+			this.m_layoutpanel = new zuki.hdhomeruntray.RoundedTableLayoutPanel();
 			this.m_devicename = new System.Windows.Forms.Label();
 			this.m_modelname = new System.Windows.Forms.Label();
 			this.m_deviceid = new System.Windows.Forms.Label();
 			this.m_ipaddress = new System.Windows.Forms.Label();
-			this.m_layoutPanel.SuspendLayout();
+			this.m_layoutpanel.SuspendLayout();
 			this.SuspendLayout();
 			// 
-			// m_layoutPanel
+			// m_layoutpanel
 			// 
-			this.m_layoutPanel.AutoSize = true;
-			this.m_layoutPanel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-			this.m_layoutPanel.BackColor = System.Drawing.SystemColors.ControlLightLight;
-			this.m_layoutPanel.ColumnCount = 2;
-			this.m_layoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-			this.m_layoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-			this.m_layoutPanel.Controls.Add(this.m_devicename, 0, 0);
-			this.m_layoutPanel.Controls.Add(this.m_modelname, 1, 0);
-			this.m_layoutPanel.Controls.Add(this.m_deviceid, 0, 1);
-			this.m_layoutPanel.Controls.Add(this.m_ipaddress, 1, 1);
-			this.m_layoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.m_layoutPanel.ForeColor = System.Drawing.Color.Black;
-			this.m_layoutPanel.Location = new System.Drawing.Point(0, 0);
-			this.m_layoutPanel.Name = "m_layoutPanel";
-			this.m_layoutPanel.Padding = new System.Windows.Forms.Padding(4);
-			this.m_layoutPanel.Radius = 16;
-			this.m_layoutPanel.RowCount = 2;
-			this.m_layoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-			this.m_layoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-			this.m_layoutPanel.Size = new System.Drawing.Size(246, 42);
-			this.m_layoutPanel.TabIndex = 1;
+			this.m_layoutpanel.AutoSize = true;
+			this.m_layoutpanel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+			this.m_layoutpanel.BackColor = System.Drawing.SystemColors.ControlLightLight;
+			this.m_layoutpanel.ColumnCount = 2;
+			this.m_layoutpanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+			this.m_layoutpanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+			this.m_layoutpanel.Controls.Add(this.m_devicename, 0, 0);
+			this.m_layoutpanel.Controls.Add(this.m_modelname, 1, 0);
+			this.m_layoutpanel.Controls.Add(this.m_deviceid, 0, 1);
+			this.m_layoutpanel.Controls.Add(this.m_ipaddress, 1, 1);
+			this.m_layoutpanel.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.m_layoutpanel.ForeColor = System.Drawing.Color.Black;
+			this.m_layoutpanel.Location = new System.Drawing.Point(0, 0);
+			this.m_layoutpanel.Name = "m_layoutpanel";
+			this.m_layoutpanel.Padding = new System.Windows.Forms.Padding(4);
+			this.m_layoutpanel.Radius = 16;
+			this.m_layoutpanel.RowCount = 2;
+			this.m_layoutpanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+			this.m_layoutpanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+			this.m_layoutpanel.Size = new System.Drawing.Size(246, 42);
+			this.m_layoutpanel.TabIndex = 1;
 			// 
 			// m_devicename
 			// 
@@ -111,23 +111,22 @@ namespace zuki.hdhomeruntray
 			// 
 			// TunerDeviceHeaderControl
 			// 
-			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
-			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Inherit;
 			this.AutoSize = true;
 			this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-			this.Controls.Add(this.m_layoutPanel);
+			this.Controls.Add(this.m_layoutpanel);
 			this.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.Name = "TunerDeviceHeaderControl";
 			this.Size = new System.Drawing.Size(246, 42);
-			this.m_layoutPanel.ResumeLayout(false);
-			this.m_layoutPanel.PerformLayout();
+			this.m_layoutpanel.ResumeLayout(false);
+			this.m_layoutpanel.PerformLayout();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
 		}
 
 		#endregion
-		private RoundedTableLayoutPanel m_layoutPanel;
+		private RoundedTableLayoutPanel m_layoutpanel;
 		private System.Windows.Forms.Label m_devicename;
 		private System.Windows.Forms.Label m_modelname;
 		private System.Windows.Forms.Label m_deviceid;

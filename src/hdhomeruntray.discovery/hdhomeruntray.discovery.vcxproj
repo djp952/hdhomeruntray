@@ -100,6 +100,7 @@
     <ClInclude Include="..\..\depends\libhdhomerun\hdhomerun_video.h" />
     <ClInclude Include="Device.h" />
     <ClInclude Include="DeviceList.h" />
+    <ClInclude Include="DeviceStatusColor.h" />
     <ClInclude Include="DeviceType.h" />
     <ClInclude Include="Devices.h" />
     <ClInclude Include="DiscoveryCompletedEventArgs.h" />
@@ -190,6 +191,7 @@
     <ClCompile Include="Device.cpp" />
     <ClCompile Include="DeviceList.cpp" />
     <ClCompile Include="Devices.cpp" />
+    <ClCompile Include="DeviceStatusColor.cpp" />
     <ClCompile Include="DiscoveryCompletedEventArgs.cpp" />
     <ClCompile Include="dllmain.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>

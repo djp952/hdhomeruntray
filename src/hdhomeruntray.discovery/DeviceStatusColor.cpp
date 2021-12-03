@@ -20,32 +20,8 @@
 // SOFTWARE.
 //---------------------------------------------------------------------------
 
-#ifndef __DEVICETYPE_H_
-#define __DEVICETYPE_H_
-#pragma once
+#include "stdafx.h"
 
-#pragma warning(push, 4)
+#include "DeviceStatusColor.h"
 
-using namespace System;
-
-namespace zuki::hdhomeruntray::discovery {
-
-//---------------------------------------------------------------------------
-// Enum DeviceType
-//
-// Indicates the type of a HDHomeRun device
-//---------------------------------------------------------------------------
-
-public enum class DeviceType
-{
-	Tuner		= HDHOMERUN_DEVICE_TYPE_TUNER,		// Tuner device
-	Storage		= HDHOMERUN_DEVICE_TYPE_STORAGE,	// Storage (DVR) device
-};
-
-//---------------------------------------------------------------------------
-
-} // zuki::hdhomeruntray::discovery
-
-#pragma warning(pop)
-
-#endif	// __DEVICETYPE_H_
+// EMPTY TRANSLATION UNIT

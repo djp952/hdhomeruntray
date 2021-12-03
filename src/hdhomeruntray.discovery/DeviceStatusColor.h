@@ -20,26 +20,46 @@
 // SOFTWARE.
 //---------------------------------------------------------------------------
 
-#ifndef __DEVICETYPE_H_
-#define __DEVICETYPE_H_
+#ifndef __DEVICESTATUSCOLOR_H_
+#define __DEVICESTATUSCOLOR_H_
 #pragma once
 
 #pragma warning(push, 4)
 
 using namespace System;
+using namespace System::Drawing;
 
 namespace zuki::hdhomeruntray::discovery {
 
 //---------------------------------------------------------------------------
-// Enum DeviceType
+// Class DeviceStatusColor
 //
-// Indicates the type of a HDHomeRun device
+// Defines constant Color declarations for device functions
 //---------------------------------------------------------------------------
 
-public enum class DeviceType
+public ref class DeviceStatusColor abstract sealed
 {
-	Tuner		= HDHOMERUN_DEVICE_TYPE_TUNER,		// Tuner device
-	Storage		= HDHOMERUN_DEVICE_TYPE_STORAGE,	// Storage (DVR) device
+public:
+
+	//-----------------------------------------------------------------------
+	// Fields
+	//-----------------------------------------------------------------------
+
+	// Gray
+	//
+	static initonly Color Gray = Color::FromArgb(0xFFC0C0C0);
+
+	// Green
+	//
+	static initonly Color Green = Color::FromArgb(0xFF1EE500);
+
+	// Red
+	//
+	static initonly Color Red = Color::FromArgb(0xFFE50000);
+
+	// Yellow
+	//
+	static initonly Color Yellow = Color::FromArgb(0xFFFFE900);
 };
 
 //---------------------------------------------------------------------------
@@ -48,4 +68,4 @@ public enum class DeviceType
 
 #pragma warning(pop)
 
-#endif	// __DEVICETYPE_H_
+#endif	// __DEVICESTATUSCOLOR_H_

@@ -65,6 +65,7 @@
 #include <Windows.h>				// Include main Windows declarations
 #include <msclr\auto_handle.h>		// Include msclr::auto_handle<>
 #include <msclr\lock.h>				// Include msclr::lock
+#include <msclr\marshal.h>			// Include msclr::interop::marshal_as<>
 
 //---------------------------------------------------------------------------
 // libhdhomerun

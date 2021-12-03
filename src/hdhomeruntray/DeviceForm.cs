@@ -65,21 +65,18 @@ namespace zuki.hdhomeruntray
 			InitializeComponent();
 
 			this.Padding = this.Padding.ScaleDPI(this.Handle);
-			this.m_layoutPanel.Padding = this.m_layoutPanel.Padding.ScaleDPI(this.Handle);
+			this.m_layoutpanel.Padding = this.m_layoutpanel.Padding.ScaleDPI(this.Handle);
+			this.m_layoutpanel.Margin = this.m_layoutpanel.Margin.ScaleDPI(this.Handle);
 
 			// WINDOWS 11
 			//
 			if(VersionHelper.IsWindows11OrGreater())
 			{
-				// Switch to Segoe UI Variable Display
-				this.Font = new Font("Segoe UI Variable Display Semib", 9F, FontStyle.Bold);
-
 				// Apply rounded corners to the application
 				var attribute = NativeMethods.DWMWINDOWATTRIBUTE.DWMWA_WINDOW_CORNER_PREFERENCE;
 				var preference = NativeMethods.DWM_WINDOW_CORNER_PREFERENCE.DWMWCP_ROUND;
 				NativeMethods.DwmSetWindowAttribute(this.Handle, attribute, ref preference, sizeof(uint));
 			}
-
 		}
 
 		// Instance Constructor
@@ -88,6 +85,8 @@ namespace zuki.hdhomeruntray
 		{
 			if(device == null) throw new ArgumentNullException(nameof(device));
 
+			// TUNER
+			//
 			if(device.Type == DeviceType.Tuner)
 			{
 				Debug.Assert(device is TunerDevice);
@@ -98,22 +97,28 @@ namespace zuki.hdhomeruntray
 				{
 					Dock = DockStyle.Top
 				};
-				m_layoutPanel.Controls.Add(header);
+				m_layoutpanel.Controls.Add(header);
 
 				// Add the tuner user controls for the device
-				// TODO
-
-				// Add the footer user control for the device if non-legacy
-				if(!tunerdevice.IsLegacy)
+				foreach(Tuner tuner in tunerdevice.Tuners)
 				{
-					var footer = new TunerDeviceFooterControl(tunerdevice)
+					var status = new TunerDeviceStatusControl(tunerdevice, tuner)
 					{
 						Dock = DockStyle.Top
 					};
-					m_layoutPanel.Controls.Add(footer);
+					m_layoutpanel.Controls.Add(status);
 				}
+
+				// Add the footer user control for the device if non-legacy
+				var footer = new TunerDeviceFooterControl(tunerdevice)
+				{
+					Dock = DockStyle.Top
+				};
+				m_layoutpanel.Controls.Add(footer);
 			}
 
+			// STORAGE
+			//
 			else if(device.Type == DeviceType.Storage)
 			{
 				Debug.Assert(device is StorageDevice);
@@ -124,7 +129,7 @@ namespace zuki.hdhomeruntray
 				{
 					Dock = DockStyle.Top
 				};
-				m_layoutPanel.Controls.Add(header);
+				m_layoutpanel.Controls.Add(header);
 
 				// Add the recording user controls for the device
 				// TODO
@@ -134,7 +139,7 @@ namespace zuki.hdhomeruntray
 				{
 					Dock = DockStyle.Top
 				};
-				m_layoutPanel.Controls.Add(footer);
+				m_layoutpanel.Controls.Add(footer);
 			}
 		}
 

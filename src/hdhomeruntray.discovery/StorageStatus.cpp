@@ -24,6 +24,7 @@
 
 #include "StorageStatus.h"
 
+#include "DeviceStatusColor.h"
 #include "JsonWebRequest.h"
 #include "StorageDevice.h"
 
@@ -43,16 +44,16 @@ namespace zuki::hdhomeruntray::discovery {
 //	recordings		- List<> of active recordings
 
 StorageStatus::StorageStatus(LiveBufferList^ livebuffers, RecordingList^ recordings) : 
-	m_statuscolor(COLOR_GRAY), m_livebuffers(livebuffers), m_recordings(recordings)
+	m_statuscolor(DeviceStatusColor::Gray), m_livebuffers(livebuffers), m_recordings(recordings)
 {
 	if(CLRISNULL(livebuffers)) throw gcnew ArgumentNullException("livebuffers");
 	if(CLRISNULL(recordings)) throw gcnew ArgumentNullException("recordings");
 
 	// If there are live TV streams being buffered, report the status as green
-	if(m_livebuffers->Count > 0) m_statuscolor = COLOR_GREEN;
+	if(m_livebuffers->Count > 0) m_statuscolor = DeviceStatusColor::Green;
 
 	// If there are active recordings in progress, report the status as red
-	if(m_recordings->Count > 0) m_statuscolor = COLOR_RED;
+	if(m_recordings->Count > 0) m_statuscolor = DeviceStatusColor::Red;
 }
 
 //---------------------------------------------------------------------------
@@ -126,7 +127,7 @@ RecordingList^ StorageStatus::Recordings::get(void)
 
 Color StorageStatus::StatusColor::get(void)
 {
-	return Color::FromArgb(m_statuscolor);
+	return m_statuscolor;
 }
 
 //---------------------------------------------------------------------------

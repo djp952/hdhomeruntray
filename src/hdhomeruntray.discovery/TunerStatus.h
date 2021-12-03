@@ -48,6 +48,14 @@ public:
 	//-----------------------------------------------------------------------
 	// Properties
 
+	// BitRate
+	//
+	// Gets the current tuner output bitrate
+	property int BitRate
+	{
+		int get(void);
+	}
+
 	// Channel
 	//
 	// Gets the tuned channel string (modulation+frequency)
@@ -154,23 +162,17 @@ private:
 	TunerStatus(struct hdhomerun_tuner_status_t const* status, struct hdhomerun_tuner_vstatus_t const* vstatus);
 
 	//-----------------------------------------------------------------------
-	// Private Constants
-
-	// COLOR_XXXX
-	//
-	// Replacement colors for the default values from libhdhomerun
-	literal uint32_t COLOR_GREEN = 0xFF1EE500;
-	literal uint32_t COLOR_RED = 0xFFE50000;
-	literal uint32_t COLOR_YELLOW = 0xFFFFE900;
-	literal uint32_t COLOR_GRAY = 0xFFC0C0C0;
-
-	//-----------------------------------------------------------------------
 	// Private Member Functions
 
 	// ConvertHDHomeRunColor
 	//
 	// Converts the color code from libhdhomerun into the color I want to use
 	static Color ConvertHDHomeRunColor(uint32_t color);
+
+	// GetVirtualChannelName
+	//
+	// Retrieves the virtual channel name from a tuner vstatus string
+	static String^ GetVirtualChannelName(String^ vstatus);
 
 	//-----------------------------------------------------------------------
 	// Member Variables
@@ -185,6 +187,7 @@ private:
 	bool				m_hasvirtualchannel;	// Flag if virtual channel present
 	String^				m_virtualchannelnum;	// Virtual channel number
 	String^				m_virtualchannelname;	// Virtual channel name
+	int					m_bitrate;				// Current tuner bitrate
 };
 
 //---------------------------------------------------------------------------

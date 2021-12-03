@@ -140,15 +140,18 @@ namespace zuki.hdhomeruntray
 			exit.Selected += new EventHandler(this.OnExitSelected);
 
 			// Add the glyph items to the outer layout panel
+			m_layoutpanel.SuspendLayout();
 			m_layoutpanel.Controls.Add(settings);
 			m_layoutpanel.Controls.Add(unpin);
 			m_layoutpanel.Controls.Add(exit);
+			m_layoutpanel.ResumeLayout();
 
 			// If the form is already visible, it needs to be moved to adjust for the new width
 			if(this.Visible) SetWindowPosition(Screen.FromPoint(new Point(this.Left, this.Top)));
 
 			// Prevent adding the controls multiple times by tracking this
 			m_pinned = true;
+
 		}
 
 		// ShowFromNotifyIcon

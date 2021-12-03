@@ -89,6 +89,9 @@
     </Compile>
     <Compile Include="PopupItemToggledEventArgs.cs" />
     <Compile Include="PopupItemToggledEventHandler.cs" />
+    <Compile Include="RoundedPanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="RoundedTableLayoutPanel.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -97,6 +100,12 @@
     </Compile>
     <Compile Include="SettingsForm.Designer.cs">
       <DependentUpon>SettingsForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SmoothProgressBar.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="SmoothProgressBar.Designer.cs">
+      <DependentUpon>SmoothProgressBar.cs</DependentUpon>
     </Compile>
     <Compile Include="StorageDeviceFooterControl.cs">
       <SubType>UserControl</SubType>
@@ -148,6 +157,12 @@
     <Compile Include="TunerDeviceHeaderControl.Designer.cs">
       <DependentUpon>TunerDeviceHeaderControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="TunerDeviceStatusControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="TunerDeviceStatusControl.designer.cs">
+      <DependentUpon>TunerDeviceStatusControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="TunerStatusColorSource.cs" />
     <Compile Include="VersionHelper.cs" />
     <EmbeddedResource Include="DeviceForm.resx">
@@ -167,6 +182,9 @@
     <EmbeddedResource Include="SettingsForm.resx">
       <DependentUpon>SettingsForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="SmoothProgressBar.resx">
+      <DependentUpon>SmoothProgressBar.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="StorageDeviceFooterControl.resx">
       <DependentUpon>StorageDeviceFooterControl.cs</DependentUpon>
     </EmbeddedResource>
@@ -178,6 +196,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="TunerDeviceHeaderControl.resx">
       <DependentUpon>TunerDeviceHeaderControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TunerDeviceStatusControl.resx">
+      <DependentUpon>TunerDeviceStatusControl.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="app.manifest" />
     <None Include="packages.config" />

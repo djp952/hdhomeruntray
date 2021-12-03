@@ -24,6 +24,7 @@
 
 #include "TunerStatus.h"
 
+#include "DeviceStatusColor.h"
 #include "TunerDevice.h"
 
 #pragma warning(push, 4)
@@ -44,6 +45,7 @@ TunerStatus::TunerStatus(struct hdhomerun_tuner_status_t const* status) : m_hasv
 	if(status == nullptr) throw gcnew ArgumentNullException("status");
 
 	m_channel = gcnew String(status->channel);
+	m_bitrate = status->raw_bits_per_second;
 
 	m_signalstrength = static_cast<int>(status->signal_strength);
 	m_signalstrengthcolor = hdhomerun_device_get_tuner_status_ss_color(const_cast<hdhomerun_tuner_status_t*>(status));
@@ -75,6 +77,16 @@ TunerStatus::TunerStatus(struct hdhomerun_tuner_status_t const* status, struct h
 }
 
 //---------------------------------------------------------------------------
+// TunerStatus::BitRate::get
+//
+// Gets the current tuner output bitrate
+
+int TunerStatus::BitRate::get(void)
+{
+	return m_bitrate;
+}
+
+//---------------------------------------------------------------------------
 // TunerStatus::Channel::get
 //
 // Gets the tuned channel string (modulation+frequency)
@@ -95,13 +107,13 @@ String^ TunerStatus::Channel::get(void)
 
 Color TunerStatus::ConvertHDHomeRunColor(uint32_t color)
 {
-	if(color == HDHOMERUN_STATUS_COLOR_GREEN) return Color::FromArgb(COLOR_GREEN);
-	else if(color == HDHOMERUN_STATUS_COLOR_YELLOW) return Color::FromArgb(COLOR_YELLOW);
-	else if(color == HDHOMERUN_STATUS_COLOR_RED) return Color::FromArgb(COLOR_RED);
+	if(color == HDHOMERUN_STATUS_COLOR_GREEN) return DeviceStatusColor::Green;
+	else if(color == HDHOMERUN_STATUS_COLOR_YELLOW) return DeviceStatusColor::Yellow;
+	else if(color == HDHOMERUN_STATUS_COLOR_RED) return DeviceStatusColor::Gray;
 
 	// HDHOMERUN_STATUS_COLOR_NEUTRAL is only used for devices that don't 
 	// support tuner locking; not sure what that's about so default to green
-	return Color::FromArgb(COLOR_GREEN);
+	return DeviceStatusColor::Green;
 }
 
 //---------------------------------------------------------------------------
@@ -136,11 +148,31 @@ TunerStatus^ TunerStatus::Create(TunerDevice^ tunerdevice, int index)
 		struct hdhomerun_tuner_status_t status = {};			// Legacy status
 		struct hdhomerun_tuner_vstatus_t vstatus = {};			// Virtual channel status
 
+		//
+		// TODO: If the device is busy, like with a channel scan, it will refuse to
+		// provide status; this needs to be handled more gracefully than an exception
+		//
+
+		// Some non-legacy devices (EXTEND, for one) do not support vstatus
+		bool hasvstatus = false;
+
 		int result = hdhomerun_device_get_tuner_status(device, nullptr, &status);
-		if((result == 1) && (!tunerdevice->IsLegacy)) result = hdhomerun_device_get_tuner_vstatus(device, nullptr, &vstatus);
+		if((result == 1) && (!tunerdevice->IsLegacy)) {
+
+			// The virtual status function doesn't work right for channels with spaces
+			// in the name, so we have to reparse that portion of the string
+			char* vstatus_str = nullptr;
+			hasvstatus = (hdhomerun_device_get_tuner_vstatus(device, &vstatus_str, &vstatus) == 1);
+			if(hasvstatus) {
+
+				String^ vchannel = GetVirtualChannelName(gcnew String(vstatus_str));
+				msclr::auto_handle<msclr::interop::marshal_context> context(gcnew msclr::interop::marshal_context());
+				strncpy_s(vstatus.name, std::extent<decltype(vstatus.name)>::value, context->marshal_as<char const*>(vchannel), _TRUNCATE);
+			}
+		}
 		
 		// 1 == success; 0 == rejected; -1 = communication failure
-		if(result == 1) return (tunerdevice->IsLegacy) ? gcnew TunerStatus(&status) : gcnew TunerStatus(&status, &vstatus);
+		if(result == 1) return hasvstatus ? gcnew TunerStatus(&status, &vstatus) : gcnew TunerStatus(&status);
 		else if(result == 0) throw gcnew Exception("Tuner device rejected the request");
 		else if(result == -1) throw gcnew Exception("There was a communication failure accessing the tuner device");
 		else throw gcnew Exception("An unknown error occurred accessing the tuner device");
@@ -148,6 +180,45 @@ TunerStatus^ TunerStatus::Create(TunerDevice^ tunerdevice, int index)
 
 	// Ensure destruction of the hdhomerun_device_t instance
 	finally { hdhomerun_device_destroy(device); }
+}
+
+//---------------------------------------------------------------------------
+// TunerStatus::GetVirtualChannelName (static, private)
+//
+// Retrieves the virtual channel name from a tuner vstatus string
+//
+// Arguments:
+//
+//	vstatus		- Tuner vstatus string to parse
+
+String^ TunerStatus::GetVirtualChannelName(String^ vstatus)
+{
+	// There is likely a more elegant way to handle this, but the problem
+	// is that the string is formatted like this:
+	//
+	// vch=696 name=E! TV HD auth=subscribed cci=unrestricted
+	//
+	// libhdhomerun will stop at the first space in the channel name.  In order
+	// to get the full channel name we need to find the next = character and
+	// work backwards ...
+
+	int index = vstatus->IndexOf("name=");
+	if(index >= 0) {
+
+		vstatus = vstatus->Substring(index + 5);
+		index = vstatus->IndexOf("=");
+		if(index >= 0) {
+
+			vstatus = vstatus->Substring(0, index);
+			index = vstatus->LastIndexOf(" ");
+			if(index >= 0) vstatus = vstatus->Substring(0, index);
+		}
+	}
+
+	// No name= keyword in the input string
+	else return String::Empty;
+
+	return vstatus;
 }
 
 //---------------------------------------------------------------------------
@@ -187,7 +258,7 @@ int TunerStatus::SignalQuality::get(void)
 
 Color TunerStatus::SignalQualityColor::get(void)
 {
-	return this->IsActive ? ConvertHDHomeRunColor(m_signalqualitycolor) : Color::FromArgb(COLOR_GRAY);
+	return this->IsActive ? ConvertHDHomeRunColor(m_signalqualitycolor) : DeviceStatusColor::Gray;
 }
 
 //---------------------------------------------------------------------------
@@ -207,7 +278,7 @@ int TunerStatus::SignalStrength::get(void)
 
 Color TunerStatus::SignalStrengthColor::get(void)
 {
-	return this->IsActive ? ConvertHDHomeRunColor(m_signalstrengthcolor) : Color::FromArgb(COLOR_GRAY);
+	return this->IsActive ? ConvertHDHomeRunColor(m_signalstrengthcolor) : DeviceStatusColor::Gray;
 }
 
 //---------------------------------------------------------------------------
@@ -227,7 +298,7 @@ int TunerStatus::SymbolQuality::get(void)
 
 Color TunerStatus::SymbolQualityColor::get(void)
 {
-	return this->IsActive ? ConvertHDHomeRunColor(m_symbolqualitycolor) : Color::FromArgb(COLOR_GRAY);
+	return this->IsActive ? ConvertHDHomeRunColor(m_symbolqualitycolor) : DeviceStatusColor::Gray;
 }
 
 //---------------------------------------------------------------------------

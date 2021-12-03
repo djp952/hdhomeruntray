@@ -144,23 +144,31 @@ DeviceList^ DeviceList::DiscoverBroadcast(void)
 
 		// Use the discovery JSON reported by the device as opposed to the data returned from UDP
 		String^ discoverurl = String::Concat(gcnew String(devices[index].base_url), "/discover.json");
-		JObject^ discovery = JsonWebRequest::GetObject(discoverurl);
-		if(CLRISNOTNULL(discovery)) {
 
-			// Gather enough information from the discovery data to determine how to proceed
-			JToken^ deviceid = discovery->GetValue("DeviceID", StringComparison::OrdinalIgnoreCase);
-			JToken^ storageid = discovery->GetValue("StorageID", StringComparison::OrdinalIgnoreCase);
+		// The web request will fail if the URL doesn't exist or doesn't return JSON; skip this device
+		// if that's the case for now; should probably have some way to indicate this to the user
+		try {
 
-			// Convert the numeric IP address into an IPAddress instance
-			array<Byte>^ ipbytes = BitConverter::GetBytes(devices[index].ip_addr);
-			if(BitConverter::IsLittleEndian) Array::Reverse(ipbytes);
-			IPAddress^ ipaddress = gcnew IPAddress(ipbytes);
+			JObject^ discovery = JsonWebRequest::GetObject(discoverurl);
+			if(CLRISNOTNULL(discovery)) {
 
-			// A single device may report both tuners and storage so check for both types and
-			// process them as distinct device instances
-			if(CLRISNOTNULL(deviceid)) discovered->Add(TunerDevice::Create(discovery, ipaddress));
-			if(CLRISNOTNULL(storageid)) discovered->Add(StorageDevice::Create(discovery, ipaddress));
+				// Gather enough information from the discovery data to determine how to proceed
+				JToken^ deviceid = discovery->GetValue("DeviceID", StringComparison::OrdinalIgnoreCase);
+				JToken^ storageid = discovery->GetValue("StorageID", StringComparison::OrdinalIgnoreCase);
+
+				// Convert the numeric IP address into an IPAddress instance
+				array<Byte>^ ipbytes = BitConverter::GetBytes(devices[index].ip_addr);
+				if(BitConverter::IsLittleEndian) Array::Reverse(ipbytes);
+				IPAddress^ ipaddress = gcnew IPAddress(ipbytes);
+
+				// A single device may report both tuners and storage so check for both types and
+				// process them as distinct device instances
+				if(CLRISNOTNULL(deviceid)) discovered->Add(TunerDevice::Create(discovery, ipaddress));
+				if(CLRISNOTNULL(storageid)) discovered->Add(StorageDevice::Create(discovery, ipaddress));
+			}
 		}
+
+		catch(Exception^) { /* DO NOTHING */ }
 	}
 
 	// Sort the list of discovered devices prior to generating the DeviceList instance
@@ -197,23 +205,30 @@ DeviceList^ DeviceList::DiscoverHttp(void)
 			// Retrieve the individual device discovery data
 			if(CLRISNOTNULL(discoverurl) && CLRISNOTNULL(localip)) {
 
-				JObject^ discovery = JsonWebRequest::GetObject(discoverurl->ToObject<String^>());
-				if(CLRISNOTNULL(discovery)) {
+				// The web request will fail if the URL doesn't exist or doesn't return JSON; skip this device
+				// if that's the case for now; should probably have some way to indicate this to the user
+				try {
 
-					// Convert the LocalIP string into an IPAddress instance
-					IPAddress^ ipaddress = IPAddress::None;
-					if(CLRISNOTNULL(localip)) {
+					JObject^ discovery = JsonWebRequest::GetObject(discoverurl->ToObject<String^>());
+					if(CLRISNOTNULL(discovery)) {
 
-						// Storage devices come in as IP:PORT, we only want the IP address
-						array<String^>^ parts = localip->ToObject<String^>()->Split(':');
-						if(parts->Length >= 1) IPAddress::TryParse(parts[0], ipaddress);
+						// Convert the LocalIP string into an IPAddress instance
+						IPAddress^ ipaddress = IPAddress::None;
+						if(CLRISNOTNULL(localip)) {
+
+							// Storage devices come in as IP:PORT, we only want the IP address
+							array<String^>^ parts = localip->ToObject<String^>()->Split(':');
+							if(parts->Length >= 1) IPAddress::TryParse(parts[0], ipaddress);
+						}
+
+						// A single device may report both tuners and storage so check for both types and
+						// process them as distinct device instances
+						if(CLRISNOTNULL(deviceid)) discovered->Add(TunerDevice::Create(discovery, ipaddress));
+						if(CLRISNOTNULL(storageid)) discovered->Add(StorageDevice::Create(discovery, ipaddress));
 					}
-
-					// A single device may report both tuners and storage so check for both types and
-					// process them as distinct device instances
-					if(CLRISNOTNULL(deviceid)) discovered->Add(TunerDevice::Create(discovery, ipaddress));
-					if(CLRISNOTNULL(storageid)) discovered->Add(StorageDevice::Create(discovery, ipaddress));
 				}
+
+				catch(Exception^) { /* DO NOTHING */ }
 			}
 		}
 	}

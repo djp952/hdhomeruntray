@@ -29,21 +29,21 @@ namespace zuki.hdhomeruntray
 		/// </summary>
 		private void InitializeComponent()
 		{
-			this.m_layoutPanel = new System.Windows.Forms.FlowLayoutPanel();
+			this.m_layoutpanel = new System.Windows.Forms.FlowLayoutPanel();
 			this.SuspendLayout();
 			// 
-			// m_layoutPanel
+			// m_layoutpanel
 			// 
-			this.m_layoutPanel.AutoSize = true;
-			this.m_layoutPanel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-			this.m_layoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.m_layoutPanel.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
-			this.m_layoutPanel.Location = new System.Drawing.Point(4, 4);
-			this.m_layoutPanel.Name = "m_layoutPanel";
-			this.m_layoutPanel.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
-			this.m_layoutPanel.Size = new System.Drawing.Size(276, 111);
-			this.m_layoutPanel.TabIndex = 0;
-			this.m_layoutPanel.WrapContents = false;
+			this.m_layoutpanel.AutoSize = true;
+			this.m_layoutpanel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+			this.m_layoutpanel.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.m_layoutpanel.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
+			this.m_layoutpanel.Location = new System.Drawing.Point(4, 4);
+			this.m_layoutpanel.Name = "m_layoutpanel";
+			this.m_layoutpanel.Padding = new System.Windows.Forms.Padding(4);
+			this.m_layoutpanel.Size = new System.Drawing.Size(276, 111);
+			this.m_layoutpanel.TabIndex = 0;
+			this.m_layoutpanel.WrapContents = false;
 			// 
 			// DeviceForm
 			// 
@@ -53,14 +53,14 @@ namespace zuki.hdhomeruntray
 			this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
 			this.ClientSize = new System.Drawing.Size(284, 119);
 			this.ControlBox = false;
-			this.Controls.Add(this.m_layoutPanel);
+			this.Controls.Add(this.m_layoutpanel);
 			this.DoubleBuffered = true;
-			this.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
 			this.Name = "DeviceForm";
-			this.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+			this.Padding = new System.Windows.Forms.Padding(4);
 			this.ShowIcon = false;
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
@@ -73,6 +73,6 @@ namespace zuki.hdhomeruntray
 
 		#endregion
 
-		private System.Windows.Forms.FlowLayoutPanel m_layoutPanel;
+		private System.Windows.Forms.FlowLayoutPanel m_layoutpanel;
 	}
 }

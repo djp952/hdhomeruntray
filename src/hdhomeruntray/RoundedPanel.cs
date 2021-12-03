@@ -29,19 +29,21 @@ using System.Windows.Forms;
 namespace zuki.hdhomeruntray
 {
     //-----------------------------------------------------------------------
-    // Class RoundedTableLayoutPanel (internal)
+    // Class RoundedPanel (internal)
     //
-    // Customization of the TableLayoutPanel control to provide rounded corners
+    // Customization of the FlowLayoutPanel control to provide rounded corners
     //
     // Based on:
     // https://stackoverflow.com/questions/11540117/panel-with-rounded-edges
+    //
+    // TODO: Borders, the reference implementation above didn't work well at all,
+    // what I want is a nice Windows-11-esque faint drop shadow here
 
-
-    class RoundedTableLayoutPanel : TableLayoutPanel
+    class RoundedPanel : Panel
     {
         // Instance Constructor
         //
-        public RoundedTableLayoutPanel() : base()
+        public RoundedPanel() : base()
         {
             // Ensure the control is being double-buffered
             DoubleBuffered = true;
@@ -73,7 +75,7 @@ namespace zuki.hdhomeruntray
         }
 
         //-------------------------------------------------------------------
-        // TableLayoutPanel Overrides
+        // Panel Overrides
         //-------------------------------------------------------------------
 
         // OnPaint

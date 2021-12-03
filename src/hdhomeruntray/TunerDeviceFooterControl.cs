@@ -21,7 +21,7 @@
 //---------------------------------------------------------------------------
 
 using System;
-using System.Diagnostics;
+using System.Drawing;
 using System.Windows.Forms;
 
 using zuki.hdhomeruntray.discovery;
@@ -42,7 +42,16 @@ namespace zuki.hdhomeruntray
 			InitializeComponent();
 
 			this.Padding = this.Padding.ScaleDPI(this.Handle);
-			m_layoutPanel.Padding = m_layoutPanel.Padding.ScaleDPI(this.Handle);
+			m_layoutpanel.Margin = m_layoutpanel.Margin.ScaleDPI(this.Handle);
+			m_layoutpanel.Padding = m_layoutpanel.Padding.ScaleDPI(this.Handle);
+
+			// WINDOWS 11
+			//
+			if(VersionHelper.IsWindows11OrGreater())
+			{
+				this.m_firmwareversion.Font = new Font("Segoe UI Variable Small", this.m_firmwareversion.Font.Size, this.m_firmwareversion.Font.Style);
+				this.m_unused.Font = new Font("Segoe UI Variable Small", this.m_unused.Font.Size, this.m_unused.Font.Style);
+			}
 		}
 
 		// Instance Constructor
@@ -50,9 +59,6 @@ namespace zuki.hdhomeruntray
 		public TunerDeviceFooterControl(TunerDevice device) : this()
 		{
 			if(device == null) throw new ArgumentNullException(nameof(device));
-
-			// This control shouldn't be used with legacy devices
-			Debug.Assert(device.IsLegacy == false);
 
 			// Just copy the data from the device instance into the appropriate controls
 			m_firmwareversion.Text = device.FirmwareVersion;

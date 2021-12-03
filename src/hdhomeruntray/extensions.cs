@@ -91,5 +91,26 @@ namespace zuki.hdhomeruntray
 			return new Padding((int)(padding.Left * factorx), (int)(padding.Top * factory),
 				(int)(padding.Right * factorx), (int)(padding.Bottom * factory));
 		}
+
+		//-------------------------------------------------------------------
+		// Size.ScaleDPI
+		//
+		// Scales a Size value based on the DPI of the system
+
+		public static Size ScaleDPI(this Size size, IntPtr handle)
+		{
+			float factorx = 1.0F;           // Assume no horizontal scaling
+			float factory = 1.0F;           // Assume no vertical scaling
+
+			// Use a Graphics instance to determine the control's DPI factor
+			using(Graphics gr = Graphics.FromHwnd(handle))
+			{
+				factorx = gr.DpiX / 96.0F;
+				factory = gr.DpiY / 96.0F;
+			}
+
+			// Create a new Size instance with the scaling factors applied
+			return new Size((int)(size.Width * factorx), (int)(size.Height * factory));
+		}
 	}
 }

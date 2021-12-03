@@ -53,7 +53,7 @@ namespace zuki.hdhomeruntray
 			this.m_layoutPanel.Radius = 16;
 			this.m_layoutPanel.RowCount = 1;
 			this.m_layoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.m_layoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+			this.m_layoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 13F));
 			this.m_layoutPanel.Size = new System.Drawing.Size(152, 21);
 			this.m_layoutPanel.TabIndex = 1;
 			// 
@@ -83,8 +83,7 @@ namespace zuki.hdhomeruntray
 			// 
 			// StorageDeviceFooterControl
 			// 
-			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
-			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Inherit;
 			this.AutoSize = true;
 			this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
 			this.Controls.Add(this.m_layoutPanel);

@@ -92,19 +92,9 @@ private:
 	StorageStatus(LiveBufferList^ livebuffers, RecordingList^ recordings);
 
 	//-----------------------------------------------------------------------
-	// Private Constants
-
-	// COLOR_XXXX
-	//
-	// Replacement colors for the default values from libhdhomerun
-	literal uint32_t COLOR_GREEN = 0xFF1EE500;
-	literal uint32_t COLOR_RED = 0xFFE50000;
-	literal uint32_t COLOR_GRAY = 0xFFC0C0C0;
-
-	//-----------------------------------------------------------------------
 	// Member Variables
 
-	uint32_t			m_statuscolor;			// Overall status color
+	Color				m_statuscolor;			// Overall status color
 	LiveBufferList^		m_livebuffers;			// Active live buffers
 	RecordingList^		m_recordings;			// Active recordings
 };

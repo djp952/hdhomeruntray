@@ -24,7 +24,7 @@
 #define __DISCOVERYMETHOD_H_
 #pragma once
 
-#pragma warning(push, 4)				// Enable maximum compiler warnings
+#pragma warning(push, 4)
 
 using namespace System;
 using namespace System::ComponentModel;
