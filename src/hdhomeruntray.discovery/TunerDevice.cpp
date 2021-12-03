@@ -42,11 +42,17 @@ TunerDevice::TunerDevice(JObject^ device, IPAddress^ localip) : Device(device, l
 
 	JToken^ deviceid = device->GetValue("DeviceID", StringComparison::OrdinalIgnoreCase);
 	JToken^ friendlyname = device->GetValue("FriendlyName", StringComparison::OrdinalIgnoreCase);
+	JToken^ modelnumber = device->GetValue("ModelNumber", StringComparison::OrdinalIgnoreCase);
+	JToken^ firmwarename = device->GetValue("FirmwareName", StringComparison::OrdinalIgnoreCase);
+	JToken^ firmwareversion = device->GetValue("FirmwareVersion", StringComparison::OrdinalIgnoreCase);
 	JToken^ islegacy = device->GetValue("Legacy", StringComparison::OrdinalIgnoreCase);
 	JToken^ tunercount = device->GetValue("TunerCount", StringComparison::OrdinalIgnoreCase);
 
 	m_deviceid = CLRISNOTNULL(deviceid) ? deviceid->ToObject<String^>() : String::Empty;
 	m_friendlyname = CLRISNOTNULL(friendlyname) ? friendlyname->ToObject<String^>() : String::Empty;
+	m_modelnumber = CLRISNOTNULL(modelnumber) ? modelnumber->ToObject<String^>() : String::Empty;
+	m_firmwarename = CLRISNOTNULL(firmwarename) ? firmwarename->ToObject<String^>() : String::Empty;
+	m_firmwareversion = CLRISNOTNULL(firmwareversion) ? firmwareversion->ToObject<String^>() : String::Empty;
 	m_islegacy = (CLRISNOTNULL(islegacy) && (islegacy->ToObject<int>() == 1));
 	m_tunercount = CLRISNOTNULL(tunercount) ? tunercount->ToObject<int>() : 0;
 
@@ -81,6 +87,26 @@ String^ TunerDevice::DeviceID::get(void)
 }
 
 //---------------------------------------------------------------------------
+// TunerDevice::FirmwareName::get
+//
+// Gets the tuner device firmware name
+
+String^ TunerDevice::FirmwareName::get(void)
+{
+	return m_firmwarename;
+}
+
+//---------------------------------------------------------------------------
+// TunerDevice::FirmwareVersion::get
+//
+// Gets the tuner device firmware version
+
+String^ TunerDevice::FirmwareVersion::get(void)
+{
+	return m_firmwareversion;
+}
+
+//---------------------------------------------------------------------------
 // TunerDevice::FriendlyName::get
 //
 // Gets the tuner device friendly name
@@ -88,6 +114,16 @@ String^ TunerDevice::DeviceID::get(void)
 String^ TunerDevice::FriendlyName::get(void)
 {
 	return m_friendlyname;
+}
+
+//---------------------------------------------------------------------------
+// TunerDevice::ModelNumber::get
+//
+// Gets the tuner device model number
+
+String^ TunerDevice::ModelNumber::get(void)
+{
+	return m_modelnumber;
 }
 
 //---------------------------------------------------------------------------

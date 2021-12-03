@@ -69,12 +69,36 @@ public:
 		String^ get(void);
 	}
 
+	// FirmwareName
+	//
+	// Gets the tuner device firmware name
+	property String^ FirmwareName
+	{
+		String^ get(void);
+	}
+
+	// FirmwareVersion
+	//
+	// Gets the tuner device firmware version
+	property String^ FirmwareVersion
+	{
+		String^ get(void);
+	}
+
 	// FriendlyName
 	//
 	// Gets the device friendly name
 	property String^ FriendlyName
 	{
 		virtual String^ get(void) override;
+	}
+
+	// ModelNumber
+	//
+	// Gets the device model number
+	property String^ ModelNumber
+	{
+		String^ get(void);
 	}
 
 	// Name
@@ -123,6 +147,9 @@ private:
 	String^					m_deviceid;			// Tuner device identifier
 	String^					m_friendlyname;		// Tuner device friendly name
 	bool					m_islegacy;			// Legacy tuner device flag
+	String^					m_modelnumber;		// Model number string
+	String^					m_firmwarename;		// Firmware name string
+	String^					m_firmwareversion;	// Firmware version string
 	int						m_tunercount;		// Number of tuner instances
 	TunerList^				m_tuners;			// List<> of tuner instances
 };

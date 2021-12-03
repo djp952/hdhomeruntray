@@ -51,8 +51,32 @@ namespace zuki.hdhomeruntray
 			if(device == null) throw new ArgumentNullException(nameof(device));
 
 			// Just copy the data from the device instance into the appropriate controls
-			m_version.Text = "Version: ";                   // TODO: doesn't exist yet
-			m_space.Text = "";								// TODO: doesn't exist yet
+			m_version.Text = device.Version;
+			m_space.Text = FormatDiskSpace(device.FreeSpace);
+		}
+
+		//-------------------------------------------------------------------------
+		// Private Member Functions
+		//-------------------------------------------------------------------------
+
+		// FormatDiskSpace
+		//
+		// Formats a disk space number
+		private static string FormatDiskSpace(long space)
+		{
+			const double KB = 1024;             // Kilobytes
+			const double MB = KB * KB;			// Megabytes
+			const double GB = MB * KB;			// Gigabytes
+			const double TB = GB * KB;			// Terabytes
+
+			double value = space;
+
+			if(value >= TB) return String.Format("{0:N2} TB", value / TB);
+			else if(value >= GB) return String.Format("{0:N2} GB", value / GB);
+			else if(value >= MB) return String.Format("{0:N2} MB", value / MB);
+			else if(value >= KB) return String.Format("{0:N2} KB", value / KB);
+
+			return space.ToString();
 		}
 	}
 }

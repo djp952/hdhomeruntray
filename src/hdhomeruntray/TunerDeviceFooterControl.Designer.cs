@@ -31,7 +31,7 @@ namespace zuki.hdhomeruntray
 		{
 			this.m_layoutPanel = new zuki.hdhomeruntray.RoundedTableLayoutPanel();
 			this.m_firmwareversion = new System.Windows.Forms.Label();
-			this.m_updateavailable = new System.Windows.Forms.Label();
+			this.m_unused = new System.Windows.Forms.Label();
 			this.m_layoutPanel.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -44,7 +44,7 @@ namespace zuki.hdhomeruntray
 			this.m_layoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this.m_layoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this.m_layoutPanel.Controls.Add(this.m_firmwareversion, 0, 0);
-			this.m_layoutPanel.Controls.Add(this.m_updateavailable, 1, 0);
+			this.m_layoutPanel.Controls.Add(this.m_unused, 1, 0);
 			this.m_layoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.m_layoutPanel.ForeColor = System.Drawing.Color.Black;
 			this.m_layoutPanel.Location = new System.Drawing.Point(0, 0);
@@ -53,8 +53,8 @@ namespace zuki.hdhomeruntray
 			this.m_layoutPanel.Radius = 16;
 			this.m_layoutPanel.RowCount = 1;
 			this.m_layoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.m_layoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-			this.m_layoutPanel.Size = new System.Drawing.Size(250, 21);
+			this.m_layoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 13F));
+			this.m_layoutPanel.Size = new System.Drawing.Size(207, 21);
 			this.m_layoutPanel.TabIndex = 1;
 			// 
 			// m_firmwareversion
@@ -69,17 +69,17 @@ namespace zuki.hdhomeruntray
 			this.m_firmwareversion.Text = "{ m_firmwareversion }";
 			this.m_firmwareversion.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
 			// 
-			// m_updateavailable
+			// m_unused
 			// 
-			this.m_updateavailable.AutoSize = true;
-			this.m_updateavailable.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.m_updateavailable.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.m_updateavailable.Location = new System.Drawing.Point(128, 4);
-			this.m_updateavailable.Name = "m_updateavailable";
-			this.m_updateavailable.Size = new System.Drawing.Size(115, 13);
-			this.m_updateavailable.TabIndex = 4;
-			this.m_updateavailable.Text = "{ m_updateavailable }";
-			this.m_updateavailable.TextAlign = System.Drawing.ContentAlignment.BottomRight;
+			this.m_unused.AutoSize = true;
+			this.m_unused.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.m_unused.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.m_unused.Location = new System.Drawing.Point(128, 4);
+			this.m_unused.Name = "m_unused";
+			this.m_unused.Size = new System.Drawing.Size(72, 13);
+			this.m_unused.TabIndex = 4;
+			this.m_unused.Text = "{ m_unused }";
+			this.m_unused.TextAlign = System.Drawing.ContentAlignment.BottomRight;
 			// 
 			// TunerDeviceFooterControl
 			// 
@@ -90,7 +90,7 @@ namespace zuki.hdhomeruntray
 			this.Controls.Add(this.m_layoutPanel);
 			this.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.Name = "TunerDeviceFooterControl";
-			this.Size = new System.Drawing.Size(250, 21);
+			this.Size = new System.Drawing.Size(207, 21);
 			this.m_layoutPanel.ResumeLayout(false);
 			this.m_layoutPanel.PerformLayout();
 			this.ResumeLayout(false);
@@ -101,6 +101,6 @@ namespace zuki.hdhomeruntray
 		#endregion
 		private RoundedTableLayoutPanel m_layoutPanel;
 		private System.Windows.Forms.Label m_firmwareversion;
-		private System.Windows.Forms.Label m_updateavailable;
+		private System.Windows.Forms.Label m_unused;
 	}
 }

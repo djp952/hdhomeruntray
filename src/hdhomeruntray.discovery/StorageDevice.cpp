@@ -36,17 +36,25 @@ namespace zuki::hdhomeruntray::discovery {
 //	device		- Reference to the JSON discovery data for the device
 //	localip		- IP address of the storage device
 
-StorageDevice::StorageDevice(JObject^ device, IPAddress^ localip) : Device(device, localip, zuki::hdhomeruntray::discovery::DeviceType::Storage)
+StorageDevice::StorageDevice(JObject^ device, IPAddress^ localip) : 
+	Device(device, localip, zuki::hdhomeruntray::discovery::DeviceType::Storage), m_totalspace(0), m_freespace(0)
 {
 	if(CLRISNULL(device)) throw gcnew ArgumentNullException("device");
 
 	JToken^ friendlyname = device->GetValue("FriendlyName", StringComparison::OrdinalIgnoreCase);
 	JToken^ storageid = device->GetValue("StorageID", StringComparison::OrdinalIgnoreCase);
 	JToken^ storageurl = device->GetValue("StorageURL", StringComparison::OrdinalIgnoreCase);
+	JToken^ version = device->GetValue("Version", StringComparison::OrdinalIgnoreCase);
+	JToken^ totalspace = device->GetValue("TotalSpace", StringComparison::OrdinalIgnoreCase);
+	JToken^ freespace = device->GetValue("FreeSpace", StringComparison::OrdinalIgnoreCase);
 
 	m_friendlyname = CLRISNOTNULL(friendlyname) ? friendlyname->ToObject<String^>() : String::Empty;
 	m_storageid = CLRISNOTNULL(storageid) ? storageid->ToObject<String^>() : String::Empty;
 	m_storageurl = CLRISNOTNULL(storageurl) ? storageurl->ToObject<String^>() : String::Empty;
+	m_version = CLRISNOTNULL(version) ? version->ToObject<String^>() : String::Empty;
+
+	if(CLRISNOTNULL(totalspace)) int64_t::TryParse(totalspace->ToObject<String^>(), m_totalspace);
+	if(CLRISNOTNULL(freespace)) int64_t::TryParse(freespace->ToObject<String^>(), m_freespace);
 }
 
 //---------------------------------------------------------------------------
@@ -63,6 +71,16 @@ StorageDevice^ StorageDevice::Create(JObject^ device, IPAddress^ localip)
 {
 	if(CLRISNULL(device)) throw gcnew ArgumentNullException("device");
 	return gcnew StorageDevice(device, localip);
+}
+
+//---------------------------------------------------------------------------
+// StorageDevice::FreeSpace::get
+//
+// Gets the free storage space
+
+int64_t StorageDevice::FreeSpace::get(void)
+{
+	return m_freespace;
 }
 
 //---------------------------------------------------------------------------
@@ -88,6 +106,7 @@ StorageStatus^ StorageDevice::GetStorageStatus(void)
 {
 	return StorageStatus::Create(this);
 }
+
 //---------------------------------------------------------------------------
 // StorageDevice::Name::get
 //
@@ -116,6 +135,26 @@ String^ StorageDevice::StorageID::get(void)
 String^ StorageDevice::StorageURL::get(void)
 {
 	return m_storageurl;
+}
+
+//---------------------------------------------------------------------------
+// StorageDevice::TotalSpace::get
+//
+// Gets the total storage space
+
+int64_t StorageDevice::TotalSpace::get(void)
+{
+	return m_totalspace;
+}
+
+//---------------------------------------------------------------------------
+// StorageDevice::Version::get
+//
+// Gets the storage device software version
+
+String^ StorageDevice::Version::get(void)
+{
+	return m_version;
 }
 
 //---------------------------------------------------------------------------

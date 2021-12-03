@@ -58,6 +58,14 @@ public:
 	//-----------------------------------------------------------------------
 	// Properties
 
+	// FreeSpace
+	//
+	// Gets the amount of free storage space
+	property int64_t FreeSpace
+	{
+		int64_t get(void);
+	}
+
 	// FriendlyName
 	//
 	// Gets the device friendly name
@@ -90,6 +98,22 @@ public:
 		String^ get(void);
 	}
 
+	// TotalSpace
+	//
+	// Gets the total amount of storage space
+	property int64_t TotalSpace
+	{
+		int64_t get(void);
+	}
+
+	// Version
+	//
+	// Gets the storage device software version
+	property String^ Version
+	{
+		String^ get(void);
+	}
+
 internal:
 
 	//-----------------------------------------------------------------------
@@ -112,6 +136,9 @@ private:
 	String^					m_friendlyname;		// Storage device friendly name
 	String^					m_storageid;		// Storage device identifier
 	String^					m_storageurl;		// Storage device data URL
+	String^					m_version;			// Storage device version
+	int64_t					m_freespace;		// Free storage space
+	int64_t					m_totalspace;		// Total storage space
 };
 
 //---------------------------------------------------------------------------

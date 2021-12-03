@@ -55,8 +55,8 @@ namespace zuki.hdhomeruntray
 			Debug.Assert(device.IsLegacy == false);
 
 			// Just copy the data from the device instance into the appropriate controls
-			m_firmwareversion.Text = "Firmware version: ";      // TODO: doesn't exist for legacy devices
-			m_updateavailable.Text = "";						// TODO: doesn't exist for legacy devices
+			m_firmwareversion.Text = device.FirmwareVersion;
+			m_unused.Text = String.Empty;
 		}
 	}
 }

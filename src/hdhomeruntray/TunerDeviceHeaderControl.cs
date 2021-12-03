@@ -52,7 +52,7 @@ namespace zuki.hdhomeruntray
 
 			// Just copy the data from the device instance into the appropriate controls
 			m_devicename.Text = device.FriendlyName;
-			m_modelname.Text = "";                      // TODO: Doesn't exist for legacy devices
+			m_modelname.Text = device.ModelNumber;
 			m_deviceid.Text = device.DeviceID;
 			m_ipaddress.Text = device.LocalIP.ToString();
 		}
