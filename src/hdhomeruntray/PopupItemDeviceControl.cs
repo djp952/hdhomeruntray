@@ -47,7 +47,7 @@ namespace zuki.hdhomeruntray
 			{
 				AutoSize = true,
 				Size = new Size(1, 1),
-				Text = device.FriendlyName,
+				Text = m_device.FriendlyName,
 				TextAlign = ContentAlignment.BottomCenter,
 				Dock = DockStyle.Left,
 				Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold),

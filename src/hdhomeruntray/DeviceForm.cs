@@ -21,6 +21,7 @@
 //---------------------------------------------------------------------------
 
 using System;
+using System.Diagnostics;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
@@ -85,7 +86,56 @@ namespace zuki.hdhomeruntray
 		//
 		public DeviceForm(Device device) : this()
 		{
-			m_device = device ?? throw new ArgumentNullException(nameof(device));
+			if(device == null) throw new ArgumentNullException(nameof(device));
+
+			if(device.Type == DeviceType.Tuner)
+			{
+				Debug.Assert(device is TunerDevice);
+				TunerDevice tunerdevice = (TunerDevice)device;
+
+				// Add the header user control for the device
+				var header = new TunerDeviceHeaderControl(tunerdevice)
+				{
+					Dock = DockStyle.Top
+				};
+				m_layoutPanel.Controls.Add(header);
+
+				// Add the tuner user controls for the device
+				// TODO
+
+				// Add the footer user control for the device if non-legacy
+				if(!tunerdevice.IsLegacy)
+				{
+					var footer = new TunerDeviceFooterControl(tunerdevice)
+					{
+						Dock = DockStyle.Top
+					};
+					m_layoutPanel.Controls.Add(footer);
+				}
+			}
+
+			else if(device.Type == DeviceType.Storage)
+			{
+				Debug.Assert(device is StorageDevice);
+				StorageDevice storagedevice = (StorageDevice)device;
+
+				// Add the header user control for the device
+				var header = new StorageDeviceHeaderControl(storagedevice)
+				{
+					Dock = DockStyle.Top
+				};
+				m_layoutPanel.Controls.Add(header);
+
+				// Add the recording user controls for the device
+				// TODO
+
+				// Add the footer user control for the device
+				var footer = new StorageDeviceFooterControl(storagedevice)
+				{
+					Dock = DockStyle.Top
+				};
+				m_layoutPanel.Controls.Add(footer);
+			}
 		}
 
 		//-------------------------------------------------------------------
@@ -138,11 +188,5 @@ namespace zuki.hdhomeruntray
 			// Set the location of the form
 			this.Location = new Point(left, top);
 		}
-
-		//-------------------------------------------------------------------
-		// Member Variables
-		//-------------------------------------------------------------------
-
-		private readonly Device m_device;
 	}
 }

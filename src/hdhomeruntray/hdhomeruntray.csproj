@@ -89,11 +89,26 @@
     </Compile>
     <Compile Include="PopupItemToggledEventArgs.cs" />
     <Compile Include="PopupItemToggledEventHandler.cs" />
+    <Compile Include="RoundedTableLayoutPanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="SettingsForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="SettingsForm.Designer.cs">
       <DependentUpon>SettingsForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="StorageDeviceFooterControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="StorageDeviceFooterControl.designer.cs">
+      <DependentUpon>StorageDeviceFooterControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="StorageDeviceHeaderControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="StorageDeviceHeaderControl.designer.cs">
+      <DependentUpon>StorageDeviceHeaderControl.cs</DependentUpon>
     </Compile>
     <Compile Include="SymbolGlyph.cs" />
     <Compile Include="DiscoveryInterval.cs" />
@@ -121,6 +136,18 @@
     </Compile>
     <Compile Include="StatusIcons.cs" />
     <Compile Include="StatusIconType.cs" />
+    <Compile Include="TunerDeviceFooterControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="TunerDeviceFooterControl.designer.cs">
+      <DependentUpon>TunerDeviceFooterControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="TunerDeviceHeaderControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="TunerDeviceHeaderControl.Designer.cs">
+      <DependentUpon>TunerDeviceHeaderControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="TunerStatusColorSource.cs" />
     <Compile Include="VersionHelper.cs" />
     <EmbeddedResource Include="DeviceForm.resx">
@@ -139,6 +166,18 @@
     </EmbeddedResource>
     <EmbeddedResource Include="SettingsForm.resx">
       <DependentUpon>SettingsForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="StorageDeviceFooterControl.resx">
+      <DependentUpon>StorageDeviceFooterControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="StorageDeviceHeaderControl.resx">
+      <DependentUpon>StorageDeviceHeaderControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TunerDeviceFooterControl.resx">
+      <DependentUpon>TunerDeviceFooterControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TunerDeviceHeaderControl.resx">
+      <DependentUpon>TunerDeviceHeaderControl.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="app.manifest" />
     <None Include="packages.config" />
