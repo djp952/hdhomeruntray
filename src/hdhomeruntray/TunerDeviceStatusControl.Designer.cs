@@ -116,6 +116,7 @@ namespace zuki.hdhomeruntray
 			this.m_layoutpanel.Controls.Add(this.m_signallayoutpanel, 0, 1);
 			this.m_layoutpanel.Controls.Add(this.m_headerlayoutpanel, 0, 0);
 			this.m_layoutpanel.Controls.Add(this.m_footerlayoutpanel, 0, 2);
+			this.m_layoutpanel.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.m_layoutpanel.Location = new System.Drawing.Point(0, 0);
 			this.m_layoutpanel.Margin = new System.Windows.Forms.Padding(0);
 			this.m_layoutpanel.Name = "m_layoutpanel";

@@ -54,7 +54,7 @@ namespace zuki.hdhomeruntray
 				AutoSizeMode = AutoSizeMode.GrowAndShrink,
 				FlowDirection = FlowDirection.LeftToRight,
 				WrapContents = false,
-				ForeColor = Color.Black,
+				ForeColor = SystemColors.ControlText,
 				BackColor = SystemColors.ControlLightLight,
 				Padding = new Padding(8).ScaleDPI(this.Handle),
 				Radius = 16,
@@ -164,7 +164,7 @@ namespace zuki.hdhomeruntray
 			Debug.Assert(sender is RoundedFlowLayoutPanel);
 			RoundedFlowLayoutPanel panel = (RoundedFlowLayoutPanel)sender;
 
-			panel.ForeColor = Color.White;
+			panel.ForeColor = SystemColors.ControlLightLight;
 			panel.BackColor = SystemColors.ControlDark;
 		}
 
@@ -176,7 +176,7 @@ namespace zuki.hdhomeruntray
 			Debug.Assert(sender is RoundedFlowLayoutPanel);
 			RoundedFlowLayoutPanel panel = (RoundedFlowLayoutPanel)sender;
 
-			panel.ForeColor = Color.Black;
+			panel.ForeColor = SystemColors.ControlText;
 			panel.BackColor = SystemColors.ControlLightLight;
 		}
 
@@ -199,7 +199,7 @@ namespace zuki.hdhomeruntray
 			Debug.Assert(sender is RoundedFlowLayoutPanel);
 			RoundedFlowLayoutPanel panel = (RoundedFlowLayoutPanel)sender;
 
-			panel.ForeColor = Color.White;
+			panel.ForeColor = SystemColors.ControlLightLight;
 			panel.BackColor = SystemColors.ControlDark;
 		}
 
@@ -213,12 +213,12 @@ namespace zuki.hdhomeruntray
 
 			if(!m_toggled)
 			{
-				panel.ForeColor = Color.Black;
+				panel.ForeColor = SystemColors.ControlText;
 				panel.BackColor = SystemColors.ControlLightLight;
 			}
 			else
 			{
-				panel.ForeColor = Color.White;
+				panel.ForeColor = SystemColors.ControlLightLight;
 				panel.BackColor = SystemColors.ControlDark;
 			}
 		}

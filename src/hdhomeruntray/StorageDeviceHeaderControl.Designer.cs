@@ -48,7 +48,6 @@ namespace zuki.hdhomeruntray
 			this.m_layoutPanel.Controls.Add(this.m_storageid, 0, 1);
 			this.m_layoutPanel.Controls.Add(this.m_ipaddress, 1, 1);
 			this.m_layoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.m_layoutPanel.ForeColor = System.Drawing.Color.Black;
 			this.m_layoutPanel.Location = new System.Drawing.Point(0, 0);
 			this.m_layoutPanel.Name = "m_layoutPanel";
 			this.m_layoutPanel.Padding = new System.Windows.Forms.Padding(4);
