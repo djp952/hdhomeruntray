@@ -21,6 +21,7 @@
 //---------------------------------------------------------------------------
 
 using System;
+using System.Drawing;
 using System.Windows.Forms;
 
 using zuki.hdhomeruntray.discovery;
@@ -42,6 +43,15 @@ namespace zuki.hdhomeruntray
 
 			this.Padding = this.Padding.ScaleDPI(this.Handle);
 			m_layoutPanel.Padding = m_layoutPanel.Padding.ScaleDPI(this.Handle);
+
+			// WINDOWS 11
+			//
+			if(VersionHelper.IsWindows11OrGreater())
+			{
+				this.m_devicename.Font = new Font("Segoe UI Variable Display SemiB", this.m_devicename.Font.Size, this.m_devicename.Font.Style);
+				this.m_storageid.Font = new Font("Segoe UI Variable Small", this.m_storageid.Font.Size, this.m_storageid.Font.Style);
+				this.m_ipaddress.Font = new Font("Segoe UI Variable Small", this.m_ipaddress.Font.Size, this.m_ipaddress.Font.Style);
+			}
 		}
 
 		// Instance Constructor
