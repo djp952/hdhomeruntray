@@ -41,6 +41,8 @@ namespace zuki.hdhomeruntray
 		#region Win32 API Declarations
 		private static class NativeMethods
 		{
+			public const int WS_EX_COMPOSITED = 0x02000000;
+
 			public enum DWMWINDOWATTRIBUTE
 			{
 				DWMWA_WINDOW_CORNER_PREFERENCE = 33
@@ -281,6 +283,23 @@ namespace zuki.hdhomeruntray
 		private void OnUnpinSelected(object sender, EventArgs args)
 		{
 			this.Close();				// Close this form
+		}
+
+		//-------------------------------------------------------------------
+		// Control Overrides
+		//-------------------------------------------------------------------
+
+		// CreateParams
+		//
+		// Gets the required creation parameters when the control handle is created
+		protected override CreateParams CreateParams
+		{
+			get
+			{
+				CreateParams cp = base.CreateParams;
+				cp.ExStyle |= NativeMethods.WS_EX_COMPOSITED;
+				return cp;
+			}
 		}
 
 		//-------------------------------------------------------------------

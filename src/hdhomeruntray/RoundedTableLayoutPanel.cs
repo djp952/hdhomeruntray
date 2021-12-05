@@ -43,8 +43,6 @@ namespace zuki.hdhomeruntray
         //
         public RoundedTableLayoutPanel() : base()
         {
-            // Ensure the control is being double-buffered
-            DoubleBuffered = true;
         }
 
         //-------------------------------------------------------------------

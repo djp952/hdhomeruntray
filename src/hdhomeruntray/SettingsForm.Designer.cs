@@ -164,7 +164,6 @@ namespace zuki.hdhomeruntray
 			this.ClientSize = new System.Drawing.Size(370, 181);
 			this.ControlBox = false;
 			this.Controls.Add(this.m_layoutPanel);
-			this.DoubleBuffered = true;
 			this.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
 			this.MaximizeBox = false;
