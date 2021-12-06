@@ -40,7 +40,7 @@ namespace zuki.hdhomeruntray
 		{
 			InitializeComponent();
 
-            this.MinimumSize = this.MinimumSize.ScaleDPI(this.Handle);
+            MinimumSize = MinimumSize.ScaleDPI(Handle);
 		}
 
         // TODO: CLEAN THIS UP; THIS IS A COPY/PASTE JOB RIGHT NOW
@@ -53,24 +53,24 @@ namespace zuki.hdhomeruntray
         protected override void OnResize(EventArgs e)
         {
             // Invalidate the control to get a repaint.
-            this.Invalidate();
+            Invalidate();
         }
 
         protected override void OnPaint(PaintEventArgs e)
         {
             Graphics g = e.Graphics;
             SolidBrush brush = new SolidBrush(BarColor);
-            float percent = (float)(val - min) / (float)(max - min);
-            Rectangle rect = this.ClientRectangle;
+            float percent = (val - min) / (float)(max - min);
+            Rectangle rect = ClientRectangle;
 
             // Calculate area for drawing the progress.
-            rect.Width = (int)((float)rect.Width * percent);
+            rect.Width = (int)(rect.Width * percent);
 
             // Draw the progress meter.
             g.FillRectangle(brush, rect);
 
             // Draw a three-dimensional border around the control.
-            Draw3DBorder(g);
+            //Draw3DBorder(g);
 
             // Clean up.
             brush.Dispose();
@@ -107,7 +107,7 @@ namespace zuki.hdhomeruntray
                 }
 
                 // Invalidate the control to get a repaint.
-                this.Invalidate();
+                Invalidate();
             }
         }
 
@@ -135,7 +135,7 @@ namespace zuki.hdhomeruntray
                 }
 
                 // Invalidate the control to get a repaint.
-                this.Invalidate();
+                Invalidate();
             }
         }
 
@@ -167,16 +167,16 @@ namespace zuki.hdhomeruntray
                 // Invalidate only the changed area.
                 float percent;
 
-                Rectangle newValueRect = this.ClientRectangle;
-                Rectangle oldValueRect = this.ClientRectangle;
+                Rectangle newValueRect = ClientRectangle;
+                Rectangle oldValueRect = ClientRectangle;
 
                 // Use a new value to calculate the rectangle for progress.
-                percent = (float)(val - min) / (float)(max - min);
-                newValueRect.Width = (int)((float)newValueRect.Width * percent);
+                percent = (val - min) / (float)(max - min);
+                newValueRect.Width = (int)(newValueRect.Width * percent);
 
                 // Use an old value to calculate the rectangle for progress.
-                percent = (float)(oldValue - min) / (float)(max - min);
-                oldValueRect.Width = (int)((float)oldValueRect.Width * percent);
+                percent = (oldValue - min) / (float)(max - min);
+                oldValueRect.Width = (int)(oldValueRect.Width * percent);
 
                 Rectangle updateRect = new Rectangle();
 
@@ -192,10 +192,10 @@ namespace zuki.hdhomeruntray
                     updateRect.Width = oldValueRect.Width - newValueRect.Width;
                 }
 
-                updateRect.Height = this.Height;
+                updateRect.Height = Height;
 
                 // Invalidate the intersection region only.
-                this.Invalidate(updateRect);
+                Invalidate(updateRect);
             }
         }
 
@@ -211,7 +211,7 @@ namespace zuki.hdhomeruntray
                 BarColor = value;
 
                 // Invalidate the control to get a repaint.
-                this.Invalidate();
+                Invalidate();
             }
         }
 
@@ -220,17 +220,17 @@ namespace zuki.hdhomeruntray
             int PenWidth = (int)Pens.White.Width;
 
             g.DrawLine(Pens.DarkGray,
-            new Point(this.ClientRectangle.Left, this.ClientRectangle.Top),
-            new Point(this.ClientRectangle.Width - PenWidth, this.ClientRectangle.Top));
+            new Point(ClientRectangle.Left, ClientRectangle.Top),
+            new Point(ClientRectangle.Width - PenWidth, ClientRectangle.Top));
             g.DrawLine(Pens.DarkGray,
-            new Point(this.ClientRectangle.Left, this.ClientRectangle.Top),
-            new Point(this.ClientRectangle.Left, this.ClientRectangle.Height - PenWidth));
+            new Point(ClientRectangle.Left, ClientRectangle.Top),
+            new Point(ClientRectangle.Left, ClientRectangle.Height - PenWidth));
             g.DrawLine(Pens.White,
-            new Point(this.ClientRectangle.Left, this.ClientRectangle.Height - PenWidth),
-            new Point(this.ClientRectangle.Width - PenWidth, this.ClientRectangle.Height - PenWidth));
+            new Point(ClientRectangle.Left, ClientRectangle.Height - PenWidth),
+            new Point(ClientRectangle.Width - PenWidth, ClientRectangle.Height - PenWidth));
             g.DrawLine(Pens.White,
-            new Point(this.ClientRectangle.Width - PenWidth, this.ClientRectangle.Top),
-            new Point(this.ClientRectangle.Width - PenWidth, this.ClientRectangle.Height - PenWidth));
+            new Point(ClientRectangle.Width - PenWidth, ClientRectangle.Top),
+            new Point(ClientRectangle.Width - PenWidth, ClientRectangle.Height - PenWidth));
         }
     }
 }

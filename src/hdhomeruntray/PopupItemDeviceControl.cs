@@ -87,7 +87,7 @@ namespace zuki.hdhomeruntray
 				base.LayoutPanel.Controls.Add(m_dots[index]);
 			}
 
-			this.Refresh();                 // Perform the initial refresh
+			Refresh();                 // Perform the initial refresh
 		}
 
 		//-------------------------------------------------------------------------

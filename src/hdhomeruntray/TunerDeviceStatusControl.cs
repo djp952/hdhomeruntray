@@ -41,31 +41,31 @@ namespace zuki.hdhomeruntray
 		{
 			InitializeComponent();
 
-			this.Padding = this.Padding.ScaleDPI(this.Handle);
+			Padding = Padding.ScaleDPI(Handle);
 
-			this.m_layoutpanel.Margin = this.m_layoutpanel.Margin.ScaleDPI(this.Handle);
-			this.m_layoutpanel.Padding = this.m_layoutpanel.Padding.ScaleDPI(this.Handle);
-			this.m_headerlayoutpanel.Margin = this.m_headerlayoutpanel.Margin.ScaleDPI(this.Handle);
-			this.m_headerlayoutpanel.Padding = this.m_headerlayoutpanel.Padding.ScaleDPI(this.Handle);
-			this.m_signallayoutpanel.Margin = this.m_signallayoutpanel.Margin.ScaleDPI(this.Handle);
-			this.m_signallayoutpanel.Padding = this.m_signallayoutpanel.Padding.ScaleDPI(this.Handle);
-			this.m_footerlayoutpanel.Margin = this.m_footerlayoutpanel.Margin.ScaleDPI(this.Handle);
-			this.m_footerlayoutpanel.Padding = this.m_footerlayoutpanel.Padding.ScaleDPI(this.Handle);
+			m_layoutpanel.Margin = m_layoutpanel.Margin.ScaleDPI(Handle);
+			m_layoutpanel.Padding = m_layoutpanel.Padding.ScaleDPI(Handle);
+			m_headerlayoutpanel.Margin = m_headerlayoutpanel.Margin.ScaleDPI(Handle);
+			m_headerlayoutpanel.Padding = m_headerlayoutpanel.Padding.ScaleDPI(Handle);
+			m_signallayoutpanel.Margin = m_signallayoutpanel.Margin.ScaleDPI(Handle);
+			m_signallayoutpanel.Padding = m_signallayoutpanel.Padding.ScaleDPI(Handle);
+			m_footerlayoutpanel.Margin = m_footerlayoutpanel.Margin.ScaleDPI(Handle);
+			m_footerlayoutpanel.Padding = m_footerlayoutpanel.Padding.ScaleDPI(Handle);
 
 			// WINDOWS 11
 			//
 			if(VersionHelper.IsWindows11OrGreater())
 			{
-				this.m_tunernumber.Font = new Font("Segoe UI Variable Text Semibold", this.m_tunernumber.Font.Size, this.m_tunernumber.Font.Style);
-				this.m_channel.Font = new Font("Segoe UI Variable Text Semibold", this.m_channel.Font.Size, this.m_channel.Font.Style);
-				this.m_signalstrengthlabel.Font = new Font("Segoe UI Variable Text", this.m_signalstrengthlabel.Font.Size, this.m_signalstrengthlabel.Font.Style);
-				this.m_signalqualitylabel.Font = new Font("Segoe UI Variable Small", this.m_signalqualitylabel.Font.Size, this.m_signalqualitylabel.Font.Style);
-				this.m_symbolqualitylabel.Font = new Font("Segoe UI Variable Text", this.m_symbolqualitylabel.Font.Size, this.m_symbolqualitylabel.Font.Style);
-				this.m_signalstrengthpct.Font = new Font("Segoe UI Variable Text", this.m_signalstrengthpct.Font.Size, this.m_signalstrengthpct.Font.Style);
-				this.m_signalqualitypct.Font = new Font("Segoe UI Variable Text", this.m_signalqualitypct.Font.Size, this.m_signalqualitypct.Font.Style);
-				this.m_symbolqualitypct.Font = new Font("Segoe UI Variable Text", this.m_symbolqualitypct.Font.Size, this.m_symbolqualitypct.Font.Style);
-				this.m_targetip.Font = new Font("Segoe UI Variable Text", this.m_targetip.Font.Size, this.m_targetip.Font.Style);
-				this.m_bitrate.Font = new Font("Segoe UI Variable Text", this.m_bitrate.Font.Size, this.m_bitrate.Font.Style);
+				m_tunernumber.Font = new Font("Segoe UI Variable Text Semibold", m_tunernumber.Font.Size, m_tunernumber.Font.Style);
+				m_channel.Font = new Font("Segoe UI Variable Text Semibold", m_channel.Font.Size, m_channel.Font.Style);
+				m_signalstrengthlabel.Font = new Font("Segoe UI Variable Text", m_signalstrengthlabel.Font.Size, m_signalstrengthlabel.Font.Style);
+				m_signalqualitylabel.Font = new Font("Segoe UI Variable Small", m_signalqualitylabel.Font.Size, m_signalqualitylabel.Font.Style);
+				m_symbolqualitylabel.Font = new Font("Segoe UI Variable Text", m_symbolqualitylabel.Font.Size, m_symbolqualitylabel.Font.Style);
+				m_signalstrengthpct.Font = new Font("Segoe UI Variable Text", m_signalstrengthpct.Font.Size, m_signalstrengthpct.Font.Style);
+				m_signalqualitypct.Font = new Font("Segoe UI Variable Text", m_signalqualitypct.Font.Size, m_signalqualitypct.Font.Style);
+				m_symbolqualitypct.Font = new Font("Segoe UI Variable Text", m_symbolqualitypct.Font.Size, m_symbolqualitypct.Font.Style);
+				m_targetip.Font = new Font("Segoe UI Variable Text", m_targetip.Font.Size, m_targetip.Font.Style);
+				m_bitrate.Font = new Font("Segoe UI Variable Text", m_bitrate.Font.Size, m_bitrate.Font.Style);
 			}
 		}
 

@@ -89,9 +89,6 @@
     </Compile>
     <Compile Include="PopupItemToggledEventArgs.cs" />
     <Compile Include="PopupItemToggledEventHandler.cs" />
-    <Compile Include="RoundedPanel.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="RoundedTableLayoutPanel.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -113,11 +110,26 @@
     <Compile Include="StorageDeviceFooterControl.designer.cs">
       <DependentUpon>StorageDeviceFooterControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="StorageDeviceForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="StorageDeviceHeaderControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="StorageDeviceHeaderControl.designer.cs">
       <DependentUpon>StorageDeviceHeaderControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="StorageDeviceLiveBufferControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="StorageDeviceLiveBufferControl.Designer.cs">
+      <DependentUpon>StorageDeviceLiveBufferControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="StorageDeviceRecordingControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="StorageDeviceRecordingControl.Designer.cs">
+      <DependentUpon>StorageDeviceRecordingControl.cs</DependentUpon>
     </Compile>
     <Compile Include="SymbolGlyph.cs" />
     <Compile Include="DiscoveryInterval.cs" />
@@ -150,6 +162,9 @@
     </Compile>
     <Compile Include="TunerDeviceFooterControl.designer.cs">
       <DependentUpon>TunerDeviceFooterControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="TunerDeviceForm.cs">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="TunerDeviceHeaderControl.cs">
       <SubType>UserControl</SubType>
@@ -190,6 +205,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="StorageDeviceHeaderControl.resx">
       <DependentUpon>StorageDeviceHeaderControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="StorageDeviceLiveBufferControl.resx">
+      <DependentUpon>StorageDeviceLiveBufferControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="StorageDeviceRecordingControl.resx">
+      <DependentUpon>StorageDeviceRecordingControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="TunerDeviceFooterControl.resx">
       <DependentUpon>TunerDeviceFooterControl.cs</DependentUpon>

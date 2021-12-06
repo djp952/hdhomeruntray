@@ -68,8 +68,8 @@ namespace zuki.hdhomeruntray
 			InitializeComponent();
 
 			// Scale the padding based on the form DPI
-			this.Padding = this.Padding.ScaleDPI(this.Handle);
-			this.m_layoutpanel.Padding = this.m_layoutpanel.Padding.ScaleDPI(this.Handle);
+			Padding = Padding.ScaleDPI(Handle);
+			m_layoutpanel.Padding = m_layoutpanel.Padding.ScaleDPI(Handle);
 
 			// WINDOWS 11
 			//
@@ -78,7 +78,7 @@ namespace zuki.hdhomeruntray
 				// Apply rounded corners to the application
 				var attribute = NativeMethods.DWMWINDOWATTRIBUTE.DWMWA_WINDOW_CORNER_PREFERENCE;
 				var preference = NativeMethods.DWM_WINDOW_CORNER_PREFERENCE.DWMWCP_ROUND;
-				NativeMethods.DwmSetWindowAttribute(this.Handle, attribute, ref preference, sizeof(uint));
+				NativeMethods.DwmSetWindowAttribute(Handle, attribute, ref preference, sizeof(uint));
 			}
 		}
 
@@ -105,7 +105,7 @@ namespace zuki.hdhomeruntray
 			foreach(Device device in devices)
 			{
 				PopupItemDeviceControl devicecontrol = new PopupItemDeviceControl(device);
-				devicecontrol.Toggled += new PopupItemToggledEventHandler(this.OnDeviceToggled);
+				devicecontrol.Toggled += new PopupItemToggledEventHandler(OnDeviceToggled);
 				m_layoutpanel.Controls.Add(devicecontrol);
 			}
 
@@ -131,15 +131,15 @@ namespace zuki.hdhomeruntray
 
 			// Create the settings toggle
 			var settings = new PopupItemGlyphControl(SymbolGlyph.Settings, PopupItemControlType.Toggle);
-			settings.Toggled += new PopupItemToggledEventHandler(this.OnSettingsToggled);
+			settings.Toggled += new PopupItemToggledEventHandler(OnSettingsToggled);
 
 			// Crate the unpin button
 			var unpin = new PopupItemGlyphControl(SymbolGlyph.Unpin, PopupItemControlType.Button);
-			unpin.Selected += new EventHandler(this.OnUnpinSelected);
+			unpin.Selected += new EventHandler(OnUnpinSelected);
 
 			// Create the exit button
 			var exit = new PopupItemGlyphControl(SymbolGlyph.Exit, PopupItemControlType.Button);
-			exit.Selected += new EventHandler(this.OnExitSelected);
+			exit.Selected += new EventHandler(OnExitSelected);
 
 			// Add the glyph items to the outer layout panel
 			m_layoutpanel.SuspendLayout();
@@ -149,7 +149,7 @@ namespace zuki.hdhomeruntray
 			m_layoutpanel.ResumeLayout();
 
 			// If the form is already visible, it needs to be moved to adjust for the new width
-			if(this.Visible) SetWindowPosition(Screen.FromPoint(new Point(this.Left, this.Top)));
+			if(Visible) SetWindowPosition(Screen.FromPoint(new Point(Left, Top)));
 
 			// Prevent adding the controls multiple times by tracking this
 			m_pinned = true;
@@ -169,7 +169,7 @@ namespace zuki.hdhomeruntray
 			Screen screen = Screen.FromPoint(iconbounds.Location);
 
 			SetWindowPosition(screen);		// Set the window position
-			this.Show();                    // Show the form
+			Show();                    // Show the form
 			m_timer.Enabled = true;			// Enable the refresh timer
 		}
 
@@ -191,8 +191,25 @@ namespace zuki.hdhomeruntray
 
 				if(m_deviceform == null)
 				{
-					m_deviceform = new DeviceForm(devicecontrol.Device);
-					m_deviceform.ShowFromPopupItem(this, devicecontrol);
+					// TUNER DEVICE
+					//
+					if(devicecontrol.Device.Type == DeviceType.Tuner)
+					{
+						Debug.Assert(devicecontrol.Device is TunerDevice);
+						TunerDevice tunerdevice = (TunerDevice)devicecontrol.Device;
+						m_deviceform = new TunerDeviceForm(tunerdevice, this, devicecontrol);
+					}
+
+					// STORAGE DEVICE
+					//
+					else if(devicecontrol.Device.Type == DeviceType.Storage)
+					{
+						Debug.Assert(devicecontrol.Device is StorageDevice);
+						StorageDevice storagedevice = (StorageDevice)devicecontrol.Device;
+						m_deviceform = new StorageDeviceForm(storagedevice, this, devicecontrol);
+					}
+
+					if(m_deviceform != null) m_deviceform.Show();
 				}
 			}
 
@@ -209,7 +226,7 @@ namespace zuki.hdhomeruntray
 		// Invoked when the exit button has been clicked
 		private void OnExitSelected(object sender, EventArgs args)
 		{
-			this.Close();					// Close this form
+			Close();					// Close this form
 			Application.Exit();				// Exit the application
 		}
 
@@ -282,7 +299,7 @@ namespace zuki.hdhomeruntray
 		// Invoked when the unpin button has been selected
 		private void OnUnpinSelected(object sender, EventArgs args)
 		{
-			this.Close();				// Close this form
+			Close();				// Close this form
 		}
 
 		//-------------------------------------------------------------------
@@ -314,13 +331,13 @@ namespace zuki.hdhomeruntray
 			// This should work acceptably well given that the screen/monitor that will
 			// display this form is the same one with the taskbar, but there are better ways
 			// in .NET 4.7 and/or Windows 10/11 to figure out how to scale this value
-			float scalefactor = ((float)SystemInformation.SmallIconSize.Height / 16.0F);
+			float scalefactor = (SystemInformation.SmallIconSize.Height / 16.0F);
 
 			// Move the form to the desired position before showing it; it should be aligned
 			// to the lower-right corner of the work area
-			var top = screen.WorkingArea.Height - this.Size.Height - (int)(12.0F * scalefactor);
-			var left = screen.WorkingArea.Width - this.Size.Width - (int)(12.0F * scalefactor);
-			this.Location = new Point(left, top);
+			var top = screen.WorkingArea.Height - Size.Height - (int)(12.0F * scalefactor);
+			var left = screen.WorkingArea.Width - Size.Width - (int)(12.0F * scalefactor);
+			Location = new Point(left, top);
 		}
 
 		// UntoggleOthers

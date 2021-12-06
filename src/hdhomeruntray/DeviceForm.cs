@@ -35,7 +35,7 @@ namespace zuki.hdhomeruntray
 	//
 	// Implements the form that shows detailed information about a device
 
-	partial class DeviceForm : Form
+	abstract partial class DeviceForm : Form
 	{
 		#region Win32 API Declarations
 		private static class NativeMethods
@@ -66,102 +66,26 @@ namespace zuki.hdhomeruntray
 		{
 			InitializeComponent();
 
-			this.Padding = this.Padding.ScaleDPI(this.Handle);
-			this.m_layoutpanel.Padding = this.m_layoutpanel.Padding.ScaleDPI(this.Handle);
-			this.m_layoutpanel.Margin = this.m_layoutpanel.Margin.ScaleDPI(this.Handle);
-
 			// WINDOWS 11
 			//
 			if(VersionHelper.IsWindows11OrGreater())
 			{
-				// Apply rounded corners to the application
+				// Apply rounded corners to the form
 				var attribute = NativeMethods.DWMWINDOWATTRIBUTE.DWMWA_WINDOW_CORNER_PREFERENCE;
 				var preference = NativeMethods.DWM_WINDOW_CORNER_PREFERENCE.DWMWCP_ROUND;
-				NativeMethods.DwmSetWindowAttribute(this.Handle, attribute, ref preference, sizeof(uint));
+				NativeMethods.DwmSetWindowAttribute(Handle, attribute, ref preference, sizeof(uint));
 			}
 		}
 
-		// Instance Constructor
+		// Instance Constructor (protected)
 		//
-		public DeviceForm(Device device) : this()
-		{
-			if(device == null) throw new ArgumentNullException(nameof(device));
-
-			// TUNER
-			//
-			if(device.Type == DeviceType.Tuner)
-			{
-				Debug.Assert(device is TunerDevice);
-				TunerDevice tunerdevice = (TunerDevice)device;
-
-				// Add the header user control for the device
-				var header = new TunerDeviceHeaderControl(tunerdevice)
-				{
-					Dock = DockStyle.Top
-				};
-				m_layoutpanel.Controls.Add(header);
-
-				// Add the tuner user controls for the device
-				foreach(Tuner tuner in tunerdevice.Tuners)
-				{
-					var status = new TunerDeviceStatusControl(tunerdevice, tuner)
-					{
-						Dock = DockStyle.Top
-					};
-					m_layoutpanel.Controls.Add(status);
-				}
-
-				// Add the footer user control for the device if non-legacy
-				var footer = new TunerDeviceFooterControl(tunerdevice)
-				{
-					Dock = DockStyle.Top
-				};
-				m_layoutpanel.Controls.Add(footer);
-			}
-
-			// STORAGE
-			//
-			else if(device.Type == DeviceType.Storage)
-			{
-				Debug.Assert(device is StorageDevice);
-				StorageDevice storagedevice = (StorageDevice)device;
-
-				// Add the header user control for the device
-				var header = new StorageDeviceHeaderControl(storagedevice)
-				{
-					Dock = DockStyle.Top
-				};
-				m_layoutpanel.Controls.Add(header);
-
-				// Add the recording user controls for the device
-				// TODO
-
-				// Add the footer user control for the device
-				var footer = new StorageDeviceFooterControl(storagedevice)
-				{
-					Dock = DockStyle.Top
-				};
-				m_layoutpanel.Controls.Add(footer);
-			}
-		}
-
-		//-------------------------------------------------------------------
-		// Member Functions
-		//-------------------------------------------------------------------
-
-		// ShowFromPopupItem
-		//
-		// Shows the form at a position based on the popup form and the
-		// location of the item that was used to open it
-		// bounding rectangle of the notify icon instance
-		public void ShowFromPopupItem(PopupForm form, PopupItemControl item)
+		protected DeviceForm(PopupForm form, PopupItemControl item) : this()
 		{
 			if(form == null) throw new ArgumentNullException(nameof(form));
 			if(item == null) throw new ArgumentNullException(nameof(item));
 
-			// Set the window position based on the form and item
-			SetWindowPosition(form.Bounds, item.Bounds);
-			this.Show();
+			m_popupformbounds = form.Bounds;
+			m_popupitembounds = item.Bounds;
 		}
 
 		//-------------------------------------------------------------------
@@ -182,35 +106,42 @@ namespace zuki.hdhomeruntray
 		}
 
 		//-------------------------------------------------------------------
-		// Private Member Functions
+		// Event Handlers
 		//-------------------------------------------------------------------
 
-		// SetWindowPosition
+		// OnSizeChanged
 		//
-		// Sets the window position
-		private void SetWindowPosition(Rectangle formbounds, Rectangle itembounds)
+		// Invoked when the size of the form has changed
+		private void OnSizeChanged(object sender, EventArgs args)
 		{
 			// This should work acceptably well given that the screen/monitor that will
 			// display this form is the same one with the taskbar, but there are better ways
 			// in .NET 4.7 and/or Windows 10/11 to figure out how to scale this value
-			float scalefactor = ((float)SystemInformation.SmallIconSize.Height / 16.0F);
+			float scalefactor = (SystemInformation.SmallIconSize.Height / 16.0F);
 
 			// The item's coordinates will be relative to the parent form
-			var itemleft = formbounds.Left + itembounds.Left;
+			var itemleft = m_popupformbounds.Left + m_popupitembounds.Left;
 
 			// Move the form so that it's centered above the item that was used to open it
-			var top = formbounds.Top - this.Size.Height - (int)(4.0F * scalefactor);
-			var left = (itemleft + (itembounds.Width / 2)) - (this.Width / 2);
+			var top = m_popupformbounds.Top - Size.Height - (int)(4.0F * scalefactor);
+			var left = (itemleft + (m_popupitembounds.Width / 2)) - (Width / 2);
 
 			// Adjust the left margin of the form if necessary
-			if(left < formbounds.Left) left = formbounds.Left;
+			if(left < m_popupformbounds.Left) left = m_popupformbounds.Left;
 
 			// Adjust the right margin of the form if necessary
-			var right = left + this.Width;
-			if(right > formbounds.Right) left -= (right - formbounds.Right);
+			var right = left + Width;
+			if(right > m_popupformbounds.Right) left -= (right - m_popupformbounds.Right);
 
 			// Set the location of the form
-			this.Location = new Point(left, top);
+			Location = new Point(left, top);
 		}
+
+		//-------------------------------------------------------------------
+		// Member Variables
+		//-------------------------------------------------------------------
+
+		private readonly Rectangle m_popupformbounds;
+		private readonly Rectangle m_popupitembounds;
 	}
 }

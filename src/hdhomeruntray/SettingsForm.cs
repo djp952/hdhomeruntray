@@ -66,20 +66,20 @@ namespace zuki.hdhomeruntray
 		{
 			InitializeComponent();
 
-			this.Padding = this.Padding.ScaleDPI(this.Handle);
-			this.m_layoutPanel.Padding = this.m_layoutPanel.Padding.ScaleDPI(this.Handle);
+			Padding = Padding.ScaleDPI(Handle);
+			m_layoutPanel.Padding = m_layoutPanel.Padding.ScaleDPI(Handle);
 
 			// WINDOWS 11
 			//
 			if(VersionHelper.IsWindows11OrGreater())
 			{
 				// Switch to Segoe UI Variable Display
-				this.Font = new Font("Segoe UI Variable Display Semib", 9F, FontStyle.Bold);
+				Font = new Font("Segoe UI Variable Display Semib", 9F, FontStyle.Bold);
 
 				// Apply rounded corners to the application
 				var attribute = NativeMethods.DWMWINDOWATTRIBUTE.DWMWA_WINDOW_CORNER_PREFERENCE;
 				var preference = NativeMethods.DWM_WINDOW_CORNER_PREFERENCE.DWMWCP_ROUND;
-				NativeMethods.DwmSetWindowAttribute(this.Handle, attribute, ref preference, sizeof(uint));
+				NativeMethods.DwmSetWindowAttribute(Handle, attribute, ref preference, sizeof(uint));
 			}
 
 			// Bind each of the ComboBox drop-downs to their enum class
@@ -105,7 +105,7 @@ namespace zuki.hdhomeruntray
 
 			// Set the window position based on the form and item
 			SetWindowPosition(form.Bounds, item.Bounds);
-			this.Show();
+			Show();
 		}
 
 		//-------------------------------------------------------------------
@@ -197,24 +197,24 @@ namespace zuki.hdhomeruntray
 			// This should work acceptably well given that the screen/monitor that will
 			// display this form is the same one with the taskbar, but there are better ways
 			// in .NET 4.7 and/or Windows 10/11 to figure out how to scale this value
-			float scalefactor = ((float)SystemInformation.SmallIconSize.Height / 16.0F);
+			float scalefactor = (SystemInformation.SmallIconSize.Height / 16.0F);
 
 			// The item's coordinates will be relative to the parent form
 			var itemleft = formbounds.Left + itembounds.Left;
 
 			// Move the form so that it's centered above the item that was used to open it
-			var top = formbounds.Top - this.Size.Height - (int)(4.0F * scalefactor);
-			var left = (itemleft + (itembounds.Width / 2)) - (this.Width / 2);
+			var top = formbounds.Top - Size.Height - (int)(4.0F * scalefactor);
+			var left = (itemleft + (itembounds.Width / 2)) - (Width / 2);
 
 			// Adjust the left margin of the form if necessary
 			if(left < formbounds.Left) left = formbounds.Left;
 
 			// Adjust the right margin of the form if necessary
-			var right = left + this.Width;
+			var right = left + Width;
 			if(right > formbounds.Right) left -= (right - formbounds.Right);
 
 			// Set the location of the form
-			this.Location = new Point(left, top);
+			Location = new Point(left, top);
 		}
 	}
 }

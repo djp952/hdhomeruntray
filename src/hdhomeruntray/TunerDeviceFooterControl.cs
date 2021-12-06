@@ -41,16 +41,16 @@ namespace zuki.hdhomeruntray
 		{
 			InitializeComponent();
 
-			this.Padding = this.Padding.ScaleDPI(this.Handle);
-			m_layoutpanel.Margin = m_layoutpanel.Margin.ScaleDPI(this.Handle);
-			m_layoutpanel.Padding = m_layoutpanel.Padding.ScaleDPI(this.Handle);
+			Padding = Padding.ScaleDPI(Handle);
+			m_layoutpanel.Margin = m_layoutpanel.Margin.ScaleDPI(Handle);
+			m_layoutpanel.Padding = m_layoutpanel.Padding.ScaleDPI(Handle);
 
 			// WINDOWS 11
 			//
 			if(VersionHelper.IsWindows11OrGreater())
 			{
-				this.m_firmwareversion.Font = new Font("Segoe UI Variable Small", this.m_firmwareversion.Font.Size, this.m_firmwareversion.Font.Style);
-				this.m_unused.Font = new Font("Segoe UI Variable Small", this.m_unused.Font.Size, this.m_unused.Font.Style);
+				m_firmwareversion.Font = new Font("Segoe UI Variable Small", m_firmwareversion.Font.Size, m_firmwareversion.Font.Style);
+				m_unused.Font = new Font("Segoe UI Variable Small", m_unused.Font.Size, m_unused.Font.Style);
 			}
 		}
 

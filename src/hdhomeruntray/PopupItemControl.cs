@@ -41,8 +41,8 @@ namespace zuki.hdhomeruntray
 			InitializeComponent();
 
 			// Adjust the padding after initialization
-			this.Padding = this.Padding.ScaleDPI(this.Handle);
-			this.m_controlspanel.Margin = this.m_controlspanel.Margin.ScaleDPI(this.Handle);
+			Padding = Padding.ScaleDPI(Handle);
+			m_controlspanel.Margin = m_controlspanel.Margin.ScaleDPI(Handle);
 
 			// Save the type of control being implemented
 			m_type = type;
@@ -56,7 +56,7 @@ namespace zuki.hdhomeruntray
 				WrapContents = false,
 				ForeColor = SystemColors.ControlText,
 				BackColor = SystemColors.ControlLightLight,
-				Padding = new Padding(8).ScaleDPI(this.Handle),
+				Padding = new Padding(8).ScaleDPI(Handle),
 				Radius = 16,
 			};
 
@@ -108,7 +108,7 @@ namespace zuki.hdhomeruntray
 			// (The mouse events are pass-through to that control)
 			if((m_type == PopupItemControlType.Toggle) && (toggled != m_toggled))
 			{
-				OnMouseClickToggle(this.LayoutPanel, EventArgs.Empty);
+				OnMouseClickToggle(LayoutPanel, EventArgs.Empty);
 			}
 		}
 

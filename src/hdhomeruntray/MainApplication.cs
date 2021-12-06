@@ -49,7 +49,7 @@ namespace zuki.hdhomeruntray
 			// can be invoked without causing weird threading issues
 			m_context = new WindowsFormsSynchronizationContext();
 
-			Application.ApplicationExit += new EventHandler(this.OnApplicationExit);
+			Application.ApplicationExit += new EventHandler(OnApplicationExit);
 			InitializeComponent();
 
 			// Wire up a handler to watch for property changes
@@ -57,7 +57,7 @@ namespace zuki.hdhomeruntray
 
 			// Create and wire up the device discovery object
 			m_devices = new Devices();
-			m_devices.DiscoveryCompleted += new DiscoveryCompletedEventHandler(this.OnDiscoveryCompleted);
+			m_devices.DiscoveryCompleted += new DiscoveryCompletedEventHandler(OnDiscoveryCompleted);
 
 			// Show the tray icon after initialization
 			m_notifyicon.Visible = true;
@@ -80,9 +80,9 @@ namespace zuki.hdhomeruntray
 		{
 			// Create and initialize the ShellNotifyIcon instance
 			m_notifyicon = new ShellNotifyIcon();
-			m_notifyicon.ClosePopup += new EventHandler(this.OnNotifyIconClosePopup);
-			m_notifyicon.OpenPopup += new EventHandler(this.OnNotifyIconOpenPopup);
-			m_notifyicon.Selected += new EventHandler(this.OnNotifyIconSelected);
+			m_notifyicon.ClosePopup += new EventHandler(OnNotifyIconClosePopup);
+			m_notifyicon.OpenPopup += new EventHandler(OnNotifyIconOpenPopup);
+			m_notifyicon.Selected += new EventHandler(OnNotifyIconSelected);
 			m_notifyicon.Icon = StatusIcons.Get(StatusIconType.Idle);
 			m_notifyicon.HoverInterval = GetHoverInterval(Settings.Default.TrayIconHoverDelay);
 			m_notifyicon.ToolTip = "HDHomeRun System Tray";
@@ -93,7 +93,7 @@ namespace zuki.hdhomeruntray
 				AutoReset = true,
 				Interval = (double)Settings.Default.DiscoveryInterval,
 			};
-			m_timer.Elapsed += new ElapsedEventHandler(this.OnTimerElapsed);
+			m_timer.Elapsed += new ElapsedEventHandler(OnTimerElapsed);
 		}
 
 		//-------------------------------------------------------------------
@@ -159,7 +159,7 @@ namespace zuki.hdhomeruntray
 				if(m_popupform == null)
 				{
 					m_popupform = new PopupForm(m_devicelist);
-					m_popupform.FormClosed += new FormClosedEventHandler(this.OnPopupFormClosed);
+					m_popupform.FormClosed += new FormClosedEventHandler(OnPopupFormClosed);
 					m_popupform.ShowFromNotifyIcon(m_notifyicon);
 				}
 
@@ -184,7 +184,7 @@ namespace zuki.hdhomeruntray
 				else
 				{
 					m_popupform = new PopupForm(m_devicelist, true);
-					m_popupform.FormClosed += new FormClosedEventHandler(this.OnPopupFormClosed);
+					m_popupform.FormClosed += new FormClosedEventHandler(OnPopupFormClosed);
 					m_popupform.ShowFromNotifyIcon(m_notifyicon);
 				}
 

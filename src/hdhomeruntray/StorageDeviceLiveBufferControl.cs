@@ -29,63 +29,43 @@ using zuki.hdhomeruntray.discovery;
 namespace zuki.hdhomeruntray
 {
 	//--------------------------------------------------------------------------
-	// Class StorageDeviceFooterControl (internal)
+	// Class StorageDeviceLiveBufferControl (internal)
 	//
-	// User control that implements the footer for a storage device in the DeviceForm
+	// User control that implements the status for a Live Buffer
 
-	partial class StorageDeviceFooterControl : UserControl
+	partial class StorageDeviceLiveBufferControl : UserControl
 	{
 		// Instance Constructor
 		//
-		private StorageDeviceFooterControl()
+		private StorageDeviceLiveBufferControl()
 		{
 			InitializeComponent();
 
 			Padding = Padding.ScaleDPI(Handle);
-			m_layoutPanel.Padding = m_layoutPanel.Padding.ScaleDPI(Handle);
+
+			m_layoutpanel.Margin = m_layoutpanel.Margin.ScaleDPI(Handle);
+			m_layoutpanel.Padding = m_layoutpanel.Padding.ScaleDPI(Handle);
 
 			// WINDOWS 11
 			//
 			if(VersionHelper.IsWindows11OrGreater())
 			{
-				m_version.Font = new Font("Segoe UI Variable Small", m_version.Font.Size, m_version.Font.Style);
-				m_space.Font = new Font("Segoe UI Variable Small", m_space.Font.Size, m_space.Font.Style);
+				m_livebufferlabel.Font = new Font("Segoe UI Variable Text Semibold", m_livebufferlabel.Font.Size, m_livebufferlabel.Font.Style);
+				m_name.Font = new Font("Segoe UI Variable Text Semibold", m_name.Font.Size, m_name.Font.Style);
+				m_targetip.Font = new Font("Segoe UI Variable Text", m_targetip.Font.Size, m_targetip.Font.Style);
 			}
 		}
 
 		// Instance Constructor
 		//
-		public StorageDeviceFooterControl(StorageDevice device) : this()
+		public StorageDeviceLiveBufferControl(LiveBuffer livebuffer) : this()
 		{
-			if(device == null) throw new ArgumentNullException(nameof(device));
+			if(livebuffer == null) throw new ArgumentNullException(nameof(livebuffer));
 
-			// Just copy the data from the device instance into the appropriate controls
-			m_version.Text = device.Version;
-			m_space.Text = FormatDiskSpace(device.FreeSpace);
-		}
-
-		//-------------------------------------------------------------------------
-		// Private Member Functions
-		//-------------------------------------------------------------------------
-
-		// FormatDiskSpace
-		//
-		// Formats a disk space number
-		private static string FormatDiskSpace(long space)
-		{
-			const double KB = 1024;             // Kilobytes
-			const double MB = KB * KB;			// Megabytes
-			const double GB = MB * KB;			// Gigabytes
-			const double TB = GB * KB;			// Terabytes
-
-			double value = space;
-
-			if(value >= TB) return String.Format("{0:N2} TB", value / TB);
-			else if(value >= GB) return String.Format("{0:N2} GB", value / GB);
-			else if(value >= MB) return String.Format("{0:N2} MB", value / MB);
-			else if(value >= KB) return String.Format("{0:N2} KB", value / KB);
-
-			return space.ToString();
+			// This is static information, just assign from the livebuffer instance
+			m_activedot.ForeColor = DeviceStatusColor.Green;
+			m_name.Text = livebuffer.Name;
+			m_targetip.Text = livebuffer.TargetIP.ToString();
 		}
 	}
 }

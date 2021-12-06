@@ -29,63 +29,41 @@ using zuki.hdhomeruntray.discovery;
 namespace zuki.hdhomeruntray
 {
 	//--------------------------------------------------------------------------
-	// Class StorageDeviceFooterControl (internal)
+	// Class StorageDeviceRecordingControl (internal)
 	//
-	// User control that implements the footer for a storage device in the DeviceForm
+	// User control that implements the status for a Live Buffer
 
-	partial class StorageDeviceFooterControl : UserControl
+	partial class StorageDeviceRecordingControl : UserControl
 	{
 		// Instance Constructor
 		//
-		private StorageDeviceFooterControl()
+		private StorageDeviceRecordingControl()
 		{
 			InitializeComponent();
 
 			Padding = Padding.ScaleDPI(Handle);
-			m_layoutPanel.Padding = m_layoutPanel.Padding.ScaleDPI(Handle);
+
+			m_layoutpanel.Margin = m_layoutpanel.Margin.ScaleDPI(Handle);
+			m_layoutpanel.Padding = m_layoutpanel.Padding.ScaleDPI(Handle);
 
 			// WINDOWS 11
 			//
 			if(VersionHelper.IsWindows11OrGreater())
 			{
-				m_version.Font = new Font("Segoe UI Variable Small", m_version.Font.Size, m_version.Font.Style);
-				m_space.Font = new Font("Segoe UI Variable Small", m_space.Font.Size, m_space.Font.Style);
+				m_recordinglabel.Font = new Font("Segoe UI Variable Text Semibold", m_recordinglabel.Font.Size, m_recordinglabel.Font.Style);
+				m_name.Font = new Font("Segoe UI Variable Text", m_name.Font.Size, m_name.Font.Style);
 			}
 		}
 
 		// Instance Constructor
 		//
-		public StorageDeviceFooterControl(StorageDevice device) : this()
+		public StorageDeviceRecordingControl(Recording recording) : this()
 		{
-			if(device == null) throw new ArgumentNullException(nameof(device));
+			if(recording == null) throw new ArgumentNullException(nameof(recording));
 
-			// Just copy the data from the device instance into the appropriate controls
-			m_version.Text = device.Version;
-			m_space.Text = FormatDiskSpace(device.FreeSpace);
-		}
-
-		//-------------------------------------------------------------------------
-		// Private Member Functions
-		//-------------------------------------------------------------------------
-
-		// FormatDiskSpace
-		//
-		// Formats a disk space number
-		private static string FormatDiskSpace(long space)
-		{
-			const double KB = 1024;             // Kilobytes
-			const double MB = KB * KB;			// Megabytes
-			const double GB = MB * KB;			// Gigabytes
-			const double TB = GB * KB;			// Terabytes
-
-			double value = space;
-
-			if(value >= TB) return String.Format("{0:N2} TB", value / TB);
-			else if(value >= GB) return String.Format("{0:N2} GB", value / GB);
-			else if(value >= MB) return String.Format("{0:N2} MB", value / MB);
-			else if(value >= KB) return String.Format("{0:N2} KB", value / KB);
-
-			return space.ToString();
+			// This is static information, just assign from the recording instance
+			m_activedot.ForeColor = DeviceStatusColor.Red;
+			m_name.Text = recording.Name;
 		}
 	}
 }

@@ -29,7 +29,9 @@ namespace zuki.hdhomeruntray
 		/// </summary>
 		private void InitializeComponent()
 		{
+			this.components = new System.ComponentModel.Container();
 			this.m_layoutpanel = new System.Windows.Forms.FlowLayoutPanel();
+			this.m_timer = new System.Windows.Forms.Timer(this.components);
 			this.SuspendLayout();
 			// 
 			// m_layoutpanel
@@ -44,6 +46,10 @@ namespace zuki.hdhomeruntray
 			this.m_layoutpanel.Size = new System.Drawing.Size(276, 111);
 			this.m_layoutpanel.TabIndex = 0;
 			this.m_layoutpanel.WrapContents = false;
+			// 
+			// m_timer
+			// 
+			this.m_timer.Interval = 1000;
 			// 
 			// DeviceForm
 			// 
@@ -65,13 +71,14 @@ namespace zuki.hdhomeruntray
 			this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
 			this.Text = "DeviceForm";
 			this.TopMost = true;
+			this.SizeChanged += new System.EventHandler(this.OnSizeChanged);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
 		}
 
 		#endregion
-
-		private System.Windows.Forms.FlowLayoutPanel m_layoutpanel;
+		protected System.Windows.Forms.FlowLayoutPanel m_layoutpanel;
+		protected System.Windows.Forms.Timer m_timer;
 	}
 }
