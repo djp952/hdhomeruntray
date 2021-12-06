@@ -76,63 +76,78 @@ namespace zuki.hdhomeruntray
 			m_device = device ?? throw new ArgumentNullException(nameof(device));
 			m_tuner = tuner ?? throw new ArgumentNullException(nameof(tuner));
 
-			// Perform a synchronous refresh of the data before starting the timer
-			OnTimerTick(this, EventArgs.Empty);
-			m_timer.Enabled = true;
+			// Tuner identifier is static once created
+			m_tunernumber.Text = "Tuner " + m_tuner.Index.ToString(); 
+			
+			UpdateStatus();				// Initial status load
 		}
 
 		//-------------------------------------------------------------------------
-		// Event Handlers
+		// Member Functions
 		//-------------------------------------------------------------------------
 
-		// OnTimerTick
+		// UpdateStatus
 		//
-		// Invoked when the refresh timer comes due
-		private void OnTimerTick(object sender, EventArgs args)
+		// Called to update the contents of the control
+		public void UpdateStatus()
 		{
+			// Get updated status for the device and check against the last known hash
 			TunerStatus status = m_device.GetTunerStatus(m_tuner);
+			if(status.GetHashCode() == m_lasthash) return;
 
-			// Header Controls
-			//
-			m_activedot.ForeColor = (status.IsActive) ? DeviceStatusColor.Green : DeviceStatusColor.Gray;
-			m_tunernumber.Text = "Tuner " + m_tuner.Index.ToString();
-			if(status.IsActive)
-			{
-				if(status.HasVirtualChannel) m_channel.Text = status.VirtualChannelNumber + " " + status.VirtualChannelName;
-				else m_channel.Text = status.Channel;
-			}
-			else m_channel.Text = "Idle";
+			// Save the updated hash code
+			m_lasthash = status.GetHashCode();
 
-			if(status.IsActive)
+			m_layoutpanel.SuspendLayout();
+
+			try
 			{
-				// Signal Meter Controls
+				// Header Controls
 				//
-				m_signalstrengthbar.ProgressBarColor = status.SignalStrengthColor;
-				m_signalstrengthbar.Value = (status.IsActive) ? status.SignalStrength : 100;
-				m_signalstrengthpct.Text = String.Format("{0}%", status.SignalStrength);
+				m_activedot.ForeColor = (status.IsActive) ? DeviceStatusColor.Green : DeviceStatusColor.Gray;
+				
+				if(status.IsActive)
+				{
+					if(status.HasVirtualChannel) m_channel.Text = status.VirtualChannelNumber + " " + status.VirtualChannelName;
+					else m_channel.Text = status.Channel;
+				}
+				else m_channel.Text = "Idle";
 
-				m_signalqualitybar.ProgressBarColor = status.SignalQualityColor;
-				m_signalqualitybar.Value = (status.IsActive) ? status.SignalQuality : 100;
-				m_signalqualitypct.Text = String.Format("{0}%", status.SignalQuality);
+				if(status.IsActive)
+				{
+					// Signal Meter Controls
+					//
+					m_signalstrengthbar.ProgressBarColor = status.SignalStrengthColor;
+					m_signalstrengthbar.Value = (status.IsActive) ? status.SignalStrength : 100;
+					m_signalstrengthpct.Text = String.Format("{0}%", status.SignalStrength);
 
-				m_symbolqualitybar.ProgressBarColor = status.SymbolQualityColor;
-				m_symbolqualitybar.Value = (status.IsActive) ? status.SymbolQuality : 100;
-				m_symbolqualitypct.Text = String.Format("{0}%", status.SymbolQuality);
+					m_signalqualitybar.ProgressBarColor = status.SignalQualityColor;
+					m_signalqualitybar.Value = (status.IsActive) ? status.SignalQuality : 100;
+					m_signalqualitypct.Text = String.Format("{0}%", status.SignalQuality);
 
-				// Footer Controls
-				//
-				m_targetip.Text = String.Empty;     // TODO: Not sure I want to include this
-				m_bitrate.Text = FormatBitRate(status.BitRate);
+					m_symbolqualitybar.ProgressBarColor = status.SymbolQualityColor;
+					m_symbolqualitybar.Value = (status.IsActive) ? status.SymbolQuality : 100;
+					m_symbolqualitypct.Text = String.Format("{0}%", status.SymbolQuality);
 
-				if(!m_signallayoutpanel.Visible) m_signallayoutpanel.Visible = true;
-				if(!m_footerlayoutpanel.Visible) m_footerlayoutpanel.Visible = true;
+					// Footer Controls
+					//
+					m_targetip.Text = String.Empty;     // TODO: Not sure I want to include this
+					m_bitrate.Text = FormatBitRate(status.BitRate);
+
+					// Ensure the signal meter and footer are visible for an active tuner
+					if(!m_signallayoutpanel.Visible) m_signallayoutpanel.Visible = true;
+					if(!m_footerlayoutpanel.Visible) m_footerlayoutpanel.Visible = true;
+				}
+
+				else
+				{
+					// Hide the signal meter and footer panels for inactive devices
+					if(m_signallayoutpanel.Visible) m_signallayoutpanel.Visible = false;
+					if(m_footerlayoutpanel.Visible) m_footerlayoutpanel.Visible = false;
+				}
 			}
 
-			else
-			{
-				if(m_signallayoutpanel.Visible) m_signallayoutpanel.Visible = false;
-				if(m_footerlayoutpanel.Visible) m_footerlayoutpanel.Visible = false;
-			}
+			finally { m_layoutpanel.ResumeLayout(); }
 		}
 
 		//-------------------------------------------------------------------------
@@ -163,5 +178,6 @@ namespace zuki.hdhomeruntray
 
 		private readonly TunerDevice m_device;
 		private readonly Tuner m_tuner;
+		private int m_lasthash = 0;
 	}
 }

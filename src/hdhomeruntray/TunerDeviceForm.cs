@@ -86,7 +86,14 @@ namespace zuki.hdhomeruntray
 
 			try
 			{
-				// TODO: Move timer out of the user control
+				// Only update the status controls each time the timer elapses
+				foreach(Control control in m_layoutpanel.Controls)
+				{
+					if(control is TunerDeviceStatusControl statuscontrol)
+					{
+						statuscontrol.UpdateStatus();
+					}
+				}
 			}
 
 			finally { m_layoutpanel.ResumeLayout(); }

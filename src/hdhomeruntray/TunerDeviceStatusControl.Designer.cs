@@ -29,12 +29,10 @@ namespace zuki.hdhomeruntray
 		/// </summary>
 		private void InitializeComponent()
 		{
-			this.components = new System.ComponentModel.Container();
 			this.m_tunernumber = new System.Windows.Forms.Label();
 			this.m_channel = new System.Windows.Forms.Label();
 			this.m_bitrate = new System.Windows.Forms.Label();
 			this.m_targetip = new System.Windows.Forms.Label();
-			this.m_timer = new System.Windows.Forms.Timer(this.components);
 			this.m_layoutpanel = new zuki.hdhomeruntray.RoundedTableLayoutPanel();
 			this.m_signallayoutpanel = new System.Windows.Forms.TableLayoutPanel();
 			this.m_signalstrengthlabel = new System.Windows.Forms.Label();
@@ -100,11 +98,6 @@ namespace zuki.hdhomeruntray
 			this.m_targetip.TabIndex = 4;
 			this.m_targetip.Text = "{ m_targetip }";
 			this.m_targetip.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
-			// 
-			// m_timer
-			// 
-			this.m_timer.Interval = 1000;
-			this.m_timer.Tick += new System.EventHandler(this.OnTimerTick);
 			// 
 			// m_layoutpanel
 			// 
@@ -338,7 +331,6 @@ namespace zuki.hdhomeruntray
 		private System.Windows.Forms.Label m_channel;
 		private System.Windows.Forms.Label m_bitrate;
 		private System.Windows.Forms.Label m_targetip;
-		private System.Windows.Forms.Timer m_timer;
 		private zuki.hdhomeruntray.RoundedTableLayoutPanel m_layoutpanel;
 		private System.Windows.Forms.TableLayoutPanel m_signallayoutpanel;
 		private System.Windows.Forms.Label m_signalstrengthlabel;

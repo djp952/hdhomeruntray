@@ -87,6 +87,9 @@ namespace zuki.hdhomeruntray
 				StorageStatus status = m_device.GetStorageStatus();
 				if(status.GetHashCode() == m_lasthash) return;
 
+				// Save the updated hash code
+				m_lasthash = status.GetHashCode();
+
 				// Check all of the active items in the layout panel to make sure they are still valid
 				List<Control> toremove = new List<Control>();
 				foreach(Control control in m_layoutpanel.Controls)
@@ -136,9 +139,6 @@ namespace zuki.hdhomeruntray
 						m_layoutpanel.Controls.SetChildIndex(recordingcontrol, m_layoutpanel.Controls.GetChildIndex(m_footer));
 					}
 				}
-
-				// Save the updated hash code for the overall status
-				m_lasthash = status.GetHashCode();
 			}
 
 			finally { m_layoutpanel.ResumeLayout(); }
