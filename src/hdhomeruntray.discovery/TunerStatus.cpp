@@ -183,6 +183,43 @@ TunerStatus^ TunerStatus::Create(TunerDevice^ tunerdevice, int index)
 }
 
 //---------------------------------------------------------------------------
+// TunerStatus::GetHashCode
+//
+// Serves as the default hash function
+//
+// Arguments:
+//
+//	NONE
+
+int TunerStatus::GetHashCode(void)
+{
+	// 32-bit FNV-1a primes (http://www.isthe.com/chongo/tech/comp/fnv/index.html#FNV-source) 
+	const int fnv_offset_basis = 2166136261U;
+	const int fnv_prime = 16777619U;
+
+	int hash = fnv_offset_basis;
+
+	// FNV hash the relevant member variables; things like the color codes are tied
+	// to the signal strength values, no need to include those here
+	hash ^= m_channel->GetHashCode();
+	hash *= fnv_prime;
+	hash ^= m_signalstrength.GetHashCode();
+	hash *= fnv_prime;
+	hash ^= m_signalquality.GetHashCode();
+	hash *= fnv_prime;
+	hash ^= m_symbolquality.GetHashCode();
+	hash *= fnv_prime;
+	hash ^= m_virtualchannelnum->GetHashCode();
+	hash *= fnv_prime;
+	hash ^= m_virtualchannelname->GetHashCode();
+	hash *= fnv_prime;
+	hash ^= m_bitrate.GetHashCode();
+	hash *= fnv_prime;
+
+	return hash;
+}
+
+//---------------------------------------------------------------------------
 // TunerStatus::GetVirtualChannelName (static, private)
 //
 // Retrieves the virtual channel name from a tuner vstatus string

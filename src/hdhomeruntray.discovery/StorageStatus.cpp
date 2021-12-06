@@ -99,6 +99,34 @@ StorageStatus^ StorageStatus::Create(StorageDevice^ storagedevice)
 }
 
 //---------------------------------------------------------------------------
+// StorageStatus::GetHashCode
+//
+// Serves as the default hash function
+//
+// Arguments:
+//
+//	NONE
+
+int StorageStatus::GetHashCode(void)
+{
+	// 32-bit FNV-1a primes (http://www.isthe.com/chongo/tech/comp/fnv/index.html#FNV-source) 
+	const int fnv_offset_basis = 2166136261U;
+	const int fnv_prime = 16777619U;
+
+	int hash = fnv_offset_basis;
+
+	// FNV hash each member variable
+	hash ^= m_statuscolor.GetHashCode();
+	hash *= fnv_prime;
+	hash ^= m_livebuffers->GetHashCode();
+	hash *= fnv_prime;
+	hash ^= m_recordings->GetHashCode();
+	hash *= fnv_prime;
+
+	return hash;
+}
+
+//---------------------------------------------------------------------------
 // StorageStatus::LiveBuffers::get
 //
 // Gets the collection of active live buffers

@@ -60,6 +60,20 @@ Recording^ Recording::Create(JObject^ recording)
 }
 
 //---------------------------------------------------------------------------
+// Recording::GetHashCode
+//
+// Serves as the default hash function
+//
+// Arguments:
+//
+//	NONE
+
+int Recording::GetHashCode(void)
+{
+	return m_name->GetHashCode();
+}
+
+//---------------------------------------------------------------------------
 // Recording::Name::get
 //
 // Gets the name of the recording

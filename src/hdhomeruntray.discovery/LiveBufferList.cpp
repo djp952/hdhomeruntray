@@ -92,6 +92,37 @@ IEnumerator<LiveBuffer^>^ LiveBufferList::GetEnumerator(void)
 }
 
 //---------------------------------------------------------------------------
+// LiveBufferList::GetHashCode
+//
+// Serves as the default hash function
+//
+// Arguments:
+//
+//	NONE
+
+int LiveBufferList::GetHashCode(void)
+{
+	// 32-bit FNV-1a primes (http://www.isthe.com/chongo/tech/comp/fnv/index.html#FNV-source) 
+	const int fnv_offset_basis = 2166136261U;
+	const int fnv_prime = 16777619U;
+
+	int hash = fnv_offset_basis;
+
+	// Start with the live buffers count
+	hash ^= m_livebuffers->Count;
+	hash *= fnv_prime;
+
+	// Hash against each of the individual LiveBuffer instances
+	for each(LiveBuffer^ livebuffer in m_livebuffers)
+	{
+		hash ^= livebuffer->GetHashCode();
+		hash *= fnv_prime;
+	}
+
+	return hash;
+}
+
+//---------------------------------------------------------------------------
 // LiveBufferList::IEnumerable_GetEnumerator
 //
 // Returns a non-generic IEnumerator for the member collection

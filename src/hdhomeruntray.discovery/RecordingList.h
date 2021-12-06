@@ -70,6 +70,14 @@ public:
 		virtual int get();
 	}
 
+	//-----------------------------------------------------------------------
+	// Object Overrides
+
+	// GetHashCode
+	//
+	// Serves as the default hash function
+	virtual int GetHashCode(void) override;
+
 internal:
 
 	//-----------------------------------------------------------------------

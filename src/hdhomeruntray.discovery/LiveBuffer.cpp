@@ -63,6 +63,32 @@ LiveBuffer^ LiveBuffer::Create(JObject^ livebuffer)
 }
 
 //---------------------------------------------------------------------------
+// LiveBuffer::GetHashCode
+//
+// Serves as the default hash function
+//
+// Arguments:
+//
+//	NONE
+
+int LiveBuffer::GetHashCode(void)
+{
+	// 32-bit FNV-1a primes (http://www.isthe.com/chongo/tech/comp/fnv/index.html#FNV-source) 
+	const int fnv_offset_basis = 2166136261U;
+	const int fnv_prime = 16777619U;
+
+	int hash = fnv_offset_basis;
+
+	// FNV hash each member variable
+	hash ^= m_name->GetHashCode();
+	hash *= fnv_prime;
+	hash ^= m_targetip->GetHashCode();
+	hash *= fnv_prime;
+
+	return hash;
+}
+
+//---------------------------------------------------------------------------
 // LiveBuffer::Name::get
 //
 // Gets the name of the live buffer
