@@ -50,7 +50,7 @@ namespace zuki.hdhomeruntray
 				m_header = new StorageDeviceHeaderControl(device)
 				{
 					Dock = DockStyle.Top,
-					Padding = new Padding(0, 0, 0, 2).ScaleDPI(Handle)
+					Padding = new Padding(0, 0, 0, 1).ScaleDPI(Handle)
 				};
 				m_layoutpanel.Controls.Add(m_header);
 
@@ -58,7 +58,7 @@ namespace zuki.hdhomeruntray
 				m_footer = new StorageDeviceFooterControl(device)
 				{
 					Dock = DockStyle.Top,
-					Padding = new Padding(0, 2, 0, 0).ScaleDPI(Handle)
+					Padding = new Padding(0, 1, 0, 0).ScaleDPI(Handle)
 				};
 				m_layoutpanel.Controls.Add(m_footer);
 
@@ -117,7 +117,7 @@ namespace zuki.hdhomeruntray
 						{
 							Dock = DockStyle.Top,
 							Tag = livebuffer.GetHashCode(),
-							Padding = new Padding(0, 2, 0, 2).ScaleDPI(Handle)
+							Padding = new Padding(0, 1, 0, 1).ScaleDPI(Handle)
 						};
 
 						// Insert LiveBuffer items after the header
@@ -135,7 +135,7 @@ namespace zuki.hdhomeruntray
 						{
 							Dock = DockStyle.Top,
 							Tag = recording.GetHashCode(),
-							Padding = new Padding(0, 2, 0, 2).ScaleDPI(Handle)
+							Padding = new Padding(0, 1, 0, 1).ScaleDPI(Handle)
 						};
 
 						// Insert Recording items above the footer

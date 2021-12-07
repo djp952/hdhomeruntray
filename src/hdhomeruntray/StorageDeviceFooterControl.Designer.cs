@@ -29,32 +29,32 @@ namespace zuki.hdhomeruntray
 		/// </summary>
 		private void InitializeComponent()
 		{
-			this.m_layoutPanel = new zuki.hdhomeruntray.RoundedTableLayoutPanel();
+			this.m_layoutpanel = new zuki.hdhomeruntray.RoundedTableLayoutPanel();
 			this.m_version = new System.Windows.Forms.Label();
 			this.m_space = new System.Windows.Forms.Label();
-			this.m_layoutPanel.SuspendLayout();
+			this.m_layoutpanel.SuspendLayout();
 			this.SuspendLayout();
 			// 
-			// m_layoutPanel
+			// m_layoutpanel
 			// 
-			this.m_layoutPanel.AutoSize = true;
-			this.m_layoutPanel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-			this.m_layoutPanel.BackColor = System.Drawing.SystemColors.ControlLightLight;
-			this.m_layoutPanel.ColumnCount = 2;
-			this.m_layoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-			this.m_layoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-			this.m_layoutPanel.Controls.Add(this.m_version, 0, 0);
-			this.m_layoutPanel.Controls.Add(this.m_space, 1, 0);
-			this.m_layoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.m_layoutPanel.Location = new System.Drawing.Point(0, 0);
-			this.m_layoutPanel.Name = "m_layoutPanel";
-			this.m_layoutPanel.Padding = new System.Windows.Forms.Padding(4);
-			this.m_layoutPanel.Radius = 16;
-			this.m_layoutPanel.RowCount = 1;
-			this.m_layoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.m_layoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 13F));
-			this.m_layoutPanel.Size = new System.Drawing.Size(152, 21);
-			this.m_layoutPanel.TabIndex = 1;
+			this.m_layoutpanel.AutoSize = true;
+			this.m_layoutpanel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+			this.m_layoutpanel.BackColor = System.Drawing.SystemColors.ControlLightLight;
+			this.m_layoutpanel.ColumnCount = 2;
+			this.m_layoutpanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+			this.m_layoutpanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+			this.m_layoutpanel.Controls.Add(this.m_version, 0, 0);
+			this.m_layoutpanel.Controls.Add(this.m_space, 1, 0);
+			this.m_layoutpanel.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.m_layoutpanel.Location = new System.Drawing.Point(0, 0);
+			this.m_layoutpanel.Name = "m_layoutpanel";
+			this.m_layoutpanel.Padding = new System.Windows.Forms.Padding(4);
+			this.m_layoutpanel.Radii = new zuki.hdhomeruntray.Radii(0, 0, 4, 4);
+			this.m_layoutpanel.RowCount = 1;
+			this.m_layoutpanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.m_layoutpanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 13F));
+			this.m_layoutpanel.Size = new System.Drawing.Size(152, 21);
+			this.m_layoutpanel.TabIndex = 1;
 			// 
 			// m_version
 			// 
@@ -85,19 +85,19 @@ namespace zuki.hdhomeruntray
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Inherit;
 			this.AutoSize = true;
 			this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-			this.Controls.Add(this.m_layoutPanel);
+			this.Controls.Add(this.m_layoutpanel);
 			this.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.Name = "StorageDeviceFooterControl";
 			this.Size = new System.Drawing.Size(152, 21);
-			this.m_layoutPanel.ResumeLayout(false);
-			this.m_layoutPanel.PerformLayout();
+			this.m_layoutpanel.ResumeLayout(false);
+			this.m_layoutpanel.PerformLayout();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
 		}
 
 		#endregion
-		private RoundedTableLayoutPanel m_layoutPanel;
+		private RoundedTableLayoutPanel m_layoutpanel;
 		private System.Windows.Forms.Label m_version;
 		private System.Windows.Forms.Label m_space;
 	}

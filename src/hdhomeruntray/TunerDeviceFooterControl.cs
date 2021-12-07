@@ -44,6 +44,7 @@ namespace zuki.hdhomeruntray
 			Padding = Padding.ScaleDPI(Handle);
 			m_layoutpanel.Margin = m_layoutpanel.Margin.ScaleDPI(Handle);
 			m_layoutpanel.Padding = m_layoutpanel.Padding.ScaleDPI(Handle);
+			m_layoutpanel.Radii = m_layoutpanel.Radii.ScaleDPI(Handle);
 
 			// WINDOWS 11
 			//
@@ -61,7 +62,7 @@ namespace zuki.hdhomeruntray
 			if(device == null) throw new ArgumentNullException(nameof(device));
 
 			// Just copy the data from the device instance into the appropriate controls
-			m_firmwareversion.Text = device.FirmwareVersion;
+			m_firmwareversion.Text = "Firmware " + device.FirmwareVersion;
 			m_unused.Text = String.Empty;
 		}
 	}

@@ -20,7 +20,6 @@
 // SOFTWARE.
 //---------------------------------------------------------------------------
 
-using System;
 using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Drawing2D;
@@ -28,94 +27,63 @@ using System.Windows.Forms;
 
 namespace zuki.hdhomeruntray
 {
-    //-----------------------------------------------------------------------
-    // Class RoundedTableLayoutPanel (internal)
-    //
-    // Customization of the TableLayoutPanel control to provide rounded corners
-    //
-    // Based on:
-    // https://stackoverflow.com/questions/11540117/panel-with-rounded-edges
+	//-----------------------------------------------------------------------
+	// Class RoundedTableLayoutPanel (internal)
+	//
+	// Customization of the TableLayoutPanel control to provide rounded corners
 
+	class RoundedTableLayoutPanel : TableLayoutPanel
+	{
+		// Instance Constructor
+		//
+		public RoundedTableLayoutPanel() : base()
+		{
+		}
 
-    class RoundedTableLayoutPanel : TableLayoutPanel
-    {
-        // Instance Constructor
-        //
-        public RoundedTableLayoutPanel() : base()
-        {
-        }
+		//-------------------------------------------------------------------
+		// Properties
+		//-------------------------------------------------------------------
 
-        //-------------------------------------------------------------------
-        // Properties
-        //-------------------------------------------------------------------
+		[Category("Layout")]
+		public Radii Radii
+		{
+			get { return m_radii; }
+			set
+			{
+				m_radii = value;
+				Invalidate();
+			}
+		}
 
-        // Radius
-        //
-        // Gets/sets the corner radius to be applied to the control during paint
-        [DefaultValue(0)]
-        public int Radius
-        {
-            get
-            {
-                return m_radius;
-            }
-            set
-            {
-                if(value < 0) throw new ArgumentOutOfRangeException(nameof(value));
-                else if(value != m_radius)
-                {
-                    m_radius = value;
-                    Invalidate();
-                }
-            }
-        }
+		//-------------------------------------------------------------------
+		// TableLayoutPanel Overrides
+		//-------------------------------------------------------------------
 
-        //-------------------------------------------------------------------
-        // TableLayoutPanel Overrides
-        //-------------------------------------------------------------------
+		// OnPaint
+		//
+		// Invoked when the control is being painted
+		protected override void OnPaint(PaintEventArgs args)
+		{
+			// Paint the background using the back color of the parent
+			using(Brush background = new SolidBrush(Parent.BackColor))
+			{
+				// Paint the rounded
+				using(Brush brush = new SolidBrush(BackColor))
+				{
+					// Don't use anti-aliasing on the background
+					args.Graphics.FillRectangle(background, ClientRectangle);
 
-        // OnPaint
-        //
-        // Invoked when the control is being painted
-        protected override void OnPaint(PaintEventArgs args)
-        {
-            // Invoke the base implementation first
-            base.OnPaint(args);
+					// Use anti-aliasing on the rounded rectangle
+					args.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
+					args.Graphics.FillRoundedRectangle(brush, ClientRectangle, m_radii.TopLeft, m_radii.TopRight, m_radii.BottomRight, m_radii.BottomLeft);
+				}
+			}
+		}
 
-            // This only works if a non-zero radius has been specified
-            if(m_radius > 0)
-            {
-                // Scale the radius based on the DPI of the control
-                float factorx = args.Graphics.DpiX / 96.0F;
-                float factory = args.Graphics.DpiY / 96.0F;
-                int radius = (int)(m_radius * ((factorx + factory) / 2.0F));
+		//-------------------------------------------------------------------
+		// Member Variables
+		//-------------------------------------------------------------------
 
-                // Set an anti-alised smoothing mode
-                args.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
-
-                // Create a GraphicsPath that will generate the necessary information
-                // to effectively round the corners of the control
-                GraphicsPath path = new GraphicsPath();
-                path.StartFigure();
-                path.AddArc(new Rectangle(0, 0, radius, radius), 180, 90);
-                path.AddLine(radius, 0, Width - radius, 0);
-                path.AddArc(new Rectangle(Width - radius, 0, radius, radius), 270, 90);
-                path.AddLine(Width, radius, Width, Height - radius);
-                path.AddArc(new Rectangle(Width - radius, Height - radius, radius, radius), 0, 90);
-                path.AddLine(Width - radius, Height, radius, Height);
-                path.AddArc(new Rectangle(0, Height - radius, radius, radius), 90, 90);
-                path.AddLine(0, Height - radius, 0, radius);
-                path.CloseFigure();
-
-                // Assign the generated GraphicsPath to the control
-                Region = new Region(path);
-            }
-        }
-
-        //-------------------------------------------------------------------
-        // Member Variables
-        //-------------------------------------------------------------------
-
-        private int m_radius = 0;               // Corner radius
-    }
+		private Radii m_radii = new Radii(0);
+	}
 }

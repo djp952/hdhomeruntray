@@ -42,7 +42,8 @@ namespace zuki.hdhomeruntray
 			InitializeComponent();
 
 			Padding = Padding.ScaleDPI(Handle);
-			m_layoutPanel.Padding = m_layoutPanel.Padding.ScaleDPI(Handle);
+			m_layoutpanel.Padding = m_layoutpanel.Padding.ScaleDPI(Handle);
+			m_layoutpanel.Radii = m_layoutpanel.Radii.ScaleDPI(Handle);
 
 			// WINDOWS 11
 			//

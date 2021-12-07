@@ -22,6 +22,7 @@
 
 using System;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Windows.Forms;
 
 namespace zuki.hdhomeruntray
@@ -157,6 +158,7 @@ namespace zuki.hdhomeruntray
 			using(SolidBrush brush = new SolidBrush(m_color))
 			{
 				// Fill with slighly rounded corners
+				args.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
 				args.Graphics.FillRoundedRectangle(brush, rect, 2.ScaleDPI(Handle));
 			}
 		}

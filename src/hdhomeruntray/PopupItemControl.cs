@@ -56,8 +56,8 @@ namespace zuki.hdhomeruntray
 				WrapContents = false,
 				ForeColor = SystemColors.ControlText,
 				BackColor = SystemColors.ControlLightLight,
-				Padding = new Padding(8).ScaleDPI(Handle),
-				Radius = 16,
+				Padding = new Padding(6).ScaleDPI(Handle),
+				Radii = new Radii(4).ScaleDPI(Handle)
 			};
 
 			// Button type event handlers

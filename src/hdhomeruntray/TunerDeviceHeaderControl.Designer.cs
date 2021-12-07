@@ -53,7 +53,7 @@ namespace zuki.hdhomeruntray
 			this.m_layoutpanel.Location = new System.Drawing.Point(0, 0);
 			this.m_layoutpanel.Name = "m_layoutpanel";
 			this.m_layoutpanel.Padding = new System.Windows.Forms.Padding(4);
-			this.m_layoutpanel.Radius = 16;
+			this.m_layoutpanel.Radii = new zuki.hdhomeruntray.Radii(4, 4, 0, 0);
 			this.m_layoutpanel.RowCount = 2;
 			this.m_layoutpanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
 			this.m_layoutpanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
