@@ -1,7 +1,7 @@
 ﻿
 namespace zuki.hdhomeruntray
 {
-	partial class SmoothProgressBar
+	partial class SignalStatusProcessBar
 	{
 		/// <summary> 
 		/// Required designer variable.
@@ -31,11 +31,12 @@ namespace zuki.hdhomeruntray
 		{
 			this.SuspendLayout();
 			// 
-			// SmoothProgressBar
+			// SignalStatusProcessBar
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Inherit;
+			this.DoubleBuffered = true;
 			this.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.Name = "SmoothProgressBar";
+			this.Name = "SignalStatusProcessBar";
 			this.ResumeLayout(false);
 
 		}

@@ -98,11 +98,11 @@
     <Compile Include="SettingsForm.Designer.cs">
       <DependentUpon>SettingsForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="SmoothProgressBar.cs">
+    <Compile Include="SignalStatusProgressBar.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="SmoothProgressBar.Designer.cs">
-      <DependentUpon>SmoothProgressBar.cs</DependentUpon>
+    <Compile Include="SignalStatusProgressBar.Designer.cs">
+      <DependentUpon>SignalStatusProgressBar.cs</DependentUpon>
     </Compile>
     <Compile Include="StorageDeviceFooterControl.cs">
       <SubType>UserControl</SubType>
@@ -197,8 +197,8 @@
     <EmbeddedResource Include="SettingsForm.resx">
       <DependentUpon>SettingsForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="SmoothProgressBar.resx">
-      <DependentUpon>SmoothProgressBar.cs</DependentUpon>
+    <EmbeddedResource Include="SignalStatusProgressBar.resx">
+      <DependentUpon>SignalStatusProgressBar.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="StorageDeviceFooterControl.resx">
       <DependentUpon>StorageDeviceFooterControl.cs</DependentUpon>

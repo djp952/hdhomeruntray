@@ -38,9 +38,9 @@ namespace zuki.hdhomeruntray
 			this.m_signalstrengthlabel = new System.Windows.Forms.Label();
 			this.m_signalqualitylabel = new System.Windows.Forms.Label();
 			this.m_symbolqualitylabel = new System.Windows.Forms.Label();
-			this.m_signalstrengthbar = new zuki.hdhomeruntray.SmoothProgressBar();
-			this.m_signalqualitybar = new zuki.hdhomeruntray.SmoothProgressBar();
-			this.m_symbolqualitybar = new zuki.hdhomeruntray.SmoothProgressBar();
+			this.m_signalstrengthbar = new zuki.hdhomeruntray.SignalStatusProcessBar();
+			this.m_signalqualitybar = new zuki.hdhomeruntray.SignalStatusProcessBar();
+			this.m_symbolqualitybar = new zuki.hdhomeruntray.SignalStatusProcessBar();
 			this.m_signalstrengthpct = new System.Windows.Forms.Label();
 			this.m_signalqualitypct = new System.Windows.Forms.Label();
 			this.m_symbolqualitypct = new System.Windows.Forms.Label();
@@ -336,9 +336,9 @@ namespace zuki.hdhomeruntray
 		private System.Windows.Forms.Label m_signalstrengthlabel;
 		private System.Windows.Forms.Label m_signalqualitylabel;
 		private System.Windows.Forms.Label m_symbolqualitylabel;
-		private zuki.hdhomeruntray.SmoothProgressBar m_signalstrengthbar;
-		private zuki.hdhomeruntray.SmoothProgressBar m_signalqualitybar;
-		private zuki.hdhomeruntray.SmoothProgressBar m_symbolqualitybar;
+		private zuki.hdhomeruntray.SignalStatusProcessBar m_signalstrengthbar;
+		private zuki.hdhomeruntray.SignalStatusProcessBar m_signalqualitybar;
+		private zuki.hdhomeruntray.SignalStatusProcessBar m_symbolqualitybar;
 		private System.Windows.Forms.Label m_signalstrengthpct;
 		private System.Windows.Forms.Label m_signalqualitypct;
 		private System.Windows.Forms.Label m_symbolqualitypct;
