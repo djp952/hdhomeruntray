@@ -32,13 +32,16 @@ namespace zuki.hdhomeruntray
 
 	public enum TunerStatusColorSource
 	{
+		[Description("None")]
+		None = 0,
+
 		[Description("Signal Strength")]
-		SignalStrength = 0,
+		SignalStrength = 1,
 
 		[Description("Signal Quality")]
-		SignalQuality = 1,
+		SignalQuality = 2,
 
 		[Description("Symbol Quality")]
-		SymbolQuality = 2,
+		SymbolQuality = 3,
 	}
 }

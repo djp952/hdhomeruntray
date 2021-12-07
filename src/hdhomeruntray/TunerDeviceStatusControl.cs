@@ -25,6 +25,7 @@ using System.Drawing;
 using System.Windows.Forms;
 
 using zuki.hdhomeruntray.discovery;
+using zuki.hdhomeruntray.Properties;
 
 namespace zuki.hdhomeruntray
 {
@@ -104,7 +105,22 @@ namespace zuki.hdhomeruntray
 			{
 				// Header Controls
 				//
-				m_activedot.ForeColor = (status.IsActive) ? DeviceStatusColor.Green : DeviceStatusColor.Gray;
+				Color forecolor = (status.IsActive) ? DeviceStatusColor.Green : DeviceStatusColor.Gray;
+				switch(Settings.Default.TunerStatusColorSource)
+				{
+					case TunerStatusColorSource.SignalStrength:
+						forecolor = status.SignalStrengthColor;
+						break;
+
+					case TunerStatusColorSource.SignalQuality:
+						forecolor = status.SignalQualityColor;
+						break;
+
+					case TunerStatusColorSource.SymbolQuality:
+						forecolor = status.SymbolQualityColor;
+						break;
+				}
+				m_activedot.ForeColor = forecolor;
 				
 				if(status.IsActive)
 				{
