@@ -109,8 +109,8 @@ namespace zuki.hdhomeruntray
 				m_value = value;
 
 				// Invalidate only the changed area of the control
-				Rectangle newValueRect = ClientRectangle;
-				Rectangle oldValueRect = ClientRectangle;
+				Rectangle newValueRect = GetPaddedClientRectangle();
+				Rectangle oldValueRect = newValueRect;
 
 				// Use a new value to calculate the rectangle for progress
 				float percent = (m_value - m_minimum) / (float)(m_maximum - m_minimum);
@@ -151,7 +151,7 @@ namespace zuki.hdhomeruntray
 		{
 			float percent = (m_value - m_minimum) / (float)(m_maximum - m_minimum);
 
-			Rectangle rect = ClientRectangle;
+			Rectangle rect = GetPaddedClientRectangle();
 			rect.Width = (int)(rect.Width * percent);
 
 			using(SolidBrush brush = new SolidBrush(m_color))
@@ -167,6 +167,20 @@ namespace zuki.hdhomeruntray
 		protected override void OnResize(EventArgs args)
 		{
 			Invalidate();
+		}
+
+		//-------------------------------------------------------------------
+		// Private Member Functions
+		//-------------------------------------------------------------------
+
+		// GetPaddedClientRectangle
+		//
+		// Gets the client rectangle, taking padding into account
+		private Rectangle GetPaddedClientRectangle()
+		{
+			return new Rectangle(ClientRectangle.Left + Padding.Left,
+				ClientRectangle.Top + Padding.Top, ClientRectangle.Width - (Padding.Left + Padding.Right),
+				ClientRectangle.Height - (Padding.Top + Padding.Bottom));
 		}
 
 		//-------------------------------------------------------------------

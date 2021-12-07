@@ -72,6 +72,26 @@ namespace zuki.hdhomeruntray
 		}
 
 		//-------------------------------------------------------------------
+		// float.ScaleDPI
+		//
+		// Scales a float value based on the DPI of the system
+
+		public static float ScaleDPI(this float value, IntPtr handle)
+		{
+			float factorx = 1.0F;           // Assume no horizontal scaling
+			float factory = 1.0F;           // Assume no vertical scaling
+
+			// Use a Graphics instance to determine the control's DPI factor
+			using(Graphics gr = Graphics.FromHwnd(handle))
+			{
+				factorx = gr.DpiX / 96.0F;
+				factory = gr.DpiY / 96.0F;
+			}
+
+			return (float)(value * ((factorx + factory) / 2.0));
+		}
+
+		//-------------------------------------------------------------------
 		// Graphics.DrawRoundedRectangle
 		//
 		// Draws a rounded rectangle specified by a bounding Rectangle and four corner radius values
@@ -148,6 +168,26 @@ namespace zuki.hdhomeruntray
 		}
 
 		//-------------------------------------------------------------------
+		// int.ScaleDPI
+		//
+		// Scales an integer value based on the DPI of the system
+
+		public static int ScaleDPI(this int value, IntPtr handle)
+		{
+			float factorx = 1.0F;           // Assume no horizontal scaling
+			float factory = 1.0F;           // Assume no vertical scaling
+
+			// Use a Graphics instance to determine the control's DPI factor
+			using(Graphics gr = Graphics.FromHwnd(handle))
+			{
+				factorx = gr.DpiX / 96.0F;
+				factory = gr.DpiY / 96.0F;
+			}
+
+			return (int)(value * ((factorx + factory) / 2.0));
+		}
+
+		//-------------------------------------------------------------------
 		// Padding.ScaleDPI
 		//
 		// Scales a Padding value based on the DPI of the system
@@ -167,26 +207,6 @@ namespace zuki.hdhomeruntray
 			// Create a new Padding instance with the scaling factors applied
 			return new Padding((int)(padding.Left * factorx), (int)(padding.Top * factory),
 				(int)(padding.Right * factorx), (int)(padding.Bottom * factory));
-		}
-
-		//-------------------------------------------------------------------
-		// int.ScaleDPI
-		//
-		// Scales an integer value based on the DPI of the system
-
-		public static int ScaleDPI(this int value, IntPtr handle)
-		{
-			float factorx = 1.0F;           // Assume no horizontal scaling
-			float factory = 1.0F;           // Assume no vertical scaling
-
-			// Use a Graphics instance to determine the control's DPI factor
-			using(Graphics gr = Graphics.FromHwnd(handle))
-			{
-				factorx = gr.DpiX / 96.0F;
-				factory = gr.DpiY / 96.0F;
-			}
-
-			return (int)(value * ((factorx + factory) / 2.0));
 		}
 
 		//-------------------------------------------------------------------

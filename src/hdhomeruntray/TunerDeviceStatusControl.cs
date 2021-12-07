@@ -42,31 +42,70 @@ namespace zuki.hdhomeruntray
 		{
 			InitializeComponent();
 
-			Padding = Padding.ScaleDPI(Handle);
+			m_layoutpanel.SuspendLayout();
+			m_signallayoutpanel.SuspendLayout();
+			m_headerlayoutpanel.SuspendLayout();
+			m_footerlayoutpanel.SuspendLayout();
+			SuspendLayout();
 
-			m_layoutpanel.Margin = m_layoutpanel.Margin.ScaleDPI(Handle);
-			m_layoutpanel.Padding = m_layoutpanel.Padding.ScaleDPI(Handle);
-			m_headerlayoutpanel.Margin = m_headerlayoutpanel.Margin.ScaleDPI(Handle);
-			m_headerlayoutpanel.Padding = m_headerlayoutpanel.Padding.ScaleDPI(Handle);
-			m_signallayoutpanel.Margin = m_signallayoutpanel.Margin.ScaleDPI(Handle);
-			m_signallayoutpanel.Padding = m_signallayoutpanel.Padding.ScaleDPI(Handle);
-			m_footerlayoutpanel.Margin = m_footerlayoutpanel.Margin.ScaleDPI(Handle);
-			m_footerlayoutpanel.Padding = m_footerlayoutpanel.Padding.ScaleDPI(Handle);
-
-			// WINDOWS 11
-			//
-			if(VersionHelper.IsWindows11OrGreater())
+			try
 			{
-				m_tunernumber.Font = new Font("Segoe UI Variable Text Semibold", m_tunernumber.Font.Size, m_tunernumber.Font.Style);
-				m_channel.Font = new Font("Segoe UI Variable Text Semibold", m_channel.Font.Size, m_channel.Font.Style);
-				m_signalstrengthlabel.Font = new Font("Segoe UI Variable Text", m_signalstrengthlabel.Font.Size, m_signalstrengthlabel.Font.Style);
-				m_signalqualitylabel.Font = new Font("Segoe UI Variable Small", m_signalqualitylabel.Font.Size, m_signalqualitylabel.Font.Style);
-				m_symbolqualitylabel.Font = new Font("Segoe UI Variable Text", m_symbolqualitylabel.Font.Size, m_symbolqualitylabel.Font.Style);
-				m_signalstrengthpct.Font = new Font("Segoe UI Variable Text", m_signalstrengthpct.Font.Size, m_signalstrengthpct.Font.Style);
-				m_signalqualitypct.Font = new Font("Segoe UI Variable Text", m_signalqualitypct.Font.Size, m_signalqualitypct.Font.Style);
-				m_symbolqualitypct.Font = new Font("Segoe UI Variable Text", m_symbolqualitypct.Font.Size, m_symbolqualitypct.Font.Style);
-				m_targetip.Font = new Font("Segoe UI Variable Text", m_targetip.Font.Size, m_targetip.Font.Style);
-				m_bitrate.Font = new Font("Segoe UI Variable Text", m_bitrate.Font.Size, m_bitrate.Font.Style);
+				Padding = Padding.ScaleDPI(Handle);
+
+				m_layoutpanel.Margin = m_layoutpanel.Margin.ScaleDPI(Handle);
+				m_layoutpanel.Padding = m_layoutpanel.Padding.ScaleDPI(Handle);
+				m_headerlayoutpanel.Margin = m_headerlayoutpanel.Margin.ScaleDPI(Handle);
+				m_headerlayoutpanel.Padding = m_headerlayoutpanel.Padding.ScaleDPI(Handle);
+				m_signallayoutpanel.Margin = m_signallayoutpanel.Margin.ScaleDPI(Handle);
+				m_signallayoutpanel.Padding = m_signallayoutpanel.Padding.ScaleDPI(Handle);
+				m_footerlayoutpanel.Margin = m_footerlayoutpanel.Margin.ScaleDPI(Handle);
+				m_footerlayoutpanel.Padding = m_footerlayoutpanel.Padding.ScaleDPI(Handle);
+
+				m_signalstrengthlabel.Padding = m_signalstrengthlabel.Padding.ScaleDPI(Handle);
+				m_signalstrengthbar.Padding = m_signalstrengthbar.Padding.ScaleDPI(Handle);
+				m_signalstrengthpct.Padding = m_signalstrengthpct.Padding.ScaleDPI(Handle);
+
+				m_signalqualitylabel.Padding = m_signalqualitylabel.Padding.ScaleDPI(Handle);
+				m_signalqualitybar.Padding = m_signalqualitybar.Padding.ScaleDPI(Handle);
+				m_signalqualitypct.Padding = m_signalqualitypct.Padding.ScaleDPI(Handle);
+
+				m_symbolqualitylabel.Padding = m_symbolqualitylabel.Padding.ScaleDPI(Handle);
+				m_symbolqualitybar.Padding = m_symbolqualitybar.Padding.ScaleDPI(Handle);
+				m_symbolqualitypct.Padding = m_symbolqualitypct.Padding.ScaleDPI(Handle);
+
+				// Scale the middle column to have a consistent progress bar width
+				int column = m_signallayoutpanel.GetColumn(m_signalstrengthbar);
+				m_signallayoutpanel.ColumnStyles[column].Width = m_signallayoutpanel.ColumnStyles[column].Width.ScaleDPI(Handle);
+
+				// WINDOWS 11
+				//
+				if(VersionHelper.IsWindows11OrGreater())
+				{
+					m_tunernumber.Font = new Font("Segoe UI Variable Text Semibold", m_tunernumber.Font.Size, m_tunernumber.Font.Style);
+					m_channel.Font = new Font("Segoe UI Variable Text Semibold", m_channel.Font.Size, m_channel.Font.Style);
+					m_signalstrengthlabel.Font = new Font("Segoe UI Variable Text", m_signalstrengthlabel.Font.Size, m_signalstrengthlabel.Font.Style);
+					m_signalqualitylabel.Font = new Font("Segoe UI Variable Text", m_signalqualitylabel.Font.Size, m_signalqualitylabel.Font.Style);
+					m_symbolqualitylabel.Font = new Font("Segoe UI Variable Text", m_symbolqualitylabel.Font.Size, m_symbolqualitylabel.Font.Style);
+					m_signalstrengthpct.Font = new Font("Segoe UI Variable Text", m_signalstrengthpct.Font.Size, m_signalstrengthpct.Font.Style);
+					m_signalqualitypct.Font = new Font("Segoe UI Variable Text", m_signalqualitypct.Font.Size, m_signalqualitypct.Font.Style);
+					m_symbolqualitypct.Font = new Font("Segoe UI Variable Text", m_symbolqualitypct.Font.Size, m_symbolqualitypct.Font.Style);
+					m_targetip.Font = new Font("Segoe UI Variable Text", m_targetip.Font.Size, m_targetip.Font.Style);
+					m_bitrate.Font = new Font("Segoe UI Variable Text", m_bitrate.Font.Size, m_bitrate.Font.Style);
+				}
+			}
+
+			finally
+			{
+				m_layoutpanel.ResumeLayout(false);
+				m_layoutpanel.PerformLayout();
+				m_signallayoutpanel.ResumeLayout(false);
+				m_signallayoutpanel.PerformLayout();
+				m_headerlayoutpanel.ResumeLayout(false);
+				m_headerlayoutpanel.PerformLayout();
+				m_footerlayoutpanel.ResumeLayout(false);
+				m_footerlayoutpanel.PerformLayout();
+				ResumeLayout(false);
+				PerformLayout();
 			}
 		}
 
