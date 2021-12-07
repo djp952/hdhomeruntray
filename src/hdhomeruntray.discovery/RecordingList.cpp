@@ -27,6 +27,8 @@
 
 #pragma warning(push, 4)
 
+using namespace System::Diagnostics;
+
 namespace zuki::hdhomeruntray::discovery {
 
 //---------------------------------------------------------------------------
@@ -102,6 +104,8 @@ IEnumerator<Recording^>^ RecordingList::GetEnumerator(void)
 
 int RecordingList::GetHashCode(void)
 {
+	Debug::Assert(m_recordings != nullptr);
+
 	// 32-bit FNV-1a primes (http://www.isthe.com/chongo/tech/comp/fnv/index.html#FNV-source) 
 	const int fnv_offset_basis = 2166136261U;
 	const int fnv_prime = 16777619U;
@@ -109,13 +113,13 @@ int RecordingList::GetHashCode(void)
 	int hash = fnv_offset_basis;
 
 	// Start with the recordings count
-	hash ^= m_recordings->Count;
+	hash ^= (m_recordings == nullptr) ? 0 : m_recordings->Count;
 	hash *= fnv_prime;
 
 	// Hash against each of the individual Recording instances
 	for each(Recording^ recording in m_recordings)
 	{
-		hash ^= recording->GetHashCode();
+		hash ^= (recording == nullptr) ? 0 : recording->GetHashCode();
 		hash *= fnv_prime;
 	}
 

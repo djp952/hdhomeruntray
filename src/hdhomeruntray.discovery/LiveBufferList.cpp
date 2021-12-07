@@ -27,6 +27,8 @@
 
 #pragma warning(push, 4)
 
+using namespace System::Diagnostics;
+
 namespace zuki::hdhomeruntray::discovery {
 
 //---------------------------------------------------------------------------
@@ -102,6 +104,8 @@ IEnumerator<LiveBuffer^>^ LiveBufferList::GetEnumerator(void)
 
 int LiveBufferList::GetHashCode(void)
 {
+	Debug::Assert(m_livebuffers != nullptr);
+
 	// 32-bit FNV-1a primes (http://www.isthe.com/chongo/tech/comp/fnv/index.html#FNV-source) 
 	const int fnv_offset_basis = 2166136261U;
 	const int fnv_prime = 16777619U;
@@ -109,13 +113,13 @@ int LiveBufferList::GetHashCode(void)
 	int hash = fnv_offset_basis;
 
 	// Start with the live buffers count
-	hash ^= m_livebuffers->Count;
+	hash ^= (m_livebuffers == nullptr) ? 0 : m_livebuffers->Count;
 	hash *= fnv_prime;
 
 	// Hash against each of the individual LiveBuffer instances
 	for each(LiveBuffer^ livebuffer in m_livebuffers)
 	{
-		hash ^= livebuffer->GetHashCode();
+		hash ^= (livebuffer == nullptr) ? 0 : livebuffer->GetHashCode();
 		hash *= fnv_prime;
 	}
 

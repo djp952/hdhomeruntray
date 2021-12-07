@@ -80,9 +80,9 @@ int LiveBuffer::GetHashCode(void)
 	int hash = fnv_offset_basis;
 
 	// FNV hash each member variable
-	hash ^= m_name->GetHashCode();
+	hash ^= (m_name == nullptr) ? 0 : m_name->GetHashCode();
 	hash *= fnv_prime;
-	hash ^= m_targetip->GetHashCode();
+	hash ^= (m_targetip == nullptr) ? 0 : m_targetip->GetHashCode();
 	hash *= fnv_prime;
 
 	return hash;

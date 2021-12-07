@@ -40,7 +40,8 @@ namespace zuki::hdhomeruntray::discovery {
 //
 //	status		- Pointer to the unmanaged hdhomerun_tuner_status_t struct
 
-TunerStatus::TunerStatus(struct hdhomerun_tuner_status_t const* status) : m_hasvirtualchannel(false)
+TunerStatus::TunerStatus(struct hdhomerun_tuner_status_t const* status) : m_hasvirtualchannel(false),
+	m_virtualchannelnum(String::Empty), m_virtualchannelname(String::Empty)
 {
 	if(status == nullptr) throw gcnew ArgumentNullException("status");
 
@@ -201,7 +202,7 @@ int TunerStatus::GetHashCode(void)
 
 	// FNV hash the relevant member variables; things like the color codes are tied
 	// to the signal strength values, no need to include those here
-	hash ^= m_channel->GetHashCode();
+	hash ^= (m_channel == nullptr) ? 0 : m_channel->GetHashCode();
 	hash *= fnv_prime;
 	hash ^= m_signalstrength.GetHashCode();
 	hash *= fnv_prime;
@@ -209,9 +210,9 @@ int TunerStatus::GetHashCode(void)
 	hash *= fnv_prime;
 	hash ^= m_symbolquality.GetHashCode();
 	hash *= fnv_prime;
-	hash ^= m_virtualchannelnum->GetHashCode();
+	hash ^= (m_virtualchannelnum == nullptr) ? 0 : m_virtualchannelnum->GetHashCode();
 	hash *= fnv_prime;
-	hash ^= m_virtualchannelname->GetHashCode();
+	hash ^= (m_virtualchannelname == nullptr) ? 0 : m_virtualchannelname->GetHashCode();
 	hash *= fnv_prime;
 	hash ^= m_bitrate.GetHashCode();
 	hash *= fnv_prime;
