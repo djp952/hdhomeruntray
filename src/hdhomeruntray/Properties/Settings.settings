@@ -12,7 +12,7 @@
       <Value Profile="(Default)">SystemDefault</Value>
     </Setting>
     <Setting Name="TunerStatusColorSource" Type="zuki.hdhomeruntray.TunerStatusColorSource" Scope="User">
-      <Value Profile="(Default)">SignalQuality</Value>
+      <Value Profile="(Default)">None</Value>
     </Setting>
   </Settings>
 </SettingsFile>
