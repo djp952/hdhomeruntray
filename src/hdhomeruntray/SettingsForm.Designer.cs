@@ -33,7 +33,7 @@ namespace zuki.hdhomeruntray
 			System.Windows.Forms.Label m_hoverintervallabel;
 			System.Windows.Forms.Label m_discoverymethodlabel;
 			System.Windows.Forms.Label m_discoverintervallabel;
-			this.m_layoutPanel = new System.Windows.Forms.TableLayoutPanel();
+			this.m_layoutpanel = new System.Windows.Forms.TableLayoutPanel();
 			this.m_tunerstatuscolorsource = new System.Windows.Forms.ComboBox();
 			this.m_discoverymethod = new System.Windows.Forms.ComboBox();
 			this.m_discoveryinterval = new System.Windows.Forms.ComboBox();
@@ -42,7 +42,7 @@ namespace zuki.hdhomeruntray
 			m_hoverintervallabel = new System.Windows.Forms.Label();
 			m_discoverymethodlabel = new System.Windows.Forms.Label();
 			m_discoverintervallabel = new System.Windows.Forms.Label();
-			this.m_layoutPanel.SuspendLayout();
+			this.m_layoutpanel.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// m_tunerstatuscolorsourcelabel
@@ -89,32 +89,32 @@ namespace zuki.hdhomeruntray
 			m_discoverintervallabel.Text = "Discovery Interval";
 			m_discoverintervallabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
-			// m_layoutPanel
+			// m_layoutpanel
 			// 
-			this.m_layoutPanel.AutoSize = true;
-			this.m_layoutPanel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-			this.m_layoutPanel.ColumnCount = 2;
-			this.m_layoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-			this.m_layoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-			this.m_layoutPanel.Controls.Add(m_tunerstatuscolorsourcelabel, 0, 3);
-			this.m_layoutPanel.Controls.Add(this.m_tunerstatuscolorsource, 1, 3);
-			this.m_layoutPanel.Controls.Add(m_hoverintervallabel, 0, 2);
-			this.m_layoutPanel.Controls.Add(this.m_discoverymethod, 1, 1);
-			this.m_layoutPanel.Controls.Add(m_discoverymethodlabel, 0, 1);
-			this.m_layoutPanel.Controls.Add(m_discoverintervallabel, 0, 0);
-			this.m_layoutPanel.Controls.Add(this.m_discoveryinterval, 1, 0);
-			this.m_layoutPanel.Controls.Add(this.m_trayiconhoverdelay, 1, 2);
-			this.m_layoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.m_layoutPanel.Location = new System.Drawing.Point(4, 4);
-			this.m_layoutPanel.Name = "m_layoutPanel";
-			this.m_layoutPanel.Padding = new System.Windows.Forms.Padding(4);
-			this.m_layoutPanel.RowCount = 4;
-			this.m_layoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.m_layoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.m_layoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.m_layoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.m_layoutPanel.Size = new System.Drawing.Size(362, 173);
-			this.m_layoutPanel.TabIndex = 1;
+			this.m_layoutpanel.AutoSize = true;
+			this.m_layoutpanel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+			this.m_layoutpanel.ColumnCount = 2;
+			this.m_layoutpanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+			this.m_layoutpanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+			this.m_layoutpanel.Controls.Add(m_tunerstatuscolorsourcelabel, 0, 3);
+			this.m_layoutpanel.Controls.Add(this.m_tunerstatuscolorsource, 1, 3);
+			this.m_layoutpanel.Controls.Add(m_hoverintervallabel, 0, 2);
+			this.m_layoutpanel.Controls.Add(this.m_discoverymethod, 1, 1);
+			this.m_layoutpanel.Controls.Add(m_discoverymethodlabel, 0, 1);
+			this.m_layoutpanel.Controls.Add(m_discoverintervallabel, 0, 0);
+			this.m_layoutpanel.Controls.Add(this.m_discoveryinterval, 1, 0);
+			this.m_layoutpanel.Controls.Add(this.m_trayiconhoverdelay, 1, 2);
+			this.m_layoutpanel.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.m_layoutpanel.Location = new System.Drawing.Point(4, 4);
+			this.m_layoutpanel.Name = "m_layoutpanel";
+			this.m_layoutpanel.Padding = new System.Windows.Forms.Padding(4);
+			this.m_layoutpanel.RowCount = 4;
+			this.m_layoutpanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.m_layoutpanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.m_layoutpanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.m_layoutpanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.m_layoutpanel.Size = new System.Drawing.Size(362, 173);
+			this.m_layoutpanel.TabIndex = 1;
 			// 
 			// m_tunerstatuscolorsource
 			// 
@@ -163,7 +163,7 @@ namespace zuki.hdhomeruntray
 			this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
 			this.ClientSize = new System.Drawing.Size(370, 181);
 			this.ControlBox = false;
-			this.Controls.Add(this.m_layoutPanel);
+			this.Controls.Add(this.m_layoutpanel);
 			this.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
 			this.MaximizeBox = false;
@@ -175,8 +175,8 @@ namespace zuki.hdhomeruntray
 			this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
 			this.Text = "SettingsForm";
 			this.TopMost = true;
-			this.m_layoutPanel.ResumeLayout(false);
-			this.m_layoutPanel.PerformLayout();
+			this.m_layoutpanel.ResumeLayout(false);
+			this.m_layoutpanel.PerformLayout();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -184,7 +184,7 @@ namespace zuki.hdhomeruntray
 
 		#endregion
 
-		private System.Windows.Forms.TableLayoutPanel m_layoutPanel;
+		private System.Windows.Forms.TableLayoutPanel m_layoutpanel;
 		private System.Windows.Forms.ComboBox m_tunerstatuscolorsource;
 		private System.Windows.Forms.ComboBox m_discoverymethod;
 		private System.Windows.Forms.ComboBox m_discoveryinterval;

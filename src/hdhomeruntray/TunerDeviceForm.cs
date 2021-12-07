@@ -47,7 +47,8 @@ namespace zuki.hdhomeruntray
 				// Add the header user control for the device
 				m_header = new TunerDeviceHeaderControl(device)
 				{
-					Dock = DockStyle.Top
+					Dock = DockStyle.Top,
+					Padding = new Padding(0, 0, 0, 2).ScaleDPI(Handle)
 				};
 				m_layoutpanel.Controls.Add(m_header);
 
@@ -56,7 +57,8 @@ namespace zuki.hdhomeruntray
 				{
 					var status = new TunerDeviceStatusControl(device, tuner)
 					{
-						Dock = DockStyle.Top
+						Dock = DockStyle.Top,
+						Padding = new Padding(0, 2, 0, 2).ScaleDPI(Handle)
 					};
 					m_layoutpanel.Controls.Add(status);
 				}
@@ -64,7 +66,8 @@ namespace zuki.hdhomeruntray
 				// Add the footer user control for the device
 				m_footer = new TunerDeviceFooterControl(device)
 				{
-					Dock = DockStyle.Top
+					Dock = DockStyle.Top,
+					Padding = new Padding(0, 2, 0, 0).ScaleDPI(Handle)
 				};
 				m_layoutpanel.Controls.Add(m_footer);
 			}

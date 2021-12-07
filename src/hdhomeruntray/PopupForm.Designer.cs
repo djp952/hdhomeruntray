@@ -40,6 +40,7 @@ namespace zuki.hdhomeruntray
 			this.m_layoutpanel.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.m_layoutpanel.Location = new System.Drawing.Point(4, 4);
 			this.m_layoutpanel.Name = "m_layoutpanel";
+			this.m_layoutpanel.Padding = new System.Windows.Forms.Padding(4, 4, 4, 2);
 			this.m_layoutpanel.Size = new System.Drawing.Size(669, 66);
 			this.m_layoutpanel.TabIndex = 0;
 			this.m_layoutpanel.WrapContents = false;
