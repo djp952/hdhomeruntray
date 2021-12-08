@@ -105,9 +105,23 @@ namespace zuki.hdhomeruntray
 			}
 
 			// Add each device as a PopupItemControl into the layout panel
-			foreach(Device device in devices)
+			for(int index = 0; index < devices.Count; index++)
 			{
-				PopupItemDeviceControl devicecontrol = new PopupItemDeviceControl(device);
+				PopupItemDeviceControl devicecontrol = new PopupItemDeviceControl(devices[index]);
+
+				// If there is more than one device to display
+				if(devices.Count > 1)
+				{
+					// The first device only gets right padding
+					if(index == 0) devicecontrol.Padding = new Padding(0, 0, 1, 0).ScaleDPI(Handle);
+
+					// The last device only gets left padding
+					else if(index == (devices.Count - 1)) devicecontrol.Padding = new Padding(1, 0, 0, 0).ScaleDPI(Handle);
+
+					// Middle devices get both left and right padding
+					else devicecontrol.Padding = new Padding(1, 0, 1, 0).ScaleDPI(Handle);
+				}
+
 				devicecontrol.Toggled += new PopupItemToggledEventHandler(OnDeviceToggled);
 				m_layoutpanel.Controls.Add(devicecontrol);
 			}
@@ -133,15 +147,24 @@ namespace zuki.hdhomeruntray
 			if(m_pinned) return;
 
 			// Create the settings toggle
-			var settings = new PopupItemGlyphControl(SymbolGlyph.Settings, PopupItemControlType.Toggle);
+			var settings = new PopupItemGlyphControl(SymbolGlyph.Settings, PopupItemControlType.Toggle)
+			{
+				Padding = new Padding(2, 0, 1, 0).ScaleDPI(Handle)
+			};
 			settings.Toggled += new PopupItemToggledEventHandler(OnSettingsToggled);
 
 			// Crate the unpin button
-			var unpin = new PopupItemGlyphControl(SymbolGlyph.Unpin, PopupItemControlType.Button);
+			var unpin = new PopupItemGlyphControl(SymbolGlyph.Unpin, PopupItemControlType.Button)
+			{
+				Padding = new Padding(1, 0, 1, 0).ScaleDPI(Handle)
+			};
 			unpin.Selected += new EventHandler(OnUnpinSelected);
 
 			// Create the exit button
-			var exit = new PopupItemGlyphControl(SymbolGlyph.Exit, PopupItemControlType.Button);
+			var exit = new PopupItemGlyphControl(SymbolGlyph.Exit, PopupItemControlType.Button)
+			{
+				Padding = new Padding(1, 0, 0, 0).ScaleDPI(Handle)
+			};
 			exit.Selected += new EventHandler(OnExitSelected);
 
 			// Add the glyph items to the outer layout panel

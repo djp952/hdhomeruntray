@@ -40,29 +40,15 @@ namespace zuki.hdhomeruntray
 		{
 			InitializeComponent();
 
-			// Adjust the padding after initialization
+			m_layoutpanel.EnableDoubleBuferring();
+
 			Padding = Padding.ScaleDPI(Handle);
-			m_controlspanel.Margin = m_controlspanel.Margin.ScaleDPI(Handle);
+			m_layoutpanel.Margin = m_layoutpanel.Margin.ScaleDPI(Handle);
+			m_layoutpanel.Padding = m_layoutpanel.Padding.ScaleDPI(Handle);
+			m_layoutpanel.Radii = m_layoutpanel.Radii.ScaleDPI(Handle);
 
 			// Save the type of control being implemented
 			m_type = type;
-
-			// Create the inner RoundedFlowLayoutPanel control
-			m_layoutpanel = new RoundedFlowLayoutPanel
-			{
-				AutoSize = true,
-				AutoSizeMode = AutoSizeMode.GrowAndShrink,
-				FlowDirection = FlowDirection.LeftToRight,
-				WrapContents = false,
-				ForeColor = SystemColors.ControlText,
-				BackColor = SystemColors.ControlLightLight,
-				Padding = new Padding(6).ScaleDPI(Handle),
-				Radii = new Radii(4).ScaleDPI(Handle),
-			};
-
-			// This needs to be double-buffered to prevent flickering when
-			// the background color changes
-			m_layoutpanel.EnableDoubleBuferring();
 
 			// Button type event handlers
 			if(m_type == PopupItemControlType.Button)
@@ -79,9 +65,6 @@ namespace zuki.hdhomeruntray
 				m_layoutpanel.MouseEnter += OnMouseEnterToggle;
 				m_layoutpanel.MouseLeave += OnMouseLeaveToggle;
 			}
-
-			// Add the inner RoundedFlowLayoutPanel to the output FlowLayoutPanel
-			m_controlspanel.Controls.Add(m_layoutpanel);
 		}
 
 		//-------------------------------------------------------------------------
@@ -235,7 +218,6 @@ namespace zuki.hdhomeruntray
 		//-------------------------------------------------------------------
 
 		private readonly PopupItemControlType m_type;
-		private readonly RoundedFlowLayoutPanel m_layoutpanel;
 		private bool m_toggled = false;
 	}
 }
