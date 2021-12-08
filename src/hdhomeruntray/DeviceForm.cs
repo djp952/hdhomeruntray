@@ -64,6 +64,8 @@ namespace zuki.hdhomeruntray
 		{
 			InitializeComponent();
 
+			m_layoutpanel.EnableDoubleBuferring();
+
 			// WINDOWS 11
 			//
 			if(VersionHelper.IsWindows11OrGreater())

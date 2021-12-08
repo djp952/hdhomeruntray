@@ -41,6 +41,8 @@ namespace zuki.hdhomeruntray
 		{
 			InitializeComponent();
 
+			m_layoutpanel.EnableDoubleBuferring();
+
 			Padding = Padding.ScaleDPI(Handle);
 			m_layoutpanel.Padding = m_layoutpanel.Padding.ScaleDPI(Handle);
 			m_layoutpanel.Radii = m_layoutpanel.Radii.ScaleDPI(Handle);

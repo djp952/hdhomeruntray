@@ -67,10 +67,7 @@ namespace zuki.hdhomeruntray
 		{
 			InitializeComponent();
 
-			// Scale the padding based on the form DPI
-			Padding = Padding.ScaleDPI(Handle);
-			m_layoutpanel.Margin = m_layoutpanel.Margin.ScaleDPI(Handle);
-			m_layoutpanel.Padding = m_layoutpanel.Padding.ScaleDPI(Handle);
+			m_layoutpanel.EnableDoubleBuferring();
 
 			// WINDOWS 11
 			//
@@ -81,6 +78,11 @@ namespace zuki.hdhomeruntray
 				var preference = NativeMethods.DWM_WINDOW_CORNER_PREFERENCE.DWMWCP_ROUND;
 				NativeMethods.DwmSetWindowAttribute(Handle, attribute, ref preference, sizeof(uint));
 			}
+
+			// Scale the padding based on the form DPI
+			Padding = Padding.ScaleDPI(Handle);
+			m_layoutpanel.Margin = m_layoutpanel.Margin.ScaleDPI(Handle);
+			m_layoutpanel.Padding = m_layoutpanel.Padding.ScaleDPI(Handle);
 		}
 
 		// Instance Constructor

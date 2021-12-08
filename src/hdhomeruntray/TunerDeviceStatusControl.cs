@@ -42,6 +42,8 @@ namespace zuki.hdhomeruntray
 		{
 			InitializeComponent();
 
+			m_layoutpanel.EnableDoubleBuferring();
+
 			m_layoutpanel.SuspendLayout();
 			m_signallayoutpanel.SuspendLayout();
 			m_headerlayoutpanel.SuspendLayout();
