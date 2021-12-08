@@ -190,7 +190,10 @@ namespace zuki.hdhomeruntray
 		private void OnMouseClickToggle(object sender, EventArgs args)
 		{
 			m_toggled = !m_toggled;             // Invert the toggle state
-			OnMouseLeaveToggle(sender, args);   // Update the toggle state
+
+			// Update the toggle state if the mouse isn't in the control
+			if(!ClientRectangle.Contains(PointToClient(Cursor.Position))) 
+				OnMouseLeaveToggle(sender, args);
 			
 			Toggled?.Invoke(this, new PopupItemToggledEventArgs(m_toggled));
 		}
