@@ -57,8 +57,12 @@ namespace zuki.hdhomeruntray
 				ForeColor = SystemColors.ControlText,
 				BackColor = SystemColors.ControlLightLight,
 				Padding = new Padding(6).ScaleDPI(Handle),
-				Radii = new Radii(4).ScaleDPI(Handle)
+				Radii = new Radii(4).ScaleDPI(Handle),
 			};
+
+			// This needs to be double-buffered to prevent flickering when
+			// the background color changes
+			m_layoutpanel.EnableDoubleBuferring();
 
 			// Button type event handlers
 			if(m_type == PopupItemControlType.Button)

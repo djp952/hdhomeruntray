@@ -25,6 +25,7 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Linq;
+using System.Reflection;
 using System.Windows.Forms;
 
 namespace zuki.hdhomeruntray
@@ -71,6 +72,17 @@ namespace zuki.hdhomeruntray
 			}
 		}
 
+		//-------------------------------------------------------------------
+		// Control.EnableDoubleBuffering
+		//
+		// Enables double-buffering for a control via reflection
+
+		public static void EnableDoubleBuferring(this Control control)
+		{
+			var property = typeof(Control).GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic);
+			property.SetValue(control, true, null);
+		}       
+		
 		//-------------------------------------------------------------------
 		// float.ScaleDPI
 		//
