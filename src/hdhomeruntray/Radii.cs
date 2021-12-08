@@ -20,6 +20,7 @@
 // SOFTWARE.
 //---------------------------------------------------------------------------
 
+using System;
 using System.ComponentModel;
 
 namespace zuki.hdhomeruntray
@@ -29,9 +30,17 @@ namespace zuki.hdhomeruntray
 	//
 	// Value type for use with the "Rounded" panel user controls.  Does not
 	// implement all of the stuff publically consumable value types should
-	// (GetHashCode, Equals, etc.)
+	// (GetHashCode, Equals, etc.)  TODO: Go back and implement those
+	//
+	// Based on .NET Foundation .NET Windows Forms "Padding":
+	// https://github.com/dotnet/winforms
+	//
+	// Licensed to the .NET Foundation under one or more agreements.
+	// The .NET Foundation licenses this file to you under the MIT license.
+	// See the LICENSE file in the project root for more information.
 
-	[TypeConverter(typeof(ExpandableObjectConverter))]
+	[TypeConverter(typeof(RadiiConverter))]
+	[Serializable]
 	struct Radii
 	{
 		// Instance Constructor
@@ -154,7 +163,7 @@ namespace zuki.hdhomeruntray
 
 		// ShouldSerializeAll
 		//
-		// TODO: No idea
+		// Indicates to RadiiConverter that m_all should be serialized
 		internal bool ShouldSerializeAll() => m_all;
 
 		//-------------------------------------------------------------------
