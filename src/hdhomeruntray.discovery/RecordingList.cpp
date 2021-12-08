@@ -113,13 +113,13 @@ int RecordingList::GetHashCode(void)
 	int hash = fnv_offset_basis;
 
 	// Start with the recordings count
-	hash ^= (m_recordings == nullptr) ? 0 : m_recordings->Count;
+	hash ^= CLRISNULL(m_recordings) ? 0 : m_recordings->Count;
 	hash *= fnv_prime;
 
 	// Hash against each of the individual Recording instances
 	for each(Recording^ recording in m_recordings)
 	{
-		hash ^= (recording == nullptr) ? 0 : recording->GetHashCode();
+		hash ^= CLRISNULL(recording) ? 0 : recording->GetHashCode();
 		hash *= fnv_prime;
 	}
 

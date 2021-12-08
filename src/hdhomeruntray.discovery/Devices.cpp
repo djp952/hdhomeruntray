@@ -225,7 +225,7 @@ void Devices::DiscoveryCompletedAsync(Object^ state)
 bool Devices::TaskCancelled(Object^ taskid)
 {
     msclr::lock lock(m_statetolifetime->SyncRoot);
-	return m_statetolifetime[taskid] == nullptr;
+	return CLRISNULL(m_statetolifetime[taskid]);
 }
 
 //---------------------------------------------------------------------------

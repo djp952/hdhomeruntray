@@ -118,9 +118,9 @@ int StorageStatus::GetHashCode(void)
 	// FNV hash each member variable
 	hash ^= m_statuscolor.GetHashCode();
 	hash *= fnv_prime;
-	hash ^= (m_livebuffers == nullptr) ? 0 : m_livebuffers->GetHashCode();
+	hash ^= CLRISNULL(m_livebuffers) ? 0 : m_livebuffers->GetHashCode();
 	hash *= fnv_prime;
-	hash ^= (m_livebuffers == nullptr) ? 0 : m_recordings->GetHashCode();
+	hash ^= CLRISNULL(m_recordings) ? 0 : m_recordings->GetHashCode();
 	hash *= fnv_prime;
 
 	return hash;

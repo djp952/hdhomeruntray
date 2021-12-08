@@ -70,7 +70,7 @@ Recording^ Recording::Create(JObject^ recording)
 
 int Recording::GetHashCode(void)
 {
-	return (m_name == nullptr) ? 0 : m_name->GetHashCode();
+	return CLRISNULL(m_name) ? 0 : m_name->GetHashCode();
 }
 
 //---------------------------------------------------------------------------

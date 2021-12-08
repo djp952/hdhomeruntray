@@ -39,11 +39,13 @@ namespace zuki::hdhomeruntray::discovery {
 // Arguments:
 //
 //	status		- Pointer to the unmanaged hdhomerun_tuner_status_t struct
+//	targetip	- IPAddress of the target device
 
-TunerStatus::TunerStatus(struct hdhomerun_tuner_status_t const* status) : m_hasvirtualchannel(false),
-	m_virtualchannelnum(String::Empty), m_virtualchannelname(String::Empty)
+TunerStatus::TunerStatus(struct hdhomerun_tuner_status_t const* status, IPAddress^ targetip) : m_hasvirtualchannel(false),
+	m_virtualchannelnum(String::Empty), m_virtualchannelname(String::Empty), m_targetip(targetip)
 {
 	if(status == nullptr) throw gcnew ArgumentNullException("status");
+	if(CLRISNULL(targetip)) throw gcnew ArgumentNullException("targetip");
 
 	m_channel = gcnew String(status->channel);
 	m_bitrate = status->raw_bits_per_second;
@@ -64,11 +66,14 @@ TunerStatus::TunerStatus(struct hdhomerun_tuner_status_t const* status) : m_hasv
 // Arguments:
 //
 //	status		- Pointer to the unmanaged hdhomerun_tuner_status_t struct
+//	targetip	- IPAddress of the target device
 //	vstatus		- Pointer to the unmanaged hdhomerun_tuner_vstatus_t struct
 
-TunerStatus::TunerStatus(struct hdhomerun_tuner_status_t const* status, struct hdhomerun_tuner_vstatus_t const* vstatus) : TunerStatus(status)
+TunerStatus::TunerStatus(struct hdhomerun_tuner_status_t const* status, IPAddress^ targetip, struct hdhomerun_tuner_vstatus_t const* vstatus) 
+	: TunerStatus(status, targetip)
 {
 	if(status == nullptr) throw gcnew ArgumentNullException("status");
+	if(CLRISNULL(targetip)) throw gcnew ArgumentNullException("targetip");
 	if(vstatus == nullptr) throw gcnew ArgumentNullException("vstatus");
 
 	m_virtualchannelnum = gcnew String(vstatus->vchannel);
@@ -148,6 +153,7 @@ TunerStatus^ TunerStatus::Create(TunerDevice^ tunerdevice, int index)
 
 		struct hdhomerun_tuner_status_t status = {};			// Legacy status
 		struct hdhomerun_tuner_vstatus_t vstatus = {};			// Virtual channel status
+		IPAddress^ targetip = IPAddress::None;					// Target IP address
 
 		//
 		// TODO: If the device is busy, like with a channel scan, it will refuse to
@@ -171,9 +177,11 @@ TunerStatus^ TunerStatus::Create(TunerDevice^ tunerdevice, int index)
 				strncpy_s(vstatus.name, std::extent<decltype(vstatus.name)>::value, context->marshal_as<char const*>(vchannel), _TRUNCATE);
 			}
 		}
+
+		// TODO: Get Target IP Address, multiple formats apparently
 		
 		// 1 == success; 0 == rejected; -1 = communication failure
-		if(result == 1) return hasvstatus ? gcnew TunerStatus(&status, &vstatus) : gcnew TunerStatus(&status);
+		if(result == 1) return hasvstatus ? gcnew TunerStatus(&status, targetip, &vstatus) : gcnew TunerStatus(&status, targetip);
 		else if(result == 0) throw gcnew Exception("Tuner device rejected the request");
 		else if(result == -1) throw gcnew Exception("There was a communication failure accessing the tuner device");
 		else throw gcnew Exception("An unknown error occurred accessing the tuner device");
@@ -202,7 +210,7 @@ int TunerStatus::GetHashCode(void)
 
 	// FNV hash the relevant member variables; things like the color codes are tied
 	// to the signal strength values, no need to include those here
-	hash ^= (m_channel == nullptr) ? 0 : m_channel->GetHashCode();
+	hash ^= CLRISNULL(m_channel) ? 0 : m_channel->GetHashCode();
 	hash *= fnv_prime;
 	hash ^= m_signalstrength.GetHashCode();
 	hash *= fnv_prime;
@@ -210,12 +218,13 @@ int TunerStatus::GetHashCode(void)
 	hash *= fnv_prime;
 	hash ^= m_symbolquality.GetHashCode();
 	hash *= fnv_prime;
-	hash ^= (m_virtualchannelnum == nullptr) ? 0 : m_virtualchannelnum->GetHashCode();
+	hash ^= CLRISNULL(m_virtualchannelnum) ? 0 : m_virtualchannelnum->GetHashCode();
 	hash *= fnv_prime;
-	hash ^= (m_virtualchannelname == nullptr) ? 0 : m_virtualchannelname->GetHashCode();
+	hash ^= CLRISNULL(m_virtualchannelname) ? 0 : m_virtualchannelname->GetHashCode();
 	hash *= fnv_prime;
 	hash ^= m_bitrate.GetHashCode();
 	hash *= fnv_prime;
+	hash ^= CLRISNULL(m_targetip) ? 0 : m_targetip->GetHashCode();
 
 	return hash;
 }
@@ -337,6 +346,16 @@ int TunerStatus::SymbolQuality::get(void)
 Color TunerStatus::SymbolQualityColor::get(void)
 {
 	return this->IsActive ? ConvertHDHomeRunColor(m_symbolqualitycolor) : DeviceStatusColor::Gray;
+}
+
+//---------------------------------------------------------------------------
+// TunerStatus::TargetIP::get
+//
+// Gets the target IP address of the tuner
+
+IPAddress^ TunerStatus::TargetIP::get(void)
+{
+	return m_targetip;
 }
 
 //---------------------------------------------------------------------------

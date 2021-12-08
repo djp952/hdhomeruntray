@@ -113,13 +113,13 @@ int LiveBufferList::GetHashCode(void)
 	int hash = fnv_offset_basis;
 
 	// Start with the live buffers count
-	hash ^= (m_livebuffers == nullptr) ? 0 : m_livebuffers->Count;
+	hash ^= CLRISNULL(m_livebuffers) ? 0 : m_livebuffers->Count;
 	hash *= fnv_prime;
 
 	// Hash against each of the individual LiveBuffer instances
 	for each(LiveBuffer^ livebuffer in m_livebuffers)
 	{
-		hash ^= (livebuffer == nullptr) ? 0 : livebuffer->GetHashCode();
+		hash ^= CLRISNULL(livebuffer) ? 0 : livebuffer->GetHashCode();
 		hash *= fnv_prime;
 	}
 

@@ -28,6 +28,7 @@
 
 using namespace System;
 using namespace System::Drawing;
+using namespace System::Net;
 
 namespace zuki::hdhomeruntray::discovery {
 
@@ -128,6 +129,14 @@ public:
 		Color get(void);
 	}
 
+	// TargetIP
+	//
+	// Gets the target IP address of the tuner
+	property IPAddress^ TargetIP
+	{
+		IPAddress^ get(void);
+	}
+
 	// VirtualChannelName
 	//
 	// Gets the tuned virtual channel name
@@ -166,8 +175,8 @@ private:
 
 	// Instance Constructor
 	//
-	TunerStatus(struct hdhomerun_tuner_status_t const* status);
-	TunerStatus(struct hdhomerun_tuner_status_t const* status, struct hdhomerun_tuner_vstatus_t const* vstatus);
+	TunerStatus(struct hdhomerun_tuner_status_t const* status, IPAddress^ targetip);
+	TunerStatus(struct hdhomerun_tuner_status_t const* status, IPAddress^ targetip, struct hdhomerun_tuner_vstatus_t const* vstatus);
 
 	//-----------------------------------------------------------------------
 	// Private Member Functions
@@ -196,6 +205,7 @@ private:
 	String^				m_virtualchannelnum;	// Virtual channel number
 	String^				m_virtualchannelname;	// Virtual channel name
 	int					m_bitrate;				// Current tuner bitrate
+	IPAddress^			m_targetip;				// The target IP address
 };
 
 //---------------------------------------------------------------------------

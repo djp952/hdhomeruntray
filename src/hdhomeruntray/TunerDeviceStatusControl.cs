@@ -22,6 +22,7 @@
 
 using System;
 using System.Drawing;
+using System.Net;
 using System.Windows.Forms;
 
 using zuki.hdhomeruntray.discovery;
@@ -188,7 +189,7 @@ namespace zuki.hdhomeruntray
 
 					// Footer Controls
 					//
-					m_targetip.Text = String.Empty;     // TODO: Not sure I want to include this
+					m_targetip.Text = status.TargetIP.Equals(IPAddress.None) ? "" : status.TargetIP.ToString();
 					m_bitrate.Text = FormatBitRate(status.BitRate);
 
 					// Ensure the signal meter and footer are visible for an active tuner
