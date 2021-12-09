@@ -34,10 +34,10 @@ namespace zuki.hdhomeruntray
 			System.Windows.Forms.Label m_discoverymethodlabel;
 			System.Windows.Forms.Label m_discoverintervallabel;
 			this.m_layoutpanel = new System.Windows.Forms.TableLayoutPanel();
-			this.m_tunerstatuscolorsource = new System.Windows.Forms.ComboBox();
-			this.m_discoverymethod = new System.Windows.Forms.ComboBox();
-			this.m_discoveryinterval = new System.Windows.Forms.ComboBox();
-			this.m_trayiconhoverdelay = new System.Windows.Forms.ComboBox();
+			this.m_tunerstatuscolorsource = new zuki.hdhomeruntray.AutoSizeComboBox();
+			this.m_discoverymethod = new zuki.hdhomeruntray.AutoSizeComboBox();
+			this.m_discoveryinterval = new zuki.hdhomeruntray.AutoSizeComboBox();
+			this.m_trayiconhoverdelay = new zuki.hdhomeruntray.AutoSizeComboBox();
 			m_tunerstatuscolorsourcelabel = new System.Windows.Forms.Label();
 			m_hoverintervallabel = new System.Windows.Forms.Label();
 			m_discoverymethodlabel = new System.Windows.Forms.Label();
@@ -51,7 +51,7 @@ namespace zuki.hdhomeruntray
 			m_tunerstatuscolorsourcelabel.Dock = System.Windows.Forms.DockStyle.Left;
 			m_tunerstatuscolorsourcelabel.Location = new System.Drawing.Point(7, 91);
 			m_tunerstatuscolorsourcelabel.Name = "m_tunerstatuscolorsourcelabel";
-			m_tunerstatuscolorsourcelabel.Size = new System.Drawing.Size(144, 86);
+			m_tunerstatuscolorsourcelabel.Size = new System.Drawing.Size(144, 78);
 			m_tunerstatuscolorsourcelabel.TabIndex = 8;
 			m_tunerstatuscolorsourcelabel.Text = "Tuner Status Color Source";
 			m_tunerstatuscolorsourcelabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -113,45 +113,45 @@ namespace zuki.hdhomeruntray
 			this.m_layoutpanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.m_layoutpanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.m_layoutpanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.m_layoutpanel.Size = new System.Drawing.Size(370, 181);
+			this.m_layoutpanel.Size = new System.Drawing.Size(362, 173);
 			this.m_layoutpanel.TabIndex = 1;
 			// 
 			// m_tunerstatuscolorsource
 			// 
-			this.m_tunerstatuscolorsource.Dock = System.Windows.Forms.DockStyle.Right;
+			this.m_tunerstatuscolorsource.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.m_tunerstatuscolorsource.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.m_tunerstatuscolorsource.Location = new System.Drawing.Point(213, 94);
+			this.m_tunerstatuscolorsource.Location = new System.Drawing.Point(157, 94);
 			this.m_tunerstatuscolorsource.Name = "m_tunerstatuscolorsource";
-			this.m_tunerstatuscolorsource.Size = new System.Drawing.Size(150, 23);
+			this.m_tunerstatuscolorsource.Size = new System.Drawing.Size(198, 23);
 			this.m_tunerstatuscolorsource.TabIndex = 8;
 			this.m_tunerstatuscolorsource.SelectionChangeCommitted += new System.EventHandler(this.OnTunerStatusColorSourceCommitted);
 			// 
 			// m_discoverymethod
 			// 
-			this.m_discoverymethod.Dock = System.Windows.Forms.DockStyle.Right;
+			this.m_discoverymethod.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.m_discoverymethod.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.m_discoverymethod.Location = new System.Drawing.Point(213, 36);
+			this.m_discoverymethod.Location = new System.Drawing.Point(157, 36);
 			this.m_discoverymethod.Name = "m_discoverymethod";
-			this.m_discoverymethod.Size = new System.Drawing.Size(150, 23);
+			this.m_discoverymethod.Size = new System.Drawing.Size(198, 23);
 			this.m_discoverymethod.TabIndex = 3;
 			this.m_discoverymethod.SelectionChangeCommitted += new System.EventHandler(this.OnDiscoveryMethodCommitted);
 			// 
 			// m_discoveryinterval
 			// 
-			this.m_discoveryinterval.Dock = System.Windows.Forms.DockStyle.Right;
-			this.m_discoveryinterval.Location = new System.Drawing.Point(213, 7);
+			this.m_discoveryinterval.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.m_discoveryinterval.Location = new System.Drawing.Point(157, 7);
 			this.m_discoveryinterval.Name = "m_discoveryinterval";
-			this.m_discoveryinterval.Size = new System.Drawing.Size(150, 23);
+			this.m_discoveryinterval.Size = new System.Drawing.Size(198, 23);
 			this.m_discoveryinterval.TabIndex = 1;
 			this.m_discoveryinterval.SelectionChangeCommitted += new System.EventHandler(this.OnDiscoveryIntervalCommitted);
 			// 
 			// m_trayiconhoverdelay
 			// 
-			this.m_trayiconhoverdelay.Dock = System.Windows.Forms.DockStyle.Right;
+			this.m_trayiconhoverdelay.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.m_trayiconhoverdelay.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.m_trayiconhoverdelay.Location = new System.Drawing.Point(213, 65);
+			this.m_trayiconhoverdelay.Location = new System.Drawing.Point(157, 65);
 			this.m_trayiconhoverdelay.Name = "m_trayiconhoverdelay";
-			this.m_trayiconhoverdelay.Size = new System.Drawing.Size(150, 23);
+			this.m_trayiconhoverdelay.Size = new System.Drawing.Size(198, 23);
 			this.m_trayiconhoverdelay.TabIndex = 7;
 			this.m_trayiconhoverdelay.SelectionChangeCommitted += new System.EventHandler(this.OnTrayIconHoverDelayCommitted);
 			// 
@@ -161,7 +161,7 @@ namespace zuki.hdhomeruntray
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.AutoSize = true;
 			this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-			this.ClientSize = new System.Drawing.Size(370, 181);
+			this.ClientSize = new System.Drawing.Size(362, 173);
 			this.ControlBox = false;
 			this.Controls.Add(this.m_layoutpanel);
 			this.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -183,9 +183,9 @@ namespace zuki.hdhomeruntray
 		#endregion
 
 		private System.Windows.Forms.TableLayoutPanel m_layoutpanel;
-		private System.Windows.Forms.ComboBox m_tunerstatuscolorsource;
-		private System.Windows.Forms.ComboBox m_discoverymethod;
-		private System.Windows.Forms.ComboBox m_discoveryinterval;
-		private System.Windows.Forms.ComboBox m_trayiconhoverdelay;
+		private zuki.hdhomeruntray.AutoSizeComboBox m_tunerstatuscolorsource;
+		private zuki.hdhomeruntray.AutoSizeComboBox m_discoverymethod;
+		private zuki.hdhomeruntray.AutoSizeComboBox m_discoveryinterval;
+		private zuki.hdhomeruntray.AutoSizeComboBox m_trayiconhoverdelay;
 	}
 }
