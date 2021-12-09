@@ -51,7 +51,7 @@ namespace zuki.hdhomeruntray
 			m_tunerstatuscolorsourcelabel.Dock = System.Windows.Forms.DockStyle.Left;
 			m_tunerstatuscolorsourcelabel.Location = new System.Drawing.Point(7, 91);
 			m_tunerstatuscolorsourcelabel.Name = "m_tunerstatuscolorsourcelabel";
-			m_tunerstatuscolorsourcelabel.Size = new System.Drawing.Size(144, 78);
+			m_tunerstatuscolorsourcelabel.Size = new System.Drawing.Size(144, 86);
 			m_tunerstatuscolorsourcelabel.TabIndex = 8;
 			m_tunerstatuscolorsourcelabel.Text = "Tuner Status Color Source";
 			m_tunerstatuscolorsourcelabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -105,7 +105,7 @@ namespace zuki.hdhomeruntray
 			this.m_layoutpanel.Controls.Add(this.m_discoveryinterval, 1, 0);
 			this.m_layoutpanel.Controls.Add(this.m_trayiconhoverdelay, 1, 2);
 			this.m_layoutpanel.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.m_layoutpanel.Location = new System.Drawing.Point(4, 4);
+			this.m_layoutpanel.Location = new System.Drawing.Point(0, 0);
 			this.m_layoutpanel.Name = "m_layoutpanel";
 			this.m_layoutpanel.Padding = new System.Windows.Forms.Padding(4);
 			this.m_layoutpanel.RowCount = 4;
@@ -113,14 +113,14 @@ namespace zuki.hdhomeruntray
 			this.m_layoutpanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.m_layoutpanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.m_layoutpanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.m_layoutpanel.Size = new System.Drawing.Size(362, 173);
+			this.m_layoutpanel.Size = new System.Drawing.Size(370, 181);
 			this.m_layoutpanel.TabIndex = 1;
 			// 
 			// m_tunerstatuscolorsource
 			// 
 			this.m_tunerstatuscolorsource.Dock = System.Windows.Forms.DockStyle.Right;
 			this.m_tunerstatuscolorsource.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.m_tunerstatuscolorsource.Location = new System.Drawing.Point(205, 94);
+			this.m_tunerstatuscolorsource.Location = new System.Drawing.Point(213, 94);
 			this.m_tunerstatuscolorsource.Name = "m_tunerstatuscolorsource";
 			this.m_tunerstatuscolorsource.Size = new System.Drawing.Size(150, 23);
 			this.m_tunerstatuscolorsource.TabIndex = 8;
@@ -130,7 +130,7 @@ namespace zuki.hdhomeruntray
 			// 
 			this.m_discoverymethod.Dock = System.Windows.Forms.DockStyle.Right;
 			this.m_discoverymethod.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.m_discoverymethod.Location = new System.Drawing.Point(205, 36);
+			this.m_discoverymethod.Location = new System.Drawing.Point(213, 36);
 			this.m_discoverymethod.Name = "m_discoverymethod";
 			this.m_discoverymethod.Size = new System.Drawing.Size(150, 23);
 			this.m_discoverymethod.TabIndex = 3;
@@ -139,7 +139,7 @@ namespace zuki.hdhomeruntray
 			// m_discoveryinterval
 			// 
 			this.m_discoveryinterval.Dock = System.Windows.Forms.DockStyle.Right;
-			this.m_discoveryinterval.Location = new System.Drawing.Point(205, 7);
+			this.m_discoveryinterval.Location = new System.Drawing.Point(213, 7);
 			this.m_discoveryinterval.Name = "m_discoveryinterval";
 			this.m_discoveryinterval.Size = new System.Drawing.Size(150, 23);
 			this.m_discoveryinterval.TabIndex = 1;
@@ -149,7 +149,7 @@ namespace zuki.hdhomeruntray
 			// 
 			this.m_trayiconhoverdelay.Dock = System.Windows.Forms.DockStyle.Right;
 			this.m_trayiconhoverdelay.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.m_trayiconhoverdelay.Location = new System.Drawing.Point(205, 65);
+			this.m_trayiconhoverdelay.Location = new System.Drawing.Point(213, 65);
 			this.m_trayiconhoverdelay.Name = "m_trayiconhoverdelay";
 			this.m_trayiconhoverdelay.Size = new System.Drawing.Size(150, 23);
 			this.m_trayiconhoverdelay.TabIndex = 7;
@@ -165,15 +165,13 @@ namespace zuki.hdhomeruntray
 			this.ControlBox = false;
 			this.Controls.Add(this.m_layoutpanel);
 			this.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
 			this.Name = "SettingsForm";
-			this.Padding = new System.Windows.Forms.Padding(4);
 			this.ShowIcon = false;
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
-			this.Text = "SettingsForm";
 			this.TopMost = true;
 			this.m_layoutpanel.ResumeLayout(false);
 			this.m_layoutpanel.PerformLayout();

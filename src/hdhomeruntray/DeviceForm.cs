@@ -70,6 +70,10 @@ namespace zuki.hdhomeruntray
 			//
 			if(VersionHelper.IsWindows11OrGreater())
 			{
+				// Remove the border and change the padding to 4 (will scale below)
+				FormBorderStyle = FormBorderStyle.None;
+				Padding = new Padding(4);
+
 				// Apply rounded corners to the form
 				var attribute = NativeMethods.DWMWINDOWATTRIBUTE.DWMWA_WINDOW_CORNER_PREFERENCE;
 				var preference = NativeMethods.DWM_WINDOW_CORNER_PREFERENCE.DWMWCP_ROUND;

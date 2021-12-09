@@ -77,7 +77,11 @@ namespace zuki.hdhomeruntray
 				// Switch to Segoe UI Variable Display
 				Font = new Font("Segoe UI Variable Display Semib", 9F, FontStyle.Bold);
 
-				// Apply rounded corners to the application
+				// Remove the border and change the padding to 4 (will scale below)
+				FormBorderStyle = FormBorderStyle.None;
+				Padding = new Padding(4);
+
+				// Apply rounded corners to the form
 				var attribute = NativeMethods.DWMWINDOWATTRIBUTE.DWMWA_WINDOW_CORNER_PREFERENCE;
 				var preference = NativeMethods.DWM_WINDOW_CORNER_PREFERENCE.DWMWCP_ROUND;
 				NativeMethods.DwmSetWindowAttribute(Handle, attribute, ref preference, sizeof(uint));

@@ -108,7 +108,12 @@ namespace zuki.hdhomeruntray
 			m_context.Post(new SendOrPostCallback((o) =>
 			{
 				// Ensure all windows are closed
-				if(m_popupform != null) m_popupform.Close();
+				if(m_popupform != null)
+				{
+					m_popupform.Close();
+					m_popupform.Dispose();
+					m_popupform = null;
+				}
 
 			}), null);
 
@@ -143,7 +148,12 @@ namespace zuki.hdhomeruntray
 				if(m_popupform == null) return;
 
 				// Only close the popup window if it did not become pinned
-				if(!m_popupform.Pinned) m_popupform.Close();
+				if(!m_popupform.Pinned)
+				{
+					m_popupform.Close();
+					m_popupform.Dispose();
+					m_popupform = null;
+				}
 
 			}), null);
 		}
@@ -159,7 +169,6 @@ namespace zuki.hdhomeruntray
 				if(m_popupform == null)
 				{
 					m_popupform = new PopupForm(m_devicelist);
-					m_popupform.FormClosed += new FormClosedEventHandler(OnPopupFormClosed);
 					m_popupform.ShowFromNotifyIcon(m_notifyicon);
 				}
 
@@ -176,7 +185,12 @@ namespace zuki.hdhomeruntray
 				// If the popup form is already open, pin or close it
 				if(m_popupform != null)
 				{
-					if(m_popupform.Pinned) m_popupform.Close();
+					if(m_popupform.Pinned)
+					{
+						m_popupform.Close();
+						m_popupform.Dispose();
+						m_popupform = null;
+					}
 					else m_popupform.Pin();
 				}
 
@@ -184,25 +198,7 @@ namespace zuki.hdhomeruntray
 				else
 				{
 					m_popupform = new PopupForm(m_devicelist, true);
-					m_popupform.FormClosed += new FormClosedEventHandler(OnPopupFormClosed);
 					m_popupform.ShowFromNotifyIcon(m_notifyicon);
-				}
-
-			}), null);
-		}
-
-		// OnPopupFormClosed
-		//
-		// Invoked when the popup form has been closed
-		private void OnPopupFormClosed(object sender, EventArgs args)
-		{
-			m_context.Post(new SendOrPostCallback((o) =>
-			{
-				Debug.Assert(m_popupform != null);
-				if(m_popupform != null)
-				{
-					m_popupform.Dispose();
-					m_popupform = null;
 				}
 
 			}), null);
