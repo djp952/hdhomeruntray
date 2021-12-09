@@ -24,7 +24,6 @@
 
 #include "TunerStatus.h"
 
-#include "DeviceStatusColor.h"
 #include "TunerDevice.h"
 
 #pragma warning(push, 4)
@@ -38,26 +37,42 @@ namespace zuki::hdhomeruntray::discovery {
 //
 // Arguments:
 //
+//	NONE
+
+TunerStatus::TunerStatus(void)
+{
+}
+
+//---------------------------------------------------------------------------
+// TunerStatus Constructor (private)
+//
+// Arguments:
+//
 //	status		- Pointer to the unmanaged hdhomerun_tuner_status_t struct
 //	targetip	- IPAddress of the target device
 
-TunerStatus::TunerStatus(struct hdhomerun_tuner_status_t const* status, IPAddress^ targetip) : m_hasvirtualchannel(false),
-	m_virtualchannelnum(String::Empty), m_virtualchannelname(String::Empty), m_targetip(targetip)
+TunerStatus::TunerStatus(struct hdhomerun_tuner_status_t const* status, IPAddress^ targetip) : TunerStatus()
 {
 	if(status == nullptr) throw gcnew ArgumentNullException("status");
 	if(CLRISNULL(targetip)) throw gcnew ArgumentNullException("targetip");
 
 	m_channel = gcnew String(status->channel);
-	m_bitrate = status->raw_bits_per_second;
 
-	m_signalstrength = static_cast<int>(status->signal_strength);
-	m_signalstrengthcolor = hdhomerun_device_get_tuner_status_ss_color(const_cast<hdhomerun_tuner_status_t*>(status));
+	// Only bother with setting the variables if the tuner is active
+	if(IsActive) {
 
-	m_signalquality = static_cast<int>(status->signal_to_noise_quality);
-	m_signalqualitycolor = hdhomerun_device_get_tuner_status_snq_color(const_cast<hdhomerun_tuner_status_t*>(status));
+		m_signalstrength = static_cast<int>(status->signal_strength);
+		m_signalstrengthcolor = ConvertHDHomeRunColor(hdhomerun_device_get_tuner_status_ss_color(const_cast<hdhomerun_tuner_status_t*>(status)));
 
-	m_symbolquality = static_cast<int>(status->symbol_error_quality);
-	m_symbolqualitycolor = hdhomerun_device_get_tuner_status_seq_color(const_cast<hdhomerun_tuner_status_t*>(status));
+		m_signalquality = static_cast<int>(status->signal_to_noise_quality);
+		m_signalqualitycolor = ConvertHDHomeRunColor(hdhomerun_device_get_tuner_status_snq_color(const_cast<hdhomerun_tuner_status_t*>(status)));
+
+		m_symbolquality = static_cast<int>(status->symbol_error_quality);
+		m_symbolqualitycolor = ConvertHDHomeRunColor(hdhomerun_device_get_tuner_status_seq_color(const_cast<hdhomerun_tuner_status_t*>(status)));
+
+		m_bitrate = status->raw_bits_per_second;
+		m_targetip = targetip;
+	}
 }
 		
 //---------------------------------------------------------------------------
@@ -66,20 +81,24 @@ TunerStatus::TunerStatus(struct hdhomerun_tuner_status_t const* status, IPAddres
 // Arguments:
 //
 //	status		- Pointer to the unmanaged hdhomerun_tuner_status_t struct
-//	targetip	- IPAddress of the target device
 //	vstatus		- Pointer to the unmanaged hdhomerun_tuner_vstatus_t struct
+//	targetip	- IPAddress of the target device
 
-TunerStatus::TunerStatus(struct hdhomerun_tuner_status_t const* status, IPAddress^ targetip, struct hdhomerun_tuner_vstatus_t const* vstatus) 
+TunerStatus::TunerStatus(struct hdhomerun_tuner_status_t const* status, struct hdhomerun_tuner_vstatus_t const* vstatus, IPAddress^ targetip)
 	: TunerStatus(status, targetip)
 {
 	if(status == nullptr) throw gcnew ArgumentNullException("status");
 	if(CLRISNULL(targetip)) throw gcnew ArgumentNullException("targetip");
 	if(vstatus == nullptr) throw gcnew ArgumentNullException("vstatus");
 
-	m_virtualchannelnum = gcnew String(vstatus->vchannel);
-	m_virtualchannelname = gcnew String(vstatus->name);
+	// Only bother setting the variables if the tuner is active
+	if(IsActive) {
 
-	m_hasvirtualchannel = true;			// Virtual channel info is present
+		m_virtualchannelnum = gcnew String(vstatus->vchannel);
+		m_virtualchannelname = gcnew String(vstatus->name);
+
+		m_hasvirtualchannel = true;			// Virtual channel info is present
+	}
 }
 
 //---------------------------------------------------------------------------
@@ -115,7 +134,7 @@ Color TunerStatus::ConvertHDHomeRunColor(uint32_t color)
 {
 	if(color == HDHOMERUN_STATUS_COLOR_GREEN) return DeviceStatusColor::Green;
 	else if(color == HDHOMERUN_STATUS_COLOR_YELLOW) return DeviceStatusColor::Yellow;
-	else if(color == HDHOMERUN_STATUS_COLOR_RED) return DeviceStatusColor::Gray;
+	else if(color == HDHOMERUN_STATUS_COLOR_RED) return DeviceStatusColor::Red;
 
 	// HDHOMERUN_STATUS_COLOR_NEUTRAL is only used for devices that don't 
 	// support tuner locking; not sure what that's about so default to green
@@ -147,44 +166,50 @@ TunerStatus^ TunerStatus::Create(TunerDevice^ tunerdevice, int index)
 
 	// Attempt to create a hdhomerun_device_t instance for the tuner instance
 	hdhomerun_device_t* device = hdhomerun_device_create(deviceid, BitConverter::ToUInt32(ipbytes, 0), index, nullptr);
-	if(device == nullptr) throw gcnew Exception("Failed to create hdhomerun_device_t instance for the tuner");
+	if(device == nullptr) return TunerStatus::Empty;
 
 	try {
 
-		struct hdhomerun_tuner_status_t status = {};			// Legacy status
-		struct hdhomerun_tuner_vstatus_t vstatus = {};			// Virtual channel status
-		IPAddress^ targetip = IPAddress::None;					// Target IP address
-
-		//
-		// TODO: If the device is busy, like with a channel scan, it will refuse to
-		// provide status; this needs to be handled more gracefully than an exception
-		//
-
-		// Some non-legacy devices (EXTEND, for one) do not support vstatus
-		bool hasvstatus = false;
-
+		// Get the status reported by all tuner devices first
+		struct hdhomerun_tuner_status_t status = {};
 		int result = hdhomerun_device_get_tuner_status(device, nullptr, &status);
-		if((result == 1) && (!tunerdevice->IsLegacy)) {
+		if(result != 1) return TunerStatus::Empty;
 
-			// The virtual status function doesn't work right for channels with spaces
-			// in the name, so we have to reparse that portion of the string
-			char* vstatus_str = nullptr;
-			hasvstatus = (hdhomerun_device_get_tuner_vstatus(device, &vstatus_str, &vstatus) == 1);
-			if(hasvstatus) {
+		// If the channel name is "none" we can get out early here
+		if(strcmp(status.channel, "none") == 0) return TunerStatus::Empty;
 
-				String^ vchannel = GetVirtualChannelName(gcnew String(vstatus_str));
-				msclr::auto_handle<msclr::interop::marshal_context> context(gcnew msclr::interop::marshal_context());
-				strncpy_s(vstatus.name, std::extent<decltype(vstatus.name)>::value, context->marshal_as<char const*>(vchannel), _TRUNCATE);
+		// Now try to get the virtual channel status, this isn't supported by all tuner devices
+		struct hdhomerun_tuner_vstatus_t vstatus = {};
+		char* vstatus_str = nullptr;
+		bool hasvstatus = (hdhomerun_device_get_tuner_vstatus(device, &vstatus_str, &vstatus) == 1);
+
+		if(hasvstatus) {
+
+			// Extract the channel name from the virtual status string and replace the one in the structure
+			String^ vchannel = GetVirtualChannelName(gcnew String(vstatus_str));
+			msclr::auto_handle<msclr::interop::marshal_context> context(gcnew msclr::interop::marshal_context());
+			strncpy_s(vstatus.name, std::extent<decltype(vstatus.name)>::value, context->marshal_as<char const*>(vchannel), _TRUNCATE);
+		}
+
+		// And finally, try to get the tuner target device to convert into an IP address
+		IPAddress^ targetip = IPAddress::None;
+		char* target_str = nullptr;
+		bool hastarget = (hdhomerun_device_get_tuner_target(device, &target_str) == 1);
+
+		if(hastarget) {
+
+			// The target string will be in the form of a URI ([http|rtp]://192.168.0.1:12345),
+			// extract just the IPv4 address portion of the string using System::Uri
+			Uri^ uri = nullptr;
+			if(Uri::TryCreate(gcnew String(target_str), UriKind::RelativeOrAbsolute, uri))
+			{
+				if(uri->HostNameType == UriHostNameType::IPv4) IPAddress::TryParse(uri->Host, targetip);
 			}
 		}
 
-		// TODO: Get Target IP Address, multiple formats apparently
-		
-		// 1 == success; 0 == rejected; -1 = communication failure
-		if(result == 1) return hasvstatus ? gcnew TunerStatus(&status, targetip, &vstatus) : gcnew TunerStatus(&status, targetip);
-		else if(result == 0) throw gcnew Exception("Tuner device rejected the request");
-		else if(result == -1) throw gcnew Exception("There was a communication failure accessing the tuner device");
-		else throw gcnew Exception("An unknown error occurred accessing the tuner device");
+		// Create and return the proper TunerStatus based on if virtual channel info was present
+		if(hasvstatus) return gcnew TunerStatus(&status, &vstatus, targetip);
+		else return gcnew TunerStatus(&status, targetip);
 	}
 
 	// Ensure destruction of the hdhomerun_device_t instance
@@ -285,7 +310,8 @@ bool TunerStatus::HasVirtualChannel::get(void)
 
 bool TunerStatus::IsActive::get(void)
 {
-	return (String::Compare(m_channel, "none", StringComparison::OrdinalIgnoreCase) != 0);
+	if(String::IsNullOrEmpty(m_channel)) return false;
+	else return (String::Compare(m_channel, "none", StringComparison::OrdinalIgnoreCase) != 0);
 }
 
 //---------------------------------------------------------------------------
@@ -305,7 +331,7 @@ int TunerStatus::SignalQuality::get(void)
 
 Color TunerStatus::SignalQualityColor::get(void)
 {
-	return this->IsActive ? ConvertHDHomeRunColor(m_signalqualitycolor) : DeviceStatusColor::Gray;
+	return m_signalqualitycolor;
 }
 
 //---------------------------------------------------------------------------
@@ -325,7 +351,7 @@ int TunerStatus::SignalStrength::get(void)
 
 Color TunerStatus::SignalStrengthColor::get(void)
 {
-	return this->IsActive ? ConvertHDHomeRunColor(m_signalstrengthcolor) : DeviceStatusColor::Gray;
+	return m_signalstrengthcolor;
 }
 
 //---------------------------------------------------------------------------
@@ -345,7 +371,7 @@ int TunerStatus::SymbolQuality::get(void)
 
 Color TunerStatus::SymbolQualityColor::get(void)
 {
-	return this->IsActive ? ConvertHDHomeRunColor(m_symbolqualitycolor) : DeviceStatusColor::Gray;
+	return m_symbolqualitycolor;
 }
 
 //---------------------------------------------------------------------------

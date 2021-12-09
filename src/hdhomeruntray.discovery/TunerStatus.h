@@ -24,6 +24,8 @@
 #define __TUNERSTATUS_H_
 #pragma once
 
+#include "DeviceStatusColor.h"
+
 #pragma warning(push, 4)
 
 using namespace System;
@@ -154,6 +156,14 @@ public:
 	}
 
 	//-----------------------------------------------------------------------
+	// Fields
+
+	// Empty
+	//
+	// Provides an empty TunerStatus instance
+	static initonly TunerStatus^ Empty = gcnew TunerStatus();
+
+	//-----------------------------------------------------------------------
 	// Object Overrides
 
 	// GetHashCode
@@ -173,10 +183,11 @@ internal:
 
 private:
 
-	// Instance Constructor
+	// Instance Constructors
 	//
+	TunerStatus(void);
 	TunerStatus(struct hdhomerun_tuner_status_t const* status, IPAddress^ targetip);
-	TunerStatus(struct hdhomerun_tuner_status_t const* status, IPAddress^ targetip, struct hdhomerun_tuner_vstatus_t const* vstatus);
+	TunerStatus(struct hdhomerun_tuner_status_t const* status, struct hdhomerun_tuner_vstatus_t const* vstatus, IPAddress^ targetip);
 
 	//-----------------------------------------------------------------------
 	// Private Member Functions
@@ -194,18 +205,18 @@ private:
 	//-----------------------------------------------------------------------
 	// Member Variables
 
-	String^				m_channel;				// Tuned channel
-	int					m_signalquality;		// Signal quality
-	uint32_t			m_signalqualitycolor;	// Signal quality color
-	int					m_signalstrength;		// Signal strength
-	uint32_t			m_signalstrengthcolor;	// Signal strength color
-	int					m_symbolquality;		// Symbol quality
-	uint32_t			m_symbolqualitycolor;	// Symbol quality color
-	bool				m_hasvirtualchannel;	// Flag if virtual channel present
-	String^				m_virtualchannelnum;	// Virtual channel number
-	String^				m_virtualchannelname;	// Virtual channel name
-	int					m_bitrate;				// Current tuner bitrate
-	IPAddress^			m_targetip;				// The target IP address
+	String^				m_channel = gcnew String("none");
+	int					m_signalquality = 0;
+	Color				m_signalqualitycolor = DeviceStatusColor::Gray;
+	int					m_signalstrength = 0;
+	Color				m_signalstrengthcolor = DeviceStatusColor::Gray;
+	int					m_symbolquality = 0;
+	Color				m_symbolqualitycolor = DeviceStatusColor::Gray;
+	bool				m_hasvirtualchannel = false;
+	String^				m_virtualchannelnum = String::Empty;
+	String^				m_virtualchannelname = String::Empty;
+	int					m_bitrate = 0;
+	IPAddress^			m_targetip = IPAddress::None;
 };
 
 //---------------------------------------------------------------------------
