@@ -191,16 +191,37 @@ namespace zuki.hdhomeruntray
 						m_popupform.Dispose();
 						m_popupform = null;
 					}
-					else m_popupform.Pin();
+					else
+					{
+						m_popupform.Unpinned += new EventHandler(OnPopupUnpinned);
+						m_popupform.Pin();
+					}
 				}
 
 				// Otherwise create a new popup form in a pinned state
 				else
 				{
 					m_popupform = new PopupForm(m_devicelist, true);
+					m_popupform.Unpinned += new EventHandler(OnPopupUnpinned);
 					m_popupform.ShowFromNotifyIcon(m_notifyicon);
 				}
 
+			}), null);
+		}
+
+		// OnPopupUnpinned
+		//
+		// Invoked when the popup form has been unpinned
+		private void OnPopupUnpinned(object sender, EventArgs args)
+		{
+			m_context.Post(new SendOrPostCallback((o) =>
+			{
+				Debug.Assert(m_popupform != null);      // Should be impossible
+
+				m_popupform.Close();
+				m_popupform.Dispose();
+				m_popupform = null;
+			
 			}), null);
 		}
 

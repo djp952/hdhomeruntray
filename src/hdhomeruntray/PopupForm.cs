@@ -134,6 +134,15 @@ namespace zuki.hdhomeruntray
 			if(pinned) Pin();
 		}
 
+		//-------------------------------------------------------------------------
+		// Events
+		//-------------------------------------------------------------------------
+
+		// Unpinned
+		//
+		// Invoked when the popup form has been unpinned
+		public event EventHandler Unpinned;
+
 		//-------------------------------------------------------------------
 		// Member Functions
 		//-------------------------------------------------------------------
@@ -183,7 +192,6 @@ namespace zuki.hdhomeruntray
 
 			// Prevent adding the controls multiple times by tracking this
 			m_pinned = true;
-
 		}
 
 		// ShowFromNotifyIcon
@@ -329,7 +337,7 @@ namespace zuki.hdhomeruntray
 		// Invoked when the unpin button has been selected
 		private void OnUnpinSelected(object sender, EventArgs args)
 		{
-			Close();				// Close this form
+			Unpinned?.Invoke(this, EventArgs.Empty);
 		}
 
 		//-------------------------------------------------------------------
