@@ -67,14 +67,6 @@ public:
 		String^ get(void);
 	}
 
-	// HasVirtualChannel
-	//
-	// Gets a flag indicating if the virtual channel is set or not
-	property bool HasVirtualChannel
-	{
-		bool get(void);
-	}
-
 	// IsActive
 	//
 	// Gets a flag indicating if the tuner is active or not
@@ -139,22 +131,6 @@ public:
 		IPAddress^ get(void);
 	}
 
-	// VirtualChannelName
-	//
-	// Gets the tuned virtual channel name
-	property String^ VirtualChannelName
-	{
-		String^ get(void);
-	}
-
-	// VirtualChannelNumber
-	//
-	// Gets the tuned virtual channel number
-	property String^ VirtualChannelNumber
-	{
-		String^ get(void);
-	}
-
 	//-----------------------------------------------------------------------
 	// Fields
 
@@ -187,7 +163,6 @@ private:
 	//
 	TunerStatus(void);
 	TunerStatus(struct hdhomerun_tuner_status_t const* status, IPAddress^ targetip);
-	TunerStatus(struct hdhomerun_tuner_status_t const* status, struct hdhomerun_tuner_vstatus_t const* vstatus, IPAddress^ targetip);
 
 	//-----------------------------------------------------------------------
 	// Private Member Functions
@@ -199,8 +174,8 @@ private:
 
 	// GetVirtualChannelName
 	//
-	// Retrieves the virtual channel name from a tuner vstatus string
-	static String^ GetVirtualChannelName(String^ vstatus);
+	// Retrieves the virtual channel name from a tuner program and streaminfo
+	static String^ GetVirtualChannelName(String^ program, String^ streaminfo);
 
 	//-----------------------------------------------------------------------
 	// Member Variables
@@ -212,9 +187,6 @@ private:
 	Color				m_signalstrengthcolor = DeviceStatusColor::Gray;
 	int					m_symbolquality = 0;
 	Color				m_symbolqualitycolor = DeviceStatusColor::Gray;
-	bool				m_hasvirtualchannel = false;
-	String^				m_virtualchannelnum = String::Empty;
-	String^				m_virtualchannelname = String::Empty;
 	int					m_bitrate = 0;
 	IPAddress^			m_targetip = IPAddress::None;
 };

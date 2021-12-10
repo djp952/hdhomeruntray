@@ -76,32 +76,6 @@ TunerStatus::TunerStatus(struct hdhomerun_tuner_status_t const* status, IPAddres
 }
 		
 //---------------------------------------------------------------------------
-// TunerStatus Constructor (private)
-//
-// Arguments:
-//
-//	status		- Pointer to the unmanaged hdhomerun_tuner_status_t struct
-//	vstatus		- Pointer to the unmanaged hdhomerun_tuner_vstatus_t struct
-//	targetip	- IPAddress of the target device
-
-TunerStatus::TunerStatus(struct hdhomerun_tuner_status_t const* status, struct hdhomerun_tuner_vstatus_t const* vstatus, IPAddress^ targetip)
-	: TunerStatus(status, targetip)
-{
-	if(status == nullptr) throw gcnew ArgumentNullException("status");
-	if(CLRISNULL(targetip)) throw gcnew ArgumentNullException("targetip");
-	if(vstatus == nullptr) throw gcnew ArgumentNullException("vstatus");
-
-	// Only bother setting the variables if the tuner is active
-	if(IsActive) {
-
-		m_virtualchannelnum = gcnew String(vstatus->vchannel);
-		m_virtualchannelname = gcnew String(vstatus->name);
-
-		m_hasvirtualchannel = true;			// Virtual channel info is present
-	}
-}
-
-//---------------------------------------------------------------------------
 // TunerStatus::BitRate::get
 //
 // Gets the current tuner output bitrate
@@ -178,17 +152,30 @@ TunerStatus^ TunerStatus::Create(TunerDevice^ tunerdevice, int index)
 		// If the channel name is "none" we can get out early here
 		if(strcmp(status.channel, "none") == 0) return TunerStatus::Empty;
 
-		// Now try to get the virtual channel status, this isn't supported by all tuner devices
-		struct hdhomerun_tuner_vstatus_t vstatus = {};
-		char* vstatus_str = nullptr;
-		bool hasvstatus = (hdhomerun_device_get_tuner_vstatus(device, &vstatus_str, &vstatus) == 1);
+		// Try to retrieve the virtual channel information from the program/stream.  Only CableCard
+		// devices seem to support vstatus and to get bitrate the legacy status still needs to
+		// be used so switching to JSON status isn't really a good option
+		char* program_str = nullptr;
+		result = hdhomerun_device_get_tuner_program(device, &program_str);
+		if(result == 1) {
+			
+			// Volatile pointer, convert to String^ immediately
+			String^ program = gcnew String(program_str);
 
-		if(hasvstatus) {
+			char* streaminfo_str = nullptr;
+			result = hdhomerun_device_get_tuner_streaminfo(device, &streaminfo_str);
+			if(result == 1) {
 
-			// Extract the channel name from the virtual status string and replace the one in the structure
-			String^ vchannel = GetVirtualChannelName(gcnew String(vstatus_str));
-			msclr::auto_handle<msclr::interop::marshal_context> context(gcnew msclr::interop::marshal_context());
-			strncpy_s(vstatus.name, std::extent<decltype(vstatus.name)>::value, context->marshal_as<char const*>(vchannel), _TRUNCATE);
+				// Volatile pointer, convert to String^ immediately
+				String^ streaminfo = gcnew String(streaminfo_str);
+
+				String^ vchannel = GetVirtualChannelName(program, streaminfo);
+				if(!String::IsNullOrEmpty(vchannel)) {
+
+					msclr::auto_handle<msclr::interop::marshal_context> context(gcnew msclr::interop::marshal_context());
+					strncpy_s(status.channel, std::extent<decltype(status.channel)>::value, context->marshal_as<char const*>(vchannel), _TRUNCATE);
+				}
+			}
 		}
 
 		// And finally, try to get the tuner target device to convert into an IP address
@@ -198,18 +185,21 @@ TunerStatus^ TunerStatus::Create(TunerDevice^ tunerdevice, int index)
 
 		if(hastarget) {
 
+			// Volatile pointer, convert to String^ immediately
+			String^ target = gcnew String(target_str);
+
 			// The target string will be in the form of a URI ([http|rtp]://192.168.0.1:12345),
 			// extract just the IPv4 address portion of the string using System::Uri
 			Uri^ uri = nullptr;
-			if(Uri::TryCreate(gcnew String(target_str), UriKind::RelativeOrAbsolute, uri))
+			if(Uri::TryCreate(target, UriKind::RelativeOrAbsolute, uri))
 			{
-				if(uri->HostNameType == UriHostNameType::IPv4) IPAddress::TryParse(uri->Host, targetip);
+				// HostNameType can actually throw, this will happen if target is "none", for example
+				try { if(uri->HostNameType == UriHostNameType::IPv4) IPAddress::TryParse(uri->Host, targetip); }
+				catch(Exception^) { /* DO NOTHING */ }
 			}
 		}
 
-		// Create and return the proper TunerStatus based on if virtual channel info was present
-		if(hasvstatus) return gcnew TunerStatus(&status, &vstatus, targetip);
-		else return gcnew TunerStatus(&status, targetip);
+		return gcnew TunerStatus(&status, targetip);		// Create the status instance
 	}
 
 	// Ensure destruction of the hdhomerun_device_t instance
@@ -243,9 +233,6 @@ int TunerStatus::GetHashCode(void)
 	hash *= fnv_prime;
 	hash ^= m_symbolquality.GetHashCode();
 	hash *= fnv_prime;
-	hash ^= CLRISNULL(m_virtualchannelnum) ? 0 : m_virtualchannelnum->GetHashCode();
-	hash *= fnv_prime;
-	hash ^= CLRISNULL(m_virtualchannelname) ? 0 : m_virtualchannelname->GetHashCode();
 	hash *= fnv_prime;
 	hash ^= m_bitrate.GetHashCode();
 	hash *= fnv_prime;
@@ -257,50 +244,34 @@ int TunerStatus::GetHashCode(void)
 //---------------------------------------------------------------------------
 // TunerStatus::GetVirtualChannelName (static, private)
 //
-// Retrieves the virtual channel name from a tuner vstatus string
+// Retrieves the virtual channel name from a tuner program and streaminfo
 //
 // Arguments:
 //
-//	vstatus		- Tuner vstatus string to parse
+//	program		- Tuner program string
+//	streaminfo	- Tuner stream information string
 
-String^ TunerStatus::GetVirtualChannelName(String^ vstatus)
+String^ TunerStatus::GetVirtualChannelName(String^ program, String^ streaminfo)
 {
-	// There is likely a more elegant way to handle this, but the problem
-	// is that the string is formatted like this:
-	//
-	// vch=696 name=E! TV HD auth=subscribed cci=unrestricted
-	//
-	// libhdhomerun will stop at the first space in the channel name.  In order
-	// to get the full channel name we need to find the next = character and
-	// work backwards ...
+	if(CLRISNULL(program)) throw gcnew ArgumentNullException("program");
+	if(CLRISNULL(streaminfo)) throw gcnew ArgumentNullException("streaminfo");
 
-	int index = vstatus->IndexOf("name=");
-	if(index >= 0) {
+	// The program string has to be set to something
+	if(String::IsNullOrEmpty(program)) return String::Empty;
 
-		vstatus = vstatus->Substring(index + 5);
-		index = vstatus->IndexOf("=");
-		if(index >= 0) {
+	// The stream information comes in on multiple lines of text split by \n
+	array<String^>^ streams = streaminfo->Split(gcnew array<wchar_t> {'\n'}, StringSplitOptions::RemoveEmptyEntries);
+	for each(String^ stream in streams) {
 
-			vstatus = vstatus->Substring(0, index);
-			index = vstatus->LastIndexOf(" ");
-			if(index >= 0) vstatus = vstatus->Substring(0, index);
+		// If the line starts with the program number, grab the virtual channel number/name
+		if(stream->StartsWith(program)) {
+
+			int colonspace = stream->IndexOf(": ");
+			if(colonspace > 0) return stream->Substring(colonspace + 2);
 		}
 	}
 
-	// No name= keyword in the input string
-	else return String::Empty;
-
-	return vstatus;
-}
-
-//---------------------------------------------------------------------------
-// TunerStatus::HasVirtualChannel::get
-//
-// Gets a flag indicating if the virtual channel data is available
-
-bool TunerStatus::HasVirtualChannel::get(void)
-{
-	return m_hasvirtualchannel;
+	return String::Empty;
 }
 
 //---------------------------------------------------------------------------
@@ -382,26 +353,6 @@ Color TunerStatus::SymbolQualityColor::get(void)
 IPAddress^ TunerStatus::TargetIP::get(void)
 {
 	return m_targetip;
-}
-
-//---------------------------------------------------------------------------
-// TunerStatus::VirtualChannelName::get
-//
-// Gets the tuned virtual channel name
-
-String^ TunerStatus::VirtualChannelName::get(void)
-{
-	return m_virtualchannelname;
-}
-
-//---------------------------------------------------------------------------
-// TunerStatus::VirtualChannelNumber::get
-//
-// Gets the tuned virtual channel number
-
-String^ TunerStatus::VirtualChannelNumber::get(void)
-{
-	return m_virtualchannelnum;
 }
 
 //---------------------------------------------------------------------------

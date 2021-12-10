@@ -163,13 +163,8 @@ namespace zuki.hdhomeruntray
 						break;
 				}
 				m_activedot.ForeColor = forecolor;
-				
-				if(status.IsActive)
-				{
-					if(status.HasVirtualChannel) m_channel.Text = status.VirtualChannelNumber + " " + status.VirtualChannelName;
-					else m_channel.Text = status.Channel;
-				}
-				else m_channel.Text = "Idle";
+
+				m_channel.Text = (status.IsActive) ? status.Channel : "Idle";
 
 				if(status.IsActive)
 				{
