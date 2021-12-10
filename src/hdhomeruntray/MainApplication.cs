@@ -79,7 +79,7 @@ namespace zuki.hdhomeruntray
 		private void InitializeComponent()
 		{
 			// Create and initialize the ShellNotifyIcon instance
-			m_notifyicon = new ShellNotifyIcon();
+			m_notifyicon = new ShellNotifyIcon(s_guid);
 			m_notifyicon.ClosePopup += new EventHandler(OnNotifyIconClosePopup);
 			m_notifyicon.OpenPopup += new EventHandler(OnNotifyIconOpenPopup);
 			m_notifyicon.Selected += new EventHandler(OnNotifyIconSelected);
@@ -335,5 +335,9 @@ namespace zuki.hdhomeruntray
 		private PopupForm m_popupform = null;
 		private readonly Devices m_devices;
 		private DeviceList m_devicelist = DeviceList.Empty;
+		
+		// Do not change this GUID; it has to remain the same to prevent Windows from creating
+		// custom tray icon settings for each GUID that it sees
+		private static readonly Guid s_guid = Guid.Parse("{E9DD6790-E032-4CAE-9140-CC0FB55FC210}");
 	}
 }

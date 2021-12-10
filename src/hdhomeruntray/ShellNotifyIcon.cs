@@ -27,6 +27,7 @@ using System.Drawing;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Timers;
 using System.Windows.Forms;
 
 namespace zuki.hdhomeruntray
@@ -43,9 +44,8 @@ namespace zuki.hdhomeruntray
 	// The .NET Foundation licenses this file to you under the MIT license.
 	// See the LICENSE file in the project root for more information.
 	//
-	// TODO: 64-bit NativeMethods and WndProc implementations
-	// TODO: Solution for lack of NIN_POPUPOPEN and NIN_POPUPCLOSE messages on Windows 11
-	// TODO: Revisit use of System.Windows.Forms.Timer and the custom hover logic
+	// TODO: Prevent a custom hover operation from occuring if a NIN_SELECT
+	// happened -- turns out to be harder than I anticipated to do that
 	
 	class ShellNotifyIcon : Component, IWin32Window
 	{
@@ -206,21 +206,33 @@ namespace zuki.hdhomeruntray
 
 		// Instance Constructor
 		//
-		public ShellNotifyIcon()
+		private ShellNotifyIcon()
 		{
-			m_backingwindow = new BackingWindow(this);
-			m_hovertimer = new Timer();
-			m_hovertimer.Tick += new EventHandler(OnHoverTimer);
-
-			UpdateIcon(m_visible);
 		}
 
 		// Instance Constructor
 		//
-		public ShellNotifyIcon(IContainer container) : this()
+		public ShellNotifyIcon(Guid guid) : this()
 		{
-			if(container is null) throw new ArgumentNullException(nameof(container));
-			container.Add(this);
+			m_backingwindow = new BackingWindow(this);
+			m_guid = guid;
+
+			// Create the one-shot hover start timer
+			m_hoverstart = new System.Timers.Timer()
+			{
+				AutoReset = false,
+			};
+			m_hoverstart.Elapsed += new ElapsedEventHandler(OnHoverStart);
+
+			// Create the repeating hover stop timer
+			m_hoverstop = new System.Timers.Timer
+			{
+				AutoReset = true,
+				Interval = 25,			// Milliseconds
+			};
+			m_hoverstop.Elapsed += new ElapsedEventHandler(OnHoverStop);
+
+			UpdateIcon(m_visible);
 		}
 
 		// Static Constructor
@@ -450,7 +462,7 @@ namespace zuki.hdhomeruntray
 			{
 				cbSize = (uint)Marshal.SizeOf(typeof(NativeMethods.NOTIFYICONIDENTIFIER)),
 				hWnd = m_backingwindow.Handle,
-				guidItem = s_guid,
+				guidItem = m_guid,
 			};
 
 			// Attempt to retrive the bounding rectangle for the notify icon
@@ -499,7 +511,7 @@ namespace zuki.hdhomeruntray
 				cbSize = (uint)Marshal.SizeOf(typeof(NativeMethods.NOTIFYICONDATAW)),
 				uFlags = NativeMethods.NIF_INFO | NativeMethods.NIF_GUID,
 				dwInfoFlags = (uint)type,
-				guidItem = s_guid,
+				guidItem = m_guid,
 			};
 
 			// Ensure the backing window object has been created
@@ -640,33 +652,30 @@ namespace zuki.hdhomeruntray
 			s_contextmenustrip_showintaskbar.Invoke(m_contextmenu, new Object[] { cursorpos.X, cursorpos.Y });
 		}
 
-		// OnHoverTimer
+		// OnHoverStart
 		//
-		// Invoked when the pseduo-hover event timer has come due
-		private void OnHoverTimer(object sender, EventArgs args)
+		// Invoked when the hover start timer object has come due
+		private void OnHoverStart(object sender, ElapsedEventArgs args)
 		{
 			// Check if the mouse cursor is still in the icon boundaries
 			if(GetBounds().Contains(Cursor.Position))
 			{
-				// If the hover isn't active yet, open the popup window and change
-				// the timer period to a short interval to close the popup quickly
-				// regardless of the initial delay to open it
-				if(!m_hoveractive)
-				{
-					m_hovertimer.Interval = 10;			// ms
-					OnOpenPopup();
-				}
-
-				m_hoveractive = true;				// Hover is (still) active
+				// Start the repeating stop timer and open the popup window
+				m_hoverstop.Start();
+				OnOpenPopup();
 			}
+		}
 
-			else
+		// OnHoverStop
+		//
+		// Invoked when the hover stop timer object has come due
+		private void OnHoverStop(object sender, ElapsedEventArgs args)
+		{
+			// If the mouse is no longer in the icon boundaries, close the popup
+			if(!GetBounds().Contains(Cursor.Position))
 			{
-				// Mouse has left the boundaries of the icon; close the popup window
-				// and disable the timer
+				m_hoverstop.Stop();
 				OnClosePopup();
-				m_hoveractive = false;
-				m_hovertimer.Enabled = false;
 			}
 		}
 
@@ -719,7 +728,7 @@ namespace zuki.hdhomeruntray
 					uFlags = NativeMethods.NIF_MESSAGE | NativeMethods.NIF_GUID,
 					hWnd = m_backingwindow.Handle,
 					uCallbackMessage = WM_TRAYICONMESSAGE,
-					guidItem = s_guid,
+					guidItem = m_guid,
 				};
 
 				// NIF_ICON
@@ -810,7 +819,9 @@ namespace zuki.hdhomeruntray
 							break;
 
 						case NativeMethods.NIN_POPUPCLOSE:
-							OnClosePopup();
+
+							// If this event comes in when a custom hover interval has been set, ignore it
+							if(m_hoverinterval <= 0) OnClosePopup();
 							break;
 
 						case NativeMethods.NIN_POPUPOPEN:
@@ -833,12 +844,21 @@ namespace zuki.hdhomeruntray
 							// This is only applicable if a custom hover interval has been set
 							if(m_hoverinterval > 0)
 							{
-								// If we are not already in a 'hovering' state and the mouse pointer is actually in 
-								// the boundaries of the icon, start the timer to fake NIN_POPUPOPEN and NIN_POPUPCLOSE
-								if(!m_hovertimer.Enabled && GetBounds().Contains(NativeMethods.GET_X_LPARAM(message.WParam), NativeMethods.GET_Y_LPARAM(message.WParam)))
+								// Check if the mouse cursor is within the boundaries of the tray icon or not
+								if(GetBounds().Contains(NativeMethods.GET_X_LPARAM(message.WParam), NativeMethods.GET_Y_LPARAM(message.WParam)))
 								{
-									m_hovertimer.Interval = m_hoverinterval;
-									m_hovertimer.Enabled = true;
+									// In the icon; if the hover start timer is not already enabled, start it
+									if(!m_hoverstart.Enabled)
+									{
+										m_hoverstart.Interval = m_hoverinterval;
+										m_hoverstart.Start();
+									}
+								}
+								else
+								{
+									// Not in the icon, if the hover start timer is enabled, stop it before 
+									// it comes due.  The mouse has to stay within the icon boundaries
+									if(m_hoverstart.Enabled) m_hoverstart.Stop();
 								}
 							}
 
@@ -882,9 +902,10 @@ namespace zuki.hdhomeruntray
 		private readonly object m_lock = new object();		// Synchronziation object
 		private BackingWindow m_backingwindow = null;		// Backing window
 		private bool m_created = false;						// Creation flag
-		private readonly Timer m_hovertimer;				// Pseudo-hover timer
-		private int m_hoverinterval = 0;					// Pesudo-hover interval
-		private bool m_hoveractive = false;					// Flag for pesudo-hover popup
+		private readonly System.Timers.Timer m_hoverstart;  // Pseudo-hover start timer
+		private readonly System.Timers.Timer m_hoverstop;	// Pesudo-hover stop time
+		private int m_hoverinterval = 0;                    // Pesudo-hover interval
+		private readonly Guid m_guid = Guid.NewGuid();		// Icon GUID
 
 		// Property backing variables
 		//
@@ -894,10 +915,6 @@ namespace zuki.hdhomeruntray
 		private string m_tooltip = String.Empty;			// .ToolTip
 		private bool m_visible = false;                     // .Visible
 
-		// GUIDs
-		//
-		private static readonly Guid s_guid = Guid.Parse("{E9DD6790-E032-4CAE-9140-CC0FB55FC210}");
-		
 		// Component Event objects
 		//
 		private static readonly object EVENT_BALLOONTIPSHOWN = new object();
