@@ -52,6 +52,14 @@ namespace zuki.hdhomeruntray
 			Application.ApplicationExit += new EventHandler(OnApplicationExit);
 			InitializeComponent();
 
+			// Upgrade the settings if necessary
+			if(Settings.Default.UpgradeRequired)
+			{
+				Settings.Default.Upgrade();
+				Settings.Default.UpgradeRequired = false;
+				Settings.Default.Save();
+			}
+
 			// Wire up a handler to watch for property changes
 			Settings.Default.PropertyChanged += OnPropertyChanged;
 
