@@ -28,8 +28,6 @@
 
 #pragma warning(push, 4)
 
-using namespace System::Globalization;
-
 namespace zuki::hdhomeruntray::discovery {
 
 //---------------------------------------------------------------------------
@@ -56,7 +54,8 @@ TunerStatus::TunerStatus(struct hdhomerun_tuner_status_t const* status, IPAddres
 	if(status == nullptr) throw gcnew ArgumentNullException("status");
 	if(CLRISNULL(targetip)) throw gcnew ArgumentNullException("targetip");
 
-	m_channel = gcnew String(status->channel);
+	// Assign channel name
+	m_channelname = gcnew String(status->channel);
 
 	// Only bother with setting the variables if the tuner is active
 	if(IsActive) {
@@ -86,13 +85,13 @@ int TunerStatus::BitRate::get(void)
 }
 
 //---------------------------------------------------------------------------
-// TunerStatus::Channel::get
+// TunerStatus::ChannelName::get
 //
-// Gets the tuned channel string (modulation+frequency)
+// Gets the name of the tuned channel
 
-String^ TunerStatus::Channel::get(void)
+String^ TunerStatus::ChannelName::get(void)
 {
-	return m_channel;
+	return m_channelname;
 }
 
 //---------------------------------------------------------------------------
@@ -125,82 +124,12 @@ Color TunerStatus::ConvertHDHomeRunColor(uint32_t color)
 //	tunerdevice		- Reference to the parent TunerDevice object
 //	index			- Index of the tuner within the TunerDevice
 
-TunerStatus^ TunerStatus::Create(TunerDevice^ tunerdevice, int index)
+TunerStatus^ TunerStatus::Create(struct hdhomerun_tuner_status_t const* status, IPAddress^ targetip)
 {
-	if(CLRISNULL(tunerdevice)) throw gcnew ArgumentNullException("tunerdevice");
+	if(status == nullptr) throw gcnew ArgumentNullException("status");
+	if(CLRISNULL(targetip)) throw gcnew ArgumentNullException("targetip");
 
-	// Convert the device ID into an unsigned 32-bit integer
-	uint32_t deviceid = 0;
-	if(!uint32_t::TryParse(tunerdevice->DeviceID, NumberStyles::HexNumber, CultureInfo::InvariantCulture, deviceid)) 
-		throw gcnew ArgumentOutOfRangeException("deviceid");
-
-	// Convert the IP address into a byte array; convert for little endian as necessary
-	array<Byte>^ ipbytes = tunerdevice->LocalIP->GetAddressBytes();
-	if(BitConverter::IsLittleEndian) Array::Reverse(ipbytes);
-
-	// Attempt to create a hdhomerun_device_t instance for the tuner instance
-	hdhomerun_device_t* device = hdhomerun_device_create(deviceid, BitConverter::ToUInt32(ipbytes, 0), index, nullptr);
-	if(device == nullptr) return TunerStatus::Empty;
-
-	try {
-
-		// Get the status reported by all tuner devices first
-		struct hdhomerun_tuner_status_t status = {};
-		int result = hdhomerun_device_get_tuner_status(device, nullptr, &status);
-		if(result != 1) return TunerStatus::Empty;
-
-		// If the channel name is "none" we can get out early here
-		if(strcmp(status.channel, "none") == 0) return TunerStatus::Empty;
-
-		// Get the stream information for the tuned frequency
-		char* streaminfo_str = nullptr;
-		result = hdhomerun_device_get_tuner_streaminfo(device, &streaminfo_str);
-		if(result == 1) {
-
-			String^ streaminfo = gcnew String(streaminfo_str);		// Convert volatile string pointer
-
-			// Try to get the program number string from the tuner
-			char* program_str = nullptr;
-			result = hdhomerun_device_get_tuner_program(device, &program_str);
-			if(result == 1) {
-
-				// Try to use the stream info and program number to get the channel name
-				String^ vchannelname = GetVirtualChannelName(gcnew String(program_str), streaminfo);
-				if(!String::IsNullOrEmpty(vchannelname)) {
-
-					// If a better name for the channel was determined, replace it in the status structure
-					msclr::auto_handle<msclr::interop::marshal_context> context(gcnew msclr::interop::marshal_context());
-					strncpy_s(status.channel, std::extent<decltype(status.channel)>::value, context->marshal_as<char const*>(vchannelname), _TRUNCATE);
-				}
-			}
-		}
-
-		// Try to get the tuner target device to convert into an IP address
-		IPAddress^ targetip = IPAddress::None;
-		char* target_str = nullptr;
-		bool hastarget = (hdhomerun_device_get_tuner_target(device, &target_str) == 1);
-
-		if(hastarget) {
-
-			// Volatile pointer, convert to String^ immediately
-			String^ target = gcnew String(target_str);
-
-			// The target string will be in the form of a URI ([http|rtp]://192.168.0.1:12345),
-			// extract just the IPv4 address portion of the string using System::Uri
-			Uri^ uri = nullptr;
-			if(Uri::TryCreate(target, UriKind::RelativeOrAbsolute, uri))
-			{
-				// HostNameType can actually throw, this will happen if target is "none", for example
-				try { if(uri->HostNameType == UriHostNameType::IPv4) IPAddress::TryParse(uri->Host, targetip); }
-				catch(Exception^) { /* DO NOTHING */ }
-			}
-		}
-
-		return gcnew TunerStatus(&status, targetip);		// Create the status instance
-	}
-
-	// Ensure destruction of the hdhomerun_device_t instance
-	finally { hdhomerun_device_destroy(device); }
+	return gcnew TunerStatus(status, targetip);
 }
 
 //---------------------------------------------------------------------------
@@ -222,7 +151,7 @@ int TunerStatus::GetHashCode(void)
 
 	// FNV hash the relevant member variables; things like the color codes are tied
 	// to the signal strength values, no need to include those here
-	hash ^= CLRISNULL(m_channel) ? 0 : m_channel->GetHashCode();
+	hash ^= CLRISNULL(m_channelname) ? 0 : m_channelname->GetHashCode();
 	hash *= fnv_prime;
 	hash ^= m_signalstrength.GetHashCode();
 	hash *= fnv_prime;
@@ -239,55 +168,14 @@ int TunerStatus::GetHashCode(void)
 }
 
 //---------------------------------------------------------------------------
-// TunerStatus::GetVirtualChannelName (static, private)
-//
-// Retrieves the virtual channel name from a tuner program and streaminfo
-//
-// Arguments:
-//
-//	program		- Tuner program string
-//	streaminfo	- Tuner stream information string
-
-String^ TunerStatus::GetVirtualChannelName(String^ program, String^ streaminfo)
-{
-	if(CLRISNULL(program)) throw gcnew ArgumentNullException("program");
-	if(CLRISNULL(streaminfo)) throw gcnew ArgumentNullException("streaminfo");
-
-	// The program string has to be set to something
-	if(String::IsNullOrEmpty(program)) return String::Empty;
-
-	// The program can have additional information after the number, like on the
-	// HDHomeRun EXTEND there is a transcode=.  Just grab the first bit
-	int spaceindex = program->IndexOf(' ');
-	if(spaceindex > 0) program = program->Substring(0, spaceindex);
-
-	// Don't use a program number set to zero
-	if(String::Compare(program, "0", StringComparison::OrdinalIgnoreCase) == 0) return String::Empty;
-
-	// The stream information comes in on multiple lines of text split by \n
-	array<String^>^ streams = streaminfo->Split(gcnew array<wchar_t> {'\n'}, StringSplitOptions::RemoveEmptyEntries);
-	for each(String^ stream in streams) {
-
-		// If the line starts with the program number, grab the virtual channel number/name
-		if(stream->StartsWith(program)) {
-
-			int colonspace = stream->IndexOf(": ");
-			if(colonspace > 0) return stream->Substring(colonspace + 2);
-		}
-	}
-
-	return String::Empty;
-}
-
-//---------------------------------------------------------------------------
 // TunerStatus::IsActive::get
 //
 // Gets a flag indicating if the tuner is active or not
 
 bool TunerStatus::IsActive::get(void)
 {
-	if(String::IsNullOrEmpty(m_channel)) return false;
-	else return (String::Compare(m_channel, "none", StringComparison::OrdinalIgnoreCase) != 0);
+	if(String::IsNullOrEmpty(m_channelname)) return false;
+	else return (String::Compare(m_channelname, NoChannel, StringComparison::OrdinalIgnoreCase) != 0);
 }
 
 //---------------------------------------------------------------------------

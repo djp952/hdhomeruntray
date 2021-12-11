@@ -74,6 +74,7 @@
 
 struct hdhomerun_device_t {};		// LNK4248 : Unresolved typeref token
 struct hdhomerun_debug_t {};		// LNK4248 : Unresolved typeref token
+struct hdhomerun_channel_list_t {};	// LNK4248 : Unresolved typeref token
 
 //---------------------------------------------------------------------------
 

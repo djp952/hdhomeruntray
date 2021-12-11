@@ -42,7 +42,7 @@ namespace zuki.hdhomeruntray
 			this.m_symbolqualitypct = new System.Windows.Forms.Label();
 			this.m_headerlayoutpanel = new System.Windows.Forms.TableLayoutPanel();
 			this.m_tunernumber = new System.Windows.Forms.Label();
-			this.m_channel = new System.Windows.Forms.Label();
+			this.m_channelname = new System.Windows.Forms.Label();
 			this.m_activedot = new System.Windows.Forms.Label();
 			this.m_footerlayoutpanel = new System.Windows.Forms.TableLayoutPanel();
 			this.m_targetip = new System.Windows.Forms.Label();
@@ -68,6 +68,7 @@ namespace zuki.hdhomeruntray
 			this.m_layoutpanel.Margin = new System.Windows.Forms.Padding(0);
 			this.m_layoutpanel.Name = "m_layoutpanel";
 			this.m_layoutpanel.Padding = new System.Windows.Forms.Padding(4);
+			this.m_layoutpanel.Radii = new zuki.hdhomeruntray.Radii(0);
 			this.m_layoutpanel.RowCount = 3;
 			this.m_layoutpanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.m_layoutpanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -226,7 +227,7 @@ namespace zuki.hdhomeruntray
 			this.m_headerlayoutpanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this.m_headerlayoutpanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this.m_headerlayoutpanel.Controls.Add(this.m_tunernumber, 1, 0);
-			this.m_headerlayoutpanel.Controls.Add(this.m_channel, 2, 0);
+			this.m_headerlayoutpanel.Controls.Add(this.m_channelname, 2, 0);
 			this.m_headerlayoutpanel.Controls.Add(this.m_activedot, 0, 0);
 			this.m_headerlayoutpanel.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.m_headerlayoutpanel.Location = new System.Drawing.Point(7, 7);
@@ -248,17 +249,17 @@ namespace zuki.hdhomeruntray
 			this.m_tunernumber.Text = "{ m_tunernumber }";
 			this.m_tunernumber.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
 			// 
-			// m_channel
+			// m_channelname
 			// 
-			this.m_channel.AutoSize = true;
-			this.m_channel.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.m_channel.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.m_channel.Location = new System.Drawing.Point(139, 0);
-			this.m_channel.Name = "m_channel";
-			this.m_channel.Size = new System.Drawing.Size(237, 15);
-			this.m_channel.TabIndex = 2;
-			this.m_channel.Text = "{ m_channel }";
-			this.m_channel.TextAlign = System.Drawing.ContentAlignment.BottomRight;
+			this.m_channelname.AutoSize = true;
+			this.m_channelname.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.m_channelname.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.m_channelname.Location = new System.Drawing.Point(139, 0);
+			this.m_channelname.Name = "m_channelname";
+			this.m_channelname.Size = new System.Drawing.Size(237, 15);
+			this.m_channelname.TabIndex = 2;
+			this.m_channelname.Text = "{ m_channelname }";
+			this.m_channelname.TextAlign = System.Drawing.ContentAlignment.BottomRight;
 			// 
 			// m_activedot
 			// 
@@ -336,7 +337,7 @@ namespace zuki.hdhomeruntray
 
 		#endregion
 		private System.Windows.Forms.Label m_tunernumber;
-		private System.Windows.Forms.Label m_channel;
+		private System.Windows.Forms.Label m_channelname;
 		private System.Windows.Forms.Label m_bitrate;
 		private System.Windows.Forms.Label m_targetip;
 		private zuki.hdhomeruntray.RoundedTableLayoutPanel m_layoutpanel;

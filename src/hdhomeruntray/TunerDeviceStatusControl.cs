@@ -85,7 +85,7 @@ namespace zuki.hdhomeruntray
 				if(VersionHelper.IsWindows11OrGreater())
 				{
 					m_tunernumber.Font = new Font("Segoe UI Variable Text Semibold", m_tunernumber.Font.Size, m_tunernumber.Font.Style);
-					m_channel.Font = new Font("Segoe UI Variable Text Semibold", m_channel.Font.Size, m_channel.Font.Style);
+					m_channelname.Font = new Font("Segoe UI Variable Text Semibold", m_channelname.Font.Size, m_channelname.Font.Style);
 					m_signalstrengthlabel.Font = new Font("Segoe UI Variable Text", m_signalstrengthlabel.Font.Size, m_signalstrengthlabel.Font.Style);
 					m_signalqualitylabel.Font = new Font("Segoe UI Variable Text", m_signalqualitylabel.Font.Size, m_signalqualitylabel.Font.Style);
 					m_symbolqualitylabel.Font = new Font("Segoe UI Variable Text", m_symbolqualitylabel.Font.Size, m_symbolqualitylabel.Font.Style);
@@ -164,7 +164,7 @@ namespace zuki.hdhomeruntray
 				}
 				m_activedot.ForeColor = forecolor;
 
-				m_channel.Text = (status.IsActive) ? status.Channel : "Idle";
+				m_channelname.Text = (status.IsActive) ? status.ChannelName : "Idle";
 
 				if(status.IsActive)
 				{

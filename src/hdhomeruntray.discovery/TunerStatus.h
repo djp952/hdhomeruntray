@@ -59,10 +59,10 @@ public:
 		int get(void);
 	}
 
-	// Channel
+	// ChannelName
 	//
-	// Gets the tuned channel string (modulation+frequency)
-	property String^ Channel
+	// Gets the tuned channel name
+	property String^ ChannelName
 	{
 		String^ get(void);
 	}
@@ -150,12 +150,20 @@ public:
 internal:
 
 	//-----------------------------------------------------------------------
+	// Internal Fields
+
+	// NoChannel
+	//
+	// String used by HDHomeRun tuners to indicate there is no tuned channel
+	static initonly String^ NoChannel = gcnew String("none");
+
+	//-----------------------------------------------------------------------
 	// Internal Member Functions
 
 	// Create
 	//
 	// Creates a new TunerStatus instance
-	static TunerStatus^ Create(TunerDevice^ tunerdevice, int index);
+	static TunerStatus^ Create(struct hdhomerun_tuner_status_t const* status, IPAddress^ targetip);
 
 private:
 
@@ -172,15 +180,10 @@ private:
 	// Converts the color code from libhdhomerun into the color I want to use
 	static Color ConvertHDHomeRunColor(uint32_t color);
 
-	// GetVirtualChannelName
-	//
-	// Retrieves the virtual channel name from a tuner program and streaminfo
-	static String^ GetVirtualChannelName(String^ program, String^ streaminfo);
-
 	//-----------------------------------------------------------------------
 	// Member Variables
 
-	String^				m_channel = gcnew String("none");
+	String^				m_channelname = NoChannel;
 	int					m_signalquality = 0;
 	Color				m_signalqualitycolor = DeviceStatusColor::Gray;
 	int					m_signalstrength = 0;
