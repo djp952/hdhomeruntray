@@ -152,33 +152,30 @@ TunerStatus^ TunerStatus::Create(TunerDevice^ tunerdevice, int index)
 		// If the channel name is "none" we can get out early here
 		if(strcmp(status.channel, "none") == 0) return TunerStatus::Empty;
 
-		// Try to retrieve the virtual channel information from the program/stream.  Only CableCard
-		// devices seem to support vstatus and to get bitrate the legacy status still needs to
-		// be used so switching to JSON status isn't really a good option
-		char* program_str = nullptr;
-		result = hdhomerun_device_get_tuner_program(device, &program_str);
+		// Get the stream information for the tuned frequency
+		char* streaminfo_str = nullptr;
+		result = hdhomerun_device_get_tuner_streaminfo(device, &streaminfo_str);
 		if(result == 1) {
-			
-			// Volatile pointer, convert to String^ immediately
-			String^ program = gcnew String(program_str);
 
-			char* streaminfo_str = nullptr;
-			result = hdhomerun_device_get_tuner_streaminfo(device, &streaminfo_str);
+			String^ streaminfo = gcnew String(streaminfo_str);		// Convert volatile string pointer
+
+			// Try to get the program number string from the tuner
+			char* program_str = nullptr;
+			result = hdhomerun_device_get_tuner_program(device, &program_str);
 			if(result == 1) {
 
-				// Volatile pointer, convert to String^ immediately
-				String^ streaminfo = gcnew String(streaminfo_str);
+				// Try to use the stream info and program number to get the channel name
+				String^ vchannelname = GetVirtualChannelName(gcnew String(program_str), streaminfo);
+				if(!String::IsNullOrEmpty(vchannelname)) {
 
-				String^ vchannel = GetVirtualChannelName(program, streaminfo);
-				if(!String::IsNullOrEmpty(vchannel)) {
-
+					// If a better name for the channel was determined, replace it in the status structure
 					msclr::auto_handle<msclr::interop::marshal_context> context(gcnew msclr::interop::marshal_context());
-					strncpy_s(status.channel, std::extent<decltype(status.channel)>::value, context->marshal_as<char const*>(vchannel), _TRUNCATE);
+					strncpy_s(status.channel, std::extent<decltype(status.channel)>::value, context->marshal_as<char const*>(vchannelname), _TRUNCATE);
 				}
 			}
 		}
 
-		// And finally, try to get the tuner target device to convert into an IP address
+		// Try to get the tuner target device to convert into an IP address
 		IPAddress^ targetip = IPAddress::None;
 		char* target_str = nullptr;
 		bool hastarget = (hdhomerun_device_get_tuner_target(device, &target_str) == 1);
@@ -209,7 +206,7 @@ TunerStatus^ TunerStatus::Create(TunerDevice^ tunerdevice, int index)
 //---------------------------------------------------------------------------
 // TunerStatus::GetHashCode
 //
-// Serves as the default hash function
+// Serves as the defult hash function
 //
 // Arguments:
 //
@@ -258,6 +255,14 @@ String^ TunerStatus::GetVirtualChannelName(String^ program, String^ streaminfo)
 
 	// The program string has to be set to something
 	if(String::IsNullOrEmpty(program)) return String::Empty;
+
+	// The program can have additional information after the number, like on the
+	// HDHomeRun EXTEND there is a transcode=.  Just grab the first bit
+	int spaceindex = program->IndexOf(' ');
+	if(spaceindex > 0) program = program->Substring(0, spaceindex);
+
+	// Don't use a program number set to zero
+	if(String::Compare(program, "0", StringComparison::OrdinalIgnoreCase) == 0) return String::Empty;
 
 	// The stream information comes in on multiple lines of text split by \n
 	array<String^>^ streams = streaminfo->Split(gcnew array<wchar_t> {'\n'}, StringSplitOptions::RemoveEmptyEntries);
