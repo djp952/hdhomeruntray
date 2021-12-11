@@ -327,12 +327,6 @@ namespace zuki.hdhomeruntray
 			remove => Events.RemoveHandler(EVENT_CLOSEPOPUP, value);
 		}
 
-		public event ShellNotifyIconGuidChangedEventHandler GuidChanged
-		{
-			add => Events.AddHandler(EVENT_GUIDCHANGED, value);
-			remove => Events.RemoveHandler(EVENT_GUIDCHANGED, value);
-		}
-
 		// OpenPopup
 		//
 		// Invoked when the popup window should be opened (NIN_POPUPOPEN)
@@ -512,7 +506,7 @@ namespace zuki.hdhomeruntray
 			if(!m_created || DesignMode) return;
 
 			// Initialize the NOTIFYICONDATAW structure for this operation
-			NativeMethods.NOTIFYICONDATAW data = new NativeMethods.NOTIFYICONDATAW
+			var data = new NativeMethods.NOTIFYICONDATAW
 			{
 				cbSize = (uint)Marshal.SizeOf(typeof(NativeMethods.NOTIFYICONDATAW)),
 				uFlags = NativeMethods.NIF_INFO | NativeMethods.NIF_GUID,
@@ -658,14 +652,6 @@ namespace zuki.hdhomeruntray
 			s_contextmenustrip_showintaskbar.Invoke(m_contextmenu, new Object[] { cursorpos.X, cursorpos.Y });
 		}
 
-		// OnGuidChanged
-		//
-		// Raises the OnGuidChanged event
-		private void OnGuidChanged(Guid newguid)
-		{
-			((ShellNotifyIconGuidChangedEventHandler)Events[EVENT_GUIDCHANGED])?.Invoke(this, new ShellNotifyIconGuidChangedEventArgs(newguid));
-		}
-
 		// OnHoverStart
 		//
 		// Invoked when the hover start timer object has come due
@@ -736,7 +722,7 @@ namespace zuki.hdhomeruntray
 					m_backingwindow.CreateHandle(new CreateParams());
 
 				// Initialize the NOTIFYICONDATA structure
-				NativeMethods.NOTIFYICONDATAW data = new NativeMethods.NOTIFYICONDATAW
+				var data = new NativeMethods.NOTIFYICONDATAW
 				{
 					cbSize = (uint)Marshal.SizeOf(typeof(NativeMethods.NOTIFYICONDATAW)),
 					uFlags = NativeMethods.NIF_MESSAGE | NativeMethods.NIF_GUID,
@@ -764,26 +750,15 @@ namespace zuki.hdhomeruntray
 				{
 					if(!m_created)
 					{
-						// Create the tray icon instance.  This will fail with E_FAIL if the executable
-						// is in a different location than it was when the GUID was originally used.
-						m_created = NativeMethods.Shell_NotifyIconW(NativeMethods.NIM_ADD, ref data);
-						if(!m_created)
-						{
-							// Try changing the Guid and see if that makes it work
-							Guid newguid = Guid.NewGuid();
-							data.guidItem = newguid;
+						// Create the tray icon instance
+						NativeMethods.Shell_NotifyIconW(NativeMethods.NIM_ADD, ref data);
 
-							m_created = NativeMethods.Shell_NotifyIconW(NativeMethods.NIM_ADD, ref data);
-							if(m_created) OnGuidChanged(newguid);
-						}
+						// Set the version of the tray icon to NOTIFY_VERSION_4 to enable modern functionality,
+						// this only needs to be done once after the NIM_ADD operation
+						data.uVersion = NativeMethods.NOTIFYICON_VERSION_4;
+						NativeMethods.Shell_NotifyIconW(NativeMethods.NIM_SETVERSION, ref data);
 
-						if(m_created)
-						{
-							// Set the version of the tray icon to NOTIFY_VERSION_4 to enable modern functionality,
-							// this only needs to be done once after the NIM_ADD operation
-							data.uVersion = NativeMethods.NOTIFYICON_VERSION_4;
-							NativeMethods.Shell_NotifyIconW(NativeMethods.NIM_SETVERSION, ref data);
-						}
+						m_created = true;
 					}
 					
 					else NativeMethods.Shell_NotifyIconW(NativeMethods.NIM_MODIFY, ref data);
@@ -948,7 +923,6 @@ namespace zuki.hdhomeruntray
 		private static readonly object EVENT_CLOSEPOPUP = new object();
 		private static readonly object EVENT_OPENPOPUP = new object();
 		private static readonly object EVENT_SELECTED = new object();
-		private static readonly object EVENT_GUIDCHANGED = new object();
 
 		// Reflected member functions
 		//

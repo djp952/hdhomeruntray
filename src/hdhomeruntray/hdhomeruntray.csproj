@@ -103,8 +103,6 @@
     <Compile Include="SettingsForm.Designer.cs">
       <DependentUpon>SettingsForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="ShellNotifyIconGuidChangedEventArgs.cs" />
-    <Compile Include="ShellNotifyIconGuidChangedEventHandler.cs" />
     <Compile Include="SignalStatusProgressBar.cs">
       <SubType>UserControl</SubType>
     </Compile>
