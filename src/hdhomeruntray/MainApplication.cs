@@ -78,11 +78,20 @@ namespace zuki.hdhomeruntray
 		// Initializes all of the Windows Forms components and object
 		private void InitializeComponent()
 		{
+			Guid iconguid = s_guid;
+
+			// Change the GUID from the default to the replacement if necessary
+			if(!Guid.Empty.Equals(Settings.Default.TrayIconGuid))
+			{
+				iconguid = Settings.Default.TrayIconGuid;
+			}
+
 			// Create and initialize the ShellNotifyIcon instance
-			m_notifyicon = new ShellNotifyIcon(s_guid);
+			m_notifyicon = new ShellNotifyIcon(iconguid);
 			m_notifyicon.ClosePopup += new EventHandler(OnNotifyIconClosePopup);
 			m_notifyicon.OpenPopup += new EventHandler(OnNotifyIconOpenPopup);
 			m_notifyicon.Selected += new EventHandler(OnNotifyIconSelected);
+			m_notifyicon.GuidChanged += new ShellNotifyIconGuidChangedEventHandler(OnNotifyIconGuidChanged);
 			m_notifyicon.Icon = StatusIcons.Get(StatusIconType.Idle);
 			m_notifyicon.HoverInterval = GetHoverInterval(Settings.Default.TrayIconHoverDelay);
 			m_notifyicon.ToolTip = "HDHomeRun System Tray";
@@ -156,6 +165,15 @@ namespace zuki.hdhomeruntray
 				}
 
 			}), null);
+		}
+
+		// OnNotifyIconGuidChanged
+		//
+		// Invoked when the Guid of the icon needed to be changed
+		private void OnNotifyIconGuidChanged(object sender, ShellNotifyIconGuidChangedEventArgs args)
+		{
+			Settings.Default.TrayIconGuid = args.NewGuid;
+			Settings.Default.Save();
 		}
 
 		// OnNotifyIconOpenPopup
