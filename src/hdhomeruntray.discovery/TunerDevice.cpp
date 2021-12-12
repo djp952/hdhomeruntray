@@ -234,15 +234,27 @@ TunerStatus^ TunerDevice::GetTunerStatus(int index)
 
 					// The raw channel name should be modulation:frequency, we only care about the frequency
 					int colon = channel->IndexOf(':');
-					String^ frequencystring = (colon > 0) ? channel->Substring(colon + 1) : channel;
+					String^ channelorfrequencystring = (colon > 0) ? channel->Substring(colon + 1) : channel;
 
-					// Try to concvert the frequency string into a 32-bit integer for libhdhomerun to work with
-					uint32_t frequency = 0;
-					if(uint32_t::TryParse(frequencystring, frequency)) {
+					// Try to convert the channel/frequency string into a 32-bit integer for libhdhomerun to work with
+					uint32_t channelorfrequency = 0;
+					if(uint32_t::TryParse(channelorfrequencystring, channelorfrequency)) {
 
-						// Get the channel number for the specified frequency in the channel listing
-						uint16_t number = hdhomerun_channel_frequency_to_number(channellist, frequency);
-						if(number > 0) channelname = String::Format("{0} ({1}MHz)", number, frequency / 1000000);
+						// If the parsed value is less than 1000 (highest I see is 862 for eu-cable), assume channel number
+						if(channelorfrequency < 1000) {
+
+							uint16_t channel = static_cast<uint16_t>(channelorfrequency);
+							uint32_t frequency = hdhomerun_channel_number_to_frequency(channellist, channel);
+							if((channel > 0) && (frequency > 0)) channelname = String::Format("{0} ({1}MHz)", channel, frequency / 1000000);
+
+						}
+
+						else {
+
+							uint32_t frequency = channelorfrequency;
+							uint16_t channel = hdhomerun_channel_frequency_to_number(channellist, frequency);
+							if((channel > 0) && (frequency > 0)) channelname = String::Format("{0} ({1}MHz)", channel, frequency / 1000000);
+						}
 					}
 
 					// Destroy the allocated channel list
