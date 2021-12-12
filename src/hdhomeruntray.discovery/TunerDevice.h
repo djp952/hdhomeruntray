@@ -142,14 +142,6 @@ private:
 	TunerDevice(JObject^ device, IPAddress^ localip);
 
 	//-----------------------------------------------------------------------
-	// Private Member Functions
-
-	// GetVirtualChannelName
-	//
-	// Retrieves the virtual channel name from a tuner program and streaminfo
-	static String^ GetVirtualChannelName(String^ program, String^ streaminfo);
-
-	//-----------------------------------------------------------------------
 	// Member Variables
 
 	String^					m_deviceid;			// Tuner device identifier
@@ -160,9 +152,6 @@ private:
 	String^					m_firmwareversion;	// Firmware version string
 	int						m_tunercount;		// Number of tuner instances
 	TunerList^				m_tuners;			// List<> of tuner instances
-
-	// To prevent unnecessary reconversion of channel names and target IP addresses
-	array<Tuple<String^, String^, IPAddress^>^>^ m_statuscache;
 };
 
 //---------------------------------------------------------------------------

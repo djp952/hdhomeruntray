@@ -163,7 +163,7 @@ internal:
 	// Create
 	//
 	// Creates a new TunerStatus instance
-	static TunerStatus^ Create(struct hdhomerun_tuner_status_t const* status, IPAddress^ targetip);
+	static TunerStatus^ Create(TunerDevice^ tunerdevice, int index);
 
 private:
 
@@ -179,6 +179,11 @@ private:
 	//
 	// Converts the color code from libhdhomerun into the color I want to use
 	static Color ConvertHDHomeRunColor(uint32_t color);
+
+	// GetVirtualChannelName
+	//
+	// Retrieves the virtual channel name from a tuner program and streaminfo
+	static String^ GetVirtualChannelName(String^ program, String^ streaminfo);
 
 	//-----------------------------------------------------------------------
 	// Member Variables
