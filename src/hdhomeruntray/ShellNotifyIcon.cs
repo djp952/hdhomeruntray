@@ -212,7 +212,20 @@ namespace zuki.hdhomeruntray
 
 		// Instance Constructor
 		//
-		public ShellNotifyIcon(Guid guid) : this()
+		private ShellNotifyIcon(IContainer container)
+		{
+			if(container != null) container.Add(this);
+		}
+
+		// Instance Constructor
+		//
+		public ShellNotifyIcon(Guid guid) : this(guid, null)
+		{
+		}
+
+		// Instance Constructor
+		//
+		public ShellNotifyIcon(Guid guid, IContainer container) : this(container)
 		{
 			m_backingwindow = new BackingWindow(this);
 			m_guid = guid;

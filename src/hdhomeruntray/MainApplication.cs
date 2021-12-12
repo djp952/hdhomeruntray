@@ -23,6 +23,7 @@
 using System;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Drawing;
 using System.Threading;
 using System.Timers;
 using System.Windows.Forms;
@@ -86,11 +87,27 @@ namespace zuki.hdhomeruntray
 		// Initializes all of the Windows Forms components and object
 		private void InitializeComponent()
 		{
+			// Create the Container for the controls
+			var container = new Container();
+
+			var exititem = new ToolStripMenuItem("Exit");
+			exititem.Click += new EventHandler(OnMenuItemExit);
+
+			// Create the ContextMenuStrip for the tray icon
+			var contextmenu = new ContextMenuStrip(container)
+			{
+				BackColor = SystemColors.ControlLightLight,
+				Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold),
+				RenderMode = ToolStripRenderMode.System
+			};
+			contextmenu.Items.Add(exititem);
+
 			// Create and initialize the ShellNotifyIcon instance
-			m_notifyicon = new ShellNotifyIcon(s_guid);
+			m_notifyicon = new ShellNotifyIcon(s_guid, container);
 			m_notifyicon.ClosePopup += new EventHandler(OnNotifyIconClosePopup);
 			m_notifyicon.OpenPopup += new EventHandler(OnNotifyIconOpenPopup);
 			m_notifyicon.Selected += new EventHandler(OnNotifyIconSelected);
+			m_notifyicon.ContextMenuStrip = contextmenu;
 			m_notifyicon.Icon = StatusIcons.Get(StatusIconType.Idle);
 			m_notifyicon.HoverInterval = GetHoverInterval(Settings.Default.TrayIconHoverDelay);
 			m_notifyicon.ToolTip = "HDHomeRun System Tray";
@@ -102,6 +119,13 @@ namespace zuki.hdhomeruntray
 				Interval = (double)Settings.Default.DiscoveryInterval,
 			};
 			m_timer.Elapsed += new ElapsedEventHandler(OnTimerElapsed);
+
+			// WINDOWS 11
+			//
+			if(VersionHelper.IsWindows11OrGreater())
+			{
+				contextmenu.Font = new Font("Segoe UI Variable Text Semibold", contextmenu.Font.Size, contextmenu.Font.Style);
+			}
 		}
 
 		//-------------------------------------------------------------------
@@ -146,6 +170,25 @@ namespace zuki.hdhomeruntray
 			UpdateNotifyIcon(m_devicelist);
 		}
 
+		// OnMenuItemExit
+		//
+		// Invoked via the "Exit" menu item
+		private void OnMenuItemExit(object sender, EventArgs args)
+		{
+			m_context.Post(new SendOrPostCallback((o) =>
+			{
+				if(m_popupform != null)
+				{
+					m_popupform.Close();
+					m_popupform.Dispose();
+					m_popupform = null;
+				}
+
+				Application.Exit();
+
+			}), null);
+		}
+		
 		// OnNotifyIconClosePopup
 		//
 		// Invoked when the hover popup window should be closed

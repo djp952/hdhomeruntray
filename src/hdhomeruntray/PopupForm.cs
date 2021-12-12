@@ -173,18 +173,9 @@ namespace zuki.hdhomeruntray
 			};
 			unpin.Selected += new EventHandler(OnUnpinSelected);
 
-			// Create the exit button
-			var exit = new PopupItemGlyphControl(SymbolGlyph.Exit, PopupItemControlType.Button)
-			{
-				Padding = new Padding(1, 0, 0, 0).ScaleDPI(Handle)
-			};
-			exit.Selected += new EventHandler(OnExitSelected);
-
 			// Add the glyph items to the outer layout panel
 			m_layoutpanel.SuspendLayout();
-			m_layoutpanel.Controls.Add(settings);
-			m_layoutpanel.Controls.Add(unpin);
-			m_layoutpanel.Controls.Add(exit);
+			m_layoutpanel.Controls.AddRange(new Control[] { settings, unpin });
 			m_layoutpanel.ResumeLayout();
 
 			// If the form is already visible, it needs to be moved to adjust for the new width
@@ -257,15 +248,6 @@ namespace zuki.hdhomeruntray
 				m_deviceform.Dispose();
 				m_deviceform = null;
 			}
-		}
-
-		// OnExitSelected
-		//
-		// Invoked when the exit button has been clicked
-		private void OnExitSelected(object sender, EventArgs args)
-		{
-			Close();					// Close this form
-			Application.Exit();				// Exit the application
 		}
 
 		// OnFormClosing
