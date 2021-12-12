@@ -159,7 +159,7 @@ namespace zuki.hdhomeruntray
 			{
 				// Fill with slighly rounded corners
 				args.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
-				args.Graphics.FillRoundedRectangle(brush, rect, 2.ScaleDPI(Handle));
+				args.Graphics.FillRoundedRectangle(brush, rect, Math.Min(rect.Width, 2.ScaleDPI(Handle)));
 			}
 		}
 
