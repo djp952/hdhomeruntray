@@ -234,26 +234,26 @@ TunerStatus^ TunerDevice::GetTunerStatus(int index)
 
 					// The raw channel name should be modulation:frequency, we only care about the frequency
 					int colon = channel->IndexOf(':');
-					String^ channelorfrequencystring = (colon > 0) ? channel->Substring(colon + 1) : channel;
+					String^ channelnumorfrequencystring = (colon > 0) ? channel->Substring(colon + 1) : channel;
 
 					// Try to convert the channel/frequency string into a 32-bit integer for libhdhomerun to work with
-					uint32_t channelorfrequency = 0;
-					if(uint32_t::TryParse(channelorfrequencystring, channelorfrequency)) {
+					uint32_t channelnumorfrequency = 0;
+					if(uint32_t::TryParse(channelnumorfrequencystring, channelnumorfrequency)) {
 
 						// If the parsed value is less than 1000 (highest I see is 862 for eu-cable), assume channel number
-						if(channelorfrequency < 1000) {
+						if(channelnumorfrequency < 1000) {
 
-							uint16_t channel = static_cast<uint16_t>(channelorfrequency);
-							uint32_t frequency = hdhomerun_channel_number_to_frequency(channellist, channel);
-							if((channel > 0) && (frequency > 0)) channelname = String::Format("{0} ({1}MHz)", channel, frequency / 1000000);
+							uint16_t channelnum = static_cast<uint16_t>(channelnumorfrequency);
+							uint32_t frequency = hdhomerun_channel_number_to_frequency(channellist, channelnum);
+							if((channelnum > 0) && (frequency > 0)) channelname = String::Format("{0} ({1}MHz)", channelnum, frequency / 1000000);
 
 						}
 
 						else {
 
-							uint32_t frequency = channelorfrequency;
-							uint16_t channel = hdhomerun_channel_frequency_to_number(channellist, frequency);
-							if((channel > 0) && (frequency > 0)) channelname = String::Format("{0} ({1}MHz)", channel, frequency / 1000000);
+							uint32_t frequency = channelnumorfrequency;
+							uint16_t channelnum = hdhomerun_channel_frequency_to_number(channellist, frequency);
+							if((channelnum > 0) && (frequency > 0)) channelname = String::Format("{0} ({1}MHz)", channelnum, frequency / 1000000);
 						}
 					}
 
