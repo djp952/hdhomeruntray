@@ -233,7 +233,7 @@ TunerStatus^ TunerStatus::Create(TunerDevice^ tunerdevice, int index)
 			if(Uri::TryCreate(gcnew String(target_str), UriKind::RelativeOrAbsolute, uri))
 			{
 				// HostNameType can actually throw, this will happen if target is "none", for example
-				try { if(uri->HostNameType == UriHostNameType::IPv4) IPAddress::TryParse(uri->Host, targetip); }
+				try { if(uri->IsAbsoluteUri && (uri->HostNameType == UriHostNameType::IPv4)) IPAddress::TryParse(uri->Host, targetip); }
 				catch(Exception^) { /* DO NOTHING */ }
 			}
 		}
