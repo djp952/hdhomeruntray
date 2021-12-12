@@ -110,6 +110,12 @@ namespace zuki.hdhomeruntray
 				ResumeLayout(false);
 				PerformLayout();
 			}
+
+			// Lock in the width of the percentage text controls to fit "100%"
+			int pctwidth = m_signalstrengthpct.Width;
+			m_signalstrengthpct.MinimumSize = new Size(pctwidth, 0);
+			m_signalqualitypct.MinimumSize = new Size(pctwidth, 0);
+			m_symbolqualitypct.MinimumSize = new Size(pctwidth, 0);
 		}
 
 		// Instance Constructor
