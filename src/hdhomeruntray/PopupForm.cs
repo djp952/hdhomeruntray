@@ -84,9 +84,12 @@ namespace zuki.hdhomeruntray
 			}
 
 			// Scale the padding based on the form DPI
-			Padding = Padding.ScaleDPI(Handle);
-			m_layoutpanel.Margin = m_layoutpanel.Margin.ScaleDPI(Handle);
-			m_layoutpanel.Padding = m_layoutpanel.Padding.ScaleDPI(Handle);
+			using(Graphics graphics = CreateGraphics())
+			{
+				Padding = Padding.ScaleDPI(graphics);
+				m_layoutpanel.Margin = m_layoutpanel.Margin.ScaleDPI(graphics);
+				m_layoutpanel.Padding = m_layoutpanel.Padding.ScaleDPI(graphics);
+			}
 		}
 
 		// Instance Constructor
@@ -116,14 +119,17 @@ namespace zuki.hdhomeruntray
 				// If there is more than one device to display
 				if(devices.Count > 1)
 				{
-					// The first device only gets right padding
-					if(index == 0) devicecontrol.Padding = new Padding(0, 0, 1, 0).ScaleDPI(Handle);
+					using(Graphics graphics = CreateGraphics())
+					{
+						// The first device only gets right padding
+						if(index == 0) devicecontrol.Padding = new Padding(0, 0, 1, 0).ScaleDPI(graphics);
 
-					// The last device only gets left padding
-					else if(index == (devices.Count - 1)) devicecontrol.Padding = new Padding(1, 0, 0, 0).ScaleDPI(Handle);
+						// The last device only gets left padding
+						else if(index == (devices.Count - 1)) devicecontrol.Padding = new Padding(1, 0, 0, 0).ScaleDPI(graphics);
 
-					// Middle devices get both left and right padding
-					else devicecontrol.Padding = new Padding(1, 0, 1, 0).ScaleDPI(Handle);
+						// Middle devices get both left and right padding
+						else devicecontrol.Padding = new Padding(1, 0, 1, 0).ScaleDPI(graphics);
+					}
 				}
 
 				devicecontrol.Toggled += new PopupItemToggledEventHandler(OnDeviceToggled);

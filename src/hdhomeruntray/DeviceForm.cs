@@ -21,7 +21,6 @@
 //---------------------------------------------------------------------------
 
 using System;
-using System.Diagnostics;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
@@ -81,9 +80,12 @@ namespace zuki.hdhomeruntray
 			}
 
 			// Scale the padding based on the form DPI
-			Padding = Padding.ScaleDPI(Handle);
-			m_layoutpanel.Margin = m_layoutpanel.Margin.ScaleDPI(Handle);
-			m_layoutpanel.Padding = m_layoutpanel.Padding.ScaleDPI(Handle);
+			using(Graphics graphics = CreateGraphics())
+			{
+				Padding = Padding.ScaleDPI(graphics);
+				m_layoutpanel.Margin = m_layoutpanel.Margin.ScaleDPI(graphics);
+				m_layoutpanel.Padding = m_layoutpanel.Padding.ScaleDPI(graphics);
+			}
 		}
 
 		// Instance Constructor (protected)

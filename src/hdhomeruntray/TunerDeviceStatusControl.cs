@@ -53,28 +53,31 @@ namespace zuki.hdhomeruntray
 
 			try
 			{
-				Padding = Padding.ScaleDPI(Handle);
+				using(Graphics graphics = CreateGraphics())
+				{
+					Padding = Padding.ScaleDPI(graphics);
 
-				m_layoutpanel.Margin = m_layoutpanel.Margin.ScaleDPI(Handle);
-				m_layoutpanel.Padding = m_layoutpanel.Padding.ScaleDPI(Handle);
-				m_headerlayoutpanel.Margin = m_headerlayoutpanel.Margin.ScaleDPI(Handle);
-				m_headerlayoutpanel.Padding = m_headerlayoutpanel.Padding.ScaleDPI(Handle);
-				m_signallayoutpanel.Margin = m_signallayoutpanel.Margin.ScaleDPI(Handle);
-				m_signallayoutpanel.Padding = m_signallayoutpanel.Padding.ScaleDPI(Handle);
-				m_footerlayoutpanel.Margin = m_footerlayoutpanel.Margin.ScaleDPI(Handle);
-				m_footerlayoutpanel.Padding = m_footerlayoutpanel.Padding.ScaleDPI(Handle);
+					m_layoutpanel.Margin = m_layoutpanel.Margin.ScaleDPI(graphics);
+					m_layoutpanel.Padding = m_layoutpanel.Padding.ScaleDPI(graphics);
+					m_headerlayoutpanel.Margin = m_headerlayoutpanel.Margin.ScaleDPI(graphics);
+					m_headerlayoutpanel.Padding = m_headerlayoutpanel.Padding.ScaleDPI(graphics);
+					m_signallayoutpanel.Margin = m_signallayoutpanel.Margin.ScaleDPI(graphics);
+					m_signallayoutpanel.Padding = m_signallayoutpanel.Padding.ScaleDPI(graphics);
+					m_footerlayoutpanel.Margin = m_footerlayoutpanel.Margin.ScaleDPI(graphics);
+					m_footerlayoutpanel.Padding = m_footerlayoutpanel.Padding.ScaleDPI(graphics);
 
-				m_signalstrengthlabel.Padding = m_signalstrengthlabel.Padding.ScaleDPI(Handle);
-				m_signalstrengthbar.Padding = m_signalstrengthbar.Padding.ScaleDPI(Handle);
-				m_signalstrengthpct.Padding = m_signalstrengthpct.Padding.ScaleDPI(Handle);
+					m_signalstrengthlabel.Padding = m_signalstrengthlabel.Padding.ScaleDPI(graphics);
+					m_signalstrengthbar.Padding = m_signalstrengthbar.Padding.ScaleDPI(graphics);
+					m_signalstrengthpct.Padding = m_signalstrengthpct.Padding.ScaleDPI(graphics);
 
-				m_signalqualitylabel.Padding = m_signalqualitylabel.Padding.ScaleDPI(Handle);
-				m_signalqualitybar.Padding = m_signalqualitybar.Padding.ScaleDPI(Handle);
-				m_signalqualitypct.Padding = m_signalqualitypct.Padding.ScaleDPI(Handle);
+					m_signalqualitylabel.Padding = m_signalqualitylabel.Padding.ScaleDPI(graphics);
+					m_signalqualitybar.Padding = m_signalqualitybar.Padding.ScaleDPI(graphics);
+					m_signalqualitypct.Padding = m_signalqualitypct.Padding.ScaleDPI(graphics);
 
-				m_symbolqualitylabel.Padding = m_symbolqualitylabel.Padding.ScaleDPI(Handle);
-				m_symbolqualitybar.Padding = m_symbolqualitybar.Padding.ScaleDPI(Handle);
-				m_symbolqualitypct.Padding = m_symbolqualitypct.Padding.ScaleDPI(Handle);
+					m_symbolqualitylabel.Padding = m_symbolqualitylabel.Padding.ScaleDPI(graphics);
+					m_symbolqualitybar.Padding = m_symbolqualitybar.Padding.ScaleDPI(graphics);
+					m_symbolqualitypct.Padding = m_symbolqualitypct.Padding.ScaleDPI(graphics);
+				}
 
 				// Scale the middle column to have a consistent progress bar width
 				int column = m_signallayoutpanel.GetColumn(m_signalstrengthbar);

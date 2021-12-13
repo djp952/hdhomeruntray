@@ -43,10 +43,13 @@ namespace zuki.hdhomeruntray
 
 			m_layoutpanel.EnableDoubleBuferring();
 
-			Padding = Padding.ScaleDPI(Handle);
-			m_layoutpanel.Margin = m_layoutpanel.Margin.ScaleDPI(Handle);
-			m_layoutpanel.Padding = m_layoutpanel.Padding.ScaleDPI(Handle);
-			m_layoutpanel.Radii = m_layoutpanel.Radii.ScaleDPI(Handle);
+			using(Graphics graphics = CreateGraphics())
+			{
+				Padding = Padding.ScaleDPI(graphics);
+				m_layoutpanel.Margin = m_layoutpanel.Margin.ScaleDPI(graphics);
+				m_layoutpanel.Padding = m_layoutpanel.Padding.ScaleDPI(graphics);
+				m_layoutpanel.Radii = m_layoutpanel.Radii.ScaleDPI(graphics);
+			}
 
 			// WINDOWS 11
 			//

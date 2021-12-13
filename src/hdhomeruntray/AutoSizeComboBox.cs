@@ -64,7 +64,7 @@ namespace zuki.hdhomeruntray
 				if(String.IsNullOrEmpty(DisplayMember)) text = item.ToString();
 				else
 				{
-					PropertyInfo pinfo = item.GetType().GetProperty(this.DisplayMember);
+					PropertyInfo pinfo = item.GetType().GetProperty(DisplayMember);
 					text = pinfo.GetValue(item, null).ToString();
 				}
 

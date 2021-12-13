@@ -204,8 +204,8 @@ namespace zuki.hdhomeruntray
 
 		public static Padding ScaleDPI(this Padding padding, IntPtr handle)
 		{
-			float factorx = 1.0F;			// Assume no horizontal scaling
-			float factory = 1.0F;			// Assume no vertical scaling
+			float factorx = 1.0F;           // Assume no horizontal scaling
+			float factory = 1.0F;           // Assume no vertical scaling
 
 			// Use a Graphics instance to determine the control's DPI factor
 			using(Graphics gr = Graphics.FromHwnd(handle))
@@ -213,6 +213,21 @@ namespace zuki.hdhomeruntray
 				factorx = gr.DpiX / 96.0F;
 				factory = gr.DpiY / 96.0F;
 			}
+
+			// Create a new Padding instance with the scaling factors applied
+			return new Padding((int)(padding.Left * factorx), (int)(padding.Top * factory),
+				(int)(padding.Right * factorx), (int)(padding.Bottom * factory));
+		}
+
+		//-------------------------------------------------------------------
+		// Padding.ScaleDPI
+		//
+		// Scales a Padding value based on the DPI of the system
+
+		public static Padding ScaleDPI(this Padding padding, Graphics graphics)
+		{
+			float factorx = graphics.DpiX / 96.0F;
+			float factory = graphics.DpiY / 96.0F;
 
 			// Create a new Padding instance with the scaling factors applied
 			return new Padding((int)(padding.Left * factorx), (int)(padding.Top * factory),
@@ -233,6 +248,20 @@ namespace zuki.hdhomeruntray
 			{
 				factor = (gr.DpiX / 96.0F) + (gr.DpiY / 96.0F) / 2.0F;
 			}
+
+			// Create a new Radii instance with the scaling factor applied
+			return new Radii((int)(radii.TopLeft * factor), (int)(radii.TopRight * factor),
+				(int)(radii.BottomRight * factor), (int)(radii.BottomLeft * factor));
+		}
+
+		//-------------------------------------------------------------------
+		// Radii.ScaleDPI
+		//
+		// Scales a Radii value based on the DPI of the system
+
+		public static Radii ScaleDPI(this Radii radii, Graphics graphics)
+		{
+			float factor = (graphics.DpiX / 96.0F) + (graphics.DpiY / 96.0F) / 2.0F;
 
 			// Create a new Radii instance with the scaling factor applied
 			return new Radii((int)(radii.TopLeft * factor), (int)(radii.TopRight * factor),
