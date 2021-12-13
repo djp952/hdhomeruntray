@@ -24,6 +24,8 @@ using System;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
+using System.Drawing.Imaging;
+using System.Drawing.Text;
 using System.Threading;
 using System.Timers;
 using System.Windows.Forms;
@@ -76,56 +78,6 @@ namespace zuki.hdhomeruntray
 
 			// Start the periodic timer
 			m_timer.Start();
-		}
-
-		//-------------------------------------------------------------------
-		// Private Member Functions
-		//-------------------------------------------------------------------
-
-		// InitializeComponent
-		//
-		// Initializes all of the Windows Forms components and object
-		private void InitializeComponent()
-		{
-			// Create the Container for the controls
-			var container = new Container();
-
-			var exititem = new ToolStripMenuItem("Exit");
-			exititem.Click += new EventHandler(OnMenuItemExit);
-
-			// Create the ContextMenuStrip for the tray icon
-			var contextmenu = new ContextMenuStrip(container)
-			{
-				BackColor = SystemColors.ControlLightLight,
-				Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold),
-				RenderMode = ToolStripRenderMode.System
-			};
-			contextmenu.Items.Add(exititem);
-
-			// Create and initialize the ShellNotifyIcon instance
-			m_notifyicon = new ShellNotifyIcon(s_guid, container);
-			m_notifyicon.ClosePopup += new EventHandler(OnNotifyIconClosePopup);
-			m_notifyicon.OpenPopup += new EventHandler(OnNotifyIconOpenPopup);
-			m_notifyicon.Selected += new EventHandler(OnNotifyIconSelected);
-			m_notifyicon.ContextMenuStrip = contextmenu;
-			m_notifyicon.Icon = StatusIcons.Get(StatusIconType.Idle);
-			m_notifyicon.HoverInterval = GetHoverInterval(Settings.Default.TrayIconHoverDelay);
-			m_notifyicon.ToolTip = "HDHomeRun System Tray";
-
-			// Create the periodic timer object
-			m_timer = new System.Timers.Timer
-			{
-				AutoReset = true,
-				Interval = (double)Settings.Default.DiscoveryInterval,
-			};
-			m_timer.Elapsed += new ElapsedEventHandler(OnTimerElapsed);
-
-			// WINDOWS 11
-			//
-			if(VersionHelper.IsWindows11OrGreater())
-			{
-				contextmenu.Font = new Font("Segoe UI Variable Text Semibold", contextmenu.Font.Size, contextmenu.Font.Style);
-			}
 		}
 
 		//-------------------------------------------------------------------
@@ -339,6 +291,108 @@ namespace zuki.hdhomeruntray
 		{
 			m_devices.CancelAsync(this);
 			m_devices.DiscoverAsync(Settings.Default.DiscoveryMethod, this);
+		}
+
+		// InitializeComponent
+		//
+		// Initializes all of the Windows Forms components and object
+		private void InitializeComponent()
+		{
+			// Create the Container for the controls
+			var container = new Container();
+
+			var exititem = new ToolStripMenuItem("Exit");
+			exititem.Click += new EventHandler(OnMenuItemExit);
+
+			// Create the ContextMenuStrip for the tray icon
+			var contextmenu = new ContextMenuStrip(container)
+			{
+				BackColor = SystemColors.ControlLightLight,
+				Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold),
+				RenderMode = ToolStripRenderMode.Professional
+			};
+
+			// Create the icon for the exit menu item
+			Image exiticon = null;
+
+			// Windows 11 - Segoe Fluent Icons
+			//
+			if(VersionHelper.IsWindows11OrGreater())
+				exiticon = MenuImageFromSymbolGlyph(SymbolGlyph.Exit, contextmenu.ForeColor, "Segoe Fluent Icons", 11.25F, FontStyle.Regular);
+
+			// Windows 10 - Segoe MDL2 Assets
+			//
+			else if(VersionHelper.IsWindows10OrGreater())
+				exiticon = MenuImageFromSymbolGlyph(SymbolGlyph.Exit, contextmenu.ForeColor, "Segoe MDL2 Assets", 11.25F, FontStyle.Regular);
+
+			// Windows 7 - Symbols
+			else 
+				exiticon = MenuImageFromSymbolGlyph(SymbolGlyph.Exit, contextmenu.ForeColor, "Symbols", 11.25F, FontStyle.Regular);
+
+			if(exiticon != null) exititem.Image = exiticon;
+
+			// Add the completed menu item to the context menu control
+			contextmenu.Items.Add(exititem);
+
+			// Create and initialize the ShellNotifyIcon instance
+			m_notifyicon = new ShellNotifyIcon(s_guid, container);
+			m_notifyicon.ClosePopup += new EventHandler(OnNotifyIconClosePopup);
+			m_notifyicon.OpenPopup += new EventHandler(OnNotifyIconOpenPopup);
+			m_notifyicon.Selected += new EventHandler(OnNotifyIconSelected);
+			m_notifyicon.ContextMenuStrip = contextmenu;
+			m_notifyicon.Icon = StatusIcons.Get(StatusIconType.Idle);
+			m_notifyicon.HoverInterval = GetHoverInterval(Settings.Default.TrayIconHoverDelay);
+			m_notifyicon.ToolTip = "HDHomeRun System Tray";
+
+			// Create the periodic timer object
+			m_timer = new System.Timers.Timer
+			{
+				AutoReset = true,
+				Interval = (double)Settings.Default.DiscoveryInterval,
+			};
+			m_timer.Elapsed += new ElapsedEventHandler(OnTimerElapsed);
+
+			// WINDOWS 11
+			//
+			if(VersionHelper.IsWindows11OrGreater())
+			{
+				contextmenu.Font = new Font("Segoe UI Variable Text Semibold", contextmenu.Font.Size, contextmenu.Font.Style);
+			}
+		}
+
+		// MenuImageFromSymbolGlyph (static)
+		//
+		// Helper function used to create a menu image from a SymbolGlyph
+		private static Image MenuImageFromSymbolGlyph(SymbolGlyph glyph, Color forecolor, 
+			string familyname, float emsize, FontStyle style)
+		{
+			string text = new string((char)glyph, 1);	// Convert to string
+			Bitmap image = null;						// Image to return
+
+			using(Font font = new Font(familyname, emsize, style))
+			{
+				// Measure the size required to draw the glyph character
+				Size textsize = TextRenderer.MeasureText(text, font);
+				Size size = textsize;
+
+				// Square off the size
+				if(size.Width > size.Height) size.Height = size.Width;
+				if(size.Height > size.Width) size.Width = size.Height;
+
+				// Determine the position within the bitmap to draw
+				int left = (size.Width - textsize.Width) / 2;
+				int top = (size.Height - textsize.Height) / 2;
+
+				// Create a 32bpp transparent bitmap and render the text
+				image = new Bitmap(size.Width, size.Height, PixelFormat.Format32bppArgb);
+				using(Graphics drawing = Graphics.FromImage(image))
+				{
+					drawing.TextRenderingHint = TextRenderingHint.ClearTypeGridFit;
+					TextRenderer.DrawText(drawing, text, font, new Point(left, top), forecolor);
+				}
+			}
+
+			return image;
 		}
 
 		// UpdateNotifyIcon
