@@ -8,7 +8,7 @@
   <?include $(var.ProjectDir)buildenv.wxi ?>
 
   <Product Id="$(var.ProjectGuid)"
-    Name="HDHomeRun System Tray"
+    Name="HDHomeRun Status Monitor"
     Language="1033"
     Version="$(var.ProjectVersion.4)"
     Manufacturer="ZukiSoft"
@@ -18,7 +18,7 @@
     <Media Id="1" Cabinet="hdhomeruntray.cab" EmbedCab="yes" />
 
     <!-- UPGRADES -->
-    <MajorUpgrade DowngradeErrorMessage="A later version of HDHomeRun System Tray has been installed. Please uninstall that version before running HDHomeRun System Tray setup."/>
+    <MajorUpgrade DowngradeErrorMessage="A later version of HDHomeRun Status Monitor has been installed. Please uninstall that version before running HDHomeRun Status Monitor setup."/>
 
     <!-- DISALLOW ADVERTISED SHORTCUTS -->
     <Property Id="DISABLEADVTSHORTCUTS" Value="1" />
@@ -27,22 +27,22 @@
     <Property Id="ARPNOMODIFY" Value="1" />
 
     <!-- ENVIRONMENTAL CONDITION: Windows 7 or higher -->
-    <Condition Message='HDHomeRun System Tray requires Microsoft Windows 7 (or higher).'>
+    <Condition Message='HDHomeRun Status Monitor requires Microsoft Windows 7 (or higher).'>
       (VersionNT >= 601)
     </Condition>
 
     <!-- ENVIRONMENTAL CONDITION: Microsoft .NET 4.6.2 -->
     <PropertyRef Id="WIX_IS_NETFRAMEWORK_462_OR_LATER_INSTALLED"/>
-    <Condition Message="The Microsoft .NET Framework version 4.6.2 is not installed. Please install before installing HDHomeRun System Tray.">
+    <Condition Message="The Microsoft .NET Framework version 4.6.2 is not installed. Please install before installing HDHomeRun Status Monitor.">
       <![CDATA[Installed OR WIX_IS_NETFRAMEWORK_462_OR_LATER_INSTALLED]]>
     </Condition>
 
     <Directory Id="TARGETDIR" Name="SourceDir">
 
-      <!-- C:\Program Files (x86)\ZukiSoft\HDHomeRun System Tray -->
+      <!-- C:\Program Files (x86)\ZukiSoft\HDHomeRun Status Monitor -->
       <Directory Id="ProgramFilesFolder">
         <Directory Id="ZukiSoftBinFolder" Name="ZukiSoft">
-          <Directory Id="HDHomeRunTrayBinFolder" Name="HDHomeRun System Tray"/>
+          <Directory Id="HDHomeRunTrayBinFolder" Name="HDHomeRun Status Monitor"/>
         </Directory>
       </Directory>
 
@@ -55,8 +55,8 @@
     </Directory>
 
     <!-- Default feature and components -->
-    <Feature Id="feature_hdhomeruntray" Title="HDHomeRun System Tray" Level="1" TypicalDefault="install"
-      Description="Installs the HDHomeRun System Tray application" Absent="disallow" AllowAdvertise="no">
+    <Feature Id="feature_hdhomeruntray" Title="HDHomeRun Status Monitor" Level="1" TypicalDefault="install"
+      Description="Installs the HDHomeRun Status Monitor application" Absent="disallow" AllowAdvertise="no">
       <?include addvcrt.wxi ?>
       <ComponentGroupRef Id="componentgroup_hdhomeruntray"/>
     </Feature>
@@ -71,7 +71,7 @@
 
     <Component Id="hdhomeruntray_exe" Directory="HDHomeRunTrayBinFolder" Guid="16F99373-B2BB-49C0-907C-08A6AF1CBE83">
       <File Id="hdhomeruntray.exe" Source="$(var.ProjectBinFolder)hdhomeruntray.exe" Vital="yes" KeyPath="yes"/>
-      <Shortcut Id="hdhomeruntray_exe_shortcut" Directory="ProgramMenuFolder" Advertise="yes" Name="HDHomeRun System Tray" Description="HDHomeRun System Tray" WorkingDirectory="ZukiSoftBinFolder"/>
+      <Shortcut Id="hdhomeruntray_exe_shortcut" Directory="ProgramMenuFolder" Advertise="yes" Name="HDHomeRun Status Monitor" Description="HDHomeRun Status Monitor" WorkingDirectory="ZukiSoftBinFolder"/>
     </Component>
 
     <Component Id="hdhomeruntray_exe_config" Directory="HDHomeRunTrayBinFolder" Guid="CE1EC7A4-507C-487E-96BE-EC36964A9CB5">

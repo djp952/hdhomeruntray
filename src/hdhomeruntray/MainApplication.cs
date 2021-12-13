@@ -342,7 +342,7 @@ namespace zuki.hdhomeruntray
 			m_notifyicon.ContextMenuStrip = contextmenu;
 			m_notifyicon.Icon = StatusIcons.Get(StatusIconType.Idle);
 			m_notifyicon.HoverInterval = GetHoverInterval(Settings.Default.TrayIconHoverDelay);
-			m_notifyicon.ToolTip = "HDHomeRun System Tray";
+			m_notifyicon.ToolTip = "HDHomeRun Status Monitor";
 
 			// Create the periodic timer object
 			m_timer = new System.Timers.Timer
