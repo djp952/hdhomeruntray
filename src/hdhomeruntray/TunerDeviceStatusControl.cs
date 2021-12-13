@@ -80,6 +80,10 @@ namespace zuki.hdhomeruntray
 				int column = m_signallayoutpanel.GetColumn(m_signalstrengthbar);
 				m_signallayoutpanel.ColumnStyles[column].Width = m_signallayoutpanel.ColumnStyles[column].Width.ScaleDPI(Handle);
 
+				// These panels start out as invisible
+				m_signallayoutpanel.Visible = false;
+				m_footerlayoutpanel.Visible = false;
+
 				// WINDOWS 11
 				//
 				if(VersionHelper.IsWindows11OrGreater())
@@ -188,14 +192,22 @@ namespace zuki.hdhomeruntray
 					m_symbolqualitybar.Value = (status.IsActive) ? status.SymbolQuality : 100;
 					m_symbolqualitypct.Text = String.Format("{0}%", status.SymbolQuality);
 
+					// Ensure the signal meter is visible for an active tuner
+					if(!m_signallayoutpanel.Visible) m_signallayoutpanel.Visible = true;
+
 					// Footer Controls
 					//
-					m_targetip.Text = status.TargetIP.Equals(IPAddress.None) ? "" : status.TargetIP.ToString();
-					m_bitrate.Text = FormatBitRate(status.BitRate);
+					if(!status.TargetIP.Equals(IPAddress.None))
+					{
+						m_targetip.Text = status.TargetIP.ToString();
+						m_bitrate.Text = FormatBitRate(status.BitRate);
+						if(!m_footerlayoutpanel.Visible) m_footerlayoutpanel.Visible = true;
+					}
+					else if(m_footerlayoutpanel.Visible) m_footerlayoutpanel.Visible = false;
 
-					// Ensure the signal meter and footer are visible for an active tuner
-					if(!m_signallayoutpanel.Visible) m_signallayoutpanel.Visible = true;
-					if(!m_footerlayoutpanel.Visible) m_footerlayoutpanel.Visible = true;
+					// The padding of the signal layout pane may need to change based on footer visibility
+					Padding newpadding = new Padding(0, 4, 0, (m_footerlayoutpanel.Visible) ? 4 : 0).ScaleDPI(Handle);
+					if(!m_signallayoutpanel.Padding.Equals(newpadding)) m_signallayoutpanel.Padding = newpadding;
 				}
 
 				else
