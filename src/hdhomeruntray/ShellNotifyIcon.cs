@@ -245,6 +245,14 @@ namespace zuki.hdhomeruntray
 			};
 			m_hoverstop.Elapsed += new ElapsedEventHandler(OnHoverStop);
 
+			// Create the repeating timer to unblock WM_MOUSEMOVE
+			m_blockstop = new System.Timers.Timer
+			{
+				AutoReset = true,
+				Interval = 25,			// Milliseconds
+			};
+			m_blockstop.Elapsed += new ElapsedEventHandler(OnBlockPopupStop);
+
 			UpdateIcon(m_visible);
 		}
 
@@ -639,6 +647,19 @@ namespace zuki.hdhomeruntray
 			((EventHandler)Events[EVENT_BALLOONTIPSHOWN])?.Invoke(this, EventArgs.Empty);
 		}
 
+		// OnBlockPopupStop
+		//
+		// Invoked when the popup block stop timer object has come due
+		private void OnBlockPopupStop(object sender, ElapsedEventArgs args)
+		{
+			// If the mouse is no longer in the icon boundaries, unblock the popups
+			if(!GetBounds().Contains(Cursor.Position))
+			{
+				m_blockstop.Stop();
+				m_blockpopup = false;
+			}
+		}
+
 		// OnClosePopup
 		//
 		// Raises the ClosePopup event
@@ -845,33 +866,58 @@ namespace zuki.hdhomeruntray
 
 						case NativeMethods.NIN_SELECT:
 						case NativeMethods.NIN_KEYSELECT:
+
+							// When a custom hover interval is set, the popup events are
+							// blocked until the cursor has left the tray icon
+							if(m_hoverinterval > 0)
+							{
+								if(m_hoverstart.Enabled) m_hoverstart.Stop();
+								m_blockstop.Start();
+								m_blockpopup = true;
+							}
+
 							OnSelected();
 							break;
 
 						case NativeMethods.WM_CONTEXTMENU:
+
+							// When a custom hover interval is set, the popup events are
+							// blocked until the cursor has left the tray icon
+							if(m_hoverinterval > 0)
+							{
+								if(m_hoverstart.Enabled) m_hoverstart.Stop();
+								m_blockstop.Start();
+								m_blockpopup = true;
+							}
+
 							OnContextMenu();
 							break;
 
 						case NativeMethods.WM_MOUSEMOVE:
-
+							
 							// This is only applicable if a custom hover interval has been set
 							if(m_hoverinterval > 0)
 							{
-								// Check if the mouse cursor is within the boundaries of the tray icon or not
-								if(GetBounds().Contains(NativeMethods.GET_X_LPARAM(message.WParam), NativeMethods.GET_Y_LPARAM(message.WParam)))
+								// A NIN_SELECT or WM_CONTEXTMENU message blocks WM_MOUSEMOVE until the
+								// cursor has left the boundaries of the control (WM_MOUSELEAVE is hard)
+								if(!m_blockpopup)
 								{
-									// In the icon; if the hover start timer is not already enabled, start it
-									if(!m_hoverstart.Enabled)
+									// Check if the mouse cursor is within the boundaries of the tray icon or not
+									if(GetBounds().Contains(NativeMethods.GET_X_LPARAM(message.WParam), NativeMethods.GET_Y_LPARAM(message.WParam)))
 									{
-										m_hoverstart.Interval = m_hoverinterval;
-										m_hoverstart.Start();
+										// In the icon; if the hover start timer is not already enabled, start it
+										if(!m_hoverstart.Enabled)
+										{
+											m_hoverstart.Interval = m_hoverinterval;
+											m_hoverstart.Start();
+										}
 									}
-								}
-								else
-								{
-									// Not in the icon, if the hover start timer is enabled, stop it before 
-									// it comes due.  The mouse has to stay within the icon boundaries
-									if(m_hoverstart.Enabled) m_hoverstart.Stop();
+									else
+									{
+										// Not in the icon, if the hover start timer is enabled, stop it before 
+										// it comes due.  The mouse has to stay within the icon boundaries
+										if(m_hoverstart.Enabled) m_hoverstart.Stop();
+									}
 								}
 							}
 
@@ -916,7 +962,9 @@ namespace zuki.hdhomeruntray
 		private BackingWindow m_backingwindow = null;		// Backing window
 		private bool m_created = false;						// Creation flag
 		private readonly System.Timers.Timer m_hoverstart;  // Pseudo-hover start timer
-		private readonly System.Timers.Timer m_hoverstop;	// Pesudo-hover stop time
+		private readonly System.Timers.Timer m_hoverstop;   // Pesudo-hover stop time
+		private bool m_blockpopup = false;					// Flag to block popup events
+		private readonly System.Timers.Timer m_blockstop;   // Timer to unblock popup events
 		private int m_hoverinterval = 0;                    // Pesudo-hover interval
 		private readonly Guid m_guid = Guid.NewGuid();		// Icon GUID
 
