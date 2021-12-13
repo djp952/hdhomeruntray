@@ -829,7 +829,7 @@ namespace zuki.hdhomeruntray
 					UpdateIcon(false);
 					break;
 
-				// WM_TRAYMOUSEMESSAGE
+				// WM_TRAYICONMESSAGE
 				//
 				// Message from the shell directed at the tray icon
 				case WM_TRAYICONMESSAGE:
@@ -923,7 +923,9 @@ namespace zuki.hdhomeruntray
 
 							break;
 					}
-					break;
+
+					// Don't pass these onto the backing window for processing
+					return;
 			}
 
 			// Pass the message on to the ShellNotifyIconNativeWindow default WndProc
