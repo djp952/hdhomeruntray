@@ -103,6 +103,24 @@
     <Compile Include="SettingsForm.Designer.cs">
       <DependentUpon>SettingsForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="SettingsFormFooterControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="SettingsFormFooterControl.Designer.cs">
+      <DependentUpon>SettingsFormFooterControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SettingsFormHeaderControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="SettingsFormHeaderControl.designer.cs">
+      <DependentUpon>SettingsFormHeaderControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SettingsFormSettingsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="SettingsFormSettingsControl.designer.cs">
+      <DependentUpon>SettingsFormSettingsControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="SignalStatusProgressBar.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -201,6 +219,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="SettingsForm.resx">
       <DependentUpon>SettingsForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SettingsFormFooterControl.resx">
+      <DependentUpon>SettingsFormFooterControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SettingsFormHeaderControl.resx">
+      <DependentUpon>SettingsFormHeaderControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SettingsFormSettingsControl.resx">
+      <DependentUpon>SettingsFormSettingsControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="SignalStatusProgressBar.resx">
       <DependentUpon>SignalStatusProgressBar.cs</DependentUpon>

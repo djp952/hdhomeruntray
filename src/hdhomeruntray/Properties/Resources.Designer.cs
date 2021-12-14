@@ -63,6 +63,25 @@ namespace zuki.hdhomeruntray.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
+        internal static System.Drawing.Icon app {
+            get {
+                object obj = ResourceManager.GetObject("app", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://github.com/djp952/hdhomeruntray/blob/main/LICENSE.
+        /// </summary>
+        internal static string LicenseURL {
+            get {
+                return ResourceManager.GetString("LicenseURL", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
         internal static System.Drawing.Icon trayicon_gray_dark {
             get {
                 object obj = ResourceManager.GetObject("trayicon_gray_dark", resourceCulture);

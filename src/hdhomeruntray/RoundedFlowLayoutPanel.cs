@@ -56,7 +56,7 @@ namespace zuki.hdhomeruntray
 		}
 
 		//-------------------------------------------------------------------
-		// TableLayoutPanel Overrides
+		// FlowLayoutPanel Overrides
 		//-------------------------------------------------------------------
 
 		// OnPaint

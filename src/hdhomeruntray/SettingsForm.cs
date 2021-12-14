@@ -25,9 +25,6 @@ using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
-using zuki.hdhomeruntray.discovery;
-using zuki.hdhomeruntray.Properties;
-
 namespace zuki.hdhomeruntray
 {
 	//-----------------------------------------------------------------------
@@ -66,20 +63,12 @@ namespace zuki.hdhomeruntray
 		{
 			InitializeComponent();
 
-			using(Graphics graphics = CreateGraphics())
-			{
-				Padding = Padding.ScaleDPI(graphics);
-				m_layoutpanel.Margin = m_layoutpanel.Margin.ScaleDPI(graphics);
-				m_layoutpanel.Padding = m_layoutpanel.Padding.ScaleDPI(graphics);
-			}
+			m_layoutpanel.EnableDoubleBuferring();
 
 			// WINDOWS 11
 			//
 			if(VersionHelper.IsWindows11OrGreater())
 			{
-				// Switch to Segoe UI Variable Display
-				Font = new Font("Segoe UI Variable Display Semib", 9F, FontStyle.Bold);
-
 				// Remove the border and change the padding to 4 (will scale below)
 				FormBorderStyle = FormBorderStyle.None;
 				Padding = new Padding(4);
@@ -90,11 +79,16 @@ namespace zuki.hdhomeruntray
 				NativeMethods.DwmSetWindowAttribute(Handle, attribute, ref preference, sizeof(uint));
 			}
 
-			// Bind each of the ComboBox drop-downs to their enum class
-			m_discoverymethod.BindEnum(Settings.Default.DiscoveryMethod);
-			m_discoveryinterval.BindEnum(Settings.Default.DiscoveryInterval);
-			m_trayiconhoverdelay.BindEnum(Settings.Default.TrayIconHoverDelay);
-			m_tunerstatuscolorsource.BindEnum(Settings.Default.TunerStatusColorSource);
+			// Scale the padding based on the form DPI
+			using(Graphics graphics = CreateGraphics())
+			{
+				Padding = Padding.ScaleDPI(graphics);
+				m_layoutpanel.Margin = m_layoutpanel.Margin.ScaleDPI(graphics);
+				m_layoutpanel.Padding = m_layoutpanel.Padding.ScaleDPI(graphics);
+				m_header.Padding = m_header.Padding.ScaleDPI(graphics);
+				m_settings.Padding = m_settings.Padding.ScaleDPI(graphics);
+				m_footer.Padding = m_footer.Padding.ScaleDPI(graphics);
+			}
 		}
 
 		//-------------------------------------------------------------------
@@ -114,66 +108,6 @@ namespace zuki.hdhomeruntray
 			// Set the window position based on the form and item
 			SetWindowPosition(form.Bounds, item.Bounds);
 			Show();
-		}
-
-		//-------------------------------------------------------------------
-		// Event Handlers
-		//-------------------------------------------------------------------
-
-		// OnDiscoveryIntervalCommitted
-		//
-		// Invoked when a change to the combobox is committed
-		private void OnDiscoveryIntervalCommitted(object sender, EventArgs args)
-		{
-			// If the value of the combobox changed, update and save the settings
-			DiscoveryInterval discoveryinterval = (DiscoveryInterval)m_discoveryinterval.SelectedValue;
-			if(discoveryinterval != Settings.Default.DiscoveryInterval)
-			{
-				Settings.Default.DiscoveryInterval = discoveryinterval;
-				Settings.Default.Save();
-			}
-		}
-
-		// OnDiscoveryMethodCommitted
-		//
-		// Invoked when a change to the combobox is committed
-		private void OnDiscoveryMethodCommitted(object sender, EventArgs args)
-		{
-			// If the value of the combobox changed, update and save the settings
-			DiscoveryMethod discoverymethod = (DiscoveryMethod)m_discoverymethod.SelectedValue;
-			if(discoverymethod != Settings.Default.DiscoveryMethod)
-			{
-				Settings.Default.DiscoveryMethod = discoverymethod;
-				Settings.Default.Save();
-			}
-		}
-
-		// OnTrayIconHoverDelayCommitted
-		//
-		// Invoked when a change to the combobox is committed
-		private void OnTrayIconHoverDelayCommitted(object sender, EventArgs args)
-		{
-			// If the value of the combobox changed, update and save the settings
-			TrayIconHoverDelay trayiconhoverdelay = (TrayIconHoverDelay)m_trayiconhoverdelay.SelectedValue;
-			if(trayiconhoverdelay != Settings.Default.TrayIconHoverDelay)
-			{
-				Settings.Default.TrayIconHoverDelay = trayiconhoverdelay;
-				Settings.Default.Save();
-			}
-		}
-
-		// OnTunerStatusColorSourceCommitted
-		//
-		// Invoked when a change to the combobox is committed
-		private void OnTunerStatusColorSourceCommitted(object sender, EventArgs args)
-		{
-			// If the value of the combobox changed, update and save the settings
-			TunerStatusColorSource tunerstatuscolorsource = (TunerStatusColorSource)m_tunerstatuscolorsource.SelectedValue;
-			if(tunerstatuscolorsource != Settings.Default.TunerStatusColorSource)
-			{
-				Settings.Default.TunerStatusColorSource = tunerstatuscolorsource;
-				Settings.Default.Save();
-			}
 		}
 
 		//-------------------------------------------------------------------

@@ -269,6 +269,20 @@ namespace zuki.hdhomeruntray
 		}
 
 		//-------------------------------------------------------------------
+		// Size.ScaleDPI
+		//
+		// Scales a Padding value based on the DPI of the system
+
+		public static Size ScaleDPI(this Size size, Graphics graphics)
+		{
+			float factorx = graphics.DpiX / 96.0F;
+			float factory = graphics.DpiY / 96.0F;
+
+			// Return a new Size instance with the scaling factor applied
+			return new Size((int)(size.Width * factorx), (int)(size.Height * factory));
+		}
+
+		//-------------------------------------------------------------------
 		// Private Member Functions
 		//-------------------------------------------------------------------
 
