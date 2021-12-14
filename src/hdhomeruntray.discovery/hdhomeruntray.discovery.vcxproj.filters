@@ -131,6 +131,12 @@
     <ClInclude Include="DeviceStatusColor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Playback.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PlaybackList.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AssemblyInfo.cpp">
@@ -227,6 +233,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="DeviceStatusColor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Playback.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PlaybackList.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

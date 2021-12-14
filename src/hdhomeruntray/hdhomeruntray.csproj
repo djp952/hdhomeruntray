@@ -148,6 +148,12 @@
     <Compile Include="StorageDeviceLiveBufferControl.Designer.cs">
       <DependentUpon>StorageDeviceLiveBufferControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="StorageDevicePlaybackControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="StorageDevicePlaybackControl.designer.cs">
+      <DependentUpon>StorageDevicePlaybackControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="StorageDeviceRecordingControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -240,6 +246,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="StorageDeviceLiveBufferControl.resx">
       <DependentUpon>StorageDeviceLiveBufferControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="StorageDevicePlaybackControl.resx">
+      <DependentUpon>StorageDevicePlaybackControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="StorageDeviceRecordingControl.resx">
       <DependentUpon>StorageDeviceRecordingControl.cs</DependentUpon>

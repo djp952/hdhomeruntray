@@ -20,68 +20,54 @@
 // SOFTWARE.
 //---------------------------------------------------------------------------
 
-#ifndef __STORAGESTATUS_H_
-#define __STORAGESTATUS_H_
+#ifndef __PLAYBACKLIST_H_
+#define __PLAYBACKLIST_H_
 #pragma once
 
-#include "LiveBufferList.h"
-#include "PlaybackList.h"
-#include "RecordingList.h"
+#include "Playback.h"
 
 #pragma warning(push, 4)
 
 using namespace System;
-using namespace System::Drawing;
+using namespace System::Collections::Generic;
 
 namespace zuki::hdhomeruntray::discovery {
 
-// FORWARD DECLARATIONS
-//
-ref class StorageDevice;
-
 //---------------------------------------------------------------------------
-// Class StorageStatus
+// Class PlaybackList
 //
-// Describes the status of an individual HDHomeRun RECORD engine
+// Implements an IReadOnlyList<> based enumerable collection of playbacks
 //---------------------------------------------------------------------------
 
-public ref class StorageStatus
+public ref class PlaybackList : public IReadOnlyList<Playback^>
 {
 public:
 
 	//-----------------------------------------------------------------------
+	// Member Functions
+
+	// GetEnumerator
+	//
+	// Returns a generic IEnumerator<T> for the member collection
+	virtual IEnumerator<Playback^>^ GetEnumerator(void);
+
+	//-----------------------------------------------------------------------
 	// Properties
 
-	// LiveBuffers
+	// default[int]
 	//
-	// Gets the collection of active live buffers
-	property LiveBufferList^ LiveBuffers
+	// Gets the element at the specified index in the read-only list
+	property Playback^ default[int]
 	{
-		LiveBufferList^ get(void);
+		virtual Playback^ get(int index);
 	}
 
-	// Playbacks
+	// Count
 	//
-	// Gets the collection of active playbacks
-	property PlaybackList^ Playbacks
+	// Gets the number of elements in the collection
+	property int Count
 	{
-		PlaybackList^ get(void);
-	}
-
-	// Recordings
-	//
-	// Gets the collection of active recordings
-	property RecordingList^ Recordings
-	{
-		RecordingList^ get(void);
-	}
-
-	// StatusColor
-	//
-	// Gets the color code for the overall status
-	property Color StatusColor
-	{
-		Color get(void);
+		virtual int get();
 	}
 
 	//-----------------------------------------------------------------------
@@ -97,24 +83,37 @@ internal:
 	//-----------------------------------------------------------------------
 	// Internal Member Functions
 
-	// Create
+	// Create (static)
 	//
-	// Creates a new StorageStatus instance
-	static StorageStatus^ Create(StorageDevice^ storagedevice);
+	// Creates a new PlaybackList instance
+	static PlaybackList^ Create(List<Playback^>^ playbacks);
+
+	//-----------------------------------------------------------------------
+	// Internal Fields
+
+	// Empty (static)
+	//
+	// Returns an empty device collection instance
+	static initonly PlaybackList^ Empty = gcnew PlaybackList(gcnew List<Playback^>());
 
 private:
 
 	// Instance Constructor
 	//
-	StorageStatus(LiveBufferList^ livebuffers, PlaybackList^ playbacks, RecordingList^ recordings);
+	PlaybackList(List<Playback^>^ playbacks);
+
+	//-----------------------------------------------------------------------
+	// Private Member Functions
+
+	// GetEnumerator (IEnumerable)
+	//
+	// Returns a non-generic IEnumerator for the member collection
+	virtual System::Collections::IEnumerator^ IEnumerable_GetEnumerator(void) sealed = System::Collections::IEnumerable::GetEnumerator;
 
 	//-----------------------------------------------------------------------
 	// Member Variables
 
-	Color				m_statuscolor;			// Overall status color
-	LiveBufferList^		m_livebuffers;			// Active live buffers
-	PlaybackList^		m_playbacks;			// Active playbacks
-	RecordingList^		m_recordings;			// Active recordings
+	List<Playback^>^		m_livebuffers;		// Underlying collection
 };
 
 //---------------------------------------------------------------------------
@@ -123,4 +122,4 @@ private:
 
 #pragma warning(pop)
 
-#endif	// __STORAGESTATUS_H_
+#endif	// __PLAYBACKLIST_H_

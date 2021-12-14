@@ -20,68 +20,47 @@
 // SOFTWARE.
 //---------------------------------------------------------------------------
 
-#ifndef __STORAGESTATUS_H_
-#define __STORAGESTATUS_H_
+#ifndef __PLAYBACK_H_
+#define __PLAYBACK_H_
 #pragma once
-
-#include "LiveBufferList.h"
-#include "PlaybackList.h"
-#include "RecordingList.h"
 
 #pragma warning(push, 4)
 
 using namespace System;
-using namespace System::Drawing;
+using namespace System::Net;
+
+using namespace Newtonsoft::Json;
+using namespace Newtonsoft::Json::Linq;
 
 namespace zuki::hdhomeruntray::discovery {
 
-// FORWARD DECLARATIONS
-//
-ref class StorageDevice;
-
 //---------------------------------------------------------------------------
-// Class StorageStatus
+// Class Playback
 //
-// Describes the status of an individual HDHomeRun RECORD engine
+// Describes an individual HDHomeRun recording playback
 //---------------------------------------------------------------------------
 
-public ref class StorageStatus
+public ref class Playback
 {
 public:
 
 	//-----------------------------------------------------------------------
 	// Properties
 
-	// LiveBuffers
+	// Name
 	//
-	// Gets the collection of active live buffers
-	property LiveBufferList^ LiveBuffers
+	// Gets the name of the live buffer
+	property String^ Name
 	{
-		LiveBufferList^ get(void);
+		String^ get(void);
 	}
 
-	// Playbacks
+	// TargetIP
 	//
-	// Gets the collection of active playbacks
-	property PlaybackList^ Playbacks
+	// Gets the target IP address of the live buffer
+	property IPAddress^ TargetIP
 	{
-		PlaybackList^ get(void);
-	}
-
-	// Recordings
-	//
-	// Gets the collection of active recordings
-	property RecordingList^ Recordings
-	{
-		RecordingList^ get(void);
-	}
-
-	// StatusColor
-	//
-	// Gets the color code for the overall status
-	property Color StatusColor
-	{
-		Color get(void);
+		IPAddress^ get(void);
 	}
 
 	//-----------------------------------------------------------------------
@@ -99,22 +78,20 @@ internal:
 
 	// Create
 	//
-	// Creates a new StorageStatus instance
-	static StorageStatus^ Create(StorageDevice^ storagedevice);
+	// Creates a new Playback instance
+	static Playback^ Create(JObject^ playback);
 
 private:
 
 	// Instance Constructor
 	//
-	StorageStatus(LiveBufferList^ livebuffers, PlaybackList^ playbacks, RecordingList^ recordings);
+	Playback(JObject^ playback);
 
 	//-----------------------------------------------------------------------
 	// Member Variables
 
-	Color				m_statuscolor;			// Overall status color
-	LiveBufferList^		m_livebuffers;			// Active live buffers
-	PlaybackList^		m_playbacks;			// Active playbacks
-	RecordingList^		m_recordings;			// Active recordings
+	String^				m_name;				// The recording name
+	IPAddress^			m_targetip;			// The target IP address
 };
 
 //---------------------------------------------------------------------------
@@ -123,4 +100,4 @@ private:
 
 #pragma warning(pop)
 
-#endif	// __STORAGESTATUS_H_
+#endif	// __PLAYBACK_H_

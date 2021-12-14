@@ -420,6 +420,8 @@ namespace zuki.hdhomeruntray
 				else if(device is StorageDevice storagedevice)
 				{
 					StorageStatus status = storagedevice.GetStorageStatus();
+					numactive += status.LiveBuffers.Count;
+					numactive += status.Playbacks.Count;
 					numrecording += status.Recordings.Count;
 				}
 			}

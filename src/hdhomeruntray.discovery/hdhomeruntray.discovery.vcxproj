@@ -107,6 +107,8 @@
     <ClInclude Include="DiscoveryMethod.h" />
     <ClInclude Include="LiveBufferList.h" />
     <ClInclude Include="LiveBuffer.h" />
+    <ClInclude Include="Playback.h" />
+    <ClInclude Include="PlaybackList.h" />
     <ClInclude Include="ReadOnlyListEnumerator.h" />
     <ClInclude Include="Recording.h" />
     <ClInclude Include="RecordingList.h" />
@@ -201,6 +203,8 @@
     </ClCompile>
     <ClCompile Include="LiveBuffer.cpp" />
     <ClCompile Include="LiveBufferList.cpp" />
+    <ClCompile Include="Playback.cpp" />
+    <ClCompile Include="PlaybackList.cpp" />
     <ClCompile Include="ReadOnlyListEnumerator.cpp" />
     <ClCompile Include="Recording.cpp" />
     <ClCompile Include="RecordingList.cpp" />

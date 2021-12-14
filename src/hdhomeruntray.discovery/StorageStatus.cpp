@@ -40,17 +40,20 @@ namespace zuki::hdhomeruntray::discovery {
 //
 // Arguments:
 //
-//	livebuffers		- List<> if live buffers
+//	livebuffers		- List<> of live buffers
+//	playbacks		- List<> of active playbacks
 //	recordings		- List<> of active recordings
 
-StorageStatus::StorageStatus(LiveBufferList^ livebuffers, RecordingList^ recordings) : 
-	m_statuscolor(DeviceStatusColor::Gray), m_livebuffers(livebuffers), m_recordings(recordings)
+StorageStatus::StorageStatus(LiveBufferList^ livebuffers, PlaybackList^ playbacks, RecordingList^ recordings) : 
+	m_statuscolor(DeviceStatusColor::Gray), m_livebuffers(livebuffers), m_playbacks(playbacks),  m_recordings(recordings)
 {
 	if(CLRISNULL(livebuffers)) throw gcnew ArgumentNullException("livebuffers");
+	if(CLRISNULL(playbacks)) throw gcnew ArgumentNullException("playbacks");
 	if(CLRISNULL(recordings)) throw gcnew ArgumentNullException("recordings");
 
-	// If there are live TV streams being buffered, report the status as green
-	if(m_livebuffers->Count > 0) m_statuscolor = DeviceStatusColor::Green;
+	// If there are live TV streams being buffered or recording playbacks,
+	// report the status as green
+	if((m_livebuffers->Count > 0) || (m_playbacks->Count > 0)) m_statuscolor = DeviceStatusColor::Green;
 
 	// If there are active recordings in progress, report the status as red
 	if(m_recordings->Count > 0) m_statuscolor = DeviceStatusColor::Red;
@@ -73,10 +76,10 @@ StorageStatus^ StorageStatus::Create(StorageDevice^ storagedevice)
 	String^ statusurl = String::Concat(storagedevice->BaseURL, "/status.json");
 
 	List<LiveBuffer^>^ livebuffers = gcnew List<LiveBuffer^>();		// Collection of Live TV buffers
-	List<Recording^>^ recordings = gcnew List<Recording^>();		// Collection of discovered recordings
+	List<Playback^>^ playbacks = gcnew List<Playback^>();			// Collection of active playbacks
+	List<Recording^>^ recordings = gcnew List<Recording^>();		// Collection of active recordings
 
-	// The status JSON from the RECORD engine contains two types of objects; objects that represent 
-	// active recordings has "Resource":"record".  The other type is a Live TV buffer, this is "Resource":"live"
+	// The status JSON from the RECORD engine contains three types of objects; "Resource":"record", "Resource":"playback" and "Resource":"live"
 	JArray^ resources = JsonWebRequest::GetArray(statusurl);
 	if(CLRISNOTNULL(resources)) {
 
@@ -89,13 +92,14 @@ StorageStatus^ StorageStatus::Create(StorageDevice^ storagedevice)
 				if(CLRISNOTNULL(resourcetype)) {
 
 					if(String::Compare(resourcetype, "record", StringComparison::OrdinalIgnoreCase) == 0) recordings->Add(Recording::Create(resource));
+					else if(String::Compare(resourcetype, "playback", StringComparison::OrdinalIgnoreCase) == 0) playbacks->Add(Playback::Create(resource));
 					else if(String::Compare(resourcetype, "live", StringComparison::OrdinalIgnoreCase) == 0) livebuffers->Add(LiveBuffer::Create(resource));
 				}
 			}
 		}
 	}
 
-	return gcnew StorageStatus(LiveBufferList::Create(livebuffers), RecordingList::Create(recordings));
+	return gcnew StorageStatus(LiveBufferList::Create(livebuffers), PlaybackList::Create(playbacks), RecordingList::Create(recordings));
 }
 
 //---------------------------------------------------------------------------
@@ -135,6 +139,17 @@ LiveBufferList^ StorageStatus::LiveBuffers::get(void)
 {
 	CLRASSERT(CLRISNOTNULL(m_livebuffers));
 	return m_livebuffers;
+}
+
+//---------------------------------------------------------------------------
+// StorageStatus::Playbacks::get
+//
+// Gets the collection of active recording playbacks
+
+PlaybackList^ StorageStatus::Playbacks::get(void)
+{
+	CLRASSERT(CLRISNOTNULL(m_playbacks));
+	return m_playbacks;
 }
 
 //---------------------------------------------------------------------------

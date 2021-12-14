@@ -126,6 +126,24 @@ namespace zuki.hdhomeruntray
 					}
 				}
 
+				// Add Playback items for each one that isn't already represented
+				foreach(Playback playback in status.Playbacks)
+				{
+					if(!controls.Any(control => (control is StorageDevicePlaybackControl) && ((int)control.Tag == playback.GetHashCode())))
+					{
+						StorageDevicePlaybackControl playbackcontrol = new StorageDevicePlaybackControl(playback)
+						{
+							Dock = DockStyle.Top,
+							Tag = playback.GetHashCode(),
+							Padding = new Padding(0, 1, 0, 1).ScaleDPI(Handle)
+						};
+
+						// Insert LiveBuffer items after the header
+						m_layoutpanel.Controls.Add(playbackcontrol);
+						m_layoutpanel.Controls.SetChildIndex(playbackcontrol, m_layoutpanel.Controls.GetChildIndex(m_header) + 1);
+					}
+				}
+
 				// Add Recording items for each one that isn't already represented
 				foreach(Recording recording in status.Recordings)
 				{
