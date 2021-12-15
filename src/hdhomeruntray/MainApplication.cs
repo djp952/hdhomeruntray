@@ -63,6 +63,14 @@ namespace zuki.hdhomeruntray
 				Settings.Default.Save();
 			}
 
+			// Check the actual autostart setting in the registry and change if necessary
+			EnabledDisabled autostart = (IsAutoStartEnabled()) ? EnabledDisabled.Enabled : EnabledDisabled.Disabled;
+			if(autostart != Settings.Default.AutoStart)
+			{
+				Settings.Default.AutoStart = autostart;
+				Settings.Default.Save();
+			}
+
 			// Wire up a handler to watch for property changes
 			Settings.Default.PropertyChanged += OnPropertyChanged;
 
@@ -234,8 +242,17 @@ namespace zuki.hdhomeruntray
 		// Invoked when a settings property has been changed
 		private void OnPropertyChanged(object sender, PropertyChangedEventArgs args)
 		{
+			// AutoStart
+			//
+			if(args.PropertyName == nameof(Settings.Default.AutoStart))
+			{
+				// Enable or disable the autostart function in the registry
+				EnableDisableAutoStart(Settings.Default.AutoStart == EnabledDisabled.Enabled);
+			}
+
 			// DiscoveryInterval
 			// DiscoveryMethod
+			//
 			if((args.PropertyName == nameof(Settings.Default.DiscoveryInterval)) ||
 				(args.PropertyName == nameof(Settings.Default.DiscoveryMethod)))
 			{
@@ -249,6 +266,7 @@ namespace zuki.hdhomeruntray
 			}
 
 			// TrayIconHoverDelay
+			//
 			if(args.PropertyName == nameof(Settings.Default.TrayIconHoverDelay))
 			{
 				m_notifyicon.HoverInterval = GetHoverInterval(Settings.Default.TrayIconHoverDelay);
@@ -283,6 +301,30 @@ namespace zuki.hdhomeruntray
 			if((value != null) && (value is string @string)) _ = int.TryParse(@string, out mousehovertimeout);
 
 			return mousehovertimeout;
+		}
+
+		// EnableDisableAutoStart (static)
+		//
+		// Enables or disables auto-start for the application
+		private static void EnableDisableAutoStart(bool enable)
+		{
+			// Use hdhomeruntray_TRAYICONGUID as the registry value name
+			//
+			// TODO: GUID needs to be different for the x64 build
+			string appname = "hdhomeruntray_" + s_guid.ToString("N").ToUpper();
+
+			// Open the HKEY_CURRENT_USER "Run" key
+			RegistryKey startupkey = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run", true);
+			if(startupkey != null)
+			{
+				if(enable) startupkey.SetValue(appname, Application.ExecutablePath);
+				else
+				{
+					// RegistryKey will throw if the value doesn't exist ...
+					try { startupkey.DeleteValue(appname); }
+					catch(Exception) { /* DO NOTHING */ }
+				}
+			}
 		}
 
 		// ExecuteDiscovery
@@ -359,6 +401,28 @@ namespace zuki.hdhomeruntray
 			{
 				contextmenu.Font = new Font("Segoe UI Variable Text Semibold", contextmenu.Font.Size, contextmenu.Font.Style);
 			}
+		}
+
+		// IsAutoStartEnabled (static)
+		//
+		// Checks if auto-start is currently enabled or disabled
+		private static bool IsAutoStartEnabled()
+		{
+			// Use hdhomeruntray_TRAYICONGUID as the registry value name
+			//
+			// TODO: GUID needs to be different for the x64 build
+			string appname = "hdhomeruntray_" + s_guid.ToString("N").ToUpper();
+
+			// Open the HKEY_CURRENT_USER "Run" key
+			RegistryKey startupkey = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run", true);
+			if(startupkey == null) return false;
+
+			// Try to get the value for the constructed application name
+			object obj = startupkey.GetValue(appname);
+			if(obj == null) return false;
+
+			// If the value returned is a string and matches our executable path; it's set for startup
+			return (obj is string @string) && (@string == Application.ExecutablePath);
 		}
 
 		// MenuImageFromSymbolGlyph (static)
@@ -446,6 +510,9 @@ namespace zuki.hdhomeruntray
 		
 		// Do not change this GUID; it has to remain the same to prevent Windows from creating
 		// custom tray icon settings for each GUID that it sees
+		//
+		// TODO: The x64 version of the application needs a different GUID, the tray settings
+		// cache both the GUID and the path to the executable
 		private static readonly Guid s_guid = Guid.Parse("{E9DD6790-E032-4CAE-9140-CC0FB55FC210}");
 	}
 }
