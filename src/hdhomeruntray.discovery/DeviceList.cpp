@@ -205,6 +205,10 @@ DeviceList^ DeviceList::DiscoverHttp(void)
 			// Retrieve the individual device discovery data
 			if(CLRISNOTNULL(discoverurl) && CLRISNOTNULL(localip)) {
 
+				// HTTP discovery can return stale devices for up to 24 hours after they went dark,
+				// for tuner devices we can run a quick check to see if they are still alive
+				if(CLRISNOTNULL(deviceid) && (!TunerExists(localip->ToObject<String^>()))) continue;
+
 				// The web request will fail if the URL doesn't exist or doesn't return JSON; skip this device
 				// if that's the case for now; should probably have some way to indicate this to the user
 				try {
@@ -265,6 +269,37 @@ IEnumerator<Device^>^ DeviceList::GetEnumerator(void)
 System::Collections::IEnumerator^ DeviceList::IEnumerable_GetEnumerator(void)
 {
 	return GetEnumerator();
+}
+
+//---------------------------------------------------------------------------
+// DeviceList::TunerExists (static, private)
+//
+// Determines if a tuner device exists on the local network
+//
+// Arguments:
+//
+//	localip		- The IP address of the device returned from discovery
+
+bool DeviceList::TunerExists(String^ localip)
+{
+	char			devicestr[128] = {};	// Device string (IP address)
+	uint32_t		deviceid = 0;			// Device ID returned from inquiry
+
+	// Convert the managed String instance into a char array for libhdhomerun
+	msclr::auto_handle<msclr::interop::marshal_context> context(gcnew msclr::interop::marshal_context());
+	strncpy_s(devicestr, std::extent<decltype(devicestr)>::value, context->marshal_as<char const*>(localip), _TRUNCATE);
+
+	// Attempt to create a hdhomerun_device_t instance for the tuner instance.  In the
+	// event this fails for some reason, assume the device exists
+	hdhomerun_device_t* device = hdhomerun_device_create_from_str(devicestr, nullptr);
+	if(device == nullptr) return true;
+
+	// Attempt to get the Device ID for the tuner and release the device
+	deviceid = hdhomerun_device_get_device_id(device);
+	hdhomerun_device_destroy(device);
+
+	// If the Device ID was retrieved successfully, the tuner is alive
+	return (deviceid != 0);
 }
 
 //---------------------------------------------------------------------------

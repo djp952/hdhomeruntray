@@ -109,6 +109,11 @@ private:
 	//
 	// Returns a non-generic IEnumerator for the member collection
 	virtual System::Collections::IEnumerator^ IEnumerable_GetEnumerator(void) sealed = System::Collections::IEnumerable::GetEnumerator;
+
+	// TunerExists (static)
+	//
+	// Determines if a tuner device exists on the local network
+	static bool TunerExists(String^ localip);
 		
 	//-----------------------------------------------------------------------
 	// Member Variables
