@@ -513,6 +513,6 @@ namespace zuki.hdhomeruntray
 		//
 		// TODO: The x64 version of the application needs a different GUID, the tray settings
 		// cache both the GUID and the path to the executable
-		private static readonly Guid s_guid = Guid.Parse("{E9DD6790-E032-4CAE-9140-CC0FB55FC210}");
+		private static readonly Guid s_guid = Guid.Parse("{E7E66A47-F253-4D59-BCE1-60193EE55B7C}");
 	}
 }

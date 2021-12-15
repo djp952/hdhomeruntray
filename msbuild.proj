@@ -58,7 +58,11 @@
       <Output TaskParameter="MovedFiles" ItemName="Packages1"/>
     </Move>
 
-    <Copy SourceFiles="@(Packages1)" DestinationFolder="out"/>
+    <Move SourceFiles="@(Packages1)" DestinationFiles="@(Packages1->Replace('hdhomeruntray', 'hdhomerunstatusmonitor'))">
+      <Output TaskParameter="MovedFiles" ItemName="Packages2"/>
+    </Move>
+
+    <Copy SourceFiles="@(Packages2)" DestinationFolder="out"/>
 
   </Target>
 
