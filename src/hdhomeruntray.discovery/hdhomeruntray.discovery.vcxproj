@@ -49,11 +49,13 @@
     <OutDir>$(ProjectDir)..\..\bin\$(Configuration)\</OutDir>
     <IntDir>obj\$(Configuration)\</IntDir>
     <TargetName>$(RootNamespace)</TargetName>
+    <LinkKeyFile>$(ProjectDir)..\..\depends\build\zuki-oss.snk</LinkKeyFile>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>$(ProjectDir)..\..\bin\$(Configuration)\</OutDir>
     <IntDir>obj\$(Configuration)\</IntDir>
     <TargetName>$(RootNamespace)</TargetName>
+    <LinkKeyFile>$(ProjectDir)..\..\depends\build\zuki-oss.snk</LinkKeyFile>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
