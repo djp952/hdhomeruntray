@@ -58,7 +58,7 @@ namespace zuki.hdhomeruntray
 			}
 
 			// Use the applicaton icon to generate an appropriately sized image
-			Icon icon = new Icon(Properties.Resources.app, SystemInformation.IconSize);
+			Icon icon = new Icon(Properties.Resources.ApplicationIcon, SystemInformation.IconSize);
 			if(icon != null) m_icon.Image = icon.ToBitmap();
 
 			// Get the information for the header from the file version information

@@ -63,9 +63,9 @@ namespace zuki.hdhomeruntray.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Icon app {
+        internal static System.Drawing.Icon ApplicationIcon {
             get {
-                object obj = ResourceManager.GetObject("app", resourceCulture);
+                object obj = ResourceManager.GetObject("ApplicationIcon", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
             }
         }
@@ -82,9 +82,9 @@ namespace zuki.hdhomeruntray.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Icon trayicon_gray_dark {
+        internal static System.Drawing.Icon TrayIconGrayDark {
             get {
-                object obj = ResourceManager.GetObject("trayicon_gray_dark", resourceCulture);
+                object obj = ResourceManager.GetObject("TrayIconGrayDark", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
             }
         }
@@ -92,9 +92,9 @@ namespace zuki.hdhomeruntray.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Icon trayicon_gray_light {
+        internal static System.Drawing.Icon TrayIconGrayLight {
             get {
-                object obj = ResourceManager.GetObject("trayicon_gray_light", resourceCulture);
+                object obj = ResourceManager.GetObject("TrayIconGrayLight", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
             }
         }
@@ -102,9 +102,9 @@ namespace zuki.hdhomeruntray.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Icon trayicon_green_dark {
+        internal static System.Drawing.Icon TrayIconGreenDark {
             get {
-                object obj = ResourceManager.GetObject("trayicon_green_dark", resourceCulture);
+                object obj = ResourceManager.GetObject("TrayIconGreenDark", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
             }
         }
@@ -112,9 +112,9 @@ namespace zuki.hdhomeruntray.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Icon trayicon_green_light {
+        internal static System.Drawing.Icon TrayIconGreenLight {
             get {
-                object obj = ResourceManager.GetObject("trayicon_green_light", resourceCulture);
+                object obj = ResourceManager.GetObject("TrayIconGreenLight", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
             }
         }
@@ -122,9 +122,9 @@ namespace zuki.hdhomeruntray.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Icon trayicon_red_dark {
+        internal static System.Drawing.Icon TrayIconRedDark {
             get {
-                object obj = ResourceManager.GetObject("trayicon_red_dark", resourceCulture);
+                object obj = ResourceManager.GetObject("TrayIconRedDark", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
             }
         }
@@ -132,9 +132,9 @@ namespace zuki.hdhomeruntray.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Icon trayicon_red_light {
+        internal static System.Drawing.Icon TrayIconRedLight {
             get {
-                object obj = ResourceManager.GetObject("trayicon_red_light", resourceCulture);
+                object obj = ResourceManager.GetObject("TrayIconRedLight", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
             }
         }

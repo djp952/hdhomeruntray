@@ -40,12 +40,12 @@ namespace zuki.hdhomeruntray
 		static StatusIcons()
 		{
 			// Create icons of the proper size for the system from the embedded resources
-			s_active_dark = new Icon(Properties.Resources.trayicon_green_dark, SystemInformation.SmallIconSize);
-			s_active_light = new Icon(Properties.Resources.trayicon_green_light, SystemInformation.SmallIconSize);
-			s_idle_dark = new Icon(Properties.Resources.trayicon_gray_dark, SystemInformation.SmallIconSize);
-			s_idle_light = new Icon(Properties.Resources.trayicon_gray_light, SystemInformation.SmallIconSize);
-			s_recording_dark = new Icon(Properties.Resources.trayicon_red_dark, SystemInformation.SmallIconSize);
-			s_recording_light = new Icon(Properties.Resources.trayicon_red_light, SystemInformation.SmallIconSize);
+			s_active_dark = new Icon(Properties.Resources.TrayIconGreenDark, SystemInformation.SmallIconSize);
+			s_active_light = new Icon(Properties.Resources.TrayIconGreenLight, SystemInformation.SmallIconSize);
+			s_idle_dark = new Icon(Properties.Resources.TrayIconGrayDark, SystemInformation.SmallIconSize);
+			s_idle_light = new Icon(Properties.Resources.TrayIconGrayLight, SystemInformation.SmallIconSize);
+			s_recording_dark = new Icon(Properties.Resources.TrayIconRedDark, SystemInformation.SmallIconSize);
+			s_recording_light = new Icon(Properties.Resources.TrayIconRedLight, SystemInformation.SmallIconSize);
 		}
 
 		//-------------------------------------------------------------------

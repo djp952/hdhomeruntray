@@ -118,28 +118,28 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="app" type="System.Resources.ResXFileRef, System.Windows.Forms">
+  <data name="ApplicationIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\app.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="LicenseURL" xml:space="preserve">
     <value>https://github.com/djp952/hdhomeruntray/blob/main/LICENSE</value>
   </data>
-  <data name="trayicon_gray_dark" type="System.Resources.ResXFileRef, System.Windows.Forms">
+  <data name="TrayIconGrayDark" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\trayicon-gray-dark.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="trayicon_gray_light" type="System.Resources.ResXFileRef, System.Windows.Forms">
+  <data name="TrayIconGrayLight" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\trayicon-gray-light.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="trayicon_green_dark" type="System.Resources.ResXFileRef, System.Windows.Forms">
+  <data name="TrayIconGreenDark" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\trayicon-green-dark.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="trayicon_green_light" type="System.Resources.ResXFileRef, System.Windows.Forms">
+  <data name="TrayIconGreenLight" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\trayicon-green-light.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="trayicon_red_dark" type="System.Resources.ResXFileRef, System.Windows.Forms">
+  <data name="TrayIconRedDark" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\trayicon-red-dark.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="trayicon_red_light" type="System.Resources.ResXFileRef, System.Windows.Forms">
+  <data name="TrayIconRedLight" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\trayicon-red-light.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>
