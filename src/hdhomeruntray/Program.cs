@@ -22,6 +22,7 @@
 
 using System;
 using System.Runtime.InteropServices;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace zuki.hdhomeruntray
@@ -43,11 +44,25 @@ namespace zuki.hdhomeruntray
 		[STAThread]
 		static void Main()
 		{
+			// Prevent multiple instances of the application from running at the same
+			// time; the tray icon is registered with a GUID, it will only show up once
+			s_mutex = new Mutex(true, Application.ProductName, out bool creatednew);
+			if(!creatednew) return;
+
 			if(Environment.OSVersion.Version.Major >= 6) NativeMethods.SetProcessDPIAware(); 
 			
 			Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);
 			Application.Run(new MainApplication());
+
+			s_mutex.Close();
 		}
+
+
+		//-------------------------------------------------------------------
+		// Member Variables
+		//-------------------------------------------------------------------
+
+		private static Mutex s_mutex = null;		// Single instance mutex
 	}
 }
