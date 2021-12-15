@@ -168,8 +168,9 @@ namespace zuki.hdhomeruntray
 		{
 			m_context.Post(new SendOrPostCallback((o) =>
 			{
-				// Show the popup window if it's not already shown
-				if(m_popupform == null)
+				// Show the popup window if it's not already shown, and this
+				// function hasn't been disabled by the user
+				if((Settings.Default.TrayIconHover == EnabledDisabled.Enabled) && (m_popupform == null))
 				{
 					m_popupform = new PopupForm(m_devicelist);
 					m_popupform.ShowFromNotifyIcon(m_notifyicon);
