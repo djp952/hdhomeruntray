@@ -49,12 +49,13 @@ namespace zuki.hdhomeruntray
 				Padding = Padding.ScaleDPI(graphics);
 				m_layoutpanel.Margin = m_layoutpanel.Margin.ScaleDPI(graphics);
 				m_layoutpanel.Padding = m_layoutpanel.Padding.ScaleDPI(graphics);
-				//m_layoutpanel.Radii = m_layoutpanel.Radii.ScaleDPI(graphics);
+				m_layoutpanel.Radii = m_layoutpanel.Radii.ScaleDPI(graphics);
 
 				// Scaling the margins of the comboboxes will adjust the row height
 				m_autostart.Margin = m_autostart.Margin.ScaleDPI(graphics);
 				m_discoveryinterval.Margin = m_discoveryinterval.Margin.ScaleDPI(graphics);
 				m_discoverymethod.Margin = m_discoverymethod.Margin.ScaleDPI(graphics);
+				m_trayiconhover.Margin = m_trayiconhover.Margin.ScaleDPI(graphics);
 				m_trayiconhoverdelay.Margin = m_trayiconhoverdelay.Margin.ScaleDPI(graphics);
 				m_tunerstatuscolorsource.Margin = m_tunerstatuscolorsource.Margin.ScaleDPI(graphics);
 			}
@@ -66,19 +67,23 @@ namespace zuki.hdhomeruntray
 				m_autostartlabel.Font = new Font("Segoe UI Variable Text Semibold", m_autostartlabel.Font.Size, m_autostartlabel.Font.Style);
 				m_discoveryintervallabel.Font = new Font("Segoe UI Variable Text Semibold", m_discoveryintervallabel.Font.Size, m_discoveryintervallabel.Font.Style);
 				m_discoverymethodlabel.Font = new Font("Segoe UI Variable Text Semibold", m_discoverymethodlabel.Font.Size, m_discoverymethodlabel.Font.Style);
+				m_trayiconhoverlabel.Font = new Font("Segoe UI Variable Text Semibold", m_trayiconhoverlabel.Font.Size, m_trayiconhoverlabel.Font.Style);
 				m_trayiconhoverdelaylabel.Font = new Font("Segoe UI Variable Text Semibold", m_trayiconhoverdelaylabel.Font.Size, m_trayiconhoverdelaylabel.Font.Style);
 				m_tunerstatuscolorsourcelabel.Font = new Font("Segoe UI Variable Text Semibold", m_tunerstatuscolorsourcelabel.Font.Size, m_tunerstatuscolorsourcelabel.Font.Style);
 
 				m_autostart.Font = new Font("Segoe UI Variable Text", m_autostart.Font.Size, m_autostart.Font.Style);
 				m_discoveryinterval.Font = new Font("Segoe UI Variable Text", m_discoveryinterval.Font.Size, m_discoveryinterval.Font.Style);
 				m_discoverymethod.Font = new Font("Segoe UI Variable Text", m_discoverymethod.Font.Size, m_discoverymethod.Font.Style);
+				m_trayiconhover.Font = new Font("Segoe UI Variable Text", m_trayiconhover.Font.Size, m_trayiconhover.Font.Style);
 				m_trayiconhoverdelay.Font = new Font("Segoe UI Variable Text", m_trayiconhoverdelay.Font.Size, m_trayiconhoverdelay.Font.Style);
 				m_tunerstatuscolorsource.Font = new Font("Segoe UI Variable Text", m_tunerstatuscolorsource.Font.Size, m_tunerstatuscolorsource.Font.Style);
 			}
 
 			// Bind each of the ComboBox drop-downs to their enum class
+			m_autostart.BindEnum(Settings.Default.AutoStart);
 			m_discoveryinterval.BindEnum(Settings.Default.DiscoveryInterval);
 			m_discoverymethod.BindEnum(Settings.Default.DiscoveryMethod);
+			m_trayiconhover.BindEnum(Settings.Default.TrayIconHover);
 			m_trayiconhoverdelay.BindEnum(Settings.Default.TrayIconHoverDelay);
 			m_tunerstatuscolorsource.BindEnum(Settings.Default.TunerStatusColorSource);
 		}
@@ -92,7 +97,13 @@ namespace zuki.hdhomeruntray
 		// Invoked when a change to the combobox is committed
 		private void OnAutoStartCommitted(object sender, EventArgs args)
 		{
-			// TODO
+			// If the value of the combobox changed, update and save the settings
+			EnabledDisabled autostart = (EnabledDisabled)m_autostart.SelectedValue;
+			if(autostart != Settings.Default.AutoStart)
+			{
+				Settings.Default.AutoStart = autostart;
+				Settings.Default.Save();
+			}
 		}
 
 		// OnDiscoveryIntervalCommitted
@@ -119,6 +130,20 @@ namespace zuki.hdhomeruntray
 			if(discoverymethod != Settings.Default.DiscoveryMethod)
 			{
 				Settings.Default.DiscoveryMethod = discoverymethod;
+				Settings.Default.Save();
+			}
+		}
+
+		// OnTrayIconHoverCommitted
+		//
+		// Invoked when a change to the combobox is committed
+		private void OnTrayIconHoverCommitted(object sender, EventArgs args)
+		{
+			// If the value of the combobox changed, update and save the settings
+			EnabledDisabled trayiconhover = (EnabledDisabled)m_trayiconhover.SelectedValue;
+			if(trayiconhover != Settings.Default.TrayIconHover)
+			{
+				Settings.Default.TrayIconHover = trayiconhover;
 				Settings.Default.Save();
 			}
 		}

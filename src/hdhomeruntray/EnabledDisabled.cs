@@ -1,4 +1,4 @@
-//---------------------------------------------------------------------------
+﻿//---------------------------------------------------------------------------
 // Copyright (c) 2021 Michael G. Brehm
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -20,36 +20,21 @@
 // SOFTWARE.
 //---------------------------------------------------------------------------
 
-#ifndef __DISCOVERYMETHOD_H_
-#define __DISCOVERYMETHOD_H_
-#pragma once
+using System.ComponentModel;
 
-#pragma warning(push, 4)
-
-using namespace System;
-using namespace System::ComponentModel;
-
-namespace zuki::hdhomeruntray::discovery {
-
-//---------------------------------------------------------------------------
-// Enum DiscoveryMethod
-//
-// Indicates the discovery method to use for finding the devices
-//---------------------------------------------------------------------------
-
-public enum class DiscoveryMethod
+namespace zuki.hdhomeruntray
 {
-	[Description("Broadcast (UDP)")]
-	Broadcast	= 0,
+	//-----------------------------------------------------------------------
+	// Enum EnabledDisabled
+	//
+	// Defines constants that determine enabled/disabled settings values
 
-	[Description("Cloud (HTTP)")]
-	Http		= 1,
-};
+	public enum EnabledDisabled
+	{
+		[Description("Disabled")]
+		Disabled = 0,
 
-//---------------------------------------------------------------------------
-
-} // zuki::hdhomeruntray::discovery
-
-#pragma warning(pop)
-
-#endif	// __DISCOVERYMETHOD_H_
+		[Description("Enabled")]
+		Enabled = 1,
+	}
+}

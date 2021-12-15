@@ -82,5 +82,29 @@ namespace zuki.hdhomeruntray.Properties {
                 this["UpgradeRequired"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Disabled")]
+        public global::zuki.hdhomeruntray.EnabledDisabled AutoStart {
+            get {
+                return ((global::zuki.hdhomeruntray.EnabledDisabled)(this["AutoStart"]));
+            }
+            set {
+                this["AutoStart"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Enabled")]
+        public global::zuki.hdhomeruntray.EnabledDisabled TrayIconHover {
+            get {
+                return ((global::zuki.hdhomeruntray.EnabledDisabled)(this["TrayIconHover"]));
+            }
+            set {
+                this["TrayIconHover"] = value;
+            }
+        }
     }
 }
