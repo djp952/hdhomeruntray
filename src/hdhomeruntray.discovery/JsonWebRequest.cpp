@@ -37,6 +37,9 @@ using namespace System::Threading::Tasks;
 static JsonWebRequest::JsonWebRequest()
 {
 	s_httpclient = gcnew HttpClient();
+
+	// Nothing this application does should take more than 2.5 seconds to complete
+	s_httpclient->Timeout = TimeSpan::FromMilliseconds(2500);
 }
 
 //---------------------------------------------------------------------------
