@@ -785,14 +785,15 @@ namespace zuki.hdhomeruntray
 					if(!m_created)
 					{
 						// Create the tray icon instance
-						NativeMethods.Shell_NotifyIconW(NativeMethods.NIM_ADD, ref data);
+						m_created = NativeMethods.Shell_NotifyIconW(NativeMethods.NIM_ADD, ref data);
 
-						// Set the version of the tray icon to NOTIFY_VERSION_4 to enable modern functionality,
-						// this only needs to be done once after the NIM_ADD operation
-						data.uVersion = NativeMethods.NOTIFYICON_VERSION_4;
-						NativeMethods.Shell_NotifyIconW(NativeMethods.NIM_SETVERSION, ref data);
-
-						m_created = true;
+						if(m_created)
+						{
+							// Set the version of the tray icon to NOTIFY_VERSION_4 to enable modern functionality,
+							// this only needs to be done once after the NIM_ADD operation
+							data.uVersion = NativeMethods.NOTIFYICON_VERSION_4;
+							NativeMethods.Shell_NotifyIconW(NativeMethods.NIM_SETVERSION, ref data);
+						}
 					}
 					
 					else NativeMethods.Shell_NotifyIconW(NativeMethods.NIM_MODIFY, ref data);
