@@ -38,7 +38,7 @@ namespace zuki.hdhomeruntray
 		//
 		public TunerDeviceForm(TunerDevice device, PopupForm form, PopupItemControl item) : base(form, item)
 		{
-			m_device = device ?? throw new ArgumentNullException(nameof(device));
+			if(device == null) throw new ArgumentNullException(nameof(device));
 
 			m_layoutpanel.SuspendLayout();
 
@@ -106,8 +106,7 @@ namespace zuki.hdhomeruntray
 		// Member Variables
 		//-------------------------------------------------------------------
 
-		private TunerDevice m_device;
-		private TunerDeviceHeaderControl m_header;
-		private TunerDeviceFooterControl m_footer;
+		private readonly TunerDeviceHeaderControl m_header;
+		private readonly TunerDeviceFooterControl m_footer;
 	}
 }

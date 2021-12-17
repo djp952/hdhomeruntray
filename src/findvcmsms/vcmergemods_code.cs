@@ -42,6 +42,6 @@ namespace zuki.build.tools
 		/// <summary>
 		/// Collection of merge modules {name, path}
 		/// </summary>
-		private Dictionary<string, string> m_modules;
+		private readonly Dictionary<string, string> m_modules;
 	}
 }

@@ -814,7 +814,7 @@ namespace zuki.hdhomeruntray
 		private void WndProc(ref Message message)
 		{
 			// Handle the custom TaskbarCreated window message first
-			if(message.Msg == m_taskbarcreated)
+			if(message.Msg == s_taskbarcreated)
 			{
 				OnTaskbarCreated();
 				return;
@@ -994,6 +994,6 @@ namespace zuki.hdhomeruntray
 
 		// Custom window messages
 		//
-		private static readonly int m_taskbarcreated = (int)NativeMethods.RegisterWindowMessageW("TaskbarCreated");
+		private static readonly int s_taskbarcreated = (int)NativeMethods.RegisterWindowMessageW("TaskbarCreated");
 	}
 }

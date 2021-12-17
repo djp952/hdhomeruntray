@@ -189,7 +189,7 @@ namespace zuki.hdhomeruntray
 		// Member Variables
 		//-------------------------------------------------------------------
 
-		private int m_minimum = 0;
+		private readonly int m_minimum = 0;
 		private int m_maximum = 100;
 		private int m_value = 0;
 		private Color m_color = Color.Blue;

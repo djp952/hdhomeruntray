@@ -52,7 +52,7 @@ namespace zuki.hdhomeruntray
 			public const uint REG_NOTIFY_THREAD_AGNOSTIC = 0x10000000;
 
 			[DllImport("advapi32.dll")]
-			public static extern IntPtr RegNotifyChangeKeyValue(IntPtr hKey, [MarshalAs(UnmanagedType.Bool)] bool watchSubtree, 
+			public static extern int RegNotifyChangeKeyValue(IntPtr hKey, [MarshalAs(UnmanagedType.Bool)] bool watchSubtree, 
 				uint notifyFilter, IntPtr hEvent, [MarshalAs(UnmanagedType.Bool)] bool asynchronous);
 		}
 		#endregion
@@ -176,12 +176,12 @@ namespace zuki.hdhomeruntray
 				while(true)
 				{
 					// RegNotifyChangeKeyValue will block until a change is registered or the key is closed
-					IntPtr result = NativeMethods.RegNotifyChangeKeyValue(key.Handle.DangerousGetHandle(), true, NativeMethods.LAST_SET, IntPtr.Zero, false);
+					int result = NativeMethods.RegNotifyChangeKeyValue(key.Handle.DangerousGetHandle(), true, NativeMethods.LAST_SET, IntPtr.Zero, false);
 
 					lock(this)
 					{
 						// A zero result and a valid reference in m_monitoredkey means to fire the event, otherwise die
-						if((result == IntPtr.Zero) && (m_monitoredkey != null)) ValueChanged?.Invoke(this, EventArgs.Empty);
+						if((result == 0) && (m_monitoredkey != null)) ValueChanged?.Invoke(this, EventArgs.Empty);
 						else return;
 					}
 				}

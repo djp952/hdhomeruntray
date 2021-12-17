@@ -34,21 +34,8 @@ namespace zuki.hdhomeruntray
 	//
 	// Helper class used to load the proper system tray icons for the system
 	
-	class StatusIcons
+	static class StatusIcons
 	{
-		// Static Constructor
-		//
-		static StatusIcons()
-		{
-			// Create icons of the proper size for the system from the embedded resources
-			s_active_dark = new Icon(Properties.Resources.TrayIconGreenDark, SystemInformation.SmallIconSize);
-			s_active_light = new Icon(Properties.Resources.TrayIconGreenLight, SystemInformation.SmallIconSize);
-			s_idle_dark = new Icon(Properties.Resources.TrayIconGrayDark, SystemInformation.SmallIconSize);
-			s_idle_light = new Icon(Properties.Resources.TrayIconGrayLight, SystemInformation.SmallIconSize);
-			s_recording_dark = new Icon(Properties.Resources.TrayIconRedDark, SystemInformation.SmallIconSize);
-			s_recording_light = new Icon(Properties.Resources.TrayIconRedLight, SystemInformation.SmallIconSize);
-		}
-
 		//-------------------------------------------------------------------
 		// Member Functions
 		//-------------------------------------------------------------------
@@ -81,11 +68,11 @@ namespace zuki.hdhomeruntray
 		// Member Variables
 		//-------------------------------------------------------------------
 
-		private static readonly Icon s_active_dark;			// Active (dark)
-		private static readonly Icon s_active_light;		// Active (light)
-		private static readonly Icon s_idle_dark;			// Idle (dark)
-		private static readonly Icon s_idle_light;			// Idle (light)
-		private static readonly Icon s_recording_dark;		// Recording (dark)
-		private static readonly Icon s_recording_light;		// Recording (light)
+		private static readonly Icon s_active_dark = new Icon(Properties.Resources.TrayIconGreenDark, SystemInformation.SmallIconSize);
+		private static readonly Icon s_active_light = new Icon(Properties.Resources.TrayIconGreenLight, SystemInformation.SmallIconSize);
+		private static readonly Icon s_idle_dark = new Icon(Properties.Resources.TrayIconGrayDark, SystemInformation.SmallIconSize);
+		private static readonly Icon s_idle_light = new Icon(Properties.Resources.TrayIconGrayLight, SystemInformation.SmallIconSize);
+		private static readonly Icon s_recording_dark = new Icon(Properties.Resources.TrayIconRedDark, SystemInformation.SmallIconSize);
+		private static readonly Icon s_recording_light = new Icon(Properties.Resources.TrayIconRedLight, SystemInformation.SmallIconSize);
 	}
 }

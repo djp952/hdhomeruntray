@@ -20,7 +20,9 @@
 // SOFTWARE.
 //---------------------------------------------------------------------------
 
+using System;
 using System.Reflection;
+using System.Resources;
 using System.Runtime.InteropServices;
 
 // General Information about an assembly is controlled through the following
@@ -37,5 +39,9 @@ using System.Runtime.InteropServices;
 // COM, set the ComVisible attribute to true on that type.
 [assembly: ComVisible(false)]
 
+// Because FxCop said to
+[assembly: CLSCompliant(true)]
+
 // The following GUID is for the ID of the typelib if this project is exposed to COM
 [assembly: Guid("fe5b686c-c64d-4e48-9b9e-0529897e682e")]
+[assembly: NeutralResourcesLanguage("en-US")]
