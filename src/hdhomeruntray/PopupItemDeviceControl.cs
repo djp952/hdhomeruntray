@@ -152,7 +152,7 @@ namespace zuki.hdhomeruntray
 				StorageStatus status = storagedevice.GetStorageStatus();
 
 				// The storage device only gets one dot for the overall status
-				m_dots[0].ForeColor = status.StatusColor;
+				m_dots[0].ForeColor = DeviceStatusColor.FromDeviceStatus(status.DeviceStatus);
 			}
 
 			base.Refresh();

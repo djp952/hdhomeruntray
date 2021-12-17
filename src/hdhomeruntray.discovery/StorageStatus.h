@@ -25,7 +25,6 @@
 #pragma once
 
 #include "DeviceStatus.h"
-#include "DeviceStatusColor.h"		// TODO: remove me
 #include "LiveBufferList.h"
 #include "PlaybackList.h"
 #include "RecordingList.h"
@@ -88,14 +87,6 @@ public:
 		RecordingList^ get(void);
 	}
 
-	// StatusColor
-	//
-	// Gets the color code for the overall status
-	property Color StatusColor
-	{
-		Color get(void);
-	}
-
 	//-----------------------------------------------------------------------
 	// Object Overrides
 
@@ -123,7 +114,6 @@ private:
 	//-----------------------------------------------------------------------
 	// Member Variables
 
-	Color				m_statuscolor = DeviceStatusColor::Gray;
 	LiveBufferList^		m_livebuffers = nullptr;
 	PlaybackList^		m_playbacks = nullptr;
 	RecordingList^		m_recordings = nullptr;

@@ -53,14 +53,6 @@ StorageStatus::StorageStatus(LiveBufferList^ livebuffers, PlaybackList^ playback
 	// Determine what the overall device status should be reported as
 	if((m_livebuffers->Count > 0) || (m_playbacks->Count > 0)) m_devicestatus = _DeviceStatus::Active;
 	if(m_recordings->Count > 0) m_devicestatus = _DeviceStatus::ActiveAndRecording;
-
-	// TODO: the rest of this and the member variable should go away in favor of DeviceStatus
-	// If there are live TV streams being buffered or recording playbacks,
-	// report the status as green
-	if((m_livebuffers->Count > 0) || (m_playbacks->Count > 0)) m_statuscolor = DeviceStatusColor::Green;
-
-	// If there are active recordings in progress, report the status as red
-	if(m_recordings->Count > 0) m_statuscolor = DeviceStatusColor::Red;
 }
 
 //---------------------------------------------------------------------------
@@ -134,9 +126,9 @@ int StorageStatus::GetHashCode(void)
 	int hash = fnv_offset_basis;
 
 	// FNV hash each member variable
-	hash ^= m_statuscolor.GetHashCode();
-	hash *= fnv_prime;
 	hash ^= CLRISNULL(m_livebuffers) ? 0 : m_livebuffers->GetHashCode();
+	hash *= fnv_prime;
+	hash ^= CLRISNULL(m_playbacks) ? 0 : m_playbacks->GetHashCode();
 	hash *= fnv_prime;
 	hash ^= CLRISNULL(m_recordings) ? 0 : m_recordings->GetHashCode();
 	hash *= fnv_prime;
@@ -175,16 +167,6 @@ RecordingList^ StorageStatus::Recordings::get(void)
 {
 	CLRASSERT(CLRISNOTNULL(m_recordings));
 	return m_recordings;
-}
-
-//---------------------------------------------------------------------------
-// StorageStatus::StatusColor::get
-//
-// Gets the color code for the overall status
-
-Color StorageStatus::StatusColor::get(void)
-{
-	return m_statuscolor;
 }
 
 //---------------------------------------------------------------------------
