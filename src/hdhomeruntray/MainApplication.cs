@@ -181,6 +181,7 @@ namespace zuki.hdhomeruntray
 				if((Settings.Default.TrayIconHover == EnabledDisabled.Enabled) && (m_popupform == null))
 				{
 					m_popupform = new PopupForm(m_devicelist);
+					m_popupform.DeviceStatusChanged += new DeviceStatusChangedEventHandler(OnPopupDeviceStatusChanged);
 					m_popupform.ShowFromNotifyIcon(m_notifyicon);
 				}
 
@@ -214,11 +215,26 @@ namespace zuki.hdhomeruntray
 				else
 				{
 					m_popupform = new PopupForm(m_devicelist, true);
+					m_popupform.DeviceStatusChanged += new DeviceStatusChangedEventHandler(OnPopupDeviceStatusChanged);
 					m_popupform.Unpinned += new EventHandler(OnPopupUnpinned);
 					m_popupform.ShowFromNotifyIcon(m_notifyicon);
 				}
 
 			}), null);
+		}
+
+		// OnPopupDeviceStatusChaged
+		//
+		// Invoked when the overall device status has changed
+		private void OnPopupDeviceStatusChanged(object sender, DeviceStatusChangedEventArgs args)
+		{
+			// The timer granularity of the popup form is much higher than
+			// the discovery timer; just go with what it's telling us
+			if(args.DeviceStatus != m_status)
+			{
+				m_status = args.DeviceStatus;
+				m_notifyicon.Icon = StatusIcons.Get(m_status);
+			}
 		}
 
 		// OnPopupUnpinned

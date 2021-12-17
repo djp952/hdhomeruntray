@@ -144,6 +144,11 @@ namespace zuki.hdhomeruntray
 		// Events
 		//-------------------------------------------------------------------------
 
+		// DeviceStatusChanged
+		//
+		// Invoked when the overall device status has changed
+		public event DeviceStatusChangedEventHandler DeviceStatusChanged;
+
 		// Unpinned
 		//
 		// Invoked when the popup form has been unpinned
@@ -309,14 +314,27 @@ namespace zuki.hdhomeruntray
 		// Invoked when the timer comes due
 		private void OnTimerTick(object sender, EventArgs args)
 		{
+			DeviceStatus newstatus = DeviceStatus.Idle;
+
 			// Probably can't happen, but make sure the timer is still
 			// enabled before executing the refresh
 			if(m_timer.Enabled)
 			{
 				foreach(Control control in m_layoutpanel.Controls)
 				{
-					if(control is PopupItemDeviceControl devicecontrol) devicecontrol.Refresh();
+					if(control is PopupItemDeviceControl devicecontrol)
+					{
+						devicecontrol.Refresh();
+						if(devicecontrol.DeviceStatus > newstatus) newstatus = devicecontrol.DeviceStatus;
+					}
 				}
+			}
+
+			// Check for an overall device status change and fire the event
+			if(newstatus != m_status)
+			{
+				DeviceStatusChanged?.Invoke(this, new DeviceStatusChangedEventArgs(newstatus));
+				m_status = newstatus;
 			}
 		}
 
@@ -394,5 +412,6 @@ namespace zuki.hdhomeruntray
 		private bool m_pinned = false;
 		private DeviceForm m_deviceform = null;
 		private SettingsForm m_settingsform = null;
+		private DeviceStatus m_status = DeviceStatus.Idle;
 	}
 }

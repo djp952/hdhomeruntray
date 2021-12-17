@@ -102,6 +102,14 @@ namespace zuki.hdhomeruntray
 			get { return m_device; }
 		}
 
+		// DeviceStatus
+		//
+		// Gets the overall status of the device
+		public DeviceStatus DeviceStatus
+		{
+			get { return m_status; }
+		}
+
 		//-------------------------------------------------------------------------
 		// Control Overrides
 		//-------------------------------------------------------------------------
@@ -111,6 +119,9 @@ namespace zuki.hdhomeruntray
 		// Overrides Control::Refresh
 		public override void Refresh()
 		{
+			// Default overall status to Idle
+			m_status = DeviceStatus.Idle;
+
 			// No device; this is a static or glyph instance
 			if(m_device == null) return;
 
@@ -122,6 +133,9 @@ namespace zuki.hdhomeruntray
 				{
 					// Get the granular tuner status from the device
 					TunerStatus status = tunerdevice.GetTunerStatus(index);
+
+					// Update the overall device status indicator
+					if(status.DeviceStatus > m_status) m_status = status.DeviceStatus;
 
 					// Default to a standard color, but obey the setting
 					Color forecolor = DeviceStatusColor.FromDeviceStatus(status.DeviceStatus);
@@ -151,6 +165,9 @@ namespace zuki.hdhomeruntray
 				// Get the granular storage status from the device
 				StorageStatus status = storagedevice.GetStorageStatus();
 
+				// Update the overall device status indicator
+				if(status.DeviceStatus > m_status) m_status = status.DeviceStatus;
+
 				// The storage device only gets one dot for the overall status
 				m_dots[0].ForeColor = DeviceStatusColor.FromDeviceStatus(status.DeviceStatus);
 			}
@@ -162,7 +179,8 @@ namespace zuki.hdhomeruntray
 		// Member Variables
 		//-------------------------------------------------------------------
 
-		private readonly Device m_device = null;	// Referenced device object
-		private readonly Label[] m_dots;			// Status dot labels
+		private readonly Device m_device = null;
+		private readonly Label[] m_dots;
+		private DeviceStatus m_status = DeviceStatus.Idle;
 	}
 }
