@@ -44,6 +44,7 @@
 
     <MakeDir Directories="out" ContinueOnError="false"/>
 
+    <MSBuild Targets="Restore" Projects="src\hdhomeruntray\hdhomeruntray.csproj" Properties="SolutionDir=$(MSBuildThisFileDirectory);RestorePackagesConfig=true"/>
     <MSBuild Projects="src\findvcmsms\findvcmsms.csproj" Properties="Configuration=$(Configuration);Platform=x86" Targets="Build" ContinueOnError="false"/>
     <MSBuild Projects="src\hdhomeruntray.discovery\hdhomeruntray.discovery.vcxproj" Properties="Configuration=$(Configuration);Platform=Win32" Targets="Build" ContinueOnError="false"/>
     <MSBuild Projects="src\hdhomeruntray\hdhomeruntray.csproj" Properties="Configuration=$(Configuration);Platform=x86" Targets="Build" ContinueOnError="false"/>
