@@ -25,6 +25,7 @@ using System.Drawing;
 using System.Windows.Forms;
 
 using Microsoft.Win32;
+using zuki.hdhomeruntray.discovery;
 
 namespace zuki.hdhomeruntray
 {
@@ -55,7 +56,7 @@ namespace zuki.hdhomeruntray
 		// Get (static)
 		//
 		// Retrieves the specified icon
-		public static Icon Get(StatusIconType type)
+		public static Icon Get(DeviceStatus devicestatus)
 		{
 			bool lighticon = false;
 
@@ -67,12 +68,12 @@ namespace zuki.hdhomeruntray
 				if((value is int @int) && (@int != 1)) lighticon = true;
 			}
 
-			switch(type)
+			switch(devicestatus)
 			{
-				case StatusIconType.Active: return (lighticon) ? s_active_light : s_active_dark;
-				case StatusIconType.Idle: return (lighticon) ? s_idle_light : s_idle_dark;
-				case StatusIconType.Recording: return (lighticon) ? s_recording_light : s_recording_dark;
-				default: throw new ArgumentOutOfRangeException(nameof(type));
+				case DeviceStatus.Idle: return (lighticon) ? s_idle_light : s_idle_dark;
+				case DeviceStatus.Active: return (lighticon) ? s_active_light : s_active_dark;
+				case DeviceStatus.ActiveAndRecording: return (lighticon) ? s_recording_light : s_recording_dark;
+				default: throw new ArgumentOutOfRangeException(nameof(devicestatus));
 			}
 		}
 

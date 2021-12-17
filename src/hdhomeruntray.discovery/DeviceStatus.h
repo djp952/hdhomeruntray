@@ -1,4 +1,4 @@
-﻿//---------------------------------------------------------------------------
+//---------------------------------------------------------------------------
 // Copyright (c) 2021 Michael G. Brehm
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -20,17 +20,33 @@
 // SOFTWARE.
 //---------------------------------------------------------------------------
 
-namespace zuki.hdhomeruntray
+#ifndef __DEVICESTATUS_H_
+#define __DEVICESTATUS_H_
+#pragma once
+
+#pragma warning(push, 4)
+
+using namespace System;
+
+namespace zuki::hdhomeruntray::discovery {
+
+//---------------------------------------------------------------------------
+// Enum DeviceStatus
+//
+// Indicates the overall device status
+//---------------------------------------------------------------------------
+
+public enum class DeviceStatus
 {
-	//-----------------------------------------------------------------------
-	// Enum StatusIconType (internal)
-	//
-	// Enumeration defining the status icon types
-	
-	enum StatusIconType
-	{
-		Active = 0,					// At least one tuner is active
-		Idle = 1,					// All tuners are idle
-		Recording = 2,				// At least one recording is active
-	};
-}
+	Idle				= 0,			// Device is idle
+	Active				= 1,			// Device is active
+	ActiveAndRecording	= 2,			// Device is active and recording
+};
+
+//---------------------------------------------------------------------------
+
+} // zuki::hdhomeruntray::discovery
+
+#pragma warning(pop)
+
+#endif	// __DEVICESTATUS_H_

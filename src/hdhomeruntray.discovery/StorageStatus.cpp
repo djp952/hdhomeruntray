@@ -24,7 +24,6 @@
 
 #include "StorageStatus.h"
 
-#include "DeviceStatusColor.h"
 #include "JsonWebRequest.h"
 #include "StorageDevice.h"
 
@@ -45,12 +44,17 @@ namespace zuki::hdhomeruntray::discovery {
 //	recordings		- List<> of active recordings
 
 StorageStatus::StorageStatus(LiveBufferList^ livebuffers, PlaybackList^ playbacks, RecordingList^ recordings) : 
-	m_statuscolor(DeviceStatusColor::Gray), m_livebuffers(livebuffers), m_playbacks(playbacks),  m_recordings(recordings)
+	m_livebuffers(livebuffers), m_playbacks(playbacks),  m_recordings(recordings)
 {
 	if(CLRISNULL(livebuffers)) throw gcnew ArgumentNullException("livebuffers");
 	if(CLRISNULL(playbacks)) throw gcnew ArgumentNullException("playbacks");
 	if(CLRISNULL(recordings)) throw gcnew ArgumentNullException("recordings");
 
+	// Determine what the overall device status should be reported as
+	if((m_livebuffers->Count > 0) || (m_playbacks->Count > 0)) m_devicestatus = _DeviceStatus::Active;
+	if(m_recordings->Count > 0) m_devicestatus = _DeviceStatus::ActiveAndRecording;
+
+	// TODO: the rest of this and the member variable should go away in favor of DeviceStatus
 	// If there are live TV streams being buffered or recording playbacks,
 	// report the status as green
 	if((m_livebuffers->Count > 0) || (m_playbacks->Count > 0)) m_statuscolor = DeviceStatusColor::Green;
@@ -100,6 +104,16 @@ StorageStatus^ StorageStatus::Create(StorageDevice^ storagedevice)
 	}
 
 	return gcnew StorageStatus(LiveBufferList::Create(livebuffers), PlaybackList::Create(playbacks), RecordingList::Create(recordings));
+}
+
+//---------------------------------------------------------------------------
+// StorageStatus::DeviceStatus::get
+//
+// Gets the overall device status
+
+_DeviceStatus StorageStatus::DeviceStatus::get(void)
+{
+	return m_devicestatus;
 }
 
 //---------------------------------------------------------------------------

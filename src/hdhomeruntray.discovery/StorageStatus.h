@@ -24,6 +24,8 @@
 #define __STORAGESTATUS_H_
 #pragma once
 
+#include "DeviceStatus.h"
+#include "DeviceStatusColor.h"		// TODO: remove me
 #include "LiveBufferList.h"
 #include "PlaybackList.h"
 #include "RecordingList.h"
@@ -32,6 +34,8 @@
 
 using namespace System;
 using namespace System::Drawing;
+
+using _DeviceStatus = zuki::hdhomeruntray::discovery::DeviceStatus;
 
 namespace zuki::hdhomeruntray::discovery {
 
@@ -51,6 +55,14 @@ public:
 
 	//-----------------------------------------------------------------------
 	// Properties
+
+	// DeviceStatus
+	//
+	// Gets the overall device status
+	property _DeviceStatus DeviceStatus
+	{
+		_DeviceStatus get(void);
+	}
 
 	// LiveBuffers
 	//
@@ -111,10 +123,11 @@ private:
 	//-----------------------------------------------------------------------
 	// Member Variables
 
-	Color				m_statuscolor;			// Overall status color
-	LiveBufferList^		m_livebuffers;			// Active live buffers
-	PlaybackList^		m_playbacks;			// Active playbacks
-	RecordingList^		m_recordings;			// Active recordings
+	Color				m_statuscolor = DeviceStatusColor::Gray;
+	LiveBufferList^		m_livebuffers = nullptr;
+	PlaybackList^		m_playbacks = nullptr;
+	RecordingList^		m_recordings = nullptr;
+	_DeviceStatus		m_devicestatus = _DeviceStatus::Idle;
 };
 
 //---------------------------------------------------------------------------

@@ -56,11 +56,12 @@ TunerStatus::TunerStatus(struct hdhomerun_tuner_status_t const* status, IPAddres
 	if(status == nullptr) throw gcnew ArgumentNullException("status");
 	if(CLRISNULL(targetip)) throw gcnew ArgumentNullException("targetip");
 
-	// Assign channel name
+	// Assign the channel name and determine the overall device status
 	m_channelname = gcnew String(status->channel);
+	if(String::Compare(m_channelname, NoChannel, StringComparison::OrdinalIgnoreCase) != 0) m_devicestatus = _DeviceStatus::Active;
 
 	// Only bother with setting the variables if the tuner is active
-	if(IsActive) {
+	if(m_devicestatus == _DeviceStatus::Active) {
 
 		m_signalstrength = static_cast<int>(status->signal_strength);
 		m_signalstrengthcolor = ConvertHDHomeRunColor(hdhomerun_device_get_tuner_status_ss_color(const_cast<hdhomerun_tuner_status_t*>(status)));
@@ -246,6 +247,16 @@ TunerStatus^ TunerStatus::Create(TunerDevice^ tunerdevice, int index)
 }
 
 //---------------------------------------------------------------------------
+// TunerStatus::DeviceStatus::get
+//
+// Gets the overall device status
+
+_DeviceStatus TunerStatus::DeviceStatus::get(void)
+{
+	return m_devicestatus;
+}
+
+//---------------------------------------------------------------------------
 // TunerStatus::GetHashCode
 //
 // Serves as the defult hash function
@@ -328,8 +339,8 @@ String^ TunerStatus::GetVirtualChannelName(String^ program, String^ streaminfo)
 
 bool TunerStatus::IsActive::get(void)
 {
-	if(String::IsNullOrEmpty(m_channelname)) return false;
-	else return (String::Compare(m_channelname, NoChannel, StringComparison::OrdinalIgnoreCase) != 0);
+	// TODO: Remove this method in favor of DeviceStatus property
+	return (m_devicestatus == _DeviceStatus::Active);
 }
 
 //---------------------------------------------------------------------------

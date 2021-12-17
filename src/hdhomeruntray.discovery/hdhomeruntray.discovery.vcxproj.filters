@@ -137,6 +137,9 @@
     <ClInclude Include="PlaybackList.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="DeviceStatus.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AssemblyInfo.cpp">
@@ -239,6 +242,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="PlaybackList.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DeviceStatus.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

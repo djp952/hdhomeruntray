@@ -24,6 +24,7 @@
 #define __TUNERSTATUS_H_
 #pragma once
 
+#include "DeviceStatus.h"
 #include "DeviceStatusColor.h"
 
 #pragma warning(push, 4)
@@ -31,6 +32,8 @@
 using namespace System;
 using namespace System::Drawing;
 using namespace System::Net;
+
+using _DeviceStatus = zuki::hdhomeruntray::discovery::DeviceStatus;
 
 namespace zuki::hdhomeruntray::discovery {
 
@@ -65,6 +68,14 @@ public:
 	property String^ ChannelName
 	{
 		String^ get(void);
+	}
+
+	// DeviceStatus
+	//
+	// Gets the overall device status
+	property _DeviceStatus DeviceStatus
+	{
+		_DeviceStatus get(void);
 	}
 
 	// IsActive
@@ -197,6 +208,7 @@ private:
 	Color				m_symbolqualitycolor = DeviceStatusColor::Gray;
 	int					m_bitrate = 0;
 	IPAddress^			m_targetip = IPAddress::None;
+	_DeviceStatus		m_devicestatus = _DeviceStatus::Idle;
 };
 
 //---------------------------------------------------------------------------

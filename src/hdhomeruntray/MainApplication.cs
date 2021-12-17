@@ -383,7 +383,7 @@ namespace zuki.hdhomeruntray
 			m_notifyicon.OpenPopup += new EventHandler(OnNotifyIconOpenPopup);
 			m_notifyicon.Selected += new EventHandler(OnNotifyIconSelected);
 			m_notifyicon.ContextMenuStrip = contextmenu;
-			m_notifyicon.Icon = StatusIcons.Get(StatusIconType.Idle);
+			m_notifyicon.Icon = StatusIcons.Get(DeviceStatus.Idle);
 			m_notifyicon.HoverInterval = GetHoverInterval(Settings.Default.TrayIconHoverDelay);
 			m_notifyicon.ToolTip = "HDHomeRun Status Monitor";
 
@@ -467,34 +467,40 @@ namespace zuki.hdhomeruntray
 		{
 			if(devices == null) throw new ArgumentNullException(nameof(devices));
 
-			int numactive = 0;              // Count of active tuners
-			int numrecording = 0;			// Count of active recordings
+			DeviceStatus overallstatus = DeviceStatus.Idle;
 
 			// Iterate over all the devices to determine what status should be shown
 			foreach(Device device in devices)
 			{
+				// For tuners, we can stop looking after the first one found to be active
 				if(device is TunerDevice tunerdevice)
 				{
 					foreach(Tuner tuner in tunerdevice.Tuners)
 					{
-						TunerStatus status = tunerdevice.GetTunerStatus(tuner);
-						if(status.IsActive) numactive++;
+						DeviceStatus status = tunerdevice.GetTunerStatus(tuner).DeviceStatus;
+						if(status > overallstatus)
+						{
+							overallstatus = status;
+							break;
+						}
 					}
 				}
 
+				// For storage, we can stop looking after the first one found to be recording
 				else if(device is StorageDevice storagedevice)
 				{
-					StorageStatus status = storagedevice.GetStorageStatus();
-					numactive += status.LiveBuffers.Count;
-					numactive += status.Playbacks.Count;
-					numrecording += status.Recordings.Count;
+					DeviceStatus status = storagedevice.GetStorageStatus().DeviceStatus;
+					if(status > overallstatus) overallstatus = status;
+					if(overallstatus >= DeviceStatus.ActiveAndRecording) break;
 				}
 			}
 
-			// Update the icon image based on the overall status
-			if(numrecording > 0) m_notifyicon.Icon = StatusIcons.Get(StatusIconType.Recording);
-			else if(numactive > 0) m_notifyicon.Icon = StatusIcons.Get(StatusIconType.Active);
-			else m_notifyicon.Icon = StatusIcons.Get(StatusIconType.Idle);
+			// If the overall status has changed, update the tray icon accordingly
+			if(overallstatus != m_status)
+			{
+				m_status = overallstatus;
+				m_notifyicon.Icon = StatusIcons.Get(m_status);
+			}
 		}
 
 		//-------------------------------------------------------------------
@@ -507,6 +513,7 @@ namespace zuki.hdhomeruntray
 		private PopupForm m_popupform = null;
 		private readonly Devices m_devices;
 		private DeviceList m_devicelist = DeviceList.Empty;
+		private DeviceStatus m_status = DeviceStatus.Idle;
 		
 		// Do not change this GUID; it has to remain the same to prevent Windows from creating
 		// custom tray icon settings for each GUID that it sees

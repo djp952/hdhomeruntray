@@ -193,7 +193,6 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="StatusIcons.cs" />
-    <Compile Include="StatusIconType.cs" />
     <Compile Include="TunerDeviceFooterControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
