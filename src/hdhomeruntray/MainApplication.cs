@@ -71,6 +71,16 @@ namespace zuki.hdhomeruntray
 				Settings.Default.Save();
 			}
 
+			// On Windows 10 and above, set up a system theme registry monitor
+			if(VersionHelper.IsWindows10OrGreater())
+			{
+				m_thememonitor = new RegistryKeyValueChangeMonitor(Registry.CurrentUser, @"Software\Microsoft\Windows\CurrentVersion\Themes\Personalize");
+				m_thememonitor.ValueChanged += new EventHandler(OnTaskbarThemeChanged);
+
+				try { m_thememonitor.Start(); }
+				catch(Exception) { /* DON'T CARE FOR NOW */ }
+			}
+
 			// Wire up a handler to watch for property changes
 			Settings.Default.PropertyChanged += OnPropertyChanged;
 
@@ -108,6 +118,13 @@ namespace zuki.hdhomeruntray
 				}
 
 			}), null);
+
+			// Stop and dispose of the theme registry monitor if created
+			if(m_thememonitor != null)
+			{
+				m_thememonitor.Stop();
+				m_thememonitor.Dispose();
+			}
 
 			m_timer.Enabled = false;            // Stop the timer
 			m_devices.CancelAsync(this);        // Cancel any operations
@@ -287,6 +304,16 @@ namespace zuki.hdhomeruntray
 			{
 				m_notifyicon.HoverInterval = GetHoverInterval(Settings.Default.TrayIconHoverDelay);
 			}
+		}
+
+		// OnTaskbarThemeChanged
+		//
+		// Invoked when the system taskbar theme has changed
+		private void OnTaskbarThemeChanged(object sender, EventArgs args)
+		{
+			// Refresh the status icon if would be different than it already is
+			Icon statusicon = StatusIcons.Get(m_status);
+			if(!m_notifyicon.Icon.Equals(statusicon)) m_notifyicon.Icon = statusicon;
 		}
 
 		// OnTimerElapsed
@@ -530,6 +557,7 @@ namespace zuki.hdhomeruntray
 		private readonly Devices m_devices;
 		private DeviceList m_devicelist = DeviceList.Empty;
 		private DeviceStatus m_status = DeviceStatus.Idle;
+		private readonly RegistryKeyValueChangeMonitor m_thememonitor;
 		
 		// Do not change this GUID; it has to remain the same to prevent Windows from creating
 		// custom tray icon settings for each GUID that it sees

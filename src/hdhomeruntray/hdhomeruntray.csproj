@@ -103,6 +103,7 @@
     <Compile Include="PopupItemToggledEventHandler.cs" />
     <Compile Include="Radii.cs" />
     <Compile Include="RadiiConverter.cs" />
+    <Compile Include="RegistryKeyValueChangeMonitor.cs" />
     <Compile Include="RoundedTableLayoutPanel.cs">
       <SubType>Component</SubType>
     </Compile>
