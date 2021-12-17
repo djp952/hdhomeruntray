@@ -47,6 +47,7 @@ TunerDevice::TunerDevice(JObject^ device, IPAddress^ localip) : Device(device, l
 	JToken^ firmwareversion = device->GetValue("FirmwareVersion", StringComparison::OrdinalIgnoreCase);
 	JToken^ islegacy = device->GetValue("Legacy", StringComparison::OrdinalIgnoreCase);
 	JToken^ tunercount = device->GetValue("TunerCount", StringComparison::OrdinalIgnoreCase);
+	JToken^ upgradeavailable = device->GetValue("UpgradeAvailable", StringComparison::OrdinalIgnoreCase);
 
 	m_deviceid = CLRISNOTNULL(deviceid) ? deviceid->ToObject<String^>() : String::Empty;
 	m_friendlyname = CLRISNOTNULL(friendlyname) ? friendlyname->ToObject<String^>() : String::Empty;
@@ -55,6 +56,7 @@ TunerDevice::TunerDevice(JObject^ device, IPAddress^ localip) : Device(device, l
 	m_firmwareversion = CLRISNOTNULL(firmwareversion) ? firmwareversion->ToObject<String^>() : String::Empty;
 	m_islegacy = (CLRISNOTNULL(islegacy) && (islegacy->ToObject<int>() == 1));
 	m_tunercount = CLRISNOTNULL(tunercount) ? tunercount->ToObject<int>() : 0;
+	m_upgradeavailable = CLRISNOTNULL(upgradeavailable);
 
 	// Create a collection from which the individual tuner objects can be accessed
 	m_tuners = TunerList::Create(m_tunercount);
@@ -103,7 +105,7 @@ String^ TunerDevice::FirmwareName::get(void)
 
 bool TunerDevice::FirmwareUpdateAvailable::get(void)
 {
-	return false;
+	return m_upgradeavailable;
 }
 
 //---------------------------------------------------------------------------

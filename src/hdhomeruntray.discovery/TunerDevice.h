@@ -152,14 +152,15 @@ private:
 	//-----------------------------------------------------------------------
 	// Member Variables
 
-	String^					m_deviceid;			// Tuner device identifier
-	String^					m_friendlyname;		// Tuner device friendly name
-	bool					m_islegacy;			// Legacy tuner device flag
-	String^					m_modelnumber;		// Model number string
-	String^					m_firmwarename;		// Firmware name string
-	String^					m_firmwareversion;	// Firmware version string
-	int						m_tunercount;		// Number of tuner instances
-	TunerList^				m_tuners;			// List<> of tuner instances
+	String^				m_deviceid;				// Tuner device identifier
+	String^				m_friendlyname;			// Tuner device friendly name
+	bool				m_islegacy;				// Legacy tuner device flag
+	String^				m_modelnumber;			// Model number string
+	String^				m_firmwarename;			// Firmware name string
+	String^				m_firmwareversion;		// Firmware version string
+	int					m_tunercount;			// Number of tuner instances
+	TunerList^			m_tuners;				// List<> of tuner instances
+	bool				m_upgradeavailable;		// Upgrade available flag
 };
 
 //---------------------------------------------------------------------------
