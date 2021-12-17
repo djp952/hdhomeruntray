@@ -160,7 +160,7 @@ namespace zuki.hdhomeruntray
 			{
 				// Header Controls
 				//
-				Color forecolor = (status.IsActive) ? DeviceStatusColor.Green : DeviceStatusColor.Gray;
+				Color forecolor = DeviceStatusColor.FromDeviceStatus(status.DeviceStatus);
 				switch(Settings.Default.TunerStatusColorSource)
 				{
 					case TunerStatusColorSource.SignalStrength:
@@ -177,22 +177,22 @@ namespace zuki.hdhomeruntray
 				}
 				m_activedot.ForeColor = forecolor;
 
-				m_channelname.Text = (status.IsActive) ? status.ChannelName : "Idle";
+				m_channelname.Text = (status.DeviceStatus >= DeviceStatus.Active) ? status.ChannelName : "Idle";
 
-				if(status.IsActive)
+				if(status.DeviceStatus >= DeviceStatus.Active)
 				{
 					// Signal Meter Controls
 					//
 					m_signalstrengthbar.ProgressBarColor = status.SignalStrengthColor;
-					m_signalstrengthbar.Value = (status.IsActive) ? status.SignalStrength : 100;
+					m_signalstrengthbar.Value = status.SignalStrength;
 					m_signalstrengthpct.Text = String.Format("{0}%", status.SignalStrength);
 
 					m_signalqualitybar.ProgressBarColor = status.SignalQualityColor;
-					m_signalqualitybar.Value = (status.IsActive) ? status.SignalQuality : 100;
+					m_signalqualitybar.Value = status.SignalQuality;
 					m_signalqualitypct.Text = String.Format("{0}%", status.SignalQuality);
 
 					m_symbolqualitybar.ProgressBarColor = status.SymbolQualityColor;
-					m_symbolqualitybar.Value = (status.IsActive) ? status.SymbolQuality : 100;
+					m_symbolqualitybar.Value = status.SymbolQuality;
 					m_symbolqualitypct.Text = String.Format("{0}%", status.SymbolQuality);
 
 					// Ensure the signal meter is visible for an active tuner

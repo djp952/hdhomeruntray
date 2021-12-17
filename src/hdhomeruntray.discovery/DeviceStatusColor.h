@@ -26,8 +26,12 @@
 
 #pragma warning(push, 4)
 
+#include "DeviceStatus.h"
+
 using namespace System;
 using namespace System::Drawing;
+
+using _DeviceStatus = zuki::hdhomeruntray::discovery::DeviceStatus;
 
 namespace zuki::hdhomeruntray::discovery {
 
@@ -40,6 +44,15 @@ namespace zuki::hdhomeruntray::discovery {
 public ref class DeviceStatusColor abstract sealed
 {
 public:
+
+	//-----------------------------------------------------------------------
+	// Member Functions
+	//-----------------------------------------------------------------------
+
+	// FromDeviceStatus (static)
+	//
+	// Determines the color from a DeviceStatus enumeration value
+	static Color FromDeviceStatus(_DeviceStatus devicestatus);
 
 	//-----------------------------------------------------------------------
 	// Fields

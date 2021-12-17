@@ -123,8 +123,8 @@ namespace zuki.hdhomeruntray
 					// Get the granular tuner status from the device
 					TunerStatus status = tunerdevice.GetTunerStatus(index);
 
-					// Default to a color of green/gray, but obey the setting for the dot color
-					Color forecolor = (status.IsActive) ? DeviceStatusColor.Green : DeviceStatusColor.Gray;
+					// Default to a standard color, but obey the setting
+					Color forecolor = DeviceStatusColor.FromDeviceStatus(status.DeviceStatus);
 					switch(Settings.Default.TunerStatusColorSource)
 					{
 						case TunerStatusColorSource.SignalStrength:

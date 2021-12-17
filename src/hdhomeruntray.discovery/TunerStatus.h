@@ -78,14 +78,6 @@ public:
 		_DeviceStatus get(void);
 	}
 
-	// IsActive
-	//
-	// Gets a flag indicating if the tuner is active or not
-	property bool IsActive
-	{
-		bool get(void);
-	}
-
 	// SignalQuality
 	//
 	// Gets the signal quality of the tuned channel

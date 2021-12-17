@@ -333,17 +333,6 @@ String^ TunerStatus::GetVirtualChannelName(String^ program, String^ streaminfo)
 }
 
 //---------------------------------------------------------------------------
-// TunerStatus::IsActive::get
-//
-// Gets a flag indicating if the tuner is active or not
-
-bool TunerStatus::IsActive::get(void)
-{
-	// TODO: Remove this method in favor of DeviceStatus property
-	return (m_devicestatus == _DeviceStatus::Active);
-}
-
-//---------------------------------------------------------------------------
 // TunerStatus::SignalQuality::get
 //
 // Gets the signal quality of the tuned channel
