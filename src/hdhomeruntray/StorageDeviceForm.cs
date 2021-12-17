@@ -34,7 +34,7 @@ namespace zuki.hdhomeruntray
 	//
 	// Specializes DeviceForm for use with storage devices
 
-	class StorageDeviceForm : DeviceForm
+	internal class StorageDeviceForm : DeviceForm
 	{
 		// Instance Constructor
 		//
@@ -72,7 +72,7 @@ namespace zuki.hdhomeruntray
 			// Set the timer for periodic refresh of the storage status
 			m_timer.Interval = 2000;
 			m_timer.Tick += new EventHandler(OnTimerTick);
-			m_timer.Enabled = true; 
+			m_timer.Enabled = true;
 		}
 
 		// OnTimerTick
@@ -96,7 +96,7 @@ namespace zuki.hdhomeruntray
 				List<Control> toremove = new List<Control>();
 				foreach(Control control in m_layoutpanel.Controls)
 				{
-					if((control is StorageDeviceLiveBufferControl) && 
+					if((control is StorageDeviceLiveBufferControl) &&
 						(!status.LiveBuffers.Any(livebuffer => livebuffer.GetHashCode() == (int)control.Tag))) toremove.Add(control);
 
 					else if((control is StorageDeviceRecordingControl) &&

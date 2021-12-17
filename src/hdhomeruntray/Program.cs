@@ -27,7 +27,7 @@ using System.Windows.Forms;
 
 namespace zuki.hdhomeruntray
 {
-	static class Program
+	internal static class Program
 	{
 		#region Win32 API Declarations
 		private static class NativeMethods
@@ -42,15 +42,15 @@ namespace zuki.hdhomeruntray
 		//
 		// Application entry point
 		[STAThread]
-		static void Main()
+		private static void Main()
 		{
 			// Prevent multiple instances of the application from running at the same
 			// time; the tray icon is registered with a GUID, it will only show up once
 			s_mutex = new Mutex(true, Application.ProductName, out bool creatednew);
 			if(!creatednew) return;
 
-			if(Environment.OSVersion.Version.Major >= 6) NativeMethods.SetProcessDPIAware(); 
-			
+			if(Environment.OSVersion.Version.Major >= 6) NativeMethods.SetProcessDPIAware();
+
 			Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);
 			Application.Run(new MainApplication());
@@ -63,6 +63,6 @@ namespace zuki.hdhomeruntray
 		// Member Variables
 		//-------------------------------------------------------------------
 
-		private static Mutex s_mutex = null;		// Single instance mutex
+		private static Mutex s_mutex = null;        // Single instance mutex
 	}
 }

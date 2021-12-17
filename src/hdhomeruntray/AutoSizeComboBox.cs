@@ -57,11 +57,11 @@ namespace zuki.hdhomeruntray
 
 			// Determine what the widest entry in the drop-down will be
 			int maxwidth = 0;
-			foreach(Object item in Items)
+			foreach(object item in Items)
 			{
 				// Get the text that will appear in the control
 				string text;
-				if(String.IsNullOrEmpty(DisplayMember)) text = item.ToString();
+				if(string.IsNullOrEmpty(DisplayMember)) text = item.ToString();
 				else
 				{
 					PropertyInfo pinfo = item.GetType().GetProperty(DisplayMember);

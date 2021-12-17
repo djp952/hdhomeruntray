@@ -27,5 +27,5 @@ namespace zuki.hdhomeruntray
 	//
 	// Delegate type for the a DeviceStatusChanged event
 
-	delegate void DeviceStatusChangedEventHandler(object sender, DeviceStatusChangedEventArgs args);
+	internal delegate void DeviceStatusChangedEventHandler(object sender, DeviceStatusChangedEventArgs args);
 }

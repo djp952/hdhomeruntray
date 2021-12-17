@@ -34,7 +34,7 @@ namespace zuki.hdhomeruntray
 	//
 	// User control that implements the footer for a tuner device in the DeviceForm
 
-	partial class TunerDeviceFooterControl : UserControl
+	internal partial class TunerDeviceFooterControl : UserControl
 	{
 		// Instance Constructor
 		//
@@ -97,6 +97,6 @@ namespace zuki.hdhomeruntray
 		// Member Variables
 		//-------------------------------------------------------------------
 
-		private readonly string m_baseurl;		// Tuner base URL
+		private readonly string m_baseurl;      // Tuner base URL
 	}
 }

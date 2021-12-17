@@ -30,13 +30,13 @@ using System.Windows.Forms;
 
 namespace zuki.hdhomeruntray
 {
-    //-----------------------------------------------------------------------
-    // Class Extensions
-    //
-    // Implements extension methods
+	//-----------------------------------------------------------------------
+	// Class Extensions
+	//
+	// Implements extension methods
 
-    static class Extensions
-    {
+	internal static class Extensions
+	{
 		//-------------------------------------------------------------------
 		// ComboBox.BindEnum
 		//
@@ -56,7 +56,7 @@ namespace zuki.hdhomeruntray
 					Description = (Attribute.GetCustomAttribute(value.GetType().GetField(value.ToString()), typeof(DescriptionAttribute)) as DescriptionAttribute)?.Description ?? value.ToString(),
 					Value = value
 				})
-				.OrderBy(item => item.Value)		// MB: was item.Value.ToString()
+				.OrderBy(item => item.Value)        // MB: was item.Value.ToString()
 				.ToList();
 
 			combobox.DataSource = list;
@@ -79,10 +79,10 @@ namespace zuki.hdhomeruntray
 
 		public static void EnableDoubleBuferring(this Control control)
 		{
-			var property = typeof(Control).GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic);
+			PropertyInfo property = typeof(Control).GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic);
 			property.SetValue(control, true, null);
-		}       
-		
+		}
+
 		//-------------------------------------------------------------------
 		// float.ScaleDPI
 		//
@@ -241,7 +241,7 @@ namespace zuki.hdhomeruntray
 
 		public static Radii ScaleDPI(this Radii radii, IntPtr handle)
 		{
-			float factor = 1.0F;			// Assume no scaling
+			float factor = 1.0F;            // Assume no scaling
 
 			// Use a Graphics instance to determine the control's DPI factor
 			using(Graphics gr = Graphics.FromHwnd(handle))
@@ -296,9 +296,9 @@ namespace zuki.hdhomeruntray
 
 		private static GraphicsPath CreateRoundedRectangle(Rectangle bounds, int radiusTopLeft, int radiusTopRight, int radiusBottomRight, int radiusBottomLeft)
 		{
-			var size = new Size(radiusTopLeft << 1, radiusTopLeft << 1);
-			var arc = new Rectangle(bounds.Location, size);
-			var path = new GraphicsPath();
+			Size size = new Size(radiusTopLeft << 1, radiusTopLeft << 1);
+			Rectangle arc = new Rectangle(bounds.Location, size);
+			GraphicsPath path = new GraphicsPath();
 
 			// top left arc
 			if(radiusTopLeft == 0) path.AddLine(arc.Location, arc.Location);
@@ -352,7 +352,7 @@ namespace zuki.hdhomeruntray
 
 		private static GraphicsPath CreateRoundedRectangle(Rectangle bounds, int radius)
 		{
-			var path = new GraphicsPath();
+			GraphicsPath path = new GraphicsPath();
 			if(radius == 0)
 			{
 				path.AddRectangle(bounds);
@@ -360,8 +360,8 @@ namespace zuki.hdhomeruntray
 			}
 
 			int diameter = radius * 2;
-			var size = new Size(diameter, diameter);
-			var arc = new Rectangle(bounds.Location, size);
+			Size size = new Size(diameter, diameter);
+			Rectangle arc = new Rectangle(bounds.Location, size);
 
 			// top left arc
 			path.AddArc(arc, 180, 90);

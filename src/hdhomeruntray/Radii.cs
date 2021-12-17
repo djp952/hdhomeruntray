@@ -41,7 +41,7 @@ namespace zuki.hdhomeruntray
 
 	[TypeConverter(typeof(RadiiConverter))]
 	[Serializable]
-	struct Radii
+	internal struct Radii
 	{
 		// Instance Constructor
 		//
@@ -164,7 +164,10 @@ namespace zuki.hdhomeruntray
 		// ShouldSerializeAll
 		//
 		// Indicates to RadiiConverter that m_all should be serialized
-		internal bool ShouldSerializeAll() => m_all;
+		internal bool ShouldSerializeAll()
+		{
+			return m_all;
+		}
 
 		//-------------------------------------------------------------------
 		// Member Variables

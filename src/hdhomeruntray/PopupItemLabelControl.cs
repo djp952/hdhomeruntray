@@ -31,7 +31,7 @@ namespace zuki.hdhomeruntray
 	//
 	// Implements a static label popup item control
 
-	class PopupItemLabelControl : PopupItemControl
+	internal class PopupItemLabelControl : PopupItemControl
 	{
 		// Instance Constructor
 		//
@@ -40,7 +40,7 @@ namespace zuki.hdhomeruntray
 			if(text == null) throw new ArgumentNullException(nameof(text));
 
 			// Create the label control for the text
-			var label = new PassthroughLabelControl
+			PassthroughLabelControl label = new PassthroughLabelControl
 			{
 				AutoSize = true,
 				Size = new Size(1, 1),

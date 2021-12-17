@@ -34,7 +34,7 @@ namespace zuki.hdhomeruntray
 	//
 	// Implements a Device popup item control
 
-	class PopupItemDeviceControl : PopupItemControl
+	internal class PopupItemDeviceControl : PopupItemControl
 	{
 		// Instance Constructor
 		//
@@ -43,7 +43,7 @@ namespace zuki.hdhomeruntray
 			m_device = device ?? throw new ArgumentNullException(nameof(device));
 
 			// Create the name label for the control
-			var name = new PassthroughLabelControl
+			PassthroughLabelControl name = new PassthroughLabelControl
 			{
 				AutoSize = true,
 				Size = new Size(1, 1),
@@ -97,18 +97,12 @@ namespace zuki.hdhomeruntray
 		// Device
 		//
 		// Gets a reference to the device instance associated with this item
-		public Device Device
-		{
-			get { return m_device; }
-		}
+		public Device Device => m_device;
 
 		// DeviceStatus
 		//
 		// Gets the overall status of the device
-		public DeviceStatus DeviceStatus
-		{
-			get { return m_status; }
-		}
+		public DeviceStatus DeviceStatus => m_status;
 
 		//-------------------------------------------------------------------------
 		// Control Overrides

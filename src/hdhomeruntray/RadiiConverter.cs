@@ -43,7 +43,7 @@ namespace zuki.hdhomeruntray
 	//
 	// TODO: Clean this up
 
-	class RadiiConverter : TypeConverter
+	internal class RadiiConverter : TypeConverter
 	{
 		/// <summary>
 		///  Determines if this converter can convert an object in the given source type to
@@ -157,7 +157,7 @@ namespace zuki.hdhomeruntray
 		{
 			if(propertyValues == null) throw new ArgumentNullException(nameof(propertyValues));
 
-			var original = context.PropertyDescriptor.GetValue(context.Instance);
+			object original = context.PropertyDescriptor.GetValue(context.Instance);
 			try
 			{
 				// When incrementally changing an existing Radii instance e.g. through a PropertyGrid
@@ -194,7 +194,10 @@ namespace zuki.hdhomeruntray
 			}
 		}
 
-		public override bool GetCreateInstanceSupported(ITypeDescriptorContext context) => true;
+		public override bool GetCreateInstanceSupported(ITypeDescriptorContext context)
+		{
+			return true;
+		}
 
 		public override PropertyDescriptorCollection GetProperties(ITypeDescriptorContext context, object value, Attribute[] attributes)
 		{
@@ -202,6 +205,9 @@ namespace zuki.hdhomeruntray
 			return props.Sort(new string[] { nameof(Radii.All), nameof(Radii.TopLeft), nameof(Radii.TopRight), nameof(Radii.BottomRight), nameof(Radii.BottomLeft) });
 		}
 
-		public override bool GetPropertiesSupported(ITypeDescriptorContext context) => true;
+		public override bool GetPropertiesSupported(ITypeDescriptorContext context)
+		{
+			return true;
+		}
 	}
 }

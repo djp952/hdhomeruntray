@@ -36,7 +36,7 @@ namespace zuki.hdhomeruntray
 	// Form displayed as the popup from the notify icon, provides a display
 	// of each discovered device and the status of the tuners/recordings
 
-	partial class PopupForm : Form
+	internal partial class PopupForm : Form
 	{
 		#region Win32 API Declarations
 		private static class NativeMethods
@@ -78,8 +78,8 @@ namespace zuki.hdhomeruntray
 				Padding = new Padding(4);
 
 				// Apply rounded corners to the form
-				var attribute = NativeMethods.DWMWINDOWATTRIBUTE.DWMWA_WINDOW_CORNER_PREFERENCE;
-				var preference = NativeMethods.DWM_WINDOW_CORNER_PREFERENCE.DWMWCP_ROUND;
+				NativeMethods.DWMWINDOWATTRIBUTE attribute = NativeMethods.DWMWINDOWATTRIBUTE.DWMWA_WINDOW_CORNER_PREFERENCE;
+				NativeMethods.DWM_WINDOW_CORNER_PREFERENCE preference = NativeMethods.DWM_WINDOW_CORNER_PREFERENCE.DWMWCP_ROUND;
 				NativeMethods.DwmSetWindowAttribute(Handle, attribute, ref preference, sizeof(uint));
 			}
 
@@ -158,10 +158,7 @@ namespace zuki.hdhomeruntray
 		// Member Functions
 		//-------------------------------------------------------------------
 
-		public bool Pinned
-		{
-			get { return m_pinned; }
-		}
+		public bool Pinned => m_pinned;
 
 		// Pin
 		//
@@ -171,14 +168,14 @@ namespace zuki.hdhomeruntray
 			if(m_pinned) return;
 
 			// Create the settings toggle
-			var settings = new PopupItemGlyphControl(SymbolGlyph.Settings, PopupItemControlType.Toggle)
+			PopupItemGlyphControl settings = new PopupItemGlyphControl(SymbolGlyph.Settings, PopupItemControlType.Toggle)
 			{
 				Padding = new Padding(2, 0, 1, 0).ScaleDPI(Handle)
 			};
 			settings.Toggled += new PopupItemToggledEventHandler(OnSettingsToggled);
 
 			// Crate the unpin button
-			var unpin = new PopupItemGlyphControl(SymbolGlyph.Unpin, PopupItemControlType.Button)
+			PopupItemGlyphControl unpin = new PopupItemGlyphControl(SymbolGlyph.Unpin, PopupItemControlType.Button)
 			{
 				Padding = new Padding(1, 0, 1, 0).ScaleDPI(Handle)
 			};
@@ -208,9 +205,9 @@ namespace zuki.hdhomeruntray
 			Rectangle iconbounds = icon.GetBounds();
 			Screen screen = Screen.FromPoint(iconbounds.Location);
 
-			SetWindowPosition(screen);		// Set the window position
+			SetWindowPosition(screen);      // Set the window position
 			Show();                    // Show the form
-			m_timer.Enabled = true;			// Enable the refresh timer
+			m_timer.Enabled = true;         // Enable the refresh timer
 		}
 
 		//-------------------------------------------------------------------
@@ -282,7 +279,7 @@ namespace zuki.hdhomeruntray
 				m_settingsform = null;
 			}
 
-			m_timer.Enabled = false;		// Kill the timer
+			m_timer.Enabled = false;        // Kill the timer
 		}
 
 		// OnSettingsToggled
@@ -379,8 +376,8 @@ namespace zuki.hdhomeruntray
 
 			// Move the form to the desired position before showing it; it should be aligned
 			// to the lower-right corner of the work area
-			var top = screen.WorkingArea.Height - Size.Height - (int)(12.0F * scalefactor);
-			var left = screen.WorkingArea.Width - Size.Width - (int)(12.0F * scalefactor);
+			int top = screen.WorkingArea.Height - Size.Height - (int)(12.0F * scalefactor);
+			int left = screen.WorkingArea.Width - Size.Width - (int)(12.0F * scalefactor);
 			Location = new Point(left, top);
 		}
 

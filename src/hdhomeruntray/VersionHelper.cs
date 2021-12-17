@@ -20,7 +20,6 @@
 // SOFTWARE.
 //---------------------------------------------------------------------------
 
-using System;
 using System.Runtime.InteropServices;
 
 namespace zuki.hdhomeruntray
@@ -32,8 +31,8 @@ namespace zuki.hdhomeruntray
 	//
 	// Source: https://stackoverflow.com/questions/31550444/c-sharp-how-to-use-the-new-version-helper-api
 
-	static class VersionHelper
-    {
+	internal static class VersionHelper
+	{
 		#region Win32 API Declarations
 		private static class NativeMethods
 		{
@@ -104,9 +103,9 @@ namespace zuki.hdhomeruntray
 				public int dwPlatformId;
 				[MarshalAs(UnmanagedType.ByValTStr, SizeConst = 128)]
 				public string szCSDVersion;
-				public UInt16 wServicePackMajor;
-				public UInt16 wServicePackMinor;
-				public UInt16 wSuiteMask;
+				public ushort wServicePackMajor;
+				public ushort wServicePackMinor;
+				public ushort wSuiteMask;
 				public byte wProductType;
 				public byte wReserved;
 			}
@@ -117,12 +116,12 @@ namespace zuki.hdhomeruntray
 
 		public static bool IsWindowsVersionOrGreater(ushort wMajorVersion, ushort wMinorVersion, ushort wServicePackMajor)
 		{
-			var osvi = new NativeMethods.OSVERSIONINFOEXW
+			NativeMethods.OSVERSIONINFOEXW osvi = new NativeMethods.OSVERSIONINFOEXW
 			{
 				dwOSVersionInfoSize = Marshal.SizeOf(typeof(NativeMethods.OSVERSIONINFOEXW))
 			};
 
-			var dwlConditionMask = NativeMethods.VerSetConditionMask(
+			ulong dwlConditionMask = NativeMethods.VerSetConditionMask(
 				NativeMethods.VerSetConditionMask(
 				NativeMethods.VerSetConditionMask(
 					0, NativeMethods.VER_MAJORVERSION, NativeMethods.VER_GREATER_EQUAL),
@@ -204,12 +203,12 @@ namespace zuki.hdhomeruntray
 		// TODO: Revisit this when <versionhelpers.h> has this macro implemented
 		public static bool IsWindows11OrGreater()
 		{
-			var osvi = new NativeMethods.OSVERSIONINFOEXW
+			NativeMethods.OSVERSIONINFOEXW osvi = new NativeMethods.OSVERSIONINFOEXW
 			{
 				dwOSVersionInfoSize = Marshal.SizeOf(typeof(NativeMethods.OSVERSIONINFOEXW))
 			};
 
-			var dwlConditionMask = NativeMethods.VerSetConditionMask(
+			ulong dwlConditionMask = NativeMethods.VerSetConditionMask(
 				NativeMethods.VerSetConditionMask(
 				NativeMethods.VerSetConditionMask(
 					0, NativeMethods.VER_MAJORVERSION, NativeMethods.VER_GREATER_EQUAL),
@@ -225,13 +224,13 @@ namespace zuki.hdhomeruntray
 
 		public static bool IsWindowsServer()
 		{
-			var osvi = new NativeMethods.OSVERSIONINFOEXW
+			NativeMethods.OSVERSIONINFOEXW osvi = new NativeMethods.OSVERSIONINFOEXW
 			{
 				dwOSVersionInfoSize = Marshal.SizeOf(typeof(NativeMethods.OSVERSIONINFOEXW)),
 				wProductType = NativeMethods.VER_NT_WORKSTATION
 			};
 
-			var dwlConditionMask = NativeMethods.VerSetConditionMask(0, NativeMethods.VER_PRODUCT_TYPE, NativeMethods.VER_EQUAL);
+			ulong dwlConditionMask = NativeMethods.VerSetConditionMask(0, NativeMethods.VER_PRODUCT_TYPE, NativeMethods.VER_EQUAL);
 
 			return !NativeMethods.VerifyVersionInfoW(ref osvi, NativeMethods.VER_PRODUCT_TYPE, dwlConditionMask);
 		}

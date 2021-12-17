@@ -27,10 +27,10 @@ namespace zuki.hdhomeruntray
 	//
 	// Enumeration defining the types of PopupItemControls that can be created
 
-	enum PopupItemControlType
+	internal enum PopupItemControlType
 	{
-		Static = 0,					// Static popup item control
-		Button = 1,					// Button popup item control
-		Toggle = 2,					// Toggle popup item control
+		Static = 0,                 // Static popup item control
+		Button = 1,                 // Button popup item control
+		Toggle = 2,                 // Toggle popup item control
 	};
 }

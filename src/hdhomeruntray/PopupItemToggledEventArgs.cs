@@ -29,7 +29,7 @@ namespace zuki.hdhomeruntray
 	//
 	// Event arguments type for the PopupItemControl::Toggled event
 
-	class PopupItemToggledEventArgs : EventArgs
+	internal class PopupItemToggledEventArgs : EventArgs
 	{
 		// Instance Constructor
 		//
@@ -45,15 +45,12 @@ namespace zuki.hdhomeruntray
 		// Toggled
 		//
 		// Gets the flag indicating if the toggle is active or inactive
-		public bool Toggled
-		{
-			get { return m_toggled; }
-		}
+		public bool Toggled => m_toggled;
 
 		//-------------------------------------------------------------------------
 		// Member Variables
 		//-------------------------------------------------------------------------
 
-		private readonly bool m_toggled;	// Flag indicating if the toggle is active or not
+		private readonly bool m_toggled;    // Flag indicating if the toggle is active or not
 	}
 }

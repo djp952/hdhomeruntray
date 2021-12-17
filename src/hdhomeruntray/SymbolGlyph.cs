@@ -28,13 +28,13 @@ namespace zuki.hdhomeruntray
 	// Enumeration defining the character codes for button glyphs that use the
 	// Symbols/Segoe UI MDL2 Assets/Segoe Fluent Icons fonts
 
-	enum SymbolGlyph
+	internal enum SymbolGlyph
 	{
-		Details = 0xE179,			// Details icon		(U+E179)
-		Exit = 0xE10A,				// X icon			(U+E10A)
-		Expand = 0xE10C,			// Ellipsis icon	(U+E10C)
-		Pin = 0xE141,				// Pin icon			(U+E141)
-		Settings = 0xE115,			// Gear icon		(U+E115)
-		Unpin = 0xE196,				// Unpin icon		(U+E196)
+		Details = 0xE179,           // Details icon		(U+E179)
+		Exit = 0xE10A,              // X icon			(U+E10A)
+		Expand = 0xE10C,            // Ellipsis icon	(U+E10C)
+		Pin = 0xE141,               // Pin icon			(U+E141)
+		Settings = 0xE115,          // Gear icon		(U+E115)
+		Unpin = 0xE196,             // Unpin icon		(U+E196)
 	};
 }

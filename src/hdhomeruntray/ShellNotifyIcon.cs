@@ -43,11 +43,8 @@ namespace zuki.hdhomeruntray
 	// Licensed to the .NET Foundation under one or more agreements.
 	// The .NET Foundation licenses this file to you under the MIT license.
 	// See the LICENSE file in the project root for more information.
-	//
-	// TODO: Prevent a custom hover operation from occuring if a NIN_SELECT
-	// happened -- turns out to be harder than I anticipated to do that
-	
-	class ShellNotifyIcon : Component, IWin32Window
+
+	internal class ShellNotifyIcon : Component, IWin32Window
 	{
 		#region Win32 API Declarations
 		/// <summary>
@@ -241,7 +238,7 @@ namespace zuki.hdhomeruntray
 			m_hoverstop = new System.Timers.Timer
 			{
 				AutoReset = true,
-				Interval = 25,			// Milliseconds
+				Interval = 25,          // Milliseconds
 			};
 			m_hoverstop.Elapsed += new ElapsedEventHandler(OnHoverStop);
 
@@ -249,7 +246,7 @@ namespace zuki.hdhomeruntray
 			m_blockstop = new System.Timers.Timer
 			{
 				AutoReset = true,
-				Interval = 25,			// Milliseconds
+				Interval = 25,          // Milliseconds
 			};
 			m_blockstop.Elapsed += new ElapsedEventHandler(OnBlockPopupStop);
 
@@ -265,7 +262,7 @@ namespace zuki.hdhomeruntray
 			// -> internal void ShowInTaskbar(int x, int y)
 			foreach(MethodInfo methodinfo in typeof(ContextMenuStrip).GetMethods(BindingFlags.NonPublic | BindingFlags.Instance))
 			{
-				if(String.Compare(methodinfo.Name, "ShowInTaskbar", true) == 0)
+				if(string.Compare(methodinfo.Name, "ShowInTaskbar", true) == 0)
 				{
 					s_contextmenustrip_showintaskbar = methodinfo;
 					break;
@@ -376,8 +373,8 @@ namespace zuki.hdhomeruntray
 		[DefaultValue(null)]
 		public ContextMenuStrip ContextMenuStrip
 		{
-			get { return m_contextmenu; }
-			set { m_contextmenu = value; }
+			get => m_contextmenu;
+			set => m_contextmenu = value;
 		}
 
 		// Handle (IWin32Window)
@@ -391,7 +388,7 @@ namespace zuki.hdhomeruntray
 		[Localizable(true), DefaultValue(null)]
 		public Icon Icon
 		{
-			get { return m_icon; }
+			get => m_icon;
 			set
 			{
 				if(m_icon != value)
@@ -408,7 +405,7 @@ namespace zuki.hdhomeruntray
 		[DefaultValue(0)]
 		public int HoverInterval
 		{
-			get { return m_hoverinterval; }
+			get => m_hoverinterval;
 			set
 			{
 				if(m_hoverinterval != value)
@@ -425,8 +422,8 @@ namespace zuki.hdhomeruntray
 		[Localizable(false), Bindable(true), DefaultValue(null), TypeConverter(typeof(StringConverter))]
 		public object Tag
 		{
-			get { return m_tag; }
-			set { m_tag = value; }
+			get => m_tag;
+			set => m_tag = value;
 		}
 
 		// ToolTip
@@ -435,7 +432,7 @@ namespace zuki.hdhomeruntray
 		[Localizable(true), DefaultValue("")]
 		public string ToolTip
 		{
-			get { return m_tooltip; }
+			get => m_tooltip;
 			set
 			{
 				// Don't allow the value to become null
@@ -455,7 +452,7 @@ namespace zuki.hdhomeruntray
 		[Localizable(true), DefaultValue(false)]
 		public bool Visible
 		{
-			get { return m_visible; }
+			get => m_visible;
 			set
 			{
 				if(m_visible != value)
@@ -527,7 +524,7 @@ namespace zuki.hdhomeruntray
 			if(!m_created || DesignMode) return;
 
 			// Initialize the NOTIFYICONDATAW structure for this operation
-			var data = new NativeMethods.NOTIFYICONDATAW
+			NativeMethods.NOTIFYICONDATAW data = new NativeMethods.NOTIFYICONDATAW
 			{
 				cbSize = (uint)Marshal.SizeOf(typeof(NativeMethods.NOTIFYICONDATAW)),
 				uFlags = NativeMethods.NIF_INFO | NativeMethods.NIF_GUID,
@@ -615,8 +612,8 @@ namespace zuki.hdhomeruntray
 				m_component.WndProc(ref message);
 			}
 
-			private readonly ShellNotifyIcon m_component;	// Owning ShellNotifyIcon component
-			private GCHandle m_gchandle;					// Handle to prevent Garbage collection
+			private readonly ShellNotifyIcon m_component;   // Owning ShellNotifyIcon component
+			private GCHandle m_gchandle;                    // Handle to prevent Garbage collection
 		}
 
 		//-------------------------------------------------------------------
@@ -683,7 +680,7 @@ namespace zuki.hdhomeruntray
 			NativeMethods.SetForegroundWindow(m_backingwindow);
 
 			// Set the context menu strip to be topmost, allowing it to overlap the system tray
-			s_contextmenustrip_showintaskbar.Invoke(m_contextmenu, new Object[] { cursorpos.X, cursorpos.Y });
+			s_contextmenustrip_showintaskbar.Invoke(m_contextmenu, new object[] { cursorpos.X, cursorpos.Y });
 		}
 
 		// OnHoverStart
@@ -756,7 +753,7 @@ namespace zuki.hdhomeruntray
 					m_backingwindow.CreateHandle(new CreateParams());
 
 				// Initialize the NOTIFYICONDATA structure
-				var data = new NativeMethods.NOTIFYICONDATAW
+				NativeMethods.NOTIFYICONDATAW data = new NativeMethods.NOTIFYICONDATAW
 				{
 					cbSize = (uint)Marshal.SizeOf(typeof(NativeMethods.NOTIFYICONDATAW)),
 					uFlags = NativeMethods.NIF_MESSAGE | NativeMethods.NIF_GUID,
@@ -795,7 +792,7 @@ namespace zuki.hdhomeruntray
 							NativeMethods.Shell_NotifyIconW(NativeMethods.NIM_SETVERSION, ref data);
 						}
 					}
-					
+
 					else NativeMethods.Shell_NotifyIconW(NativeMethods.NIM_MODIFY, ref data);
 				}
 
@@ -895,7 +892,7 @@ namespace zuki.hdhomeruntray
 							break;
 
 						case NativeMethods.WM_MOUSEMOVE:
-							
+
 							// This is only applicable if a custom hover interval has been set
 							if(m_hoverinterval > 0)
 							{
@@ -961,22 +958,22 @@ namespace zuki.hdhomeruntray
 		// Member Variables
 		//-------------------------------------------------------------------
 
-		private readonly object m_lock = new object();		// Synchronziation object
-		private BackingWindow m_backingwindow = null;		// Backing window
-		private bool m_created = false;						// Creation flag
+		private readonly object m_lock = new object();      // Synchronziation object
+		private BackingWindow m_backingwindow = null;       // Backing window
+		private bool m_created = false;                     // Creation flag
 		private readonly System.Timers.Timer m_hoverstart;  // Pseudo-hover start timer
 		private readonly System.Timers.Timer m_hoverstop;   // Pesudo-hover stop time
-		private bool m_blockpopup = false;					// Flag to block popup events
+		private bool m_blockpopup = false;                  // Flag to block popup events
 		private readonly System.Timers.Timer m_blockstop;   // Timer to unblock popup events
 		private int m_hoverinterval = 0;                    // Pesudo-hover interval
-		private readonly Guid m_guid = Guid.NewGuid();		// Icon GUID
+		private readonly Guid m_guid = Guid.NewGuid();      // Icon GUID
 
 		// Property backing variables
 		//
-		private ContextMenuStrip m_contextmenu = null;		// .ContextMenu
-		private Icon m_icon = null;							// .Icon
-		private object m_tag = null;						// .Tag
-		private string m_tooltip = String.Empty;			// .ToolTip
+		private ContextMenuStrip m_contextmenu = null;      // .ContextMenu
+		private Icon m_icon = null;                         // .Icon
+		private object m_tag = null;                        // .Tag
+		private string m_tooltip = string.Empty;            // .ToolTip
 		private bool m_visible = false;                     // .Visible
 
 		// Component Event objects

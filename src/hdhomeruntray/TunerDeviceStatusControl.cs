@@ -35,7 +35,7 @@ namespace zuki.hdhomeruntray
 	//
 	// User control that implements the status for a tuner device in the DeviceForm
 
-	partial class TunerDeviceStatusControl : UserControl
+	internal partial class TunerDeviceStatusControl : UserControl
 	{
 		// Instance Constructor
 		//
@@ -133,9 +133,9 @@ namespace zuki.hdhomeruntray
 			m_tuner = tuner ?? throw new ArgumentNullException(nameof(tuner));
 
 			// Tuner identifier is static once created
-			m_tunernumber.Text = "Tuner " + m_tuner.Index.ToString(); 
-			
-			UpdateStatus();				// Initial status load
+			m_tunernumber.Text = "Tuner " + m_tuner.Index.ToString();
+
+			UpdateStatus();             // Initial status load
 		}
 
 		//-------------------------------------------------------------------------
@@ -185,15 +185,15 @@ namespace zuki.hdhomeruntray
 					//
 					m_signalstrengthbar.ProgressBarColor = status.SignalStrengthColor;
 					m_signalstrengthbar.Value = status.SignalStrength;
-					m_signalstrengthpct.Text = String.Format("{0}%", status.SignalStrength);
+					m_signalstrengthpct.Text = string.Format("{0}%", status.SignalStrength);
 
 					m_signalqualitybar.ProgressBarColor = status.SignalQualityColor;
 					m_signalqualitybar.Value = status.SignalQuality;
-					m_signalqualitypct.Text = String.Format("{0}%", status.SignalQuality);
+					m_signalqualitypct.Text = string.Format("{0}%", status.SignalQuality);
 
 					m_symbolqualitybar.ProgressBarColor = status.SymbolQualityColor;
 					m_symbolqualitybar.Value = status.SymbolQuality;
-					m_symbolqualitypct.Text = String.Format("{0}%", status.SymbolQuality);
+					m_symbolqualitypct.Text = string.Format("{0}%", status.SymbolQuality);
 
 					// Ensure the signal meter is visible for an active tuner
 					if(!m_signallayoutpanel.Visible) m_signallayoutpanel.Visible = true;
@@ -233,17 +233,17 @@ namespace zuki.hdhomeruntray
 		// Formats a bit rate number
 		private static string FormatBitRate(long bps)
 		{
-			const double Kbps = 1024;				// Kilobits/s
-			const double Mbps = Kbps * Kbps;		// Megabits/s
-			const double Gbps = Mbps * Kbps;		// Gigabits/s
+			const double Kbps = 1024;               // Kilobits/s
+			const double Mbps = Kbps * Kbps;        // Megabits/s
+			const double Gbps = Mbps * Kbps;        // Gigabits/s
 
 			double value = bps;
 
-			if(value >= Gbps) return String.Format("{0:N2} Gb/s", value / Gbps);
-			else if(value >= Mbps) return String.Format("{0:N2} Mb/s", value / Mbps);
-			else if(value >= Kbps) return String.Format("{0:N2} Kb/s", value / Kbps);
+			if(value >= Gbps) return string.Format("{0:N2} Gb/s", value / Gbps);
+			else if(value >= Mbps) return string.Format("{0:N2} Mb/s", value / Mbps);
+			else if(value >= Kbps) return string.Format("{0:N2} Kb/s", value / Kbps);
 
-			return String.Format("{0} bps", bps);
+			return string.Format("{0} bps", bps);
 		}
 
 		//-------------------------------------------------------------------------

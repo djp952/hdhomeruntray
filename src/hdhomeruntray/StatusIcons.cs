@@ -33,8 +33,8 @@ namespace zuki.hdhomeruntray
 	// Class StatusIcons (internal)
 	//
 	// Helper class used to load the proper system tray icons for the system
-	
-	static class StatusIcons
+
+	internal static class StatusIcons
 	{
 		//-------------------------------------------------------------------
 		// Member Functions
@@ -51,7 +51,7 @@ namespace zuki.hdhomeruntray
 			if(VersionHelper.IsWindows10OrGreater())
 			{
 				// NOTE: Assume zero (dark taskbar / light icon) here if the value is missing
-				var value = Registry.GetValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize", "SystemUsesLightTheme", 0);
+				object value = Registry.GetValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize", "SystemUsesLightTheme", 0);
 				if((value is int @int) && (@int != 1)) lighticon = true;
 			}
 

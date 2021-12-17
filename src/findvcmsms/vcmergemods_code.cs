@@ -25,7 +25,7 @@ using System.Collections.Generic;
 
 namespace zuki.build.tools
 {
-	partial class vcmergemods
+	public partial class vcmergemods
 	{
 		/// <summary>
 		/// Instance Constructor
@@ -33,7 +33,7 @@ namespace zuki.build.tools
 		/// <param name="modules">Dictionary of merge modules to clone { name, path }</param>
 		public vcmergemods(Dictionary<string, string> modules)
 		{
-			if (modules == null) throw new ArgumentNullException("modules");
+			if(modules == null) throw new ArgumentNullException("modules");
 
 			// Clone the provided Dictionary<> into a local copy
 			m_modules = new Dictionary<string, string>(modules);

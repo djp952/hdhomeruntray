@@ -32,7 +32,7 @@ namespace zuki.hdhomeruntray
 	//
 	// Implements the form that shows detailed information about a device
 
-	abstract partial class DeviceForm : Form
+	internal abstract partial class DeviceForm : Form
 	{
 		#region Win32 API Declarations
 		private static class NativeMethods
@@ -74,8 +74,8 @@ namespace zuki.hdhomeruntray
 				Padding = new Padding(4);
 
 				// Apply rounded corners to the form
-				var attribute = NativeMethods.DWMWINDOWATTRIBUTE.DWMWA_WINDOW_CORNER_PREFERENCE;
-				var preference = NativeMethods.DWM_WINDOW_CORNER_PREFERENCE.DWMWCP_ROUND;
+				NativeMethods.DWMWINDOWATTRIBUTE attribute = NativeMethods.DWMWINDOWATTRIBUTE.DWMWA_WINDOW_CORNER_PREFERENCE;
+				NativeMethods.DWM_WINDOW_CORNER_PREFERENCE preference = NativeMethods.DWM_WINDOW_CORNER_PREFERENCE.DWMWCP_ROUND;
 				NativeMethods.DwmSetWindowAttribute(Handle, attribute, ref preference, sizeof(uint));
 			}
 
@@ -131,17 +131,17 @@ namespace zuki.hdhomeruntray
 			float scalefactor = (SystemInformation.SmallIconSize.Height / 16.0F);
 
 			// The item's coordinates will be relative to the parent form
-			var itemleft = m_popupformbounds.Left + m_popupitembounds.Left;
+			int itemleft = m_popupformbounds.Left + m_popupitembounds.Left;
 
 			// Move the form so that it's centered above the item that was used to open it
-			var top = m_popupformbounds.Top - Size.Height - (int)(4.0F * scalefactor);
-			var left = (itemleft + (m_popupitembounds.Width / 2)) - (Width / 2);
+			int top = m_popupformbounds.Top - Size.Height - (int)(4.0F * scalefactor);
+			int left = (itemleft + (m_popupitembounds.Width / 2)) - (Width / 2);
 
 			// Adjust the left margin of the form if necessary
 			if(left < m_popupformbounds.Left) left = m_popupformbounds.Left;
 
 			// Adjust the right margin of the form if necessary
-			var right = left + Width;
+			int right = left + Width;
 			if(right > m_popupformbounds.Right) left -= (right - m_popupformbounds.Right);
 
 			// Set the location of the form

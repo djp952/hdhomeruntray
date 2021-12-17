@@ -34,7 +34,7 @@ namespace zuki.hdhomeruntray
 	//
 	// User control that implements the settings panel for the settngs form
 
-	partial class SettingsFormSettingsControl : UserControl
+	internal partial class SettingsFormSettingsControl : UserControl
 	{
 		// Instance Constructor
 		//

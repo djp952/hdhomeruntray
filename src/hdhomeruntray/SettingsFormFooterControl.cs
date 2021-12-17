@@ -20,7 +20,6 @@
 // SOFTWARE.
 //---------------------------------------------------------------------------
 
-using System;
 using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
@@ -32,7 +31,7 @@ namespace zuki.hdhomeruntray
 	//
 	// User control that implements the footer for the settngs form
 
-	partial class SettingsFormFooterControl : UserControl
+	internal partial class SettingsFormFooterControl : UserControl
 	{
 		// Instance Constructor
 		//

@@ -32,7 +32,7 @@ namespace zuki.hdhomeruntray
 	//
 	// Implements the form that provides the means to manipulate the settings
 
-	partial class SettingsForm : Form
+	internal partial class SettingsForm : Form
 	{
 		#region Win32 API Declarations
 		private static class NativeMethods
@@ -74,8 +74,8 @@ namespace zuki.hdhomeruntray
 				Padding = new Padding(4);
 
 				// Apply rounded corners to the form
-				var attribute = NativeMethods.DWMWINDOWATTRIBUTE.DWMWA_WINDOW_CORNER_PREFERENCE;
-				var preference = NativeMethods.DWM_WINDOW_CORNER_PREFERENCE.DWMWCP_ROUND;
+				NativeMethods.DWMWINDOWATTRIBUTE attribute = NativeMethods.DWMWINDOWATTRIBUTE.DWMWA_WINDOW_CORNER_PREFERENCE;
+				NativeMethods.DWM_WINDOW_CORNER_PREFERENCE preference = NativeMethods.DWM_WINDOW_CORNER_PREFERENCE.DWMWCP_ROUND;
 				NativeMethods.DwmSetWindowAttribute(Handle, attribute, ref preference, sizeof(uint));
 			}
 
@@ -142,17 +142,17 @@ namespace zuki.hdhomeruntray
 			float scalefactor = (SystemInformation.SmallIconSize.Height / 16.0F);
 
 			// The item's coordinates will be relative to the parent form
-			var itemleft = formbounds.Left + itembounds.Left;
+			int itemleft = formbounds.Left + itembounds.Left;
 
 			// Move the form so that it's centered above the item that was used to open it
-			var top = formbounds.Top - Size.Height - (int)(4.0F * scalefactor);
-			var left = (itemleft + (itembounds.Width / 2)) - (Width / 2);
+			int top = formbounds.Top - Size.Height - (int)(4.0F * scalefactor);
+			int left = (itemleft + (itembounds.Width / 2)) - (Width / 2);
 
 			// Adjust the left margin of the form if necessary
 			if(left < formbounds.Left) left = formbounds.Left;
 
 			// Adjust the right margin of the form if necessary
-			var right = left + Width;
+			int right = left + Width;
 			if(right > formbounds.Right) left -= (right - formbounds.Right);
 
 			// Set the location of the form

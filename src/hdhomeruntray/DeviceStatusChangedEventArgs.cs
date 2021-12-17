@@ -31,7 +31,7 @@ namespace zuki.hdhomeruntray
 	//
 	// Event arguments type for a DeviceStatusChanged event
 
-	class DeviceStatusChangedEventArgs : EventArgs
+	internal class DeviceStatusChangedEventArgs : EventArgs
 	{
 		// Instance Constructor
 		//
@@ -47,10 +47,7 @@ namespace zuki.hdhomeruntray
 		// DeviceStatus
 		//
 		// Gets the updated DeviceStatus
-		public DeviceStatus DeviceStatus
-		{
-			get { return m_status; }
-		}
+		public DeviceStatus DeviceStatus => m_status;
 
 		//-------------------------------------------------------------------------
 		// Member Variables

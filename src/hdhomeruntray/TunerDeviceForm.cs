@@ -32,7 +32,7 @@ namespace zuki.hdhomeruntray
 	//
 	// Specializes DeviceForm for use with tuner devices
 
-	class TunerDeviceForm : DeviceForm
+	internal class TunerDeviceForm : DeviceForm
 	{
 		// Instance Constructor
 		//
@@ -55,7 +55,7 @@ namespace zuki.hdhomeruntray
 				// Add the tuner user controls for the device
 				foreach(Tuner tuner in device.Tuners)
 				{
-					var status = new TunerDeviceStatusControl(device, tuner)
+					TunerDeviceStatusControl status = new TunerDeviceStatusControl(device, tuner)
 					{
 						Dock = DockStyle.Top,
 						Padding = new Padding(0, 1, 0, 1).ScaleDPI(Handle)

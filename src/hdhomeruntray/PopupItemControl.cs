@@ -32,7 +32,7 @@ namespace zuki.hdhomeruntray
 	//
 	// Implements the base class for each popup form item control
 
-	abstract partial class PopupItemControl : UserControl
+	internal abstract partial class PopupItemControl : UserControl
 	{
 		// Instance Constructor (protected)
 		//
@@ -109,18 +109,12 @@ namespace zuki.hdhomeruntray
 		// ControlType
 		//
 		// Exposes the type of popup item control
-		public PopupItemControlType ControlType
-		{
-			get { return m_type; }
-		}
+		public PopupItemControlType ControlType => m_type;
 
 		// IsToggled
 		//
 		// Exposes the toggled state of a toggle-type control
-		public bool IsToggled
-		{
-			get { return m_toggled; }
-		}
+		public bool IsToggled => m_toggled;
 
 		//-------------------------------------------------------------------
 		// Protected Properties
@@ -129,10 +123,7 @@ namespace zuki.hdhomeruntray
 		// LayoutPanel
 		//
 		// Exposes the reference to the layout panel
-		protected FlowLayoutPanel LayoutPanel
-		{
-			get { return m_layoutpanel; }
-		}
+		protected FlowLayoutPanel LayoutPanel => m_layoutpanel;
 
 		//-------------------------------------------------------------------
 		// Event Handlers
@@ -178,9 +169,9 @@ namespace zuki.hdhomeruntray
 			m_toggled = !m_toggled;             // Invert the toggle state
 
 			// Update the toggle state if the mouse isn't in the control
-			if(!ClientRectangle.Contains(PointToClient(Cursor.Position))) 
+			if(!ClientRectangle.Contains(PointToClient(Cursor.Position)))
 				OnMouseLeaveToggle(sender, args);
-			
+
 			Toggled?.Invoke(this, new PopupItemToggledEventArgs(m_toggled));
 		}
 

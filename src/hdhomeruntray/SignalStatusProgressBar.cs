@@ -36,7 +36,7 @@ namespace zuki.hdhomeruntray
 	// Based on:
 	// https://docs.microsoft.com/en-US/troubleshoot/dotnet/csharp/create-smooth-progress-bar
 
-	partial class SignalStatusProcessBar : UserControl
+	internal partial class SignalStatusProcessBar : UserControl
 	{
 		// Instance Constructor
 		//
@@ -56,7 +56,7 @@ namespace zuki.hdhomeruntray
 		// Get/sets the maximum value of the progress bar
 		public int Maximum
 		{
-			get { return m_maximum; }
+			get => m_maximum;
 			set
 			{
 				if((value < 0) || (value < m_minimum)) throw new ArgumentOutOfRangeException(nameof(value));
@@ -71,7 +71,7 @@ namespace zuki.hdhomeruntray
 		// Get/sets the minimum value of the progress bar
 		public int Minimum
 		{
-			get { return m_minimum; }
+			get => m_minimum;
 			set
 			{
 				if((value < m_minimum) || (value > m_maximum)) throw new ArgumentOutOfRangeException(nameof(value));
@@ -86,7 +86,7 @@ namespace zuki.hdhomeruntray
 		// Gets/sets the color of the progress bar
 		public Color ProgressBarColor
 		{
-			get { return m_color; }
+			get => m_color;
 			set
 			{
 				m_color = value;
@@ -99,7 +99,7 @@ namespace zuki.hdhomeruntray
 		// Gets/sets the current value of the progress bar
 		public int Value
 		{
-			get { return m_value; }
+			get => m_value;
 			set
 			{
 				if((value < m_minimum) || (value > m_maximum)) throw new ArgumentOutOfRangeException(nameof(value));

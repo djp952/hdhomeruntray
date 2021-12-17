@@ -30,7 +30,7 @@ namespace zuki.hdhomeruntray
 	//
 	// Implements a SymbolGlyph popup item control
 
-	class PopupItemGlyphControl : PopupItemControl
+	internal class PopupItemGlyphControl : PopupItemControl
 	{
 		// Instance Constructor
 		//
@@ -43,7 +43,7 @@ namespace zuki.hdhomeruntray
 		public PopupItemGlyphControl(SymbolGlyph glyph, PopupItemControlType type) : base(type)
 		{
 			// Create the label control for the symbol
-			var label = new PassthroughLabelControl
+			PassthroughLabelControl label = new PassthroughLabelControl
 			{
 				AutoSize = true,
 				Size = new Size(1, 1),

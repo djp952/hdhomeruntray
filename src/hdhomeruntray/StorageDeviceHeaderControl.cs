@@ -33,7 +33,7 @@ namespace zuki.hdhomeruntray
 	//
 	// User control that implements the header for a storage device in the DeviceForm
 
-	partial class StorageDeviceHeaderControl : UserControl
+	internal partial class StorageDeviceHeaderControl : UserControl
 	{
 		// Instance Constructor
 		//

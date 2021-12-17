@@ -33,7 +33,7 @@ namespace zuki.hdhomeruntray
 	//
 	// User control that implements the footer for a storage device in the DeviceForm
 
-	partial class StorageDeviceFooterControl : UserControl
+	internal partial class StorageDeviceFooterControl : UserControl
 	{
 		// Instance Constructor
 		//
@@ -80,16 +80,16 @@ namespace zuki.hdhomeruntray
 		private static string FormatDiskSpace(long space)
 		{
 			const double KB = 1024;             // Kilobytes
-			const double MB = KB * KB;			// Megabytes
-			const double GB = MB * KB;			// Gigabytes
-			const double TB = GB * KB;			// Terabytes
+			const double MB = KB * KB;          // Megabytes
+			const double GB = MB * KB;          // Gigabytes
+			const double TB = GB * KB;          // Terabytes
 
 			double value = space;
 
-			if(value >= TB) return String.Format("{0:N2} TB", value / TB);
-			else if(value >= GB) return String.Format("{0:N2} GB", value / GB);
-			else if(value >= MB) return String.Format("{0:N2} MB", value / MB);
-			else if(value >= KB) return String.Format("{0:N2} KB", value / KB);
+			if(value >= TB) return string.Format("{0:N2} TB", value / TB);
+			else if(value >= GB) return string.Format("{0:N2} GB", value / GB);
+			else if(value >= MB) return string.Format("{0:N2} MB", value / MB);
+			else if(value >= KB) return string.Format("{0:N2} KB", value / KB);
 
 			return space.ToString();
 		}

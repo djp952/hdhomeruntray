@@ -41,8 +41,8 @@ namespace zuki.hdhomeruntray
 	//
 	// Provides the main application context object, which is used as the 
 	// parameter to Application.Run() instead of providing a main form object
-	
-	class MainApplication : ApplicationContext
+
+	internal class MainApplication : ApplicationContext
 	{
 		// Instance Constructor
 		//
@@ -165,7 +165,7 @@ namespace zuki.hdhomeruntray
 
 			}), null);
 		}
-		
+
 		// OnNotifyIconClosePopup
 		//
 		// Invoked when the hover popup window should be closed
@@ -266,7 +266,7 @@ namespace zuki.hdhomeruntray
 				m_popupform.Close();
 				m_popupform.Dispose();
 				m_popupform = null;
-			
+
 			}), null);
 		}
 
@@ -385,13 +385,13 @@ namespace zuki.hdhomeruntray
 		private void InitializeComponent()
 		{
 			// Create the Container for the controls
-			var container = new Container();
+			Container container = new Container();
 
-			var exititem = new ToolStripMenuItem("Exit");
+			ToolStripMenuItem exititem = new ToolStripMenuItem("Exit");
 			exititem.Click += new EventHandler(OnMenuItemExit);
 
 			// Create the ContextMenuStrip for the tray icon
-			var contextmenu = new ContextMenuStrip(container)
+			ContextMenuStrip contextmenu = new ContextMenuStrip(container)
 			{
 				BackColor = SystemColors.ControlLightLight,
 				Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold),
@@ -412,7 +412,7 @@ namespace zuki.hdhomeruntray
 				exiticon = MenuImageFromSymbolGlyph(SymbolGlyph.Exit, contextmenu.ForeColor, "Segoe MDL2 Assets", 11.25F, FontStyle.Regular);
 
 			// Windows 7 - Symbols
-			else 
+			else
 				exiticon = MenuImageFromSymbolGlyph(SymbolGlyph.Exit, contextmenu.ForeColor, "Symbols", 11.25F, FontStyle.Regular);
 
 			if(exiticon != null) exititem.Image = exiticon;
@@ -471,11 +471,11 @@ namespace zuki.hdhomeruntray
 		// MenuImageFromSymbolGlyph (static)
 		//
 		// Helper function used to create a menu image from a SymbolGlyph
-		private static Image MenuImageFromSymbolGlyph(SymbolGlyph glyph, Color forecolor, 
+		private static Image MenuImageFromSymbolGlyph(SymbolGlyph glyph, Color forecolor,
 			string familyname, float emsize, FontStyle style)
 		{
-			string text = new string((char)glyph, 1);	// Convert to string
-			Bitmap image = null;						// Image to return
+			string text = new string((char)glyph, 1);   // Convert to string
+			Bitmap image = null;                        // Image to return
 
 			using(Font font = new Font(familyname, emsize, style))
 			{
@@ -552,13 +552,13 @@ namespace zuki.hdhomeruntray
 
 		private readonly WindowsFormsSynchronizationContext m_context;
 		private ShellNotifyIcon m_notifyicon;
-		private System.Timers.Timer	m_timer;
+		private System.Timers.Timer m_timer;
 		private PopupForm m_popupform = null;
 		private readonly Devices m_devices;
 		private DeviceList m_devicelist = DeviceList.Empty;
 		private DeviceStatus m_status = DeviceStatus.Idle;
 		private readonly RegistryKeyValueChangeMonitor m_thememonitor;
-		
+
 		// Do not change this GUID; it has to remain the same to prevent Windows from creating
 		// custom tray icon settings for each GUID that it sees
 		//

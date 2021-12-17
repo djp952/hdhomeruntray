@@ -33,7 +33,7 @@ namespace zuki.hdhomeruntray
 	//
 	// User control that implements the status for a recording playback
 
-	partial class StorageDevicePlaybackControl : UserControl
+	internal partial class StorageDevicePlaybackControl : UserControl
 	{
 		// Instance Constructor
 		//

@@ -33,7 +33,7 @@ namespace zuki.hdhomeruntray
 	//
 	// User control that implements the header for a tuner device in the DeviceForm
 
-	partial class TunerDeviceHeaderControl : UserControl
+	internal partial class TunerDeviceHeaderControl : UserControl
 	{
 		// Instance Constructor
 		//

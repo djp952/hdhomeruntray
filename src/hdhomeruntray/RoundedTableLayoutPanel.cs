@@ -32,7 +32,7 @@ namespace zuki.hdhomeruntray
 	//
 	// Customization of the TableLayoutPanel control to provide rounded corners
 
-	class RoundedTableLayoutPanel : TableLayoutPanel
+	internal class RoundedTableLayoutPanel : TableLayoutPanel
 	{
 		// Instance Constructor
 		//
@@ -47,7 +47,7 @@ namespace zuki.hdhomeruntray
 		[Category("Layout")]
 		public Radii Radii
 		{
-			get { return m_radii; }
+			get => m_radii;
 			set
 			{
 				m_radii = value;

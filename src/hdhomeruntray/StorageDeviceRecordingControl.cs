@@ -33,7 +33,7 @@ namespace zuki.hdhomeruntray
 	//
 	// User control that implements the status for a Live Buffer
 
-	partial class StorageDeviceRecordingControl : UserControl
+	internal partial class StorageDeviceRecordingControl : UserControl
 	{
 		// Instance Constructor
 		//

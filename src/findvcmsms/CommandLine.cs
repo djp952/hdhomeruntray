@@ -28,7 +28,7 @@ namespace zuki.build.tools
 	/// <summary>
 	/// Command-line argument/switch helper
 	/// </summary>
-	class CommandLine
+	internal class CommandLine
 	{
 		/// <summary>
 		/// Instance constructor
@@ -42,26 +42,26 @@ namespace zuki.build.tools
 
 			// Separate out all switched arguments from the argument list
 			int index = 0;
-			while (index < arguments.Count)
+			while(index < arguments.Count)
 			{
 				// If the argument starts with a forward slash or a minus sign, this is a switch
-				if (arguments[index].StartsWith("/") || arguments[index].StartsWith("-"))
+				if(arguments[index].StartsWith("/") || arguments[index].StartsWith("-"))
 				{
-					if (arguments[index].Length > 1)
+					if(arguments[index].Length > 1)
 					{
 						// Pull out the entire switch argument, sans the / or -
 						string switcharg = arguments[index].Substring(1);
 
 						// Switches can optionally include data after a colon
 						int colon = switcharg.IndexOf(":");
-						if (colon != -1) switches.Add(switcharg.Substring(0, colon).ToLower(), switcharg.Substring(colon + 1));
+						if(colon != -1) switches.Add(switcharg.Substring(0, colon).ToLower(), switcharg.Substring(colon + 1));
 						else switches.Add(switcharg.ToLower(), string.Empty);
 
-						arguments.RemoveAt(index);			// Remove switch from the argument list
+						arguments.RemoveAt(index);          // Remove switch from the argument list
 					}
 				}
 
-				else index++;								// Move to the next argument string
+				else index++;                               // Move to the next argument string
 			}
 
 			// Convert the argument and switch collections into ReadOnly<> fields

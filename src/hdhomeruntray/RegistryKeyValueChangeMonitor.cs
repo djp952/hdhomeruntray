@@ -21,9 +21,6 @@
 //---------------------------------------------------------------------------
 
 using System;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Threading;
 
@@ -40,7 +37,7 @@ namespace zuki.hdhomeruntray
 	// Loosely based on:
 	// http://www.pinvoke.net/default.aspx/advapi32.regnotifychangekeyvalue
 
-	class RegistryKeyValueChangeMonitor : IDisposable
+	internal class RegistryKeyValueChangeMonitor : IDisposable
 	{
 		#region Win32 API Declarations
 		private static class NativeMethods
@@ -52,7 +49,7 @@ namespace zuki.hdhomeruntray
 			public const uint REG_NOTIFY_THREAD_AGNOSTIC = 0x10000000;
 
 			[DllImport("advapi32.dll")]
-			public static extern int RegNotifyChangeKeyValue(IntPtr hKey, [MarshalAs(UnmanagedType.Bool)] bool watchSubtree, 
+			public static extern int RegNotifyChangeKeyValue(IntPtr hKey, [MarshalAs(UnmanagedType.Bool)] bool watchSubtree,
 				uint notifyFilter, IntPtr hEvent, [MarshalAs(UnmanagedType.Bool)] bool asynchronous);
 		}
 		#endregion
@@ -132,7 +129,7 @@ namespace zuki.hdhomeruntray
 				if(m_monitoredkey == null) throw new Exception("Unable to open the specified registry key for monitoring");
 
 				// Create the background worker thread
-				var thread = new Thread(new ThreadStart(ThreadProc))
+				Thread thread = new Thread(new ThreadStart(ThreadProc))
 				{
 					IsBackground = true
 				};
