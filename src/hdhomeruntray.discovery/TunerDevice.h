@@ -77,6 +77,14 @@ public:
 		String^ get(void);
 	}
 
+	// FirmwareUpdateAvailable
+	//
+	// Flag if there is a firmware update available for the device
+	property bool FirmwareUpdateAvailable
+	{
+		bool get(void);
+	}
+
 	// FirmwareVersion
 	//
 	// Gets the tuner device firmware version

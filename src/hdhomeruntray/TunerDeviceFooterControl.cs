@@ -21,6 +21,7 @@
 //---------------------------------------------------------------------------
 
 using System;
+using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -56,7 +57,7 @@ namespace zuki.hdhomeruntray
 			if(VersionHelper.IsWindows11OrGreater())
 			{
 				m_firmwareversion.Font = new Font("Segoe UI Variable Small", m_firmwareversion.Font.Size, m_firmwareversion.Font.Style);
-				m_unused.Font = new Font("Segoe UI Variable Small", m_unused.Font.Size, m_unused.Font.Style);
+				m_updateavailable.Font = new Font("Segoe UI Variable Small", m_updateavailable.Font.Size, m_updateavailable.Font.Style);
 			}
 		}
 
@@ -66,9 +67,36 @@ namespace zuki.hdhomeruntray
 		{
 			if(device == null) throw new ArgumentNullException(nameof(device));
 
+			// Save the base URL string in case an update is available
+			m_baseurl = device.BaseURL;
+
 			// Just copy the data from the device instance into the appropriate controls
 			m_firmwareversion.Text = "Firmware " + device.FirmwareVersion;
-			m_unused.Text = String.Empty;
+			m_updateavailable.Text = (device.FirmwareUpdateAvailable) ? "Update Available" : string.Empty;
 		}
+
+		//-------------------------------------------------------------------
+		// Event Handlers
+		//-------------------------------------------------------------------
+
+		// OnUpdateClicked
+		//
+		// Invoked when the update link has been clicked
+		private void OnUpdateClicked(object sender, LinkLabelLinkClickedEventArgs args)
+		{
+			using(Process process = new Process())
+			{
+				process.StartInfo.FileName = m_baseurl;
+				process.StartInfo.UseShellExecute = true;
+				process.StartInfo.Verb = "open";
+				process.Start();
+			}
+		}
+
+		//-------------------------------------------------------------------
+		// Member Variables
+		//-------------------------------------------------------------------
+
+		private readonly string m_baseurl;		// Tuner base URL
 	}
 }

@@ -97,6 +97,16 @@ String^ TunerDevice::FirmwareName::get(void)
 }
 
 //---------------------------------------------------------------------------
+// TunerDevice::FirmwareUpdateAvailable
+//
+// Flag if there is a firmware update available for the device
+
+bool TunerDevice::FirmwareUpdateAvailable::get(void)
+{
+	return false;
+}
+
+//---------------------------------------------------------------------------
 // TunerDevice::FirmwareVersion::get
 //
 // Gets the tuner device firmware version
