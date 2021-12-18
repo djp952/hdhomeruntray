@@ -82,7 +82,7 @@ namespace zuki.hdhomeruntray
 			}
 
 			// Wire up a handler to watch for property changes
-			Settings.Default.PropertyChanged += OnPropertyChanged;
+			Settings.Default.PropertyChanged += new PropertyChangedEventHandler(OnPropertyChanged);
 
 			// Create and wire up the device discovery object
 			m_devices = new Devices();

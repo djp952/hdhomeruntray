@@ -21,6 +21,7 @@
 //---------------------------------------------------------------------------
 
 using System;
+using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -65,7 +66,14 @@ namespace zuki.hdhomeruntray
 			// Determine the number of dots to display; for tuners this will be the
 			// number of tuners within the device; otherwise just use one dot
 			int numdots = 1;
-			if(m_device is TunerDevice tunerdevice) numdots = tunerdevice.Tuners.Count;
+			if(m_device is TunerDevice tunerdevice)
+			{
+				numdots = tunerdevice.Tuners.Count;
+
+				// For tuner devices, also wire up a handler for property changes as the color
+				// of the dot(s) may need to change dynamically
+				Settings.Default.PropertyChanged += new PropertyChangedEventHandler(OnPropertyChanged);
+			}
 
 			// Create the dot labels
 			m_dots = new Label[numdots];
@@ -167,6 +175,23 @@ namespace zuki.hdhomeruntray
 			}
 
 			base.Refresh();
+		}
+
+		//-------------------------------------------------------------------
+		// Event Handlers
+		//-------------------------------------------------------------------
+
+		// OnPropertyChanged
+		//
+		// Invoked when a settings property has been changed
+		private void OnPropertyChanged(object sender, PropertyChangedEventArgs args)
+		{
+			// TunerStatusColorSource
+			//
+			if(args.PropertyName == nameof(Settings.Default.TunerStatusColorSource))
+			{
+				Refresh();
+			}
 		}
 
 		//-------------------------------------------------------------------
