@@ -154,7 +154,7 @@ namespace zuki.hdhomeruntray
 		private void OnTrayIconHoverDelayCommitted(object sender, EventArgs args)
 		{
 			// If the value of the combobox changed, update and save the settings
-			TrayIconHoverDelay trayiconhoverdelay = (TrayIconHoverDelay)m_tunerstatuscolorsource.SelectedValue;
+			TrayIconHoverDelay trayiconhoverdelay = (TrayIconHoverDelay)m_trayiconhoverdelay.SelectedValue;
 			if(trayiconhoverdelay != Settings.Default.TrayIconHoverDelay)
 			{
 				Settings.Default.TrayIconHoverDelay = trayiconhoverdelay;
@@ -168,7 +168,7 @@ namespace zuki.hdhomeruntray
 		private void OnTunerStatusColorSourceCommitted(object sender, EventArgs args)
 		{
 			// If the value of the combobox changed, update and save the settings
-			TunerStatusColorSource tunerstatuscolorsource = (TunerStatusColorSource)m_trayiconhoverdelay.SelectedValue;
+			TunerStatusColorSource tunerstatuscolorsource = (TunerStatusColorSource)m_tunerstatuscolorsource.SelectedValue;
 			if(tunerstatuscolorsource != Settings.Default.TunerStatusColorSource)
 			{
 				Settings.Default.TunerStatusColorSource = tunerstatuscolorsource;
