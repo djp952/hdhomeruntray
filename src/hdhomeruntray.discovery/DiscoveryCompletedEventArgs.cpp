@@ -39,7 +39,7 @@ namespace zuki::hdhomeruntray::discovery {
 //	cancelled	- Flag if the operation was cancelled
 //	state		- Asyncrhonous operation user state
 
-DiscoveryCompletedEventArgs::DiscoveryCompletedEventArgs(zuki::hdhomeruntray::discovery::DiscoveryMethod method, 
+DiscoveryCompletedEventArgs::DiscoveryCompletedEventArgs(_DiscoveryMethod method, 
 	DeviceList^ devices, Exception^ exception, bool cancelled, Object^ userstate) : 
 	AsyncCompletedEventArgs(exception, cancelled, userstate), Devices(devices), DiscoveryMethod(method)
 {

@@ -20,12 +20,14 @@
 // SOFTWARE.
 //---------------------------------------------------------------------------
 
+using zuki.hdhomeruntray.discovery;
+
 namespace zuki.hdhomeruntray
 {
 	//-----------------------------------------------------------------------
 	// Delegate DeviceStatusChangedEventHandler (internal)
 	//
-	// Delegate type for the a DeviceStatusChanged event
+	// Delegate type for a DeviceStatusChanged event
 
 	internal delegate void DeviceStatusChangedEventHandler(object sender, DeviceStatusChangedEventArgs args);
 }

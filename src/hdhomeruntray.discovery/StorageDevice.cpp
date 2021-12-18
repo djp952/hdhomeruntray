@@ -36,8 +36,8 @@ namespace zuki::hdhomeruntray::discovery {
 //	device		- Reference to the JSON discovery data for the device
 //	localip		- IP address of the storage device
 
-StorageDevice::StorageDevice(JObject^ device, IPAddress^ localip) : 
-	Device(device, localip, zuki::hdhomeruntray::discovery::DeviceType::Storage), m_totalspace(0), m_freespace(0)
+StorageDevice::StorageDevice(JObject^ device, IPAddress^ localip) : Device(device, localip, _DeviceType::Storage), 
+	m_totalspace(0), m_freespace(0)
 {
 	if(CLRISNULL(device)) throw gcnew ArgumentNullException("device");
 

@@ -94,8 +94,20 @@ namespace zuki.hdhomeruntray
 				// Add the dot label to the layout panel
 				base.LayoutPanel.Controls.Add(m_dots[index]);
 			}
+		}
 
-			Refresh();                 // Perform the initial refresh
+		//-------------------------------------------------------------------------
+		// Member Functions
+		//-------------------------------------------------------------------------
+
+		// SetDotColor
+		//
+		// Forces a color change to one of the dots being displayed
+		public void SetDotColor(int index, Color color)
+		{
+			// This comes from the PopupForm in response to a color change event,
+			// just change the color to whatever has been specified
+			if(index < m_dots.Length) m_dots[index].ForeColor = color;
 		}
 
 		//-------------------------------------------------------------------------
@@ -175,6 +187,16 @@ namespace zuki.hdhomeruntray
 			}
 
 			base.Refresh();
+		}
+
+		// SetDeviceColor
+		//
+		// Forces a color change to the device at the specified index
+		public void SetDeviceColor(int index, Color color)
+		{
+			// This is invoked due to a color change from a more granular timer instance,
+			// if the index is valid just go ahead and change the dot color blindly
+			if(index < m_dots.Length) m_dots[index].ForeColor = color;
 		}
 
 		//-------------------------------------------------------------------

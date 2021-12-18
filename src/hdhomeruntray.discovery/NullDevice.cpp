@@ -20,33 +20,63 @@
 // SOFTWARE.
 //---------------------------------------------------------------------------
 
-#ifndef __DEVICETYPE_H_
-#define __DEVICETYPE_H_
-#pragma once
+#include "stdafx.h"
+
+#include "NullDevice.h"
 
 #pragma warning(push, 4)
-
-using namespace System;
 
 namespace zuki::hdhomeruntray::discovery {
 
 //---------------------------------------------------------------------------
-// Enum DeviceType
+// NullDevice Constructor (private)
 //
-// Indicates the type of a HDHomeRun device
-//---------------------------------------------------------------------------
+// Arguments:
+//
+//	NONE
 
-public enum class DeviceType
+NullDevice::NullDevice() : Device(_DeviceType::None)
 {
-	None		= 0,								// Unknown/empty device
-	Tuner		= HDHOMERUN_DEVICE_TYPE_TUNER,		// Tuner device
-	Storage		= HDHOMERUN_DEVICE_TYPE_STORAGE,	// Storage (DVR) device
-};
+	m_name = String::Empty;
+	m_friendlyname = String::Empty;
+}
+
+//---------------------------------------------------------------------------
+// NullDevice::Create (internal)
+//
+// Creates a new NullDevice instance
+//
+// Arguments:
+//
+//	NONE
+
+NullDevice^ NullDevice::Create(void)
+{
+	return gcnew NullDevice();
+}
+
+//---------------------------------------------------------------------------
+// NullDevice::FriendlyName::get
+//
+// Gets the tuner device friendly name
+
+String^ NullDevice::FriendlyName::get(void)
+{
+	return m_friendlyname;
+}
+
+//---------------------------------------------------------------------------
+// NullDevice::Name::get
+//
+// Gets the tuner device name
+
+String^ NullDevice::Name::get(void)
+{
+	return m_name;
+}
 
 //---------------------------------------------------------------------------
 
 } // zuki::hdhomeruntray::discovery
 
 #pragma warning(pop)
-
-#endif	// __DEVICETYPE_H_

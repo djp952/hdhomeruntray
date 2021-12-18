@@ -60,6 +60,7 @@ namespace zuki.hdhomeruntray
 						Dock = DockStyle.Top,
 						Padding = new Padding(0, 1, 0, 1).ScaleDPI(Handle)
 					};
+					status.DeviceStatusChanged += new DeviceStatusChangedEventHandler(OnDeviceStatusChanged);
 					m_layoutpanel.Controls.Add(status);
 				}
 
@@ -78,6 +79,18 @@ namespace zuki.hdhomeruntray
 			m_timer.Interval = 1000;
 			m_timer.Tick += new EventHandler(OnTimerTick);
 			m_timer.Enabled = true;
+		}
+
+		//-------------------------------------------------------------------------
+		// Event Handlers
+		//-------------------------------------------------------------------------
+
+		// OnDeviceStatusChanged
+		//
+		// Invoked when the color of the settings "dot" has changed
+		private void OnDeviceStatusChanged(object sender, DeviceStatusChangedEventArgs args)
+		{
+			RaiseDeviceStatusChanged(this, args);
 		}
 
 		// OnTimerTick

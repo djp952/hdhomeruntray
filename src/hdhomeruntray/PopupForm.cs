@@ -154,11 +154,18 @@ namespace zuki.hdhomeruntray
 		// Invoked when the popup form has been unpinned
 		public event EventHandler Unpinned;
 
+		//-------------------------------------------------------------------------
+		// Properties
+		//-------------------------------------------------------------------------
+
+		// Pinned
+		//
+		// Indicates if the popup form is currently pinned or not
+		public bool Pinned => m_pinned;
+
 		//-------------------------------------------------------------------
 		// Member Functions
 		//-------------------------------------------------------------------
-
-		public bool Pinned => m_pinned;
 
 		// Pin
 		//
@@ -206,13 +213,44 @@ namespace zuki.hdhomeruntray
 			Screen screen = Screen.FromPoint(iconbounds.Location);
 
 			SetWindowPosition(screen);      // Set the window position
-			Show();                    // Show the form
-			m_timer.Enabled = true;         // Enable the refresh timer
+			
+			// Perform the initial refresh and start the timer
+			OnTimerTick(this, EventArgs.Empty);
+			m_timer.Enabled = true;
+
+			Show();                         // Show the form
 		}
 
 		//-------------------------------------------------------------------
 		// Event Handlers
 		//-------------------------------------------------------------------
+
+		// OnDeviceStatusChanged
+		//
+		// Invoked when the of a device has changed
+		private void OnDeviceStatusChanged(object sender, DeviceStatusChangedEventArgs args)
+		{
+			DeviceStatus newstatus = args.DeviceStatus;
+
+			// Iterate over all of the device controls to recheck the status in order to
+			// fire our DeviceStatusChanged event and update the tray icon
+			foreach(Control control in m_layoutpanel.Controls)
+			{
+				if(control is PopupItemDeviceControl devicecontrol)
+				{
+					// TODO: A proper Device.Equals() would be better
+					if(devicecontrol.Device.BaseURL == args.Device.BaseURL) devicecontrol.SetDotColor(args.Index, args.Color);
+					if(devicecontrol.DeviceStatus > newstatus) newstatus = devicecontrol.DeviceStatus;
+				}
+			}
+
+			// Check for an overall device status change and fire the event
+			if(newstatus != m_status)
+			{
+				DeviceStatusChanged?.Invoke(this, new DeviceStatusChangedEventArgs(newstatus));
+				m_status = newstatus;
+			}
+		}
 
 		// OnDeviceToggled
 		//
@@ -235,6 +273,7 @@ namespace zuki.hdhomeruntray
 						Debug.Assert(devicecontrol.Device is TunerDevice);
 						TunerDevice tunerdevice = (TunerDevice)devicecontrol.Device;
 						m_deviceform = new TunerDeviceForm(tunerdevice, this, devicecontrol);
+						m_deviceform.DeviceStatusChanged += new DeviceStatusChangedEventHandler(OnDeviceStatusChanged);
 					}
 
 					// STORAGE DEVICE
@@ -244,6 +283,7 @@ namespace zuki.hdhomeruntray
 						Debug.Assert(devicecontrol.Device is StorageDevice);
 						StorageDevice storagedevice = (StorageDevice)devicecontrol.Device;
 						m_deviceform = new StorageDeviceForm(storagedevice, this, devicecontrol);
+						m_deviceform.DeviceStatusChanged += new DeviceStatusChangedEventHandler(OnDeviceStatusChanged);
 					}
 
 					if(m_deviceform != null) m_deviceform.Show();
@@ -313,17 +353,12 @@ namespace zuki.hdhomeruntray
 		{
 			DeviceStatus newstatus = DeviceStatus.Idle;
 
-			// Probably can't happen, but make sure the timer is still
-			// enabled before executing the refresh
-			if(m_timer.Enabled)
+			foreach(Control control in m_layoutpanel.Controls)
 			{
-				foreach(Control control in m_layoutpanel.Controls)
+				if(control is PopupItemDeviceControl devicecontrol)
 				{
-					if(control is PopupItemDeviceControl devicecontrol)
-					{
-						devicecontrol.Refresh();
-						if(devicecontrol.DeviceStatus > newstatus) newstatus = devicecontrol.DeviceStatus;
-					}
+					devicecontrol.Refresh();
+					if(devicecontrol.DeviceStatus > newstatus) newstatus = devicecontrol.DeviceStatus;
 				}
 			}
 

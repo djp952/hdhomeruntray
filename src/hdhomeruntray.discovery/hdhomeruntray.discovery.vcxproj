@@ -103,6 +103,7 @@
     <ClInclude Include="Device.h" />
     <ClInclude Include="DeviceList.h" />
     <ClInclude Include="DeviceStatus.h" />
+    <ClInclude Include="DeviceStatusChangedEventArgs.h" />
     <ClInclude Include="DeviceStatusColor.h" />
     <ClInclude Include="DeviceType.h" />
     <ClInclude Include="Devices.h" />
@@ -110,6 +111,7 @@
     <ClInclude Include="DiscoveryMethod.h" />
     <ClInclude Include="LiveBufferList.h" />
     <ClInclude Include="LiveBuffer.h" />
+    <ClInclude Include="NullDevice.h" />
     <ClInclude Include="Playback.h" />
     <ClInclude Include="PlaybackList.h" />
     <ClInclude Include="ReadOnlyListEnumerator.h" />
@@ -197,6 +199,7 @@
     <ClCompile Include="DeviceList.cpp" />
     <ClCompile Include="Devices.cpp" />
     <ClCompile Include="DeviceStatus.cpp" />
+    <ClCompile Include="DeviceStatusChangedEventArgs.cpp" />
     <ClCompile Include="DeviceStatusColor.cpp" />
     <ClCompile Include="DiscoveryCompletedEventArgs.cpp" />
     <ClCompile Include="dllmain.cpp">
@@ -207,6 +210,7 @@
     </ClCompile>
     <ClCompile Include="LiveBuffer.cpp" />
     <ClCompile Include="LiveBufferList.cpp" />
+    <ClCompile Include="NullDevice.cpp" />
     <ClCompile Include="Playback.cpp" />
     <ClCompile Include="PlaybackList.cpp" />
     <ClCompile Include="ReadOnlyListEnumerator.cpp" />

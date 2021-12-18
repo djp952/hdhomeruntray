@@ -36,7 +36,7 @@ namespace zuki::hdhomeruntray::discovery {
 //	device		- Reference to the JSON discovery data for the device
 //	localip		- The IP address of the device
 
-TunerDevice::TunerDevice(JObject^ device, IPAddress^ localip) : Device(device, localip, zuki::hdhomeruntray::discovery::DeviceType::Tuner)
+TunerDevice::TunerDevice(JObject^ device, IPAddress^ localip) : Device(device, localip, _DeviceType::Tuner)
 {
 	if(CLRISNULL(device)) throw gcnew ArgumentNullException("device");
 

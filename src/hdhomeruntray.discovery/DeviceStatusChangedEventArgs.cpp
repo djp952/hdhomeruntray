@@ -22,70 +22,67 @@
 
 #include "stdafx.h"
 
-#include "Device.h"
+#include "DeviceStatusChangedEventArgs.h"
+
+#include "DeviceStatusColor.h"
 
 #pragma warning(push, 4)
 
 namespace zuki::hdhomeruntray::discovery {
 
 //---------------------------------------------------------------------------
-// Device Constructor (protected)
+// DeviceStatusChangedEventArgs Constructor
 //
 // Arguments:
 //
-//	type		- Type of device being constructed
+//	status		- DeviceStatus to report
 
-Device::Device(_DeviceType type) : m_devicetype(type), m_localip(IPAddress::None), m_baseurl(String::Empty)
+DeviceStatusChangedEventArgs::DeviceStatusChangedEventArgs(_DeviceStatus status) :
+	DeviceStatusChangedEventArgs(status, NullDevice::Create(), 0, DeviceStatusColor::FromDeviceStatus(status))
 {
 }
 
 //---------------------------------------------------------------------------
-// Device Constructor (protected)
+// DeviceStatusChangedEventArgs Constructor
 //
 // Arguments:
 //
-//	device		- Reference to the JSON discovery data for the device
-//	localip		- The IP address of the device
-//	type		- Type of device being constructed
+//	status		- DeviceStatus to report
+//	device		- Device instance associated with the status
 
-Device::Device(JObject^ device, IPAddress^ localip, _DeviceType type) : m_devicetype(type), m_localip(localip)
+DeviceStatusChangedEventArgs::DeviceStatusChangedEventArgs(_DeviceStatus status, _Device^ device) :
+	DeviceStatusChangedEventArgs(status, device, 0, DeviceStatusColor::FromDeviceStatus(status))
 {
-	if(CLRISNULL(device)) throw gcnew ArgumentNullException("device");
-	if(CLRISNULL(localip)) throw gcnew ArgumentNullException("localip");
-
-	JToken^ baseurl = device->GetValue("BaseURL", StringComparison::OrdinalIgnoreCase);
-
-	if(CLRISNOTNULL(baseurl)) m_baseurl = baseurl->ToString();
 }
 
 //---------------------------------------------------------------------------
-// Device::BaseURL::get
+// DeviceStatusChangedEventArgs Constructor
 //
-// Gets the device web interface base URL
+// Arguments:
+//
+//	status		- DeviceStatus to report
+//	device		- Device instance associated with the status
+//	index		- Index of a subdevice within the device, like a tuner
 
-String^ Device::BaseURL::get(void)
+DeviceStatusChangedEventArgs::DeviceStatusChangedEventArgs(_DeviceStatus status, _Device^ device, int index) :
+	DeviceStatusChangedEventArgs(status, device, index, DeviceStatusColor::FromDeviceStatus(status))
 {
-	return m_baseurl;
 }
 
 //---------------------------------------------------------------------------
-// Device::LocalIP::get
+// DeviceStatusChangedEventArgs Constructor
 //
-// Gets the device local IP address
-
-IPAddress^ Device::LocalIP::get(void)
-{
-	return m_localip;
-}
-
-//---------------------------------------------------------------------------
-// Device::Type::get
+// Arguments:
 //
-// Gets the device type identifier
+//	status		- DeviceStatus to report
+//	device		- Device instance associated with the status
+//	index		- Index of a subdevice within the device, like a tuner
+//	color		- The color to associate with the device status
 
-_DeviceType Device::Type::get(void)
+DeviceStatusChangedEventArgs::DeviceStatusChangedEventArgs(_DeviceStatus status, _Device^ device, int index, _Color color) :
+	Color(color), Device(device), DeviceStatus(status), Index(index)
 {
-	return m_devicetype;
+	if(CLRISNULL(device)) throw gcnew ArgumentNullException("devices");
 }
 
 //---------------------------------------------------------------------------

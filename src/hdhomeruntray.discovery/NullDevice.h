@@ -20,9 +20,11 @@
 // SOFTWARE.
 //---------------------------------------------------------------------------
 
-#ifndef __DEVICETYPE_H_
-#define __DEVICETYPE_H_
+#ifndef __NULLDEVICE_H_
+#define __NULLDEVICE_H_
 #pragma once
+
+#include "Device.h"
 
 #pragma warning(push, 4)
 
@@ -31,16 +33,56 @@ using namespace System;
 namespace zuki::hdhomeruntray::discovery {
 
 //---------------------------------------------------------------------------
-// Enum DeviceType
+// Class NullDevice
 //
-// Indicates the type of a HDHomeRun device
+// Describes a null device (DeviceType::None), used by the GUI application
+// in places where a device instance is needed but is not available
 //---------------------------------------------------------------------------
 
-public enum class DeviceType
+public ref class NullDevice : Device
 {
-	None		= 0,								// Unknown/empty device
-	Tuner		= HDHOMERUN_DEVICE_TYPE_TUNER,		// Tuner device
-	Storage		= HDHOMERUN_DEVICE_TYPE_STORAGE,	// Storage (DVR) device
+public:
+
+	//-----------------------------------------------------------------------
+	// Properties
+
+	// FriendlyName
+	//
+	// Gets the device friendly name
+	property String^ FriendlyName
+	{
+		virtual String^ get(void) override;
+	}
+
+	// Name
+	//
+	// Gets the device name (device/storage id)
+	property String^ Name
+	{
+		virtual String^ get(void) override;
+	}
+
+internal:
+
+	//-----------------------------------------------------------------------
+	// Internal Member Functions
+
+	// Create
+	//
+	// Creates a new NullDevice instance
+	static NullDevice^ Create(void);
+
+private:
+
+	// Instance Constructors
+	//
+	NullDevice(void);
+
+	//-----------------------------------------------------------------------
+	// Member Variables
+
+	String^				m_name;					// Device name
+	String^				m_friendlyname;			// Device friendly name
 };
 
 //---------------------------------------------------------------------------
@@ -49,4 +91,4 @@ public enum class DeviceType
 
 #pragma warning(pop)
 
-#endif	// __DEVICETYPE_H_
+#endif	// __NULLDEVICE_H_

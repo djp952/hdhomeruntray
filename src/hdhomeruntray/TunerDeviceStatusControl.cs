@@ -139,6 +139,15 @@ namespace zuki.hdhomeruntray
 		}
 
 		//-------------------------------------------------------------------------
+		// Events
+		//-------------------------------------------------------------------------
+
+		// DeviceStatusChanged
+		//
+		// Invoked when the status has changed
+		public event DeviceStatusChangedEventHandler DeviceStatusChanged;
+
+		//-------------------------------------------------------------------------
 		// Member Functions
 		//-------------------------------------------------------------------------
 
@@ -153,6 +162,9 @@ namespace zuki.hdhomeruntray
 
 			// Save the updated hash code
 			m_lasthash = status.GetHashCode();
+
+			// Save the current "dot" color
+			Color lastcolor = m_activedot.ForeColor;
 
 			m_layoutpanel.SuspendLayout();
 
@@ -222,6 +234,12 @@ namespace zuki.hdhomeruntray
 			}
 
 			finally { m_layoutpanel.ResumeLayout(); }
+
+			// Invoke the status color changed event if the color of the dot changed
+			if(lastcolor != m_activedot.ForeColor)
+			{
+				DeviceStatusChanged?.Invoke(this, new DeviceStatusChangedEventArgs(status.DeviceStatus, m_device, m_tuner.Index, m_activedot.ForeColor));
+			}
 		}
 
 		//-------------------------------------------------------------------------

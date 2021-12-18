@@ -34,6 +34,8 @@ using namespace System::Net;
 using namespace Newtonsoft::Json;
 using namespace Newtonsoft::Json::Linq;
 
+using _DeviceType = zuki::hdhomeruntray::discovery::DeviceType;
+
 namespace zuki::hdhomeruntray::discovery {
 
 //---------------------------------------------------------------------------
@@ -84,24 +86,24 @@ public:
 	// DeviceType
 	//
 	// Gets the device type identifier
-	property zuki::hdhomeruntray::discovery::DeviceType Type
+	property _DeviceType Type
 	{
-		zuki::hdhomeruntray::discovery::DeviceType get(void);
+		_DeviceType get(void);
 	}
 
 protected:
 
 	// Instance Constructor
 	//
-	Device(JObject^ device, IPAddress^ localip, zuki::hdhomeruntray::discovery::DeviceType type);
+	Device(_DeviceType type);
+	Device(JObject^ device, IPAddress^ localip, _DeviceType type);
 
 	//-----------------------------------------------------------------------
 	// Member Variables
 
-	String^						m_baseurl;		// Device base URL string
-	IPAddress^					m_localip;		// Device IP address
-
-	zuki::hdhomeruntray::discovery::DeviceType	m_devicetype;	// Device type flag
+	String^					m_baseurl;			// Device base URL string
+	IPAddress^				m_localip;			// Device IP address
+	_DeviceType				m_devicetype;		// Device type flag
 };
 
 //---------------------------------------------------------------------------

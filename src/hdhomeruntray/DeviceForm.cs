@@ -25,6 +25,8 @@ using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
+using zuki.hdhomeruntray.discovery;
+
 namespace zuki.hdhomeruntray
 {
 	//-----------------------------------------------------------------------
@@ -99,6 +101,15 @@ namespace zuki.hdhomeruntray
 			m_popupitembounds = item.Bounds;
 		}
 
+		//-------------------------------------------------------------------------
+		// Events
+		//-------------------------------------------------------------------------
+
+		// DeviceStatusChanged
+		//
+		// Invoked when the status of a tuner has changed
+		public event DeviceStatusChangedEventHandler DeviceStatusChanged;
+
 		//-------------------------------------------------------------------
 		// Control Overrides
 		//-------------------------------------------------------------------
@@ -146,6 +157,18 @@ namespace zuki.hdhomeruntray
 
 			// Set the location of the form
 			Location = new Point(left, top);
+		}
+
+		//-------------------------------------------------------------------
+		// Protected Member Functions
+		//-------------------------------------------------------------------
+
+		// RaiseDeviceStatusChanged
+		//
+		// Allows derived classes to invoke the DeviceStatusChanged event
+		protected void RaiseDeviceStatusChanged(object sender, DeviceStatusChangedEventArgs args)
+		{
+			DeviceStatusChanged?.Invoke(sender, args);
 		}
 
 		//-------------------------------------------------------------------

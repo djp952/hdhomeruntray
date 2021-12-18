@@ -32,6 +32,8 @@
 using namespace System;
 using namespace System::ComponentModel;
 
+using _DiscoveryMethod = zuki::hdhomeruntray::discovery::DiscoveryMethod;
+
 namespace zuki::hdhomeruntray::discovery {
 
 //---------------------------------------------------------------------------
@@ -54,13 +56,13 @@ public:
 	// DiscoveryMethod
 	//
 	// The method used for the discovery operation
-	initonly zuki::hdhomeruntray::discovery::DiscoveryMethod DiscoveryMethod;
+	initonly _DiscoveryMethod DiscoveryMethod;
 
 internal:
 	
 	// Instance Constructor
 	//
-	DiscoveryCompletedEventArgs(zuki::hdhomeruntray::discovery::DiscoveryMethod method, DeviceList^ devices, 
+	DiscoveryCompletedEventArgs(_DiscoveryMethod method, DeviceList^ devices, 
 		Exception^ exception, bool cancelled, Object^ userstate);
 };
 

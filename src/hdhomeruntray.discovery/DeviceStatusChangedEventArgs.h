@@ -20,33 +20,70 @@
 // SOFTWARE.
 //---------------------------------------------------------------------------
 
-#ifndef __DEVICETYPE_H_
-#define __DEVICETYPE_H_
+#ifndef __DEVICESTATUSCHANGEDEVENTARGS_H_
+#define __DEVICESTATUSCHANGEDEVENTARGS_H_
 #pragma once
+
+#include "Device.h"
+#include "DeviceStatus.h"
+#include "NullDevice.h"
 
 #pragma warning(push, 4)
 
 using namespace System;
+using namespace System::Drawing;
+
+using _Color = System::Drawing::Color;
+using _Device = zuki::hdhomeruntray::discovery::Device;
+using _DeviceStatus = zuki::hdhomeruntray::discovery::DeviceStatus;
 
 namespace zuki::hdhomeruntray::discovery {
 
 //---------------------------------------------------------------------------
-// Enum DeviceType
+// Class DeviceStatusChangedEventArgs
 //
-// Indicates the type of a HDHomeRun device
-//---------------------------------------------------------------------------
+// Event arguments for a DeviceStatusChanged event; this is a helper class
+// not directly used by the discovery library code
 
-public enum class DeviceType
+public ref class DeviceStatusChangedEventArgs : public EventArgs
 {
-	None		= 0,								// Unknown/empty device
-	Tuner		= HDHOMERUN_DEVICE_TYPE_TUNER,		// Tuner device
-	Storage		= HDHOMERUN_DEVICE_TYPE_STORAGE,	// Storage (DVR) device
+public:
+
+	// Instance Constructors
+	//
+	DeviceStatusChangedEventArgs(_DeviceStatus status);
+	DeviceStatusChangedEventArgs(_DeviceStatus status, _Device^ device);
+	DeviceStatusChangedEventArgs(_DeviceStatus status, _Device^ device, int index);
+	DeviceStatusChangedEventArgs(_DeviceStatus status, _Device^ device, int index, _Color color);
+
+	//-----------------------------------------------------------------------
+	// Fields
+	
+	// Color
+	//
+	// The color code to assign to the device status
+	initonly _Color Color;
+
+	// Device
+	//
+	// The referenced device instance
+	initonly _Device^ Device;
+
+	// DeviceStatus
+	//
+	// The device status to report
+	initonly _DeviceStatus DeviceStatus;
+
+	// Index
+	//
+	// The index of a subdevice within the device, like a tuner
+	initonly int Index;
 };
 
-//---------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 } // zuki::hdhomeruntray::discovery
 
 #pragma warning(pop)
 
-#endif	// __DEVICETYPE_H_
+#endif	// __DEVICESTATUSCHANGEDEVENTARGS_H_

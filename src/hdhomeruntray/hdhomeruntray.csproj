@@ -71,7 +71,6 @@
     <Compile Include="AutoSizeComboBox.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="DeviceStatusChangedEventArgs.cs" />
     <Compile Include="DeviceStatusChangedEventHandler.cs" />
     <Compile Include="EnabledDisabled.cs" />
     <Compile Include="DeviceForm.cs">

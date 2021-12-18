@@ -80,6 +80,8 @@ namespace zuki.hdhomeruntray
 		// Invoked when the timer comes due
 		private void OnTimerTick(object sender, EventArgs args)
 		{
+			DeviceStatus newstatus = DeviceStatus.Idle;			// New device status
+			
 			m_layoutpanel.SuspendLayout();
 
 			try
@@ -161,9 +163,20 @@ namespace zuki.hdhomeruntray
 						m_layoutpanel.Controls.SetChildIndex(recordingcontrol, m_layoutpanel.Controls.GetChildIndex(m_footer));
 					}
 				}
+
+				// Determine the overall status to report for the device
+				if((status.LiveBuffers.Count > 0) || (status.Playbacks.Count > 0)) newstatus = DeviceStatus.Active;
+				if(status.Recordings.Count > 0) newstatus = DeviceStatus.ActiveAndRecording;
 			}
 
 			finally { m_layoutpanel.ResumeLayout(); }
+
+			// If the device status has changed raise the event
+			if(newstatus != m_status)
+			{
+				RaiseDeviceStatusChanged(this, new DeviceStatusChangedEventArgs(newstatus, m_device));
+				m_status = newstatus;
+			}
 		}
 
 		//-------------------------------------------------------------------
@@ -174,5 +187,6 @@ namespace zuki.hdhomeruntray
 		private readonly StorageDeviceHeaderControl m_header;
 		private readonly StorageDeviceFooterControl m_footer;
 		private int m_lasthash = 0;
+		private DeviceStatus m_status = DeviceStatus.Idle;
 	}
 }
