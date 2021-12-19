@@ -84,6 +84,10 @@ namespace zuki.hdhomeruntray
 			// Wire up a handler to watch for property changes
 			Settings.Default.PropertyChanged += new PropertyChangedEventHandler(OnPropertyChanged);
 
+			// Wire up a handler for watch for power events
+			m_powerchanged = new PowerModeChangedEventHandler(OnPowerModeChanged);
+			SystemEvents.PowerModeChanged += m_powerchanged;
+
 			// Create and wire up the device discovery object
 			m_devices = new Devices();
 			m_devices.DiscoveryCompleted += new DiscoveryCompletedEventHandler(OnDiscoveryCompleted);
@@ -118,6 +122,9 @@ namespace zuki.hdhomeruntray
 				}
 
 			}), null);
+
+			// Unsubscribe from the power mode event handler
+			SystemEvents.PowerModeChanged -= m_powerchanged;
 
 			// Stop and dispose of the theme registry monitor if created
 			if(m_thememonitor != null)
@@ -268,6 +275,35 @@ namespace zuki.hdhomeruntray
 				m_popupform = null;
 
 			}), null);
+		}
+
+		// OnPowerModeChanged
+		//
+		// Invoked when the system power mode has changed
+		private void OnPowerModeChanged(object sender, PowerModeChangedEventArgs args)
+		{
+			// Close the popup form if it's open on either suspend or resume
+			if((args.Mode == PowerModes.Suspend) || (args.Mode == PowerModes.Resume))
+			{
+				m_context.Post(new SendOrPostCallback((o) =>
+				{
+					if(m_popupform != null)
+					{
+						m_popupform.Close();
+						m_popupform.Dispose();
+						m_popupform = null;
+					}
+
+				}), null);
+			}
+
+			// Reset the discovery timer on resume; don't execute a discovery immediately
+			// as it won't typically work while the system is resuming
+			if(args.Mode == PowerModes.Resume)
+			{
+				m_timer.Stop();
+				m_timer.Start();
+			}
 		}
 
 		// OnPropertyChanged
@@ -558,6 +594,7 @@ namespace zuki.hdhomeruntray
 		private DeviceList m_devicelist = DeviceList.Empty;
 		private DeviceStatus m_status = DeviceStatus.Idle;
 		private readonly RegistryKeyValueChangeMonitor m_thememonitor;
+		private readonly PowerModeChangedEventHandler m_powerchanged;
 
 		// Do not change this GUID; it has to remain the same to prevent Windows from creating
 		// custom tray icon settings for each GUID that it sees
