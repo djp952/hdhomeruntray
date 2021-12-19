@@ -26,6 +26,8 @@
 
 #pragma warning(push, 4)
 
+using namespace System::Text::RegularExpressions;
+
 namespace zuki::hdhomeruntray::discovery {
 
 //---------------------------------------------------------------------------
@@ -41,7 +43,7 @@ Recording::Recording(JObject^ recording)
 
 	// The only thing in a recording is the name
 	JToken^ name = recording->GetValue("Name", StringComparison::OrdinalIgnoreCase);
-	m_name = CLRISNOTNULL(name) ? name->ToObject<String^>() : String::Empty;
+	m_name = CLRISNOTNULL(name) ? FormatName(name->ToObject<String^>()) : String::Empty;
 }
 
 //---------------------------------------------------------------------------
@@ -57,6 +59,37 @@ Recording^ Recording::Create(JObject^ recording)
 {
 	if(CLRISNULL(recording)) throw gcnew ArgumentNullException("recording");
 	return gcnew Recording(recording);
+}
+
+//---------------------------------------------------------------------------
+// Recording::FormatName (private, static)
+//
+// Formats a recording name
+//
+// Arguments:
+//
+//	name	- Recording name to be formatted
+
+String^ Recording::FormatName(String^ name)
+{
+	if(CLRISNULL(name)) throw gcnew ArgumentNullException("name");
+
+	// Recording names are expected to be in one of two valid formats:
+	//
+	// TITLE SxxExx YYYYMMDD [YYYYMMDD-HHMM]
+	// TITLE YYYYMMDD [YYYYMMDD-HHMM]
+	Match^ match = Regex::Match(name, "(?<name>(.* S\\d+E\\d+)?) \\d+ \\[\\d+-\\d+\\]", RegexOptions::Singleline);
+	Group^ group = match->Groups["name"];
+
+	if((CLRISNOTNULL(group)) && (group->Success) && (!String::IsNullOrEmpty(group->Value))) name = group->Value;
+	else
+	{
+		match = Regex::Match(name, "(?<name>(.*)?) \\d+ \\[\\d+-\\d+\\]", RegexOptions::Singleline);
+		group = match->Groups["name"];
+		if((CLRISNOTNULL(group)) && (group->Success) && (!String::IsNullOrEmpty(group->Value))) name = group->Value;
+	}
+
+	return name;
 }
 
 //---------------------------------------------------------------------------

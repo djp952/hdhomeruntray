@@ -88,6 +88,14 @@ private:
 	Playback(JObject^ playback);
 
 	//-----------------------------------------------------------------------
+	// Private Member Functions
+
+	// FormatName (static)
+	//
+	// Formats a recording name
+	static String^ FormatName(String^ name);
+
+	//-----------------------------------------------------------------------
 	// Member Variables
 
 	String^				m_name;				// The recording name

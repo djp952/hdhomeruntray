@@ -79,6 +79,14 @@ private:
 	Recording(JObject^ recording);
 
 	//-----------------------------------------------------------------------
+	// Private Member Functions
+
+	// FormatName (static)
+	//
+	// Formats a recording name
+	static String^ FormatName(String^ name);
+
+	//-----------------------------------------------------------------------
 	// Member Variables
 
 	String^			m_name;					// The recording name

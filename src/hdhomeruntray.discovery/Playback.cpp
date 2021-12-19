@@ -24,6 +24,8 @@
 
 #include "Playback.h"
 
+using namespace System::Text::RegularExpressions;
+
 #pragma warning(push, 4)
 
 namespace zuki::hdhomeruntray::discovery {
@@ -43,7 +45,7 @@ Playback::Playback(JObject^ playback) : m_targetip(IPAddress::None)
 	JToken^ name = playback->GetValue("Name", StringComparison::OrdinalIgnoreCase);
 	JToken^ targetip = playback->GetValue("TargetIP", StringComparison::OrdinalIgnoreCase);
 
-	m_name = CLRISNOTNULL(name) ? name->ToObject<String^>() : String::Empty;
+	m_name = CLRISNOTNULL(name) ? FormatName(name->ToObject<String^>()) : String::Empty;
 	if(CLRISNOTNULL(targetip)) IPAddress::TryParse(targetip->ToObject<String^>(), m_targetip);
 }
 
@@ -60,6 +62,37 @@ Playback^ Playback::Create(JObject^ playback)
 {
 	if(CLRISNULL(playback)) throw gcnew ArgumentNullException("playback");
 	return gcnew Playback(playback);
+}
+
+//---------------------------------------------------------------------------
+// Playback::FormatName (private, static)
+//
+// Formats a playback name
+//
+// Arguments:
+//
+//	name	- Playback name to be formatted
+
+String^ Playback::FormatName(String^ name)
+{
+	if(CLRISNULL(name)) throw gcnew ArgumentNullException("name");
+
+	// Recording names are expected to be in one of two valid formats:
+	//
+	// TITLE SxxExx YYYYMMDD [YYYYMMDD-HHMM]
+	// TITLE YYYYMMDD [YYYYMMDD-HHMM]
+	Match^ match = Regex::Match(name, "(?<name>(.* S\\d+E\\d+)?) \\d+ \\[\\d+-\\d+\\]", RegexOptions::Singleline);
+	Group^ group = match->Groups["name"];
+
+	if((CLRISNOTNULL(group)) && (group->Success) && (!String::IsNullOrEmpty(group->Value))) name = group->Value;
+	else
+	{
+		match = Regex::Match(name, "(?<name>(.*)?) \\d+ \\[\\d+-\\d+\\]", RegexOptions::Singleline);
+		group = match->Groups["name"];
+		if((CLRISNOTNULL(group)) && (group->Success) && (!String::IsNullOrEmpty(group->Value))) name = group->Value;
+	}
+
+	return name;
 }
 
 //---------------------------------------------------------------------------
