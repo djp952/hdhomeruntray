@@ -101,6 +101,9 @@ namespace zuki.hdhomeruntray
 					if((control is StorageDeviceLiveBufferControl) &&
 						(!status.LiveBuffers.Any(livebuffer => livebuffer.GetHashCode() == (int)control.Tag))) toremove.Add(control);
 
+					else if((control is StorageDevicePlaybackControl) &&
+						(!status.Playbacks.Any(playback => playback.GetHashCode() == (int)control.Tag))) toremove.Add(control);
+
 					else if((control is StorageDeviceRecordingControl) &&
 						(!status.Recordings.Any(recording => recording.GetHashCode() == (int)control.Tag))) toremove.Add(control);
 				}
