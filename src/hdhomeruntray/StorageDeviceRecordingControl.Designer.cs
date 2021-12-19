@@ -45,31 +45,32 @@ namespace zuki.hdhomeruntray
 			this.m_layoutpanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this.m_layoutpanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this.m_layoutpanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-			this.m_layoutpanel.Controls.Add(this.m_name, 0, 1);
 			this.m_layoutpanel.Controls.Add(this.m_recordinglabel, 1, 0);
 			this.m_layoutpanel.Controls.Add(this.m_activedot, 0, 0);
+			this.m_layoutpanel.Controls.Add(this.m_name, 2, 0);
 			this.m_layoutpanel.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.m_layoutpanel.Location = new System.Drawing.Point(0, 0);
 			this.m_layoutpanel.Margin = new System.Windows.Forms.Padding(0);
 			this.m_layoutpanel.Name = "m_layoutpanel";
 			this.m_layoutpanel.Padding = new System.Windows.Forms.Padding(4);
-			this.m_layoutpanel.RowCount = 2;
+			this.m_layoutpanel.Radii = new zuki.hdhomeruntray.Radii(0);
+			this.m_layoutpanel.RowCount = 1;
 			this.m_layoutpanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.m_layoutpanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.m_layoutpanel.Size = new System.Drawing.Size(98, 38);
+			this.m_layoutpanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+			this.m_layoutpanel.Size = new System.Drawing.Size(171, 23);
 			this.m_layoutpanel.TabIndex = 2;
 			// 
 			// m_name
 			// 
 			this.m_name.AutoSize = true;
-			this.m_layoutpanel.SetColumnSpan(this.m_name, 2);
 			this.m_name.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.m_name.Location = new System.Drawing.Point(7, 19);
+			this.m_name.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.m_name.Location = new System.Drawing.Point(97, 4);
 			this.m_name.Name = "m_name";
-			this.m_name.Size = new System.Drawing.Size(84, 15);
+			this.m_name.Size = new System.Drawing.Size(67, 15);
 			this.m_name.TabIndex = 4;
 			this.m_name.Text = "{ m_name }";
-			this.m_name.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+			this.m_name.TextAlign = System.Drawing.ContentAlignment.BottomRight;
 			// 
 			// m_recordinglabel
 			// 
@@ -104,7 +105,7 @@ namespace zuki.hdhomeruntray
 			this.Controls.Add(this.m_layoutpanel);
 			this.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.Name = "StorageDeviceRecordingControl";
-			this.Size = new System.Drawing.Size(98, 38);
+			this.Size = new System.Drawing.Size(171, 23);
 			this.m_layoutpanel.ResumeLayout(false);
 			this.m_layoutpanel.PerformLayout();
 			this.ResumeLayout(false);

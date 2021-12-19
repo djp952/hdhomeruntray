@@ -55,7 +55,7 @@ namespace zuki.hdhomeruntray
 			if(VersionHelper.IsWindows11OrGreater())
 			{
 				m_recordinglabel.Font = new Font("Segoe UI Variable Text Semibold", m_recordinglabel.Font.Size, m_recordinglabel.Font.Style);
-				m_name.Font = new Font("Segoe UI Variable Text", m_name.Font.Size, m_name.Font.Style);
+				m_name.Font = new Font("Segoe UI Variable Text Semibold", m_name.Font.Size, m_name.Font.Style);
 			}
 		}
 
