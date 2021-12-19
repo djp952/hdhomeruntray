@@ -29,20 +29,24 @@ using zuki.hdhomeruntray.discovery;
 namespace zuki.hdhomeruntray
 {
 	//--------------------------------------------------------------------------
-	// Class StorageDeviceRecordingControl (internal)
+	// Class StorageDeviceIdleControl (internal)
 	//
-	// User control that implements the status for a Recording
+	// User control that implements an idle status
 
-	internal partial class StorageDeviceRecordingControl : UserControl
+	internal partial class StorageDeviceIdleControl : UserControl
 	{
 		// Instance Constructor
 		//
-		private StorageDeviceRecordingControl()
+		public StorageDeviceIdleControl()
 		{
 			InitializeComponent();
 
 			m_layoutpanel.EnableDoubleBuferring();
 
+			// There is no device information to read from, this is all static
+			m_activedot.ForeColor = DeviceStatusColor.Gray;
+			m_name.Text = string.Empty;
+			
 			using(Graphics graphics = CreateGraphics())
 			{
 				Padding = Padding.ScaleDPI(graphics);
@@ -54,20 +58,9 @@ namespace zuki.hdhomeruntray
 			//
 			if(VersionHelper.IsWindows11OrGreater())
 			{
-				m_recordinglabel.Font = new Font("Segoe UI Variable Text Semibold", m_recordinglabel.Font.Size, m_recordinglabel.Font.Style);
+				m_idlelabel.Font = new Font("Segoe UI Variable Text Semibold", m_idlelabel.Font.Size, m_idlelabel.Font.Style);
 				m_name.Font = new Font("Segoe UI Variable Text Semibold", m_name.Font.Size, m_name.Font.Style);
 			}
-		}
-
-		// Instance Constructor
-		//
-		public StorageDeviceRecordingControl(Recording recording) : this()
-		{
-			if(recording == null) throw new ArgumentNullException(nameof(recording));
-
-			// This is static information, just assign from the recording instance
-			m_activedot.ForeColor = DeviceStatusColor.Red;
-			m_name.Text = recording.Name;
 		}
 	}
 }

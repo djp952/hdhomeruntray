@@ -152,6 +152,12 @@
     <Compile Include="StorageDeviceHeaderControl.designer.cs">
       <DependentUpon>StorageDeviceHeaderControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="StorageDeviceIdleControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="StorageDeviceIdleControl.designer.cs">
+      <DependentUpon>StorageDeviceIdleControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="StorageDeviceLiveBufferControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -252,6 +258,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="StorageDeviceHeaderControl.resx">
       <DependentUpon>StorageDeviceHeaderControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="StorageDeviceIdleControl.resx">
+      <DependentUpon>StorageDeviceIdleControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="StorageDeviceLiveBufferControl.resx">
       <DependentUpon>StorageDeviceLiveBufferControl.cs</DependentUpon>

@@ -98,12 +98,18 @@ namespace zuki.hdhomeruntray
 				List<Control> toremove = new List<Control>();
 				foreach(Control control in m_layoutpanel.Controls)
 				{
-					if((control is StorageDeviceLiveBufferControl) &&
+					// Idle controls
+					if((control is StorageDeviceIdleControl) && (status.DeviceStatus != DeviceStatus.Idle)) toremove.Add(control);
+
+					// Live buffer controls
+					else if((control is StorageDeviceLiveBufferControl) &&
 						(!status.LiveBuffers.Any(livebuffer => livebuffer.GetHashCode() == (int)control.Tag))) toremove.Add(control);
 
+					// Playback controls
 					else if((control is StorageDevicePlaybackControl) &&
 						(!status.Playbacks.Any(playback => playback.GetHashCode() == (int)control.Tag))) toremove.Add(control);
 
+					// Recording controls
 					else if((control is StorageDeviceRecordingControl) &&
 						(!status.Recordings.Any(recording => recording.GetHashCode() == (int)control.Tag))) toremove.Add(control);
 				}
@@ -113,63 +119,81 @@ namespace zuki.hdhomeruntray
 				// Cast the layout panel controls collection as IEnumerable<T>
 				IEnumerable<Control> controls = m_layoutpanel.Controls.Cast<Control>();
 
-				// Add LiveBuffer items for each one that isn't already represented
-				foreach(LiveBuffer livebuffer in status.LiveBuffers)
+				// Represent an idle device with a single static item
+				if(status.DeviceStatus == DeviceStatus.Idle)
 				{
-					if(!controls.Any(control => (control is StorageDeviceLiveBufferControl) && ((int)control.Tag == livebuffer.GetHashCode())))
+					if(!controls.Any(control => (control is StorageDeviceIdleControl)))
 					{
-						StorageDeviceLiveBufferControl livebuffercontrol = new StorageDeviceLiveBufferControl(livebuffer)
+						StorageDeviceIdleControl idlecontrol = new StorageDeviceIdleControl()
 						{
 							Dock = DockStyle.Top,
-							Tag = livebuffer.GetHashCode(),
 							Padding = new Padding(0, 1, 0, 1).ScaleDPI(Handle)
 						};
 
-						// Insert LiveBuffer items after the header
-						m_layoutpanel.Controls.Add(livebuffercontrol);
-						m_layoutpanel.Controls.SetChildIndex(livebuffercontrol, m_layoutpanel.Controls.GetChildIndex(m_header) + 1);
+						// Insert idle items after the header
+						m_layoutpanel.Controls.Add(idlecontrol);
+						m_layoutpanel.Controls.SetChildIndex(idlecontrol, m_layoutpanel.Controls.GetChildIndex(m_header) + 1);
 					}
 				}
 
-				// Add Playback items for each one that isn't already represented
-				foreach(Playback playback in status.Playbacks)
+				else
 				{
-					if(!controls.Any(control => (control is StorageDevicePlaybackControl) && ((int)control.Tag == playback.GetHashCode())))
+					// Add LiveBuffer items for each one that isn't already represented
+					foreach(LiveBuffer livebuffer in status.LiveBuffers)
 					{
-						StorageDevicePlaybackControl playbackcontrol = new StorageDevicePlaybackControl(playback)
+						if(!controls.Any(control => (control is StorageDeviceLiveBufferControl) && ((int)control.Tag == livebuffer.GetHashCode())))
 						{
-							Dock = DockStyle.Top,
-							Tag = playback.GetHashCode(),
-							Padding = new Padding(0, 1, 0, 1).ScaleDPI(Handle)
-						};
+							StorageDeviceLiveBufferControl livebuffercontrol = new StorageDeviceLiveBufferControl(livebuffer)
+							{
+								Dock = DockStyle.Top,
+								Tag = livebuffer.GetHashCode(),
+								Padding = new Padding(0, 1, 0, 1).ScaleDPI(Handle)
+							};
 
-						// Insert LiveBuffer items after the header
-						m_layoutpanel.Controls.Add(playbackcontrol);
-						m_layoutpanel.Controls.SetChildIndex(playbackcontrol, m_layoutpanel.Controls.GetChildIndex(m_header) + 1);
+							// Insert LiveBuffer items after the header
+							m_layoutpanel.Controls.Add(livebuffercontrol);
+							m_layoutpanel.Controls.SetChildIndex(livebuffercontrol, m_layoutpanel.Controls.GetChildIndex(m_header) + 1);
+						}
+					}
+
+					// Add Playback items for each one that isn't already represented
+					foreach(Playback playback in status.Playbacks)
+					{
+						if(!controls.Any(control => (control is StorageDevicePlaybackControl) && ((int)control.Tag == playback.GetHashCode())))
+						{
+							StorageDevicePlaybackControl playbackcontrol = new StorageDevicePlaybackControl(playback)
+							{
+								Dock = DockStyle.Top,
+								Tag = playback.GetHashCode(),
+								Padding = new Padding(0, 1, 0, 1).ScaleDPI(Handle)
+							};
+
+							// Insert LiveBuffer items after the header
+							m_layoutpanel.Controls.Add(playbackcontrol);
+							m_layoutpanel.Controls.SetChildIndex(playbackcontrol, m_layoutpanel.Controls.GetChildIndex(m_header) + 1);
+						}
+					}
+
+					// Add Recording items for each one that isn't already represented
+					foreach(Recording recording in status.Recordings)
+					{
+						if(!controls.Any(control => (control is StorageDeviceRecordingControl) && ((int)control.Tag == recording.GetHashCode())))
+						{
+							StorageDeviceRecordingControl recordingcontrol = new StorageDeviceRecordingControl(recording)
+							{
+								Dock = DockStyle.Top,
+								Tag = recording.GetHashCode(),
+								Padding = new Padding(0, 1, 0, 1).ScaleDPI(Handle)
+							};
+
+							// Insert Recording items above the footer
+							m_layoutpanel.Controls.Add(recordingcontrol);
+							m_layoutpanel.Controls.SetChildIndex(recordingcontrol, m_layoutpanel.Controls.GetChildIndex(m_footer));
+						}
 					}
 				}
 
-				// Add Recording items for each one that isn't already represented
-				foreach(Recording recording in status.Recordings)
-				{
-					if(!controls.Any(control => (control is StorageDeviceRecordingControl) && ((int)control.Tag == recording.GetHashCode())))
-					{
-						StorageDeviceRecordingControl recordingcontrol = new StorageDeviceRecordingControl(recording)
-						{
-							Dock = DockStyle.Top,
-							Tag = recording.GetHashCode(),
-							Padding = new Padding(0, 1, 0, 1).ScaleDPI(Handle)
-						};
-
-						// Insert Recording items above the footer
-						m_layoutpanel.Controls.Add(recordingcontrol);
-						m_layoutpanel.Controls.SetChildIndex(recordingcontrol, m_layoutpanel.Controls.GetChildIndex(m_footer));
-					}
-				}
-
-				// Determine the overall status to report for the device
-				if((status.LiveBuffers.Count > 0) || (status.Playbacks.Count > 0)) newstatus = DeviceStatus.Active;
-				if(status.Recordings.Count > 0) newstatus = DeviceStatus.ActiveAndRecording;
+				newstatus = status.DeviceStatus;					// New overall status to check against state
 			}
 
 			finally { m_layoutpanel.ResumeLayout(); }
