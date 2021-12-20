@@ -95,11 +95,8 @@ namespace zuki.hdhomeruntray
 			// Show the tray icon after initialization
 			m_notifyicon.Visible = true;
 
-			// Invoke an initial refresh of the device discovery data
-			ExecuteDiscovery();
-
-			// Start the periodic timer
-			m_timer.Start();
+			// Wait for the network to become available before executing initial discovery
+			m_networktimer.Start();
 		}
 
 		//-------------------------------------------------------------------
@@ -133,7 +130,8 @@ namespace zuki.hdhomeruntray
 				m_thememonitor.Dispose();
 			}
 
-			m_timer.Enabled = false;            // Stop the timer
+			m_networktimer.Enabled = false;     // Disable the timer
+			m_discoverytimer.Enabled = false;   // Disable the timer
 			m_devices.CancelAsync(this);        // Cancel any operations
 			m_notifyicon.Visible = false;       // Remove the tray icon
 		}
@@ -154,6 +152,14 @@ namespace zuki.hdhomeruntray
 			UpdateNotifyIcon(m_devicelist);
 		}
 
+		// OnDiscoveryTimerElapsed
+		//
+		// Invoked when the discovery timer object has come due
+		private void OnDiscoveryTimerElapsed(object sender, ElapsedEventArgs args)
+		{
+			ExecuteDiscovery();
+		}
+
 		// OnMenuItemExit
 		//
 		// Invoked via the "Exit" menu item
@@ -171,6 +177,27 @@ namespace zuki.hdhomeruntray
 				Application.Exit();
 
 			}), null);
+		}
+
+		// OnNetworkTimerElapsed
+		//
+		// Invoked when the network timer object has come due
+		private void OnNetworkTimerElapsed(object sender, ElapsedEventArgs args)
+		{
+			bool hasnetwork = true;     // Assume the network is available
+
+			// Check for IPv4 network connectivity; in the unlikely event of an
+			// exception, assume that the network is up and roll the dice
+			try { hasnetwork = Devices.IsIPv4NetworkAvailable(); }
+			catch(Exception) { /* DO NOTHING */ }
+
+			// If the network is available switch to device discovery
+			if(hasnetwork)
+			{
+				m_networktimer.Stop();          // Stop this timer
+				ExecuteDiscovery();             // Execute discovery
+				m_discoverytimer.Start();       // Start periodic discovery
+			}
 		}
 
 		// OnNotifyIconClosePopup
@@ -282,9 +309,12 @@ namespace zuki.hdhomeruntray
 		// Invoked when the system power mode has changed
 		private void OnPowerModeChanged(object sender, PowerModeChangedEventArgs args)
 		{
-			// Close the popup form if it's open on either suspend or resume
+			// Stop timers and close the popup form if it's open on either suspend or resume
 			if((args.Mode == PowerModes.Suspend) || (args.Mode == PowerModes.Resume))
 			{
+				m_discoverytimer.Enabled = false;
+				m_networktimer.Enabled = false;
+
 				m_context.Post(new SendOrPostCallback((o) =>
 				{
 					if(m_popupform != null)
@@ -297,13 +327,9 @@ namespace zuki.hdhomeruntray
 				}), null);
 			}
 
-			// Reset the discovery timer on resume; don't execute a discovery immediately
-			// as it won't typically work while the system is resuming
-			if(args.Mode == PowerModes.Resume)
-			{
-				m_timer.Stop();
-				m_timer.Start();
-			}
+			// On resume, use the network timer to wait for IPv4 to come back up prior
+			// to executing a new discovery operation
+			if(args.Mode == PowerModes.Resume) m_networktimer.Start();
 		}
 
 		// OnPropertyChanged
@@ -325,13 +351,14 @@ namespace zuki.hdhomeruntray
 			if((args.PropertyName == nameof(Settings.Default.DiscoveryInterval)) ||
 				(args.PropertyName == nameof(Settings.Default.DiscoveryMethod)))
 			{
-				m_timer.Enabled = false;            // Stop the timer
+				bool wasenabled = m_discoverytimer.Enabled;         // Check if enabled first
+				if(wasenabled) m_discoverytimer.Enabled = false;    // Stop the timer
 
 				// Reset the timer interval to the new value and force a new discovery
-				m_timer.Interval = (int)Settings.Default.DiscoveryInterval;
-				ExecuteDiscovery();
+				m_discoverytimer.Interval = (int)Settings.Default.DiscoveryInterval;
+				if(wasenabled) ExecuteDiscovery();
 
-				m_timer.Enabled = true;             // Restart the timer
+				if(wasenabled) m_discoverytimer.Enabled = true;     // Restart the timer
 			}
 
 			// TrayIconHoverDelay
@@ -350,14 +377,6 @@ namespace zuki.hdhomeruntray
 			// Refresh the status icon if would be different than it already is
 			Icon statusicon = StatusIcons.Get(m_status);
 			if(!m_notifyicon.Icon.Equals(statusicon)) m_notifyicon.Icon = statusicon;
-		}
-
-		// OnTimerElapsed
-		//
-		// Invoked when the timer object has come due
-		private void OnTimerElapsed(object sender, ElapsedEventArgs args)
-		{
-			ExecuteDiscovery();
 		}
 
 		//-------------------------------------------------------------------
@@ -466,13 +485,21 @@ namespace zuki.hdhomeruntray
 			m_notifyicon.HoverInterval = GetHoverInterval(Settings.Default.TrayIconHoverDelay);
 			m_notifyicon.ToolTip = "HDHomeRun Status Monitor";
 
-			// Create the periodic timer object
-			m_timer = new System.Timers.Timer
+			// Create the network timer object
+			m_networktimer = new System.Timers.Timer
+			{
+				AutoReset = true,
+				Interval = 100,
+			};
+			m_networktimer.Elapsed += new ElapsedEventHandler(OnNetworkTimerElapsed);
+
+			// Create the discovery timer object
+			m_discoverytimer = new System.Timers.Timer
 			{
 				AutoReset = true,
 				Interval = (double)Settings.Default.DiscoveryInterval,
 			};
-			m_timer.Elapsed += new ElapsedEventHandler(OnTimerElapsed);
+			m_discoverytimer.Elapsed += new ElapsedEventHandler(OnDiscoveryTimerElapsed);
 
 			// WINDOWS 11
 			//
@@ -588,7 +615,8 @@ namespace zuki.hdhomeruntray
 
 		private readonly WindowsFormsSynchronizationContext m_context;
 		private ShellNotifyIcon m_notifyicon;
-		private System.Timers.Timer m_timer;
+		private System.Timers.Timer m_networktimer;
+		private System.Timers.Timer m_discoverytimer;
 		private PopupForm m_popupform = null;
 		private readonly Devices m_devices;
 		private DeviceList m_devicelist = DeviceList.Empty;

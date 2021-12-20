@@ -90,6 +90,11 @@ public:
 	// Executes an asynchronous device discovery operation
 	void DiscoverAsync(DiscoveryMethod method, Object^ taskid);
 
+	// IsIPv4NetworkAvailable (static)
+	//
+	// Helper function used to determine if the IPv4 network is available
+	static bool IsIPv4NetworkAvailable(void);
+
 	// TryDiscover
 	//
 	// Executes a synchronous device discovery operation

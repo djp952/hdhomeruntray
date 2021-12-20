@@ -26,6 +26,8 @@
 
 #pragma warning(push, 4)
 
+using namespace System::ComponentModel;
+
 namespace zuki::hdhomeruntray::discovery {
 
 //---------------------------------------------------------------------------
@@ -211,6 +213,35 @@ void Devices::DiscoveryCompletedAsync(Object^ state)
 	if(CLRISNULL(args)) throw gcnew ArgumentNullException("args");
 
 	DiscoveryCompleted(this, args);			// Raise the event
+}
+
+//---------------------------------------------------------------------------
+// Devices::IsIPv4NetworkAvailable (static)
+//
+// Helper function used to determine if the IPv4 network is available
+//
+// Arguments:
+//
+//	NONE
+
+bool Devices::IsIPv4NetworkAvailable(void)
+{
+	INetworkListManager*	netlistmgr = nullptr;
+	NLM_CONNECTIVITY		connectivity = NLM_CONNECTIVITY_DISCONNECTED;
+
+	// Create an instance of the NetworkListManager object
+	HRESULT hresult = CoCreateInstance(CLSID_NetworkListManager, nullptr, CLSCTX_INPROC_SERVER, IID_INetworkListManager, reinterpret_cast<void**>(&netlistmgr));
+	if(FAILED(hresult)) throw gcnew Win32Exception(hresult, String::Format("Failed to create NetworkListManager instance (hr=0x{0:X8}", hresult));
+
+	// Interrogate the Network List Manager to determine the current network connectivity status
+	hresult = netlistmgr->GetConnectivity(&connectivity);
+	netlistmgr->Release();
+
+	// If the NetworkListManager returned an error, throw an exception to that effect
+	if(FAILED(hresult)) throw gcnew Win32Exception(hresult, String::Format("Failed to interrogate NetworkListManager connectivity state (hr=0x{0:X8}", hresult));
+
+	// If the status was successfully interrogated, check for the necessary IPv4 connectivity flags
+	return ((connectivity & (NLM_CONNECTIVITY_IPV4_SUBNET | NLM_CONNECTIVITY_IPV4_LOCALNETWORK | NLM_CONNECTIVITY_IPV4_INTERNET)) != 0);
 }
 
 //---------------------------------------------------------------------------
