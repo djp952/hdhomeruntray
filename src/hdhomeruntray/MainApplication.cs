@@ -258,14 +258,14 @@ namespace zuki.hdhomeruntray
 					else
 					{
 						m_popupform.Unpinned += new EventHandler(OnPopupUnpinned);
-						m_popupform.Pin();
+						m_popupform.Pin(m_notifyicon);
 					}
 				}
 
 				// Otherwise create a new popup form in a pinned state
 				else
 				{
-					m_popupform = new PopupForm(m_devicelist, true);
+					m_popupform = new PopupForm(m_devicelist, true, m_notifyicon);
 					m_popupform.DeviceStatusChanged += new DeviceStatusChangedEventHandler(OnPopupDeviceStatusChanged);
 					m_popupform.Unpinned += new EventHandler(OnPopupUnpinned);
 					m_popupform.ShowFromNotifyIcon(m_notifyicon);

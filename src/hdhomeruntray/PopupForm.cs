@@ -94,13 +94,13 @@ namespace zuki.hdhomeruntray
 
 		// Instance Constructor
 		//
-		public PopupForm(DeviceList devices) : this(devices, false)
+		public PopupForm(DeviceList devices) : this(devices, false, null)
 		{
 		}
 
 		// Instance Constructor
 		//
-		public PopupForm(DeviceList devices, bool pinned) : this()
+		public PopupForm(DeviceList devices, bool pinned, ShellNotifyIcon icon) : this()
 		{
 			if(devices == null) throw new ArgumentNullException(nameof(devices));
 
@@ -137,7 +137,7 @@ namespace zuki.hdhomeruntray
 			}
 
 			// If the window is supposed to be pinned, pin it
-			if(pinned) Pin();
+			if((pinned) && (icon != null)) Pin(icon);
 		}
 
 		//-------------------------------------------------------------------------
@@ -170,7 +170,7 @@ namespace zuki.hdhomeruntray
 		// Pin
 		//
 		// "Pins" the popup form by adding additional controls
-		public void Pin()
+		public void Pin(ShellNotifyIcon icon)
 		{
 			if(m_pinned) return;
 
@@ -194,7 +194,7 @@ namespace zuki.hdhomeruntray
 			m_layoutpanel.ResumeLayout();
 
 			// If the form is already visible, it needs to be moved to adjust for the new width
-			if(Visible) SetWindowPosition(Screen.FromPoint(new Point(Left, Top)));
+			if(Visible) SetWindowPosition(icon.GetBounds(), Screen.FromPoint(new Point(Left, Top)));
 
 			// Prevent adding the controls multiple times by tracking this
 			m_pinned = true;
@@ -212,7 +212,7 @@ namespace zuki.hdhomeruntray
 			Rectangle iconbounds = icon.GetBounds();
 			Screen screen = Screen.FromPoint(iconbounds.Location);
 
-			SetWindowPosition(screen);      // Set the window position
+			SetWindowPosition(iconbounds, screen);      // Set the window position
 			
 			// Perform the initial refresh and start the timer
 			OnTimerTick(this, EventArgs.Empty);
@@ -402,18 +402,27 @@ namespace zuki.hdhomeruntray
 		// SetWindowPosition
 		//
 		// Sets the window position so that it's in the lower right of the screen
-		private void SetWindowPosition(Screen screen)
+		private void SetWindowPosition(Rectangle iconrect, Screen screen)
 		{
 			// This should work acceptably well given that the screen/monitor that will
 			// display this form is the same one with the taskbar, but there are better ways
 			// in .NET 4.7 and/or Windows 10/11 to figure out how to scale this value
 			float scalefactor = (SystemInformation.SmallIconSize.Height / 16.0F);
 
+			// Determine the bounding rectangle to use; if the tray icon isn't docked its
+			// vertical position will be higher than the screen working area will allow
+			Rectangle workarea = screen.WorkingArea;
+			if(iconrect.Top < workarea.Bottom)
+			{
+				workarea = new Rectangle(workarea.Left, workarea.Top, workarea.Width, workarea.Height - (screen.WorkingArea.Bottom - iconrect.Top));
+			}
+
 			// Move the form to the desired position before showing it; it should be aligned
 			// to the lower-right corner of the work area
-			int top = screen.WorkingArea.Height - Size.Height - (int)(12.0F * scalefactor);
-			int left = screen.WorkingArea.Width - Size.Width - (int)(12.0F * scalefactor);
+			int top = workarea.Height - Size.Height - (int)(12.0F * scalefactor);
+			int left = workarea.Width - Size.Width - (int)(12.0F * scalefactor);
 			Location = new Point(left, top);
+			TopMost = true;
 		}
 
 		// UntoggleOthers
