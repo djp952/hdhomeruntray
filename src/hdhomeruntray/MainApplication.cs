@@ -26,6 +26,8 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Drawing.Text;
+using System.Security.Cryptography;
+using System.Text;
 using System.Threading;
 using System.Timers;
 using System.Windows.Forms;
@@ -51,6 +53,18 @@ namespace zuki.hdhomeruntray
 			// Create a WindowsFormsSynchronizationContext on which event handlers
 			// can be invoked without causing weird threading issues
 			m_context = new WindowsFormsSynchronizationContext();
+
+			// Create a pseudo GUID to use as the GUID for the ShellNotifyIcon instance, Windows
+			// stores this and the path to the application in it's Tray Icon cache and if the application
+			// is run from a different path with a different GUID, Shell_NotifyIconW (NIM_ADD) will fail.
+			//
+			// This method has a drawback in that each time the application is run from a different place,
+			// Windows will treat it as a completely separate application and the user will end up with
+			// multiple instances in their Taskbar Settings, but it's better than having no icon at all
+			//
+			byte[] buffer = Encoding.Unicode.GetBytes(Application.ExecutablePath.ToUpper());
+			byte[] hash = MD5.Create().ComputeHash(buffer);
+			m_guid = new Guid(hash);
 
 			Application.ApplicationExit += new EventHandler(OnApplicationExit);
 			InitializeComponent();
@@ -404,12 +418,12 @@ namespace zuki.hdhomeruntray
 		// EnableDisableAutoStart (static)
 		//
 		// Enables or disables auto-start for the application
-		private static void EnableDisableAutoStart(bool enable)
+		private void EnableDisableAutoStart(bool enable)
 		{
+			Debug.Assert(m_guid != Guid.Empty);
+
 			// Use hdhomeruntray_TRAYICONGUID as the registry value name
-			//
-			// TODO: GUID needs to be different for the x64 build
-			string appname = "hdhomeruntray_" + s_guid.ToString("N").ToUpper();
+			string appname = "hdhomeruntray_" + m_guid.ToString("N").ToUpper();
 
 			// Open the HKEY_CURRENT_USER "Run" key
 			RegistryKey startupkey = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run", true);
@@ -476,7 +490,7 @@ namespace zuki.hdhomeruntray
 			contextmenu.Items.Add(exititem);
 
 			// Create and initialize the ShellNotifyIcon instance
-			m_notifyicon = new ShellNotifyIcon(s_guid, container);
+			m_notifyicon = new ShellNotifyIcon(m_guid, container);
 			m_notifyicon.ClosePopup += new EventHandler(OnNotifyIconClosePopup);
 			m_notifyicon.OpenPopup += new EventHandler(OnNotifyIconOpenPopup);
 			m_notifyicon.Selected += new EventHandler(OnNotifyIconSelected);
@@ -512,12 +526,12 @@ namespace zuki.hdhomeruntray
 		// IsAutoStartEnabled (static)
 		//
 		// Checks if auto-start is currently enabled or disabled
-		private static bool IsAutoStartEnabled()
+		private bool IsAutoStartEnabled()
 		{
+			Debug.Assert(m_guid != Guid.Empty);
+
 			// Use hdhomeruntray_TRAYICONGUID as the registry value name
-			//
-			// TODO: GUID needs to be different for the x64 build
-			string appname = "hdhomeruntray_" + s_guid.ToString("N").ToUpper();
+			string appname = "hdhomeruntray_" + m_guid.ToString("N").ToUpper();
 
 			// Open the HKEY_CURRENT_USER "Run" key
 			RegistryKey startupkey = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run", true);
@@ -623,12 +637,6 @@ namespace zuki.hdhomeruntray
 		private DeviceStatus m_status = DeviceStatus.Idle;
 		private readonly RegistryKeyValueChangeMonitor m_thememonitor;
 		private readonly PowerModeChangedEventHandler m_powerchanged;
-
-		// Do not change this GUID; it has to remain the same to prevent Windows from creating
-		// custom tray icon settings for each GUID that it sees
-		//
-		// TODO: The x64 version of the application needs a different GUID, the tray settings
-		// cache both the GUID and the path to the executable
-		private static readonly Guid s_guid = Guid.Parse("{E7E66A47-F253-4D59-BCE1-60193EE55B7C}");
+		private readonly Guid m_guid = Guid.Empty;
 	}
 }
