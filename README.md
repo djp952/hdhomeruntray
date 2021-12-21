@@ -1,10 +1,39 @@
-# __hdhomeruntray__  
+# HDHomeRun Status Monitor  
+
+![logo](assets/appmarkdown.png)   
+A Windows system tray application that monitors the status of all local HDHomeRun devices in the system.   
+   
+## [__USER DOCUMENTATION AND DOWNLOADS__](https://github.com/djp952/hdhomeruntray/wiki)   
    
 Copyright (C)2021 Michael G. Brehm    
 [MIT LICENSE](https://opensource.org/licenses/MIT)   
    
-[__JSON.NET__](https://www.newtonsoft.com/json) - Copyright (C)2007 Newtonsoft   
 [__LIBHDHOMERUN__](https://github.com/Silicondust/libhdhomerun) - Copyright (C)2005-2018 Silicondust USA Inc   
+[__JSON.NET__](https://www.newtonsoft.com/json) - Copyright (c) 2007 James Newton-King   
+   
+## BUILD ENVIRONMENT
+**REQUIRED COMPONENTS**   
+* Visual Studio 2019 (.NET Framework 4.6.2 Targeting Pack, Windows 10 SDK, C++/CLI tools required)   
+* Wix Toolset Build Tools v3.11.2 (https://wixtoolset.org/releases/)   
+* Wix Toolset Visual Studio 2019 Extension (https://wixtoolset.org/releases/)   
+   
+## BUILD
+**INITIALIZE SOURCE TREE AND DEPENDENCIES**
+* Open "Developer Command Prompt for VS2019"   
+```
+git clone https://github.com/djp952/hdhomeruntray
+cd hdhomeruntray
+git submodule update --init
+```
+   
+**BUILD TARGET PACKAGE(S)**   
+* Open "Developer Command Prompt for VS2019"   
+```
+cd hdhomeruntray
+msbuild msbuild.proj
+```
+   
+Output .MSI installer package(s) will be generated in the __out__ folder.   
    
 ## ADDITIONAL LICENSE INFORMATION
    
