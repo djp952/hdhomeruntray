@@ -21,6 +21,7 @@
 //---------------------------------------------------------------------------
 
 using System;
+using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -70,6 +71,33 @@ namespace zuki.hdhomeruntray
 			m_devicename.Text = device.FriendlyName;
 			m_storageid.Text = device.StorageID;
 			m_ipaddress.Text = device.LocalIP.ToString();
+
+			// Save the BaseURL for the device for the link target
+			m_baseurl = device.BaseURL;
 		}
+
+		//-------------------------------------------------------------------
+		// Event Handlers
+		//-------------------------------------------------------------------
+
+		// OnIPAddressClicked
+		//
+		// Invoked when the IP address link has been clicked
+		private void OnIPAddressClicked(object sender, LinkLabelLinkClickedEventArgs args)
+		{
+			using(Process process = new Process())
+			{
+				process.StartInfo.FileName = m_baseurl;
+				process.StartInfo.UseShellExecute = true;
+				process.StartInfo.Verb = "open";
+				process.Start();
+			}
+		}
+
+		//-------------------------------------------------------------------
+		// Event Handlers
+		//-------------------------------------------------------------------
+
+		private readonly string m_baseurl;
 	}
 }

@@ -33,7 +33,7 @@ namespace zuki.hdhomeruntray
 			this.m_devicename = new System.Windows.Forms.Label();
 			this.m_modelname = new System.Windows.Forms.Label();
 			this.m_deviceid = new System.Windows.Forms.Label();
-			this.m_ipaddress = new System.Windows.Forms.Label();
+			this.m_ipaddress = new System.Windows.Forms.LinkLabel();
 			this.m_layoutpanel.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -98,15 +98,21 @@ namespace zuki.hdhomeruntray
 			// 
 			// m_ipaddress
 			// 
+			this.m_ipaddress.ActiveLinkColor = System.Drawing.SystemColors.HotTrack;
 			this.m_ipaddress.AutoSize = true;
 			this.m_ipaddress.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.m_ipaddress.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.m_ipaddress.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
+			this.m_ipaddress.LinkColor = System.Drawing.SystemColors.HotTrack;
 			this.m_ipaddress.Location = new System.Drawing.Point(126, 21);
 			this.m_ipaddress.Name = "m_ipaddress";
 			this.m_ipaddress.Size = new System.Drawing.Size(113, 17);
 			this.m_ipaddress.TabIndex = 4;
+			this.m_ipaddress.TabStop = true;
 			this.m_ipaddress.Text = "{ m_ipaddress }";
 			this.m_ipaddress.TextAlign = System.Drawing.ContentAlignment.BottomRight;
+			this.m_ipaddress.VisitedLinkColor = System.Drawing.SystemColors.HotTrack;
+			this.m_ipaddress.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.OnIPAddressClicked);
 			// 
 			// TunerDeviceHeaderControl
 			// 
@@ -129,6 +135,6 @@ namespace zuki.hdhomeruntray
 		private System.Windows.Forms.Label m_devicename;
 		private System.Windows.Forms.Label m_modelname;
 		private System.Windows.Forms.Label m_deviceid;
-		private System.Windows.Forms.Label m_ipaddress;
+		private System.Windows.Forms.LinkLabel m_ipaddress;
 	}
 }
