@@ -176,7 +176,7 @@ namespace zuki.hdhomeruntray
 
 		// OnMenuItemExit
 		//
-		// Invoked via the "Exit" menu item
+		// Invoked via the "Exit" menu item or the tray icon receives a WM_CLOSE
 		private void OnMenuItemExit(object sender, EventArgs args)
 		{
 			m_context.Post(new SendOrPostCallback((o) =>
@@ -491,6 +491,7 @@ namespace zuki.hdhomeruntray
 
 			// Create and initialize the ShellNotifyIcon instance
 			m_notifyicon = new ShellNotifyIcon(m_guid, container);
+			m_notifyicon.CloseApplicaftion += new EventHandler(OnMenuItemExit);
 			m_notifyicon.ClosePopup += new EventHandler(OnNotifyIconClosePopup);
 			m_notifyicon.OpenPopup += new EventHandler(OnNotifyIconOpenPopup);
 			m_notifyicon.Selected += new EventHandler(OnNotifyIconSelected);

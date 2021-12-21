@@ -336,6 +336,15 @@ namespace zuki.hdhomeruntray
 			remove => Events.RemoveHandler(EVENT_BALLOONTIPSHOWN, value);
 		}
 
+		// CloseApplication
+		//
+		// Invoked when the tray icon has received a WM_CLOSE message
+		public event EventHandler CloseApplicaftion
+		{
+			add => Events.AddHandler(EVENT_CLOSEAPPLICATION, value);
+			remove => Events.RemoveHandler(EVENT_CLOSEAPPLICATION, value);
+		}
+
 		// ClosePopup
 		//
 		// Invoked when the popup window should be closed (NIN_POPUPCLOSE)
@@ -657,6 +666,14 @@ namespace zuki.hdhomeruntray
 			}
 		}
 
+		// OnCloseApplication
+		//
+		// Raises the CloseApplication event
+		private void OnCloseApplication()
+		{
+			((EventHandler)Events[EVENT_CLOSEAPPLICATION])?.Invoke(this, EventArgs.Empty);
+		}
+
 		// OnClosePopup
 		//
 		// Raises the ClosePopup event
@@ -820,6 +837,13 @@ namespace zuki.hdhomeruntray
 			// Normal window message
 			switch((uint)message.Msg)
 			{
+				// WM_CLOSE
+				//
+				// The application is being closed
+				case NativeMethods.WM_CLOSE:
+					OnCloseApplication();
+					break;
+
 				// WM_DESTROY
 				//
 				// The application is being destroyed
@@ -981,6 +1005,7 @@ namespace zuki.hdhomeruntray
 		private static readonly object EVENT_BALLOONTIPSHOWN = new object();
 		private static readonly object EVENT_BALLOONTIPCLICKED = new object();
 		private static readonly object EVENT_BALLOONTIPCLOSED = new object();
+		private static readonly object EVENT_CLOSEAPPLICATION = new object();
 		private static readonly object EVENT_CLOSEPOPUP = new object();
 		private static readonly object EVENT_OPENPOPUP = new object();
 		private static readonly object EVENT_SELECTED = new object();
