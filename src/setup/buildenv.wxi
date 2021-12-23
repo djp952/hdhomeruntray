@@ -7,7 +7,11 @@
 
   <!-- ProjectBinFolder -->
   <!-- Set to the platform-specific \bin path  for the project -->
-  <?define ProjectBinFolder = $(var.ProjectDir)..\..\bin\$(var.Configuration)\ ?>
+  <?if $(var.Platform) = "x86" ?>
+  <?define ProjectBinFolder = $(var.ProjectDir)..\..\bin\$(var.Configuration)\x86\ ?>
+  <?else?>
+  <?define ProjectBinFolder = $(var.ProjectDir)..\..\bin\$(var.Configuration)\x64\ ?>
+  <?endif?>
 
   <!-- ProjectDependsFolder -->
   <!-- Set to the root \depends path for the project -->

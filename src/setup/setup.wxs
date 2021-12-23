@@ -14,7 +14,8 @@
     Manufacturer="ZukiSoft"
     UpgradeCode="E9655935-8B9E-4BB4-A452-302EF25F0232"> <!-- NEVER CHANGE THE UPGRADE CODE -->
 
-    <Package InstallerVersion="405" Compressed="yes" InstallPrivileges="elevated" InstallScope="perMachine"/>
+    <Package InstallerVersion="405" Compressed="yes" InstallPrivileges="elevated" InstallScope="perMachine" Platform="$(var.Platform)"/>
+    
     <Media Id="1" Cabinet="hdhomeruntray.cab" EmbedCab="yes" />
 
     <!-- UPGRADES -->
@@ -42,13 +43,22 @@
 
     <Directory Id="TARGETDIR" Name="SourceDir">
 
-      <!-- C:\Program Files (x86)\ZukiSoft\HDHomeRun Status Monitor -->
-      <Directory Id="ProgramFilesFolder">
-        <Directory Id="ZukiSoftBinFolder" Name="ZukiSoft">
-          <Directory Id="HDHomeRunTrayBinFolder" Name="HDHomeRun Status Monitor"/>
+      <?if $(var.Platform) = "x86" ?>
+        <!-- C:\Program Files (x86)\ZukiSoft\HDHomeRun Status Monitor -->
+        <Directory Id="ProgramFilesFolder">
+          <Directory Id="ZukiSoftBinFolder" Name="ZukiSoft">
+            <Directory Id="HDHomeRunTrayBinFolder" Name="HDHomeRun Status Monitor"/>
+          </Directory>
         </Directory>
-      </Directory>
-
+      <?else?>
+        <!-- C:\Program Files\ZukiSoft\HDHomeRun Status Monitor -->
+        <Directory Id="ProgramFiles64Folder">
+          <Directory Id="ZukiSoftBinFolder" Name="ZukiSoft">
+            <Directory Id="HDHomeRunTrayBinFolder" Name="HDHomeRun Status Monitor"/>
+          </Directory>
+        </Directory>
+      <?endif?>
+      
       <!-- Fonts -->
       <Directory Id="FontsFolder"/>
 

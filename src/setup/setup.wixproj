@@ -10,17 +10,30 @@
     <OutputType>Package</OutputType>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
-    <OutputPath>..\..\bin\$(Configuration)\</OutputPath>
-    <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
+    <OutputPath>..\..\bin\$(Configuration)\x86\</OutputPath>
+    <IntermediateOutputPath>obj\$(Configuration)\x86\</IntermediateOutputPath>
     <DefineConstants>Debug</DefineConstants>
     <DefineSolutionProperties>false</DefineSolutionProperties>
     <SuppressIces>ICE03</SuppressIces>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
-    <OutputPath>..\..\bin\$(Configuration)\</OutputPath>
-    <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
+    <OutputPath>..\..\bin\$(Configuration)\x86\</OutputPath>
+    <IntermediateOutputPath>obj\$(Configuration)\x86\</IntermediateOutputPath>
     <DefineSolutionProperties>false</DefineSolutionProperties>
     <SuppressIces>ICE03</SuppressIces>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' ">
+    <DefineConstants>Debug</DefineConstants>
+    <DefineSolutionProperties>false</DefineSolutionProperties>
+    <SuppressIces>ICE03</SuppressIces>
+    <OutputPath>..\..\bin\$(Configuration)\x64\</OutputPath>
+    <IntermediateOutputPath>obj\$(Configuration)\x64\</IntermediateOutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' ">
+    <DefineSolutionProperties>false</DefineSolutionProperties>
+    <SuppressIces>ICE03</SuppressIces>
+    <OutputPath>..\..\bin\$(Configuration)\x64\</OutputPath>
+    <IntermediateOutputPath>obj\$(Configuration)\x64\</IntermediateOutputPath>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="..\..\tmp\msm\vcmergemods.wxs">

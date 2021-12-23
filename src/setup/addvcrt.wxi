@@ -7,10 +7,18 @@
     file should be thrown into each <Feature> element in the main isrp_setup.wxs file
   -->
 
-  <MergeRef Id="Microsoft_VC142_CRT_x86"/>
-
-  <?if $(var.Configuration) = "Debug" ?>
-  <MergeRef Id="Microsoft_VC142_DebugCRT_x86"/>
+  <?if $(var.Platform) = "x86" ?>
+    <MergeRef Id="Microsoft_VC142_CRT_x86"/>
+    <?if $(var.Configuration) = "Debug" ?>
+    <MergeRef Id="Microsoft_VC142_DebugCRT_x86"/>
+    <?endif?>
+  <?else?>
+    <MergeRef Id="Microsoft_VC142_CRT_x86"/>
+    <MergeRef Id="Microsoft_VC142_CRT_x64"/>
+    <?if $(var.Configuration) = "Debug" ?>
+      <MergeRef Id="Microsoft_VC142_DebugCRT_x86"/>
+      <MergeRef Id="Microsoft_VC142_DebugCRT_x64"/>
+    <?endif?>
   <?endif?>
 
 </Include>

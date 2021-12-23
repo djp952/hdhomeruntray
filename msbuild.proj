@@ -20,7 +20,7 @@
  SOFTWARE.
 -->
 
-<Project DefaultTargets="windows" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="all" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 
   <PropertyGroup>
     <PackageVersion></PackageVersion>         <!-- Set by PackageVersion Target; may override on the command line -->
@@ -39,8 +39,8 @@
 
   </Target>
 
-  <!-- BUILD: WINDOWS -->
-  <Target Name="windows" DependsOnTargets="PackageVersion">
+  <!-- BUILD: WINDOWS-X86 -->
+  <Target Name="windows-x86" DependsOnTargets="PackageVersion">
 
     <MakeDir Directories="out" ContinueOnError="false"/>
 
@@ -52,19 +52,49 @@
     <MSBuild Projects="src\setup\setup.wixproj" Properties="Configuration=$(Configuration);Platform=x86" Targets="Build" ContinueOnError="false"/>
 
     <ItemGroup>
-      <Packages Include="bin\Release\hdhomeruntray.msi"/>
+      <PackagesX86 Include="bin\Release\x86\hdhomeruntray.msi"/>
     </ItemGroup>
 
-    <Move SourceFiles="@(Packages)" DestinationFiles="@(Packages->Replace('.msi', '-$(PackageVersion).msi'))">
-      <Output TaskParameter="MovedFiles" ItemName="Packages1"/>
+    <Move SourceFiles="@(PackagesX86)" DestinationFiles="@(PackagesX86->Replace('.msi', '-$(PackageVersion)-x86.msi'))">
+      <Output TaskParameter="MovedFiles" ItemName="PackagesX86_1"/>
     </Move>
 
-    <Move SourceFiles="@(Packages1)" DestinationFiles="@(Packages1->Replace('hdhomeruntray', 'hdhomerunstatusmonitor'))">
-      <Output TaskParameter="MovedFiles" ItemName="Packages2"/>
+    <Move SourceFiles="@(PackagesX86_1)" DestinationFiles="@(PackagesX86_1->Replace('hdhomeruntray', 'hdhomerunstatusmonitor'))">
+      <Output TaskParameter="MovedFiles" ItemName="PackagesX86_2"/>
     </Move>
 
-    <Copy SourceFiles="@(Packages2)" DestinationFolder="out"/>
+    <Copy SourceFiles="@(PackagesX86_2)" DestinationFolder="out"/>
 
   </Target>
+
+  <!-- BUILD: WINDOWS-X64 -->
+  <Target Name="windows-x64" DependsOnTargets="PackageVersion">
+
+    <MakeDir Directories="out" ContinueOnError="false"/>
+
+    <MSBuild Targets="Restore" Projects="src\hdhomeruntray\hdhomeruntray.csproj" Properties="SolutionDir=$(MSBuildThisFileDirectory);RestorePackagesConfig=true"/>
+    <MSBuild Projects="src\findvcmsms\findvcmsms.csproj" Properties="Configuration=$(Configuration);Platform=x64" Targets="Build" ContinueOnError="false"/>
+    <MSBuild Projects="src\hdhomeruntray.discovery\hdhomeruntray.discovery.vcxproj" Properties="Configuration=$(Configuration);Platform=x64" Targets="Build" ContinueOnError="false"/>
+    <MSBuild Projects="src\hdhomeruntray\hdhomeruntray.csproj" Properties="Configuration=$(Configuration);Platform=x64" Targets="Build" ContinueOnError="false"/>
+    <MSBuild Projects="src\setup.findvcmsms\setup.findvcmsms.vcxproj" Properties="Configuration=$(Configuration);Platform=x64" Targets="Build" ContinueOnError="false"/>
+    <MSBuild Projects="src\setup\setup.wixproj" Properties="Configuration=$(Configuration);Platform=x64" Targets="Build" ContinueOnError="false"/>
+
+    <ItemGroup>
+      <PackagesX64 Include="bin\Release\x64\hdhomeruntray.msi"/>
+    </ItemGroup>
+
+    <Move SourceFiles="@(PackagesX64)" DestinationFiles="@(PackagesX64->Replace('.msi', '-$(PackageVersion)-x64.msi'))">
+      <Output TaskParameter="MovedFiles" ItemName="PackagesX64_1"/>
+    </Move>
+
+    <Move SourceFiles="@(PackagesX64_1)" DestinationFiles="@(PackagesX64_1->Replace('hdhomeruntray', 'hdhomerunstatusmonitor'))">
+      <Output TaskParameter="MovedFiles" ItemName="PackagesX64_2"/>
+    </Move>
+
+    <Copy SourceFiles="@(PackagesX64_2)" DestinationFolder="out"/>
+
+  </Target>
+
+  <Target Name="all" DependsOnTargets="windows-x86;windows-x64"/>
 
 </Project>
