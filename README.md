@@ -13,7 +13,7 @@ Copyright (C)2021 Michael G. Brehm
    
 ## BUILD ENVIRONMENT
 **REQUIRED COMPONENTS**   
-* Visual Studio 2019 (.NET Framework 4.6.2 Targeting Pack, Windows 10 SDK, C++/CLI tools required)   
+* Visual Studio 2019 (__.NET Framework 4.6.2 Targeting Pack__, __Windows 10 SDK (any version)__, __C++/CLI tools__, and __C++ 2019 Redistributable MSMs__ required)   
 * Wix Toolset Build Tools v3.11.2 (https://wixtoolset.org/releases/)   
 * Wix Toolset Visual Studio 2019 Extension (https://wixtoolset.org/releases/)   
    
