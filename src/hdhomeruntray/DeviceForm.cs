@@ -99,6 +99,11 @@ namespace zuki.hdhomeruntray
 
 			m_popupformbounds = form.Bounds;
 			m_popupitembounds = item.Bounds;
+
+			// Avoid repeated calls to OnSizeChanged() by adding the event handler
+			// after the form has been initialized and call it manually the first time
+			SizeChanged += new EventHandler(OnSizeChanged);
+			OnSizeChanged(this, EventArgs.Empty);
 		}
 
 		//-------------------------------------------------------------------------

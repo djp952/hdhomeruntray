@@ -57,9 +57,9 @@ namespace zuki.hdhomeruntray
 		}
 		#endregion
 
-		// Instance Constructor
+		// Instance Constructor (private)
 		//
-		public SettingsForm()
+		private SettingsForm()
 		{
 			InitializeComponent();
 
@@ -91,23 +91,20 @@ namespace zuki.hdhomeruntray
 			}
 		}
 
-		//-------------------------------------------------------------------
-		// Member Functions
-		//-------------------------------------------------------------------
-
-		// ShowFromPopupItem
+		// Instance Constructor
 		//
-		// Shows the form at a position based on the popup form and the
-		// location of the item that was used to open it
-		// bounding rectangle of the notify icon instance
-		public void ShowFromPopupItem(PopupForm form, PopupItemControl item)
+		public SettingsForm(PopupForm form, PopupItemControl item) : this()
 		{
 			if(form == null) throw new ArgumentNullException(nameof(form));
 			if(item == null) throw new ArgumentNullException(nameof(item));
 
-			// Set the window position based on the form and item
-			SetWindowPosition(form.Bounds, item.Bounds);
-			Show();
+			m_popupformbounds = form.Bounds;
+			m_popupitembounds = item.Bounds;
+
+			// Avoid repeated calls to OnSizeChanged() by adding the event handler
+			// after the form has been initialized and call it manually the first time
+			SizeChanged += new EventHandler(OnSizeChanged);
+			OnSizeChanged(this, EventArgs.Empty);
 		}
 
 		//-------------------------------------------------------------------
@@ -128,35 +125,44 @@ namespace zuki.hdhomeruntray
 		}
 
 		//-------------------------------------------------------------------
-		// Private Member Functions
+		// Event Handlers
 		//-------------------------------------------------------------------
 
-		// SetWindowPosition
+		// OnSizeChanged
 		//
-		// Sets the window position
-		private void SetWindowPosition(Rectangle formbounds, Rectangle itembounds)
+		// Invoked when the size of the form has changed
+		private void OnSizeChanged(object sender, EventArgs args)
 		{
+			System.Diagnostics.Debug.WriteLine("SettingsForm::OnSizeChanged");
+
 			// This should work acceptably well given that the screen/monitor that will
 			// display this form is the same one with the taskbar, but there are better ways
 			// in .NET 4.7 and/or Windows 10/11 to figure out how to scale this value
 			float scalefactor = (SystemInformation.SmallIconSize.Height / 16.0F);
 
 			// The item's coordinates will be relative to the parent form
-			int itemleft = formbounds.Left + itembounds.Left;
+			int itemleft = m_popupformbounds.Left + m_popupitembounds.Left;
 
 			// Move the form so that it's centered above the item that was used to open it
-			int top = formbounds.Top - Size.Height - (int)(4.0F * scalefactor);
-			int left = (itemleft + (itembounds.Width / 2)) - (Width / 2);
+			int top = m_popupformbounds.Top - Size.Height - (int)(4.0F * scalefactor);
+			int left = (itemleft + (m_popupitembounds.Width / 2)) - (Width / 2);
 
 			// Adjust the left margin of the form if necessary
-			if(left < formbounds.Left) left = formbounds.Left;
+			if(left < m_popupformbounds.Left) left = m_popupformbounds.Left;
 
 			// Adjust the right margin of the form if necessary
 			int right = left + Width;
-			if(right > formbounds.Right) left -= (right - formbounds.Right);
+			if(right > m_popupformbounds.Right) left -= (right - m_popupformbounds.Right);
 
 			// Set the location of the form
 			Location = new Point(left, top);
 		}
+
+		//-------------------------------------------------------------------
+		// Member Variables
+		//-------------------------------------------------------------------
+
+		private readonly Rectangle m_popupformbounds;
+		private readonly Rectangle m_popupitembounds;
 	}
 }

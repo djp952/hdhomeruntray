@@ -68,6 +68,7 @@ namespace zuki.hdhomeruntray
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
 			this.TopMost = true;
+			this.Deactivate += new System.EventHandler(this.OnDeactivate);
 			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.OnFormClosing);
 			this.ResumeLayout(false);
 			this.PerformLayout();

@@ -69,7 +69,6 @@ namespace zuki.hdhomeruntray
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
 			this.TopMost = true;
-			this.SizeChanged += new System.EventHandler(this.OnSizeChanged);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 

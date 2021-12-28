@@ -225,6 +225,14 @@ namespace zuki.hdhomeruntray
 		// Event Handlers
 		//-------------------------------------------------------------------
 
+		// OnDeactivate
+		//
+		// Invoked when the form has been deactivated
+		private void OnDeactivate(object sender, EventArgs args)
+		{
+			// TODO: FOR FUTURE USE TO HANDLE "UNPIN AUTOMATICALLY" (ISSUE 31)
+		}
+
 		// OnDeviceStatusChanged
 		//
 		// Invoked when the of a device has changed
@@ -286,7 +294,11 @@ namespace zuki.hdhomeruntray
 						m_deviceform.DeviceStatusChanged += new DeviceStatusChangedEventHandler(OnDeviceStatusChanged);
 					}
 
-					if(m_deviceform != null) m_deviceform.Show();
+					if(m_deviceform != null)
+					{
+						m_deviceform.Deactivate += new EventHandler(OnDeactivate);
+						m_deviceform.Show(this);
+					}
 				}
 			}
 
@@ -333,8 +345,9 @@ namespace zuki.hdhomeruntray
 
 				if(m_settingsform == null)
 				{
-					m_settingsform = new SettingsForm();
-					m_settingsform.ShowFromPopupItem(this, (PopupItemControl)sender);
+					m_settingsform = new SettingsForm(this, (PopupItemControl)sender);
+					m_settingsform.Deactivate += new EventHandler(OnDeactivate);
+					m_settingsform.Show(this);
 				}
 			}
 
@@ -436,7 +449,6 @@ namespace zuki.hdhomeruntray
 				{
 					if(popupitemcontrol.ControlType == PopupItemControlType.Toggle)
 					{
-						//if(!Object.ReferenceEquals(popupitemcontrol, toggled))
 						if(popupitemcontrol != toggled && popupitemcontrol.IsToggled)
 						{
 							popupitemcontrol.Toggle(false);
