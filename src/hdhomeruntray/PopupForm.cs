@@ -193,8 +193,14 @@ namespace zuki.hdhomeruntray
 			m_layoutpanel.Controls.AddRange(new Control[] { settings, unpin });
 			m_layoutpanel.ResumeLayout();
 
+			// For auto unpin, the location of the icon when the form was pinned is needed
+			m_pinnediconrect = icon.GetBounds();
+
 			// If the form is already visible, it needs to be moved to adjust for the new width
-			if(Visible) SetWindowPosition(icon.GetBounds(), Screen.FromPoint(new Point(Left, Top)));
+			if(Visible) SetWindowPosition(m_pinnediconrect, Screen.FromPoint(new Point(Left, Top)));
+
+			// For auto unpin, the location of the icon when the form was pinned is needed
+			m_pinnediconrect = icon.GetBounds();
 
 			// Prevent adding the controls multiple times by tracking this
 			m_pinned = true;
@@ -234,11 +240,13 @@ namespace zuki.hdhomeruntray
 			// event handler is enabled
 			if((m_pinned) && (Properties.Settings.Default.AutoUnpin == EnabledDisabled.Enabled))
 			{
-				// If the cursor is not currently in the popup form client area unpin it
-				if(!ClientRectangle.Contains(PointToClient(Cursor.Position)))
-				{
-					OnUnpinSelected(this, EventArgs.Empty);
-				}
+				Point cursorpos = Cursor.Position;
+
+				bool inpopup = ClientRectangle.Contains(PointToClient(cursorpos));
+				bool inicon = m_pinnediconrect.Contains(cursorpos);
+
+				// If the cursor is not in the popup form client area and not in the icon, unpin
+				if(!inpopup && !inicon) OnUnpinSelected(this, EventArgs.Empty);
 			}
 		}
 
@@ -399,6 +407,7 @@ namespace zuki.hdhomeruntray
 		{
 			Unpinned?.Invoke(this, EventArgs.Empty);
 			m_pinned = false;
+			m_pinnediconrect = Rectangle.Empty;
 		}
 
 		//-------------------------------------------------------------------
@@ -473,6 +482,7 @@ namespace zuki.hdhomeruntray
 		//-------------------------------------------------------------------
 
 		private bool m_pinned = false;
+		private Rectangle m_pinnediconrect = Rectangle.Empty;
 		private DeviceForm m_deviceform = null;
 		private SettingsForm m_settingsform = null;
 		private DeviceStatus m_status = DeviceStatus.Idle;
