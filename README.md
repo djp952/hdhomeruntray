@@ -13,13 +13,13 @@ Copyright (C)2021 Michael G. Brehm
    
 ## BUILD ENVIRONMENT
 **REQUIRED COMPONENTS**   
-* Visual Studio 2019 (__.NET Framework 4.6.2 Targeting Pack__, __Windows 10 SDK (any version)__, __C++/CLI tools__, and __C++ 2019 Redistributable MSMs__ required)   
+* Visual Studio 2022 (__.NET Framework 4.6.2 Targeting Pack__, __Windows 10 SDK (any version)__, __C++/CLI tools__, and __C++ 2022 Redistributable MSMs__ required)   
 * Wix Toolset Build Tools v3.11.2 (https://wixtoolset.org/releases/)   
-* Wix Toolset Visual Studio 2019 Extension (https://wixtoolset.org/releases/)   
+* Wix Toolset Visual Studio 2022 Extension (https://wixtoolset.org/releases/)   
    
 ## BUILD
 **INITIALIZE SOURCE TREE AND DEPENDENCIES**
-* Open "Developer Command Prompt for VS2019"   
+* Open "Developer Command Prompt for VS2022"   
 ```
 git clone https://github.com/djp952/hdhomeruntray
 cd hdhomeruntray
@@ -27,7 +27,7 @@ git submodule update --init
 ```
    
 **BUILD TARGET PACKAGE(S)**   
-* Open "Developer Command Prompt for VS2019"   
+* Open "Developer Command Prompt for VS2022"   
 ```
 cd hdhomeruntray
 msbuild msbuild.proj
