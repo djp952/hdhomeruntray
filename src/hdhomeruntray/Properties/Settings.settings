@@ -23,5 +23,8 @@
     <Setting Name="TrayIconHover" Type="zuki.hdhomeruntray.EnabledDisabled" Scope="User">
       <Value Profile="(Default)">Enabled</Value>
     </Setting>
+    <Setting Name="AutoUnpin" Type="zuki.hdhomeruntray.EnabledDisabled" Scope="User">
+      <Value Profile="(Default)">Disabled</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

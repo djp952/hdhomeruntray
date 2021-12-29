@@ -230,7 +230,16 @@ namespace zuki.hdhomeruntray
 		// Invoked when the form has been deactivated
 		private void OnDeactivate(object sender, EventArgs args)
 		{
-			// TODO: FOR FUTURE USE TO HANDLE "UNPIN AUTOMATICALLY" (ISSUE 31)
+			// If the form is pinned and the setting to auto-unpin is set, this
+			// event handler is enabled
+			if((m_pinned) && (Properties.Settings.Default.AutoUnpin == EnabledDisabled.Enabled))
+			{
+				// If the cursor is not currently in the popup form client area unpin it
+				if(!ClientRectangle.Contains(PointToClient(Cursor.Position)))
+				{
+					OnUnpinSelected(this, EventArgs.Empty);
+				}
+			}
 		}
 
 		// OnDeviceStatusChanged
@@ -389,6 +398,7 @@ namespace zuki.hdhomeruntray
 		private void OnUnpinSelected(object sender, EventArgs args)
 		{
 			Unpinned?.Invoke(this, EventArgs.Empty);
+			m_pinned = false;
 		}
 
 		//-------------------------------------------------------------------

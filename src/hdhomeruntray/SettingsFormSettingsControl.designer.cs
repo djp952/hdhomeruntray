@@ -36,12 +36,14 @@ namespace zuki.hdhomeruntray
 			this.m_trayiconhoverlabel = new System.Windows.Forms.Label();
 			this.m_trayiconhoverdelaylabel = new System.Windows.Forms.Label();
 			this.m_tunerstatuscolorsourcelabel = new System.Windows.Forms.Label();
+			this.m_unpinautomaticallylabel = new System.Windows.Forms.Label();
 			this.m_autostart = new zuki.hdhomeruntray.AutoSizeComboBox();
 			this.m_discoveryinterval = new zuki.hdhomeruntray.AutoSizeComboBox();
 			this.m_discoverymethod = new zuki.hdhomeruntray.AutoSizeComboBox();
 			this.m_trayiconhover = new zuki.hdhomeruntray.AutoSizeComboBox();
 			this.m_trayiconhoverdelay = new zuki.hdhomeruntray.AutoSizeComboBox();
 			this.m_tunerstatuscolorsource = new zuki.hdhomeruntray.AutoSizeComboBox();
+			this.m_unpinautomatically = new zuki.hdhomeruntray.AutoSizeComboBox();
 			this.m_layoutpanel.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -59,17 +61,20 @@ namespace zuki.hdhomeruntray
 			this.m_layoutpanel.Controls.Add(this.m_trayiconhoverlabel, 0, 3);
 			this.m_layoutpanel.Controls.Add(this.m_trayiconhoverdelaylabel, 0, 4);
 			this.m_layoutpanel.Controls.Add(this.m_tunerstatuscolorsourcelabel, 0, 5);
+			this.m_layoutpanel.Controls.Add(this.m_unpinautomaticallylabel, 0, 6);
 			this.m_layoutpanel.Controls.Add(this.m_autostart, 1, 2);
 			this.m_layoutpanel.Controls.Add(this.m_discoveryinterval, 1, 0);
 			this.m_layoutpanel.Controls.Add(this.m_discoverymethod, 1, 1);
 			this.m_layoutpanel.Controls.Add(this.m_trayiconhover, 1, 3);
 			this.m_layoutpanel.Controls.Add(this.m_trayiconhoverdelay, 1, 4);
 			this.m_layoutpanel.Controls.Add(this.m_tunerstatuscolorsource, 1,5);
+			this.m_layoutpanel.Controls.Add(this.m_unpinautomatically, 1, 6);
 			this.m_layoutpanel.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.m_layoutpanel.Location = new System.Drawing.Point(0, 0);
 			this.m_layoutpanel.Name = "m_layoutpanel";
 			this.m_layoutpanel.Padding = new System.Windows.Forms.Padding(4);
-			this.m_layoutpanel.RowCount = 6;
+			this.m_layoutpanel.RowCount = 7;
+			this.m_layoutpanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.m_layoutpanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.m_layoutpanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.m_layoutpanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -151,6 +156,18 @@ namespace zuki.hdhomeruntray
 			this.m_tunerstatuscolorsourcelabel.Text = "Tuner Status Color Source";
 			this.m_tunerstatuscolorsourcelabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
+			// m_unpinautomaticallylabel
+			// 
+			this.m_unpinautomaticallylabel.AutoSize = true;
+			this.m_unpinautomaticallylabel.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.m_unpinautomaticallylabel.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.m_unpinautomaticallylabel.Location = new System.Drawing.Point(7, 105);
+			this.m_unpinautomaticallylabel.Name = "m_unpinautomaticallylabel";
+			this.m_unpinautomaticallylabel.Size = new System.Drawing.Size(144, 34);
+			this.m_unpinautomaticallylabel.TabIndex = 3;
+			this.m_unpinautomaticallylabel.Text = "Unpin Automatically";
+			this.m_unpinautomaticallylabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
 			// m_autostart
 			// 
 			this.m_autostart.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -223,6 +240,18 @@ namespace zuki.hdhomeruntray
 			this.m_tunerstatuscolorsource.TabIndex = 9;
 			this.m_tunerstatuscolorsource.SelectionChangeCommitted += new System.EventHandler(this.OnTunerStatusColorSourceCommitted);
 			// 
+			// m_unpinautomatically
+			// 
+			this.m_unpinautomatically.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.m_unpinautomatically.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.m_unpinautomatically.FormattingEnabled = true;
+			this.m_unpinautomatically.Location = new System.Drawing.Point(158, 109);
+			this.m_unpinautomatically.Margin = new System.Windows.Forms.Padding(4, 4, 4, 7);
+			this.m_unpinautomatically.Name = "m_unpinautomatically";
+			this.m_unpinautomatically.Size = new System.Drawing.Size(131, 23);
+			this.m_unpinautomatically.TabIndex = 8;
+			this.m_unpinautomatically.SelectionChangeCommitted += new System.EventHandler(this.OnUnpinAutomaticallyCommitted);
+			// 
 			// SettingsFormSettingsControl
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Inherit;
@@ -236,7 +265,6 @@ namespace zuki.hdhomeruntray
 			this.m_layoutpanel.PerformLayout();
 			this.ResumeLayout(false);
 			this.PerformLayout();
-
 		}
 
 		#endregion
@@ -248,11 +276,13 @@ namespace zuki.hdhomeruntray
 		private System.Windows.Forms.Label m_trayiconhoverlabel;
 		private System.Windows.Forms.Label m_trayiconhoverdelaylabel;
 		private System.Windows.Forms.Label m_tunerstatuscolorsourcelabel;
+		private System.Windows.Forms.Label m_unpinautomaticallylabel;
 		private AutoSizeComboBox m_autostart;
 		private AutoSizeComboBox m_discoveryinterval;
 		private AutoSizeComboBox m_discoverymethod;
 		private AutoSizeComboBox m_trayiconhover;
 		private AutoSizeComboBox m_trayiconhoverdelay;
 		private AutoSizeComboBox m_tunerstatuscolorsource;
+		private AutoSizeComboBox m_unpinautomatically;
 	}
 }

@@ -106,5 +106,17 @@ namespace zuki.hdhomeruntray.Properties {
                 this["TrayIconHover"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Disabled")]
+        public global::zuki.hdhomeruntray.EnabledDisabled AutoUnpin {
+            get {
+                return ((global::zuki.hdhomeruntray.EnabledDisabled)(this["AutoUnpin"]));
+            }
+            set {
+                this["AutoUnpin"] = value;
+            }
+        }
     }
 }
