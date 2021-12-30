@@ -39,19 +39,16 @@ namespace zuki.hdhomeruntray
 	{
 		// Instance Constructor (protected)
 		//
-		protected PopupItemControl(PopupItemControlType type)
+		protected PopupItemControl(PopupItemControlType type, SizeF scalefactor)
 		{
 			InitializeComponent();
 
 			m_layoutpanel.EnableDoubleBuferring();
 
-			using(Graphics graphics = CreateGraphics())
-			{
-				Padding = Padding.ScaleDPI(graphics);
-				m_layoutpanel.Margin = m_layoutpanel.Margin.ScaleDPI(graphics);
-				m_layoutpanel.Padding = m_layoutpanel.Padding.ScaleDPI(graphics);
-				m_layoutpanel.Radii = m_layoutpanel.Radii.ScaleDPI(graphics);
-			}
+			Padding = Padding.ScaleDPI(scalefactor);
+			m_layoutpanel.Margin = m_layoutpanel.Margin.ScaleDPI(scalefactor);
+			m_layoutpanel.Padding = m_layoutpanel.Padding.ScaleDPI(scalefactor);
+			m_layoutpanel.Radii = m_layoutpanel.Radii.ScaleDPI(scalefactor);
 
 			// Save the type of control being implemented
 			m_type = type;

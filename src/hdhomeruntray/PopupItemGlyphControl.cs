@@ -34,13 +34,13 @@ namespace zuki.hdhomeruntray
 	{
 		// Instance Constructor
 		//
-		public PopupItemGlyphControl(SymbolGlyph glyph) : this(glyph, PopupItemControlType.Button)
+		public PopupItemGlyphControl(SymbolGlyph glyph, SizeF scalefactor) : this(glyph, PopupItemControlType.Button, scalefactor)
 		{
 		}
 
 		// Instance Constructor
 		//
-		public PopupItemGlyphControl(SymbolGlyph glyph, PopupItemControlType type) : base(type)
+		public PopupItemGlyphControl(SymbolGlyph glyph, PopupItemControlType type, SizeF scalefactor) : base(type, scalefactor)
 		{
 			// Create the label control for the symbol
 			PassthroughLabelControl label = new PassthroughLabelControl

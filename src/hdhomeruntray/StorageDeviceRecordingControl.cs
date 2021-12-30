@@ -37,18 +37,15 @@ namespace zuki.hdhomeruntray
 	{
 		// Instance Constructor
 		//
-		private StorageDeviceRecordingControl()
+		private StorageDeviceRecordingControl(SizeF scalefactor)
 		{
 			InitializeComponent();
 
 			m_layoutpanel.EnableDoubleBuferring();
 
-			using(Graphics graphics = CreateGraphics())
-			{
-				Padding = Padding.ScaleDPI(graphics);
-				m_layoutpanel.Margin = m_layoutpanel.Margin.ScaleDPI(graphics);
-				m_layoutpanel.Padding = m_layoutpanel.Padding.ScaleDPI(graphics);
-			}
+			Padding = Padding.ScaleDPI(scalefactor);
+			m_layoutpanel.Margin = m_layoutpanel.Margin.ScaleDPI(scalefactor);
+			m_layoutpanel.Padding = m_layoutpanel.Padding.ScaleDPI(scalefactor);
 
 			// WINDOWS 11
 			//
@@ -61,7 +58,7 @@ namespace zuki.hdhomeruntray
 
 		// Instance Constructor
 		//
-		public StorageDeviceRecordingControl(Recording recording) : this()
+		public StorageDeviceRecordingControl(Recording recording, SizeF scalefactor) : this(scalefactor)
 		{
 			if(recording == null) throw new ArgumentNullException(nameof(recording));
 

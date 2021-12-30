@@ -39,7 +39,7 @@ namespace zuki.hdhomeruntray
 	{
 		// Instance Constructor
 		//
-		private TunerDeviceStatusControl()
+		private TunerDeviceStatusControl(SizeF scalefactor)
 		{
 			InitializeComponent();
 
@@ -51,37 +51,37 @@ namespace zuki.hdhomeruntray
 			m_footerlayoutpanel.SuspendLayout();
 			SuspendLayout();
 
+			// The scaling factor needs to be saved as it's used dynamically below
+			m_scalefactor = scalefactor;
+
 			try
 			{
-				using(Graphics graphics = CreateGraphics())
-				{
-					Padding = Padding.ScaleDPI(graphics);
+				Padding = Padding.ScaleDPI(m_scalefactor);
 
-					m_layoutpanel.Margin = m_layoutpanel.Margin.ScaleDPI(graphics);
-					m_layoutpanel.Padding = m_layoutpanel.Padding.ScaleDPI(graphics);
-					m_headerlayoutpanel.Margin = m_headerlayoutpanel.Margin.ScaleDPI(graphics);
-					m_headerlayoutpanel.Padding = m_headerlayoutpanel.Padding.ScaleDPI(graphics);
-					m_signallayoutpanel.Margin = m_signallayoutpanel.Margin.ScaleDPI(graphics);
-					m_signallayoutpanel.Padding = m_signallayoutpanel.Padding.ScaleDPI(graphics);
-					m_footerlayoutpanel.Margin = m_footerlayoutpanel.Margin.ScaleDPI(graphics);
-					m_footerlayoutpanel.Padding = m_footerlayoutpanel.Padding.ScaleDPI(graphics);
+				m_layoutpanel.Margin = m_layoutpanel.Margin.ScaleDPI(m_scalefactor);
+				m_layoutpanel.Padding = m_layoutpanel.Padding.ScaleDPI(m_scalefactor);
+				m_headerlayoutpanel.Margin = m_headerlayoutpanel.Margin.ScaleDPI(m_scalefactor);
+				m_headerlayoutpanel.Padding = m_headerlayoutpanel.Padding.ScaleDPI(m_scalefactor);
+				m_signallayoutpanel.Margin = m_signallayoutpanel.Margin.ScaleDPI(m_scalefactor);
+				m_signallayoutpanel.Padding = m_signallayoutpanel.Padding.ScaleDPI(m_scalefactor);
+				m_footerlayoutpanel.Margin = m_footerlayoutpanel.Margin.ScaleDPI(m_scalefactor);
+				m_footerlayoutpanel.Padding = m_footerlayoutpanel.Padding.ScaleDPI(m_scalefactor);
 
-					m_signalstrengthlabel.Padding = m_signalstrengthlabel.Padding.ScaleDPI(graphics);
-					m_signalstrengthbar.Padding = m_signalstrengthbar.Padding.ScaleDPI(graphics);
-					m_signalstrengthpct.Padding = m_signalstrengthpct.Padding.ScaleDPI(graphics);
+				m_signalstrengthlabel.Padding = m_signalstrengthlabel.Padding.ScaleDPI(m_scalefactor);
+				m_signalstrengthbar.Padding = m_signalstrengthbar.Padding.ScaleDPI(m_scalefactor);
+				m_signalstrengthpct.Padding = m_signalstrengthpct.Padding.ScaleDPI(m_scalefactor);
 
-					m_signalqualitylabel.Padding = m_signalqualitylabel.Padding.ScaleDPI(graphics);
-					m_signalqualitybar.Padding = m_signalqualitybar.Padding.ScaleDPI(graphics);
-					m_signalqualitypct.Padding = m_signalqualitypct.Padding.ScaleDPI(graphics);
+				m_signalqualitylabel.Padding = m_signalqualitylabel.Padding.ScaleDPI(m_scalefactor);
+				m_signalqualitybar.Padding = m_signalqualitybar.Padding.ScaleDPI(m_scalefactor);
+				m_signalqualitypct.Padding = m_signalqualitypct.Padding.ScaleDPI(m_scalefactor);
 
-					m_symbolqualitylabel.Padding = m_symbolqualitylabel.Padding.ScaleDPI(graphics);
-					m_symbolqualitybar.Padding = m_symbolqualitybar.Padding.ScaleDPI(graphics);
-					m_symbolqualitypct.Padding = m_symbolqualitypct.Padding.ScaleDPI(graphics);
-				}
+				m_symbolqualitylabel.Padding = m_symbolqualitylabel.Padding.ScaleDPI(m_scalefactor);
+				m_symbolqualitybar.Padding = m_symbolqualitybar.Padding.ScaleDPI(m_scalefactor);
+				m_symbolqualitypct.Padding = m_symbolqualitypct.Padding.ScaleDPI(m_scalefactor);
 
 				// Scale the middle column to have a consistent progress bar width
 				int column = m_signallayoutpanel.GetColumn(m_signalstrengthbar);
-				m_signallayoutpanel.ColumnStyles[column].Width = m_signallayoutpanel.ColumnStyles[column].Width.ScaleDPI(Handle);
+				m_signallayoutpanel.ColumnStyles[column].Width = (m_signallayoutpanel.ColumnStyles[column].Width * m_scalefactor.Width);
 
 				// These panels start out as invisible
 				m_signallayoutpanel.Visible = false;
@@ -127,7 +127,7 @@ namespace zuki.hdhomeruntray
 
 		// Instance Constructor
 		//
-		public TunerDeviceStatusControl(TunerDevice device, Tuner tuner) : this()
+		public TunerDeviceStatusControl(TunerDevice device, Tuner tuner, SizeF scalefactor) : this(scalefactor)
 		{
 			m_device = device ?? throw new ArgumentNullException(nameof(device));
 			m_tuner = tuner ?? throw new ArgumentNullException(nameof(tuner));
@@ -221,7 +221,7 @@ namespace zuki.hdhomeruntray
 					else if(m_footerlayoutpanel.Visible) m_footerlayoutpanel.Visible = false;
 
 					// The padding of the signal layout pane may need to change based on footer visibility
-					Padding newpadding = new Padding(0, 4, 0, (m_footerlayoutpanel.Visible) ? 4 : 0).ScaleDPI(Handle);
+					Padding newpadding = new Padding(0, 4, 0, (m_footerlayoutpanel.Visible) ? 4 : 0).ScaleDPI(m_scalefactor);
 					if(!m_signallayoutpanel.Padding.Equals(newpadding)) m_signallayoutpanel.Padding = newpadding;
 				}
 
@@ -271,5 +271,6 @@ namespace zuki.hdhomeruntray
 		private readonly TunerDevice m_device;
 		private readonly Tuner m_tuner;
 		private int m_lasthash = 0;
+		private readonly SizeF m_scalefactor = SizeF.Empty;
 	}
 }

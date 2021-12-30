@@ -35,7 +35,7 @@ namespace zuki.hdhomeruntray
 	{
 		// Instance Constructor
 		//
-		public PopupItemLabelControl(string text) : base(PopupItemControlType.Static)
+		public PopupItemLabelControl(string text, SizeF scalefactor) : base(PopupItemControlType.Static, scalefactor)
 		{
 			if(text == null) throw new ArgumentNullException(nameof(text));
 

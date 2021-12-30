@@ -84,26 +84,6 @@ namespace zuki.hdhomeruntray
 		}
 
 		//-------------------------------------------------------------------
-		// float.ScaleDPI
-		//
-		// Scales a float value based on the DPI of the system
-
-		public static float ScaleDPI(this float value, IntPtr handle)
-		{
-			float factorx = 1.0F;           // Assume no horizontal scaling
-			float factory = 1.0F;           // Assume no vertical scaling
-
-			// Use a Graphics instance to determine the control's DPI factor
-			using(Graphics gr = Graphics.FromHwnd(handle))
-			{
-				factorx = gr.DpiX / 96.0F;
-				factory = gr.DpiY / 96.0F;
-			}
-
-			return (float)(value * ((factorx + factory) / 2.0));
-		}
-
-		//-------------------------------------------------------------------
 		// Graphics.DrawRoundedRectangle
 		//
 		// Draws a rounded rectangle specified by a bounding Rectangle and four corner radius values
@@ -180,46 +160,6 @@ namespace zuki.hdhomeruntray
 		}
 
 		//-------------------------------------------------------------------
-		// int.ScaleDPI
-		//
-		// Scales an integer value based on the DPI of the system
-
-		public static int ScaleDPI(this int value, IntPtr handle)
-		{
-			float factor = 1.0F;            // Assume no scaling
-
-			// Use a Graphics instance to determine the control's DPI factor
-			using(Graphics gr = Graphics.FromHwnd(handle))
-			{
-				factor = (gr.DpiX / 96.0F) + (gr.DpiY / 96.0F) / 2.0F;
-			}
-
-			return (int)(value * factor);
-		}
-
-		//-------------------------------------------------------------------
-		// Padding.ScaleDPI
-		//
-		// Scales a Padding value based on the DPI of the system
-
-		public static Padding ScaleDPI(this Padding padding, IntPtr handle)
-		{
-			float factorx = 1.0F;           // Assume no horizontal scaling
-			float factory = 1.0F;           // Assume no vertical scaling
-
-			// Use a Graphics instance to determine the control's DPI factor
-			using(Graphics gr = Graphics.FromHwnd(handle))
-			{
-				factorx = gr.DpiX / 96.0F;
-				factory = gr.DpiY / 96.0F;
-			}
-
-			// Create a new Padding instance with the scaling factors applied
-			return new Padding((int)(padding.Left * factorx), (int)(padding.Top * factory),
-				(int)(padding.Right * factorx), (int)(padding.Bottom * factory));
-		}
-
-		//-------------------------------------------------------------------
 		// Padding.ScaleDPI
 		//
 		// Scales a Padding value based on the DPI of the system
@@ -235,23 +175,15 @@ namespace zuki.hdhomeruntray
 		}
 
 		//-------------------------------------------------------------------
-		// Radii.ScaleDPI
+		// Padding.ScaleDPI
 		//
-		// Scales a Radii value based on the DPI of the system
+		// Scales a Padding value based on a precalculated X/Y scaling factor
 
-		public static Radii ScaleDPI(this Radii radii, IntPtr handle)
+		public static Padding ScaleDPI(this Padding padding, SizeF factor)
 		{
-			float factor = 1.0F;            // Assume no scaling
-
-			// Use a Graphics instance to determine the control's DPI factor
-			using(Graphics gr = Graphics.FromHwnd(handle))
-			{
-				factor = (gr.DpiX / 96.0F) + (gr.DpiY / 96.0F) / 2.0F;
-			}
-
-			// Create a new Radii instance with the scaling factor applied
-			return new Radii((int)(radii.TopLeft * factor), (int)(radii.TopRight * factor),
-				(int)(radii.BottomRight * factor), (int)(radii.BottomLeft * factor));
+			// Create a new Padding instance with the scaling factors applied
+			return new Padding((int)(padding.Left * factor.Width), (int)(padding.Top * factor.Height),
+				(int)(padding.Right * factor.Width), (int)(padding.Bottom * factor.Height));
 		}
 
 		//-------------------------------------------------------------------
@@ -269,17 +201,17 @@ namespace zuki.hdhomeruntray
 		}
 
 		//-------------------------------------------------------------------
-		// Size.ScaleDPI
+		// Radii.ScaleDPI
 		//
-		// Scales a Padding value based on the DPI of the system
+		// Scales a Radii value based on a precalculated X/Y scaling factor
 
-		public static Size ScaleDPI(this Size size, Graphics graphics)
+		public static Radii ScaleDPI(this Radii radii, SizeF factor)
 		{
-			float factorx = graphics.DpiX / 96.0F;
-			float factory = graphics.DpiY / 96.0F;
+			float avgfactor = (factor.Width + factor.Height) / 2.0F;
 
-			// Return a new Size instance with the scaling factor applied
-			return new Size((int)(size.Width * factorx), (int)(size.Height * factory));
+			// Create a new Radii instance with the scaling factor applied
+			return new Radii((int)(radii.TopLeft * avgfactor), (int)(radii.TopRight * avgfactor),
+				(int)(radii.BottomRight * avgfactor), (int)(radii.BottomLeft * avgfactor));
 		}
 
 		//-------------------------------------------------------------------

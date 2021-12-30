@@ -81,13 +81,16 @@ namespace zuki.hdhomeruntray
 				NativeMethods.DwmSetWindowAttribute(Handle, attribute, ref preference, sizeof(uint));
 			}
 
-			// Scale the padding based on the form DPI
+			// Using CreateGraphics() in every form/control that autoscales was
+			// causing a performance concern; calculate the factor only once
 			using(Graphics graphics = CreateGraphics())
 			{
-				Padding = Padding.ScaleDPI(graphics);
-				m_layoutpanel.Margin = m_layoutpanel.Margin.ScaleDPI(graphics);
-				m_layoutpanel.Padding = m_layoutpanel.Padding.ScaleDPI(graphics);
+				m_scalefactor = new SizeF(graphics.DpiX / 96.0F, graphics.DpiY / 96.0F);
 			}
+
+			Padding = Padding.ScaleDPI(m_scalefactor);
+			m_layoutpanel.Margin = m_layoutpanel.Margin.ScaleDPI(m_scalefactor);
+			m_layoutpanel.Padding = m_layoutpanel.Padding.ScaleDPI(m_scalefactor);
 		}
 
 		// Instance Constructor (protected)
@@ -175,6 +178,12 @@ namespace zuki.hdhomeruntray
 		{
 			DeviceStatusChanged?.Invoke(sender, args);
 		}
+
+		//-------------------------------------------------------------------
+		// Protected Member Variables
+		//-------------------------------------------------------------------
+
+		protected readonly SizeF m_scalefactor = SizeF.Empty;
 
 		//-------------------------------------------------------------------
 		// Member Variables

@@ -38,19 +38,16 @@ namespace zuki.hdhomeruntray
 	{
 		// Instance Constructor
 		//
-		private TunerDeviceHeaderControl()
+		private TunerDeviceHeaderControl(SizeF scalefactor)
 		{
 			InitializeComponent();
 
 			m_layoutpanel.EnableDoubleBuferring();
 
-			using(Graphics graphics = CreateGraphics())
-			{
-				Padding = Padding.ScaleDPI(graphics);
-				m_layoutpanel.Margin = m_layoutpanel.Margin.ScaleDPI(graphics);
-				m_layoutpanel.Padding = m_layoutpanel.Padding.ScaleDPI(graphics);
-				m_layoutpanel.Radii = m_layoutpanel.Radii.ScaleDPI(graphics);
-			}
+			Padding = Padding.ScaleDPI(scalefactor);
+			m_layoutpanel.Margin = m_layoutpanel.Margin.ScaleDPI(scalefactor);
+			m_layoutpanel.Padding = m_layoutpanel.Padding.ScaleDPI(scalefactor);
+			m_layoutpanel.Radii = m_layoutpanel.Radii.ScaleDPI(scalefactor);
 
 			// WINDOWS 11
 			//
@@ -65,7 +62,7 @@ namespace zuki.hdhomeruntray
 
 		// Instance Constructor
 		//
-		public TunerDeviceHeaderControl(TunerDevice device) : this()
+		public TunerDeviceHeaderControl(TunerDevice device, SizeF scalefactor) : this(scalefactor)
 		{
 			if(device == null) throw new ArgumentNullException(nameof(device));
 

@@ -83,13 +83,16 @@ namespace zuki.hdhomeruntray
 				NativeMethods.DwmSetWindowAttribute(Handle, attribute, ref preference, sizeof(uint));
 			}
 
-			// Scale the padding based on the form DPI
+			// Using CreateGraphics() in every form/control that autoscales was
+			// causing a performance concern; calculate the factor only once
 			using(Graphics graphics = CreateGraphics())
 			{
-				Padding = Padding.ScaleDPI(graphics);
-				m_layoutpanel.Margin = m_layoutpanel.Margin.ScaleDPI(graphics);
-				m_layoutpanel.Padding = m_layoutpanel.Padding.ScaleDPI(graphics);
+				m_scalefactor = new SizeF(graphics.DpiX / 96.0F, graphics.DpiY / 96.0F);
 			}
+
+			Padding = Padding.ScaleDPI(m_scalefactor);
+			m_layoutpanel.Margin = m_layoutpanel.Margin.ScaleDPI(m_scalefactor);
+			m_layoutpanel.Padding = m_layoutpanel.Padding.ScaleDPI(m_scalefactor);
 		}
 
 		// Instance Constructor
@@ -107,7 +110,7 @@ namespace zuki.hdhomeruntray
 			// If no devices were detected, place a dummy item in the list
 			if(devices.Count == 0)
 			{
-				m_layoutpanel.Controls.Add(new PopupItemLabelControl("No HDHomeRun devices detected"));
+				m_layoutpanel.Controls.Add(new PopupItemLabelControl("No HDHomeRun devices detected", m_scalefactor));
 				return;
 			}
 
@@ -115,7 +118,7 @@ namespace zuki.hdhomeruntray
 			for(int index = 0; index < devices.Count; index++)
 			{
 				// Create the device control and enable hovering by adding an event handler
-				PopupItemDeviceControl devicecontrol = new PopupItemDeviceControl(devices[index])
+				PopupItemDeviceControl devicecontrol = new PopupItemDeviceControl(devices[index], m_scalefactor)
 				{
 					HoverToClick = true
 				};
@@ -123,17 +126,14 @@ namespace zuki.hdhomeruntray
 				// If there is more than one device to display
 				if(devices.Count > 1)
 				{
-					using(Graphics graphics = CreateGraphics())
-					{
-						// The first device only gets right padding
-						if(index == 0) devicecontrol.Padding = new Padding(0, 0, 1, 0).ScaleDPI(graphics);
+					// The first device only gets right padding
+					if(index == 0) devicecontrol.Padding = new Padding(0, 0, 1, 0).ScaleDPI(m_scalefactor);
 
-						// The last device only gets left padding
-						else if(index == (devices.Count - 1)) devicecontrol.Padding = new Padding(1, 0, 0, 0).ScaleDPI(graphics);
+					// The last device only gets left padding
+					else if(index == (devices.Count - 1)) devicecontrol.Padding = new Padding(1, 0, 0, 0).ScaleDPI(m_scalefactor);
 
-						// Middle devices get both left and right padding
-						else devicecontrol.Padding = new Padding(1, 0, 1, 0).ScaleDPI(graphics);
-					}
+					// Middle devices get both left and right padding
+					else devicecontrol.Padding = new Padding(1, 0, 1, 0).ScaleDPI(m_scalefactor);
 				}
 
 				devicecontrol.Toggled += new PopupItemToggledEventHandler(OnDeviceToggled);
@@ -179,16 +179,16 @@ namespace zuki.hdhomeruntray
 			if(m_pinned) return;
 
 			// Create the settings toggle
-			PopupItemGlyphControl settings = new PopupItemGlyphControl(SymbolGlyph.Settings, PopupItemControlType.Toggle)
+			PopupItemGlyphControl settings = new PopupItemGlyphControl(SymbolGlyph.Settings, PopupItemControlType.Toggle, m_scalefactor)
 			{
-				Padding = new Padding(2, 0, 1, 0).ScaleDPI(Handle)
+				Padding = new Padding(2, 0, 1, 0).ScaleDPI(m_scalefactor)
 			};
 			settings.Toggled += new PopupItemToggledEventHandler(OnSettingsToggled);
 
 			// Crate the unpin button
-			PopupItemGlyphControl unpin = new PopupItemGlyphControl(SymbolGlyph.Unpin, PopupItemControlType.Button)
+			PopupItemGlyphControl unpin = new PopupItemGlyphControl(SymbolGlyph.Unpin, PopupItemControlType.Button, m_scalefactor)
 			{
-				Padding = new Padding(1, 0, 1, 0).ScaleDPI(Handle)
+				Padding = new Padding(1, 0, 1, 0).ScaleDPI(m_scalefactor)
 			};
 			unpin.Selected += new EventHandler(OnUnpinSelected);
 
@@ -490,5 +490,6 @@ namespace zuki.hdhomeruntray
 		private DeviceForm m_deviceform = null;
 		private SettingsForm m_settingsform = null;
 		private DeviceStatus m_status = DeviceStatus.Idle;
+		private readonly SizeF m_scalefactor = SizeF.Empty;
 	}
 }

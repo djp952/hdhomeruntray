@@ -47,18 +47,18 @@ namespace zuki.hdhomeruntray
 			try
 			{
 				// Add the header user control for the device
-				m_header = new StorageDeviceHeaderControl(device)
+				m_header = new StorageDeviceHeaderControl(device, m_scalefactor)
 				{
 					Dock = DockStyle.Top,
-					Padding = new Padding(0, 0, 0, 1).ScaleDPI(Handle)
+					Padding = new Padding(0, 0, 0, 1).ScaleDPI(m_scalefactor)
 				};
 				m_layoutpanel.Controls.Add(m_header);
 
 				// Add the footer user control for the device
-				m_footer = new StorageDeviceFooterControl(device)
+				m_footer = new StorageDeviceFooterControl(device, m_scalefactor)
 				{
 					Dock = DockStyle.Top,
-					Padding = new Padding(0, 1, 0, 0).ScaleDPI(Handle)
+					Padding = new Padding(0, 1, 0, 0).ScaleDPI(m_scalefactor)
 				};
 				m_layoutpanel.Controls.Add(m_footer);
 
@@ -124,10 +124,10 @@ namespace zuki.hdhomeruntray
 				{
 					if(!controls.Any(control => (control is StorageDeviceIdleControl)))
 					{
-						StorageDeviceIdleControl idlecontrol = new StorageDeviceIdleControl()
+						StorageDeviceIdleControl idlecontrol = new StorageDeviceIdleControl(m_scalefactor)
 						{
 							Dock = DockStyle.Top,
-							Padding = new Padding(0, 1, 0, 1).ScaleDPI(Handle)
+							Padding = new Padding(0, 1, 0, 1).ScaleDPI(m_scalefactor)
 						};
 
 						// Insert idle items after the header
@@ -143,11 +143,11 @@ namespace zuki.hdhomeruntray
 					{
 						if(!controls.Any(control => (control is StorageDeviceLiveBufferControl) && ((int)control.Tag == livebuffer.GetHashCode())))
 						{
-							StorageDeviceLiveBufferControl livebuffercontrol = new StorageDeviceLiveBufferControl(livebuffer)
+							StorageDeviceLiveBufferControl livebuffercontrol = new StorageDeviceLiveBufferControl(livebuffer, m_scalefactor)
 							{
 								Dock = DockStyle.Top,
 								Tag = livebuffer.GetHashCode(),
-								Padding = new Padding(0, 1, 0, 1).ScaleDPI(Handle)
+								Padding = new Padding(0, 1, 0, 1).ScaleDPI(m_scalefactor)
 							};
 
 							// Insert LiveBuffer items after the header
@@ -161,11 +161,11 @@ namespace zuki.hdhomeruntray
 					{
 						if(!controls.Any(control => (control is StorageDevicePlaybackControl) && ((int)control.Tag == playback.GetHashCode())))
 						{
-							StorageDevicePlaybackControl playbackcontrol = new StorageDevicePlaybackControl(playback)
+							StorageDevicePlaybackControl playbackcontrol = new StorageDevicePlaybackControl(playback, m_scalefactor)
 							{
 								Dock = DockStyle.Top,
 								Tag = playback.GetHashCode(),
-								Padding = new Padding(0, 1, 0, 1).ScaleDPI(Handle)
+								Padding = new Padding(0, 1, 0, 1).ScaleDPI(m_scalefactor)
 							};
 
 							// Insert LiveBuffer items after the header
@@ -179,11 +179,11 @@ namespace zuki.hdhomeruntray
 					{
 						if(!controls.Any(control => (control is StorageDeviceRecordingControl) && ((int)control.Tag == recording.GetHashCode())))
 						{
-							StorageDeviceRecordingControl recordingcontrol = new StorageDeviceRecordingControl(recording)
+							StorageDeviceRecordingControl recordingcontrol = new StorageDeviceRecordingControl(recording, m_scalefactor)
 							{
 								Dock = DockStyle.Top,
 								Tag = recording.GetHashCode(),
-								Padding = new Padding(0, 1, 0, 1).ScaleDPI(Handle)
+								Padding = new Padding(0, 1, 0, 1).ScaleDPI(m_scalefactor)
 							};
 
 							// Insert Recording items above the footer

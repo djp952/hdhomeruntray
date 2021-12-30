@@ -44,7 +44,12 @@ namespace zuki.hdhomeruntray
 		{
 			InitializeComponent();
 
-			Padding = Padding.ScaleDPI(Handle);
+			using(Graphics graphics = CreateGraphics())
+			{
+				m_scalefactor = new SizeF(graphics.DpiX / 96.0F, graphics.DpiY / 96.0F);
+			}
+
+			Padding = Padding.ScaleDPI(m_scalefactor);
 		}
 
 		//-------------------------------------------------------------------
@@ -159,7 +164,7 @@ namespace zuki.hdhomeruntray
 			{
 				// Fill with slighly rounded corners
 				args.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
-				args.Graphics.FillRoundedRectangle(brush, rect, Math.Min(rect.Width, 2.ScaleDPI(Handle)));
+				args.Graphics.FillRoundedRectangle(brush, rect, Math.Min(rect.Width, (int)(2.0F * m_scalefactor.Width)));
 			}
 		}
 
@@ -193,5 +198,6 @@ namespace zuki.hdhomeruntray
 		private int m_maximum = 100;
 		private int m_value = 0;
 		private Color m_color = Color.Blue;
+		private readonly SizeF m_scalefactor = SizeF.Empty;
 	}
 }

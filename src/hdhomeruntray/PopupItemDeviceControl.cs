@@ -39,7 +39,7 @@ namespace zuki.hdhomeruntray
 	{
 		// Instance Constructor
 		//
-		public PopupItemDeviceControl(Device device) : base(PopupItemControlType.Toggle)
+		public PopupItemDeviceControl(Device device, SizeF scalefactor) : base(PopupItemControlType.Toggle, scalefactor)
 		{
 			m_device = device ?? throw new ArgumentNullException(nameof(device));
 

@@ -45,30 +45,30 @@ namespace zuki.hdhomeruntray
 			try
 			{
 				// Add the header user control for the device
-				m_header = new TunerDeviceHeaderControl(device)
+				m_header = new TunerDeviceHeaderControl(device, m_scalefactor)
 				{
 					Dock = DockStyle.Top,
-					Padding = new Padding(0, 0, 0, 1).ScaleDPI(Handle)
+					Padding = new Padding(0, 0, 0, 1).ScaleDPI(m_scalefactor)
 				};
 				m_layoutpanel.Controls.Add(m_header);
 
 				// Add the tuner user controls for the device
 				foreach(Tuner tuner in device.Tuners)
 				{
-					TunerDeviceStatusControl status = new TunerDeviceStatusControl(device, tuner)
+					TunerDeviceStatusControl status = new TunerDeviceStatusControl(device, tuner, m_scalefactor)
 					{
 						Dock = DockStyle.Top,
-						Padding = new Padding(0, 1, 0, 1).ScaleDPI(Handle)
+						Padding = new Padding(0, 1, 0, 1).ScaleDPI(m_scalefactor)
 					};
 					status.DeviceStatusChanged += new DeviceStatusChangedEventHandler(OnDeviceStatusChanged);
 					m_layoutpanel.Controls.Add(status);
 				}
 
 				// Add the footer user control for the device
-				m_footer = new TunerDeviceFooterControl(device)
+				m_footer = new TunerDeviceFooterControl(device, m_scalefactor)
 				{
 					Dock = DockStyle.Top,
-					Padding = new Padding(0, 1, 0, 0).ScaleDPI(Handle)
+					Padding = new Padding(0, 1, 0, 0).ScaleDPI(m_scalefactor)
 				};
 				m_layoutpanel.Controls.Add(m_footer);
 			}

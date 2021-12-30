@@ -37,7 +37,7 @@ namespace zuki.hdhomeruntray
 	{
 		// Instance Constructor
 		//
-		public StorageDeviceIdleControl()
+		public StorageDeviceIdleControl(SizeF scalefactor)
 		{
 			InitializeComponent();
 
@@ -47,12 +47,9 @@ namespace zuki.hdhomeruntray
 			m_activedot.ForeColor = DeviceStatusColor.Gray;
 			m_name.Text = string.Empty;
 			
-			using(Graphics graphics = CreateGraphics())
-			{
-				Padding = Padding.ScaleDPI(graphics);
-				m_layoutpanel.Margin = m_layoutpanel.Margin.ScaleDPI(graphics);
-				m_layoutpanel.Padding = m_layoutpanel.Padding.ScaleDPI(graphics);
-			}
+			Padding = Padding.ScaleDPI(scalefactor);
+			m_layoutpanel.Margin = m_layoutpanel.Margin.ScaleDPI(scalefactor);
+			m_layoutpanel.Padding = m_layoutpanel.Padding.ScaleDPI(scalefactor);
 
 			// WINDOWS 11
 			//
