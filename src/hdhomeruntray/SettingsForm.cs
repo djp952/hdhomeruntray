@@ -133,8 +133,6 @@ namespace zuki.hdhomeruntray
 		// Invoked when the size of the form has changed
 		private void OnSizeChanged(object sender, EventArgs args)
 		{
-			System.Diagnostics.Debug.WriteLine("SettingsForm::OnSizeChanged");
-
 			// This should work acceptably well given that the screen/monitor that will
 			// display this form is the same one with the taskbar, but there are better ways
 			// in .NET 4.7 and/or Windows 10/11 to figure out how to scale this value
