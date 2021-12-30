@@ -55,8 +55,8 @@ namespace zuki.hdhomeruntray
 				m_autostart.Margin = m_autostart.Margin.ScaleDPI(graphics);
 				m_discoveryinterval.Margin = m_discoveryinterval.Margin.ScaleDPI(graphics);
 				m_discoverymethod.Margin = m_discoverymethod.Margin.ScaleDPI(graphics);
-				m_trayiconhover.Margin = m_trayiconhover.Margin.ScaleDPI(graphics);
-				m_trayiconhoverdelay.Margin = m_trayiconhoverdelay.Margin.ScaleDPI(graphics);
+				m_hovertoclick.Margin = m_hovertoclick.Margin.ScaleDPI(graphics);
+				m_hovertoclickdelay.Margin = m_hovertoclickdelay.Margin.ScaleDPI(graphics);
 				m_tunerstatuscolorsource.Margin = m_tunerstatuscolorsource.Margin.ScaleDPI(graphics);
 				m_unpinautomatically.Margin = m_unpinautomatically.Margin.ScaleDPI(graphics);
 			}
@@ -68,16 +68,16 @@ namespace zuki.hdhomeruntray
 				m_autostartlabel.Font = new Font("Segoe UI Variable Text Semibold", m_autostartlabel.Font.Size, m_autostartlabel.Font.Style);
 				m_discoveryintervallabel.Font = new Font("Segoe UI Variable Text Semibold", m_discoveryintervallabel.Font.Size, m_discoveryintervallabel.Font.Style);
 				m_discoverymethodlabel.Font = new Font("Segoe UI Variable Text Semibold", m_discoverymethodlabel.Font.Size, m_discoverymethodlabel.Font.Style);
-				m_trayiconhoverlabel.Font = new Font("Segoe UI Variable Text Semibold", m_trayiconhoverlabel.Font.Size, m_trayiconhoverlabel.Font.Style);
-				m_trayiconhoverdelaylabel.Font = new Font("Segoe UI Variable Text Semibold", m_trayiconhoverdelaylabel.Font.Size, m_trayiconhoverdelaylabel.Font.Style);
+				m_hovertoclicklabel.Font = new Font("Segoe UI Variable Text Semibold", m_hovertoclicklabel.Font.Size, m_hovertoclicklabel.Font.Style);
+				m_hovertoclickdelaylabel.Font = new Font("Segoe UI Variable Text Semibold", m_hovertoclickdelaylabel.Font.Size, m_hovertoclickdelaylabel.Font.Style);
 				m_tunerstatuscolorsourcelabel.Font = new Font("Segoe UI Variable Text Semibold", m_tunerstatuscolorsourcelabel.Font.Size, m_tunerstatuscolorsourcelabel.Font.Style);
 				m_unpinautomaticallylabel.Font = new Font("Segoe UI Variable Text Semibold", m_unpinautomaticallylabel.Font.Size, m_unpinautomaticallylabel.Font.Style);
 
 				m_autostart.Font = new Font("Segoe UI Variable Text", m_autostart.Font.Size, m_autostart.Font.Style);
 				m_discoveryinterval.Font = new Font("Segoe UI Variable Text", m_discoveryinterval.Font.Size, m_discoveryinterval.Font.Style);
 				m_discoverymethod.Font = new Font("Segoe UI Variable Text", m_discoverymethod.Font.Size, m_discoverymethod.Font.Style);
-				m_trayiconhover.Font = new Font("Segoe UI Variable Text", m_trayiconhover.Font.Size, m_trayiconhover.Font.Style);
-				m_trayiconhoverdelay.Font = new Font("Segoe UI Variable Text", m_trayiconhoverdelay.Font.Size, m_trayiconhoverdelay.Font.Style);
+				m_hovertoclick.Font = new Font("Segoe UI Variable Text", m_hovertoclick.Font.Size, m_hovertoclick.Font.Style);
+				m_hovertoclickdelay.Font = new Font("Segoe UI Variable Text", m_hovertoclickdelay.Font.Size, m_hovertoclickdelay.Font.Style);
 				m_tunerstatuscolorsource.Font = new Font("Segoe UI Variable Text", m_tunerstatuscolorsource.Font.Size, m_tunerstatuscolorsource.Font.Style);
 				m_unpinautomatically.Font = new Font("Segoe UI Variable Text", m_unpinautomatically.Font.Size, m_unpinautomatically.Font.Style);
 			}
@@ -86,8 +86,8 @@ namespace zuki.hdhomeruntray
 			m_autostart.BindEnum(Settings.Default.AutoStart);
 			m_discoveryinterval.BindEnum(Settings.Default.DiscoveryInterval);
 			m_discoverymethod.BindEnum(Settings.Default.DiscoveryMethod);
-			m_trayiconhover.BindEnum(Settings.Default.TrayIconHover);
-			m_trayiconhoverdelay.BindEnum(Settings.Default.TrayIconHoverDelay);
+			m_hovertoclick.BindEnum(Settings.Default.HoverToClick);
+			m_hovertoclickdelay.BindEnum(Settings.Default.HoverToClickDelay);
 			m_tunerstatuscolorsource.BindEnum(Settings.Default.TunerStatusColorSource);
 			m_unpinautomatically.BindEnum(Settings.Default.AutoUnpin);
 		}
@@ -138,30 +138,30 @@ namespace zuki.hdhomeruntray
 			}
 		}
 
-		// OnTrayIconHoverCommitted
+		// OnHoverToClickCommitted
 		//
 		// Invoked when a change to the combobox is committed
-		private void OnTrayIconHoverCommitted(object sender, EventArgs args)
+		private void OnHoverToClickCommitted(object sender, EventArgs args)
 		{
 			// If the value of the combobox changed, update and save the settings
-			EnabledDisabled trayiconhover = (EnabledDisabled)m_trayiconhover.SelectedValue;
-			if(trayiconhover != Settings.Default.TrayIconHover)
+			EnabledDisabled hovertoclick = (EnabledDisabled)m_hovertoclick.SelectedValue;
+			if(hovertoclick != Settings.Default.HoverToClick)
 			{
-				Settings.Default.TrayIconHover = trayiconhover;
+				Settings.Default.HoverToClick = hovertoclick;
 				Settings.Default.Save();
 			}
 		}
 
-		// OnTrayIconHoverDelayCommitted
+		// OnHoverToClickDelayCommitted
 		//
 		// Invoked when a change to the combobox is committed
-		private void OnTrayIconHoverDelayCommitted(object sender, EventArgs args)
+		private void OnHoverToClickDelayCommitted(object sender, EventArgs args)
 		{
 			// If the value of the combobox changed, update and save the settings
-			TrayIconHoverDelay trayiconhoverdelay = (TrayIconHoverDelay)m_trayiconhoverdelay.SelectedValue;
-			if(trayiconhoverdelay != Settings.Default.TrayIconHoverDelay)
+			HoverToClickDelay hovertoclickdelay = (HoverToClickDelay)m_hovertoclickdelay.SelectedValue;
+			if(hovertoclickdelay != Settings.Default.HoverToClickDelay)
 			{
-				Settings.Default.TrayIconHoverDelay = trayiconhoverdelay;
+				Settings.Default.HoverToClickDelay = hovertoclickdelay;
 				Settings.Default.Save();
 			}
 		}

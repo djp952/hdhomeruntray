@@ -114,7 +114,11 @@ namespace zuki.hdhomeruntray
 			// Add each device as a PopupItemControl into the layout panel
 			for(int index = 0; index < devices.Count; index++)
 			{
-				PopupItemDeviceControl devicecontrol = new PopupItemDeviceControl(devices[index]);
+				// Create the device control and enable hovering by adding an event handler
+				PopupItemDeviceControl devicecontrol = new PopupItemDeviceControl(devices[index])
+				{
+					HoverToClick = true
+				};
 
 				// If there is more than one device to display
 				if(devices.Count > 1)

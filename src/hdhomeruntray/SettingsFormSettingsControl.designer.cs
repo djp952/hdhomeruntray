@@ -33,15 +33,15 @@ namespace zuki.hdhomeruntray
 			this.m_autostartlabel = new System.Windows.Forms.Label();
 			this.m_discoveryintervallabel = new System.Windows.Forms.Label();
 			this.m_discoverymethodlabel = new System.Windows.Forms.Label();
-			this.m_trayiconhoverlabel = new System.Windows.Forms.Label();
-			this.m_trayiconhoverdelaylabel = new System.Windows.Forms.Label();
+			this.m_hovertoclicklabel = new System.Windows.Forms.Label();
+			this.m_hovertoclickdelaylabel = new System.Windows.Forms.Label();
 			this.m_tunerstatuscolorsourcelabel = new System.Windows.Forms.Label();
 			this.m_unpinautomaticallylabel = new System.Windows.Forms.Label();
 			this.m_autostart = new zuki.hdhomeruntray.AutoSizeComboBox();
 			this.m_discoveryinterval = new zuki.hdhomeruntray.AutoSizeComboBox();
 			this.m_discoverymethod = new zuki.hdhomeruntray.AutoSizeComboBox();
-			this.m_trayiconhover = new zuki.hdhomeruntray.AutoSizeComboBox();
-			this.m_trayiconhoverdelay = new zuki.hdhomeruntray.AutoSizeComboBox();
+			this.m_hovertoclick = new zuki.hdhomeruntray.AutoSizeComboBox();
+			this.m_hovertoclickdelay = new zuki.hdhomeruntray.AutoSizeComboBox();
 			this.m_tunerstatuscolorsource = new zuki.hdhomeruntray.AutoSizeComboBox();
 			this.m_unpinautomatically = new zuki.hdhomeruntray.AutoSizeComboBox();
 			this.m_layoutpanel.SuspendLayout();
@@ -55,18 +55,18 @@ namespace zuki.hdhomeruntray
 			this.m_layoutpanel.ColumnCount = 2;
 			this.m_layoutpanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this.m_layoutpanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-			this.m_layoutpanel.Controls.Add(this.m_autostartlabel, 0, 2);
+			this.m_layoutpanel.Controls.Add(this.m_autostartlabel, 0, 4);
 			this.m_layoutpanel.Controls.Add(this.m_discoveryintervallabel, 0, 0);
 			this.m_layoutpanel.Controls.Add(this.m_discoverymethodlabel, 0, 1);
-			this.m_layoutpanel.Controls.Add(this.m_trayiconhoverlabel, 0, 3);
-			this.m_layoutpanel.Controls.Add(this.m_trayiconhoverdelaylabel, 0, 4);
+			this.m_layoutpanel.Controls.Add(this.m_hovertoclicklabel, 0, 2);
+			this.m_layoutpanel.Controls.Add(this.m_hovertoclickdelaylabel, 0, 3);
 			this.m_layoutpanel.Controls.Add(this.m_tunerstatuscolorsourcelabel, 0, 5);
 			this.m_layoutpanel.Controls.Add(this.m_unpinautomaticallylabel, 0, 6);
-			this.m_layoutpanel.Controls.Add(this.m_autostart, 1, 2);
+			this.m_layoutpanel.Controls.Add(this.m_autostart, 1, 4);
 			this.m_layoutpanel.Controls.Add(this.m_discoveryinterval, 1, 0);
 			this.m_layoutpanel.Controls.Add(this.m_discoverymethod, 1, 1);
-			this.m_layoutpanel.Controls.Add(this.m_trayiconhover, 1, 3);
-			this.m_layoutpanel.Controls.Add(this.m_trayiconhoverdelay, 1, 4);
+			this.m_layoutpanel.Controls.Add(this.m_hovertoclick, 1, 2);
+			this.m_layoutpanel.Controls.Add(this.m_hovertoclickdelay, 1, 3);
 			this.m_layoutpanel.Controls.Add(this.m_tunerstatuscolorsource, 1,5);
 			this.m_layoutpanel.Controls.Add(this.m_unpinautomatically, 1, 6);
 			this.m_layoutpanel.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -120,29 +120,29 @@ namespace zuki.hdhomeruntray
 			this.m_discoverymethodlabel.Text = "Device Discovery Method";
 			this.m_discoverymethodlabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
-			// m_trayiconhoverlabel
+			// m_hovertoclicklabel
 			// 
-			this.m_trayiconhoverlabel.AutoSize = true;
-			this.m_trayiconhoverlabel.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.m_trayiconhoverlabel.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.m_trayiconhoverlabel.Location = new System.Drawing.Point(7, 105);
-			this.m_trayiconhoverlabel.Name = "m_trayiconhoverlabel";
-			this.m_trayiconhoverlabel.Size = new System.Drawing.Size(144, 34);
-			this.m_trayiconhoverlabel.TabIndex = 3;
-			this.m_trayiconhoverlabel.Text = "Tray Icon Hover";
-			this.m_trayiconhoverlabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.m_hovertoclicklabel.AutoSize = true;
+			this.m_hovertoclicklabel.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.m_hovertoclicklabel.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.m_hovertoclicklabel.Location = new System.Drawing.Point(7, 105);
+			this.m_hovertoclicklabel.Name = "m_hovertoclicklabel";
+			this.m_hovertoclicklabel.Size = new System.Drawing.Size(144, 34);
+			this.m_hovertoclicklabel.TabIndex = 3;
+			this.m_hovertoclicklabel.Text = "Hover To Click";
+			this.m_hovertoclicklabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
-			// m_trayiconhoverdelaylabel
+			// m_hovertoclickdelaylabel
 			// 
-			this.m_trayiconhoverdelaylabel.AutoSize = true;
-			this.m_trayiconhoverdelaylabel.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.m_trayiconhoverdelaylabel.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.m_trayiconhoverdelaylabel.Location = new System.Drawing.Point(7, 105);
-			this.m_trayiconhoverdelaylabel.Name = "m_trayiconhoverdelaylabel";
-			this.m_trayiconhoverdelaylabel.Size = new System.Drawing.Size(144, 34);
-			this.m_trayiconhoverdelaylabel.TabIndex = 3;
-			this.m_trayiconhoverdelaylabel.Text = "Tray Icon Hover Delay";
-			this.m_trayiconhoverdelaylabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.m_hovertoclickdelaylabel.AutoSize = true;
+			this.m_hovertoclickdelaylabel.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.m_hovertoclickdelaylabel.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.m_hovertoclickdelaylabel.Location = new System.Drawing.Point(7, 105);
+			this.m_hovertoclickdelaylabel.Name = "m_hovertoclickdelaylabel";
+			this.m_hovertoclickdelaylabel.Size = new System.Drawing.Size(144, 34);
+			this.m_hovertoclickdelaylabel.TabIndex = 3;
+			this.m_hovertoclickdelaylabel.Text = "Hover To Click Delay";
+			this.m_hovertoclickdelaylabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// m_tunerstatuscolorsourcelabel
 			// 
@@ -204,29 +204,29 @@ namespace zuki.hdhomeruntray
 			this.m_discoverymethod.TabIndex = 7;
 			this.m_discoverymethod.SelectionChangeCommitted += new System.EventHandler(this.OnDiscoveryMethodCommitted);
 			// 
-			// m_trayiconhover
+			// m_hovertoclick
 			// 
-			this.m_trayiconhover.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.m_trayiconhover.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.m_trayiconhover.FormattingEnabled = true;
-			this.m_trayiconhover.Location = new System.Drawing.Point(158, 109);
-			this.m_trayiconhover.Margin = new System.Windows.Forms.Padding(4, 4, 4, 7);
-			this.m_trayiconhover.Name = "m_trayiconhover";
-			this.m_trayiconhover.Size = new System.Drawing.Size(131, 23);
-			this.m_trayiconhover.TabIndex = 8;
-			this.m_trayiconhover.SelectionChangeCommitted += new System.EventHandler(this.OnTrayIconHoverCommitted);
+			this.m_hovertoclick.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.m_hovertoclick.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.m_hovertoclick.FormattingEnabled = true;
+			this.m_hovertoclick.Location = new System.Drawing.Point(158, 109);
+			this.m_hovertoclick.Margin = new System.Windows.Forms.Padding(4, 4, 4, 7);
+			this.m_hovertoclick.Name = "m_hovertoclick";
+			this.m_hovertoclick.Size = new System.Drawing.Size(131, 23);
+			this.m_hovertoclick.TabIndex = 8;
+			this.m_hovertoclick.SelectionChangeCommitted += new System.EventHandler(this.OnHoverToClickCommitted);
 			// 
-			// m_trayiconhoverdelay
+			// m_hovertoclickdelay
 			// 
-			this.m_trayiconhoverdelay.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.m_trayiconhoverdelay.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.m_trayiconhoverdelay.FormattingEnabled = true;
-			this.m_trayiconhoverdelay.Location = new System.Drawing.Point(158, 109);
-			this.m_trayiconhoverdelay.Margin = new System.Windows.Forms.Padding(4, 4, 4, 7);
-			this.m_trayiconhoverdelay.Name = "m_trayiconhoverdelay";
-			this.m_trayiconhoverdelay.Size = new System.Drawing.Size(131, 23);
-			this.m_trayiconhoverdelay.TabIndex = 8;
-			this.m_trayiconhoverdelay.SelectionChangeCommitted += new System.EventHandler(this.OnTrayIconHoverDelayCommitted);
+			this.m_hovertoclickdelay.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.m_hovertoclickdelay.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.m_hovertoclickdelay.FormattingEnabled = true;
+			this.m_hovertoclickdelay.Location = new System.Drawing.Point(158, 109);
+			this.m_hovertoclickdelay.Margin = new System.Windows.Forms.Padding(4, 4, 4, 7);
+			this.m_hovertoclickdelay.Name = "m_hovertoclickdelay";
+			this.m_hovertoclickdelay.Size = new System.Drawing.Size(131, 23);
+			this.m_hovertoclickdelay.TabIndex = 8;
+			this.m_hovertoclickdelay.SelectionChangeCommitted += new System.EventHandler(this.OnHoverToClickDelayCommitted);
 			// 
 			// m_tunerstatuscolorsource
 			// 
@@ -273,15 +273,15 @@ namespace zuki.hdhomeruntray
 		private System.Windows.Forms.Label m_autostartlabel;
 		private System.Windows.Forms.Label m_discoveryintervallabel;
 		private System.Windows.Forms.Label m_discoverymethodlabel;
-		private System.Windows.Forms.Label m_trayiconhoverlabel;
-		private System.Windows.Forms.Label m_trayiconhoverdelaylabel;
+		private System.Windows.Forms.Label m_hovertoclicklabel;
+		private System.Windows.Forms.Label m_hovertoclickdelaylabel;
 		private System.Windows.Forms.Label m_tunerstatuscolorsourcelabel;
 		private System.Windows.Forms.Label m_unpinautomaticallylabel;
 		private AutoSizeComboBox m_autostart;
 		private AutoSizeComboBox m_discoveryinterval;
 		private AutoSizeComboBox m_discoverymethod;
-		private AutoSizeComboBox m_trayiconhover;
-		private AutoSizeComboBox m_trayiconhoverdelay;
+		private AutoSizeComboBox m_hovertoclick;
+		private AutoSizeComboBox m_hovertoclickdelay;
 		private AutoSizeComboBox m_tunerstatuscolorsource;
 		private AutoSizeComboBox m_unpinautomatically;
 	}

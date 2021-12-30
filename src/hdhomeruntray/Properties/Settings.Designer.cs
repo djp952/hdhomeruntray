@@ -12,7 +12,7 @@ namespace zuki.hdhomeruntray.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "16.10.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "17.0.3.0")]
     internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
         
         private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
@@ -50,12 +50,12 @@ namespace zuki.hdhomeruntray.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("SystemDefault")]
-        public global::zuki.hdhomeruntray.TrayIconHoverDelay TrayIconHoverDelay {
+        public global::zuki.hdhomeruntray.HoverToClickDelay HoverToClickDelay {
             get {
-                return ((global::zuki.hdhomeruntray.TrayIconHoverDelay)(this["TrayIconHoverDelay"]));
+                return ((global::zuki.hdhomeruntray.HoverToClickDelay)(this["HoverToClickDelay"]));
             }
             set {
-                this["TrayIconHoverDelay"] = value;
+                this["HoverToClickDelay"] = value;
             }
         }
         
@@ -98,12 +98,12 @@ namespace zuki.hdhomeruntray.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("Enabled")]
-        public global::zuki.hdhomeruntray.EnabledDisabled TrayIconHover {
+        public global::zuki.hdhomeruntray.EnabledDisabled HoverToClick {
             get {
-                return ((global::zuki.hdhomeruntray.EnabledDisabled)(this["TrayIconHover"]));
+                return ((global::zuki.hdhomeruntray.EnabledDisabled)(this["HoverToClick"]));
             }
             set {
-                this["TrayIconHover"] = value;
+                this["HoverToClick"] = value;
             }
         }
         
