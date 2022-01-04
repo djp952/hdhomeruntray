@@ -202,7 +202,7 @@
     <Compile Include="RoundedFlowLayoutPanel.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="HoverToClickDelay.cs" />
+    <Compile Include="TrayIconHoverDelay.cs" />
     <Compile Include="MainApplication.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="PopupForm.cs">

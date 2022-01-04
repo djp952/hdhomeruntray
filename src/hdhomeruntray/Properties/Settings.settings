@@ -8,7 +8,7 @@
     <Setting Name="DiscoveryInterval" Type="zuki.hdhomeruntray.DiscoveryInterval" Scope="User">
       <Value Profile="(Default)">TwoMinutes</Value>
     </Setting>
-    <Setting Name="HoverToClickDelay" Type="zuki.hdhomeruntray.HoverToClickDelay" Scope="User">
+    <Setting Name="TrayIconHoverDelay" Type="zuki.hdhomeruntray.TrayIconHoverDelay" Scope="User">
       <Value Profile="(Default)">SystemDefault</Value>
     </Setting>
     <Setting Name="TunerStatusColorSource" Type="zuki.hdhomeruntray.TunerStatusColorSource" Scope="User">
@@ -20,7 +20,7 @@
     <Setting Name="AutoStart" Type="zuki.hdhomeruntray.EnabledDisabled" Scope="User">
       <Value Profile="(Default)">Disabled</Value>
     </Setting>
-    <Setting Name="HoverToClick" Type="zuki.hdhomeruntray.EnabledDisabled" Scope="User">
+    <Setting Name="TrayIconHover" Type="zuki.hdhomeruntray.EnabledDisabled" Scope="User">
       <Value Profile="(Default)">Enabled</Value>
     </Setting>
     <Setting Name="AutoUnpin" Type="zuki.hdhomeruntray.EnabledDisabled" Scope="User">

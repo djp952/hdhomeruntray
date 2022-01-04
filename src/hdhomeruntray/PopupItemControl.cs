@@ -24,9 +24,6 @@ using System;
 using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
-using Microsoft.Win32;
-
-using zuki.hdhomeruntray.Properties;
 
 namespace zuki.hdhomeruntray
 {
@@ -68,10 +65,6 @@ namespace zuki.hdhomeruntray
 				m_layoutpanel.MouseEnter += OnMouseEnterToggle;
 				m_layoutpanel.MouseLeave += OnMouseLeaveToggle;
 			}
-
-			// Create the hover timer
-			m_hovertimer = new Timer();
-			m_hovertimer.Tick += new EventHandler(OnHoverTimerTick);
 		}
 
 		//-------------------------------------------------------------------------
@@ -115,15 +108,6 @@ namespace zuki.hdhomeruntray
 		// Exposes the type of popup item control
 		public PopupItemControlType ControlType => m_type;
 
-		// HoverToClick
-		//
-		// Enables/disables "hover to click" for this control
-		public bool HoverToClick
-		{
-			get => m_hovertoclick;
-			set => m_hovertoclick = value;
-		}
-
 		// IsToggled
 		//
 		// Exposes the toggled state of a toggle-type control
@@ -142,30 +126,11 @@ namespace zuki.hdhomeruntray
 		// Event Handlers
 		//-------------------------------------------------------------------
 
-		// OnHoverTimerTick
-		//
-		// Invoked when the hover timer object has come due
-		private void OnHoverTimerTick(object sender, EventArgs args)
-		{
-			// Always stop the timer, this is a one-shot
-			if(m_hovertimer.Enabled) m_hovertimer.Stop();
-
-			//If the mouse cursor is still in the client rectangle invoke a click
-			if(ClientRectangle.Contains(PointToClient(Cursor.Position)))
-			{
-				if(m_type == PopupItemControlType.Toggle) OnMouseClickToggle(this, EventArgs.Empty);
-				else if(m_type == PopupItemControlType.Button) OnMouseClickButton(this, EventArgs.Empty);
-			}
-		}
-
 		// OnMouseClickButton
 		//
 		// Handles the MouseClick event for button-type controls
 		private void OnMouseClickButton(object sender, EventArgs args)
 		{
-			// Stop any pending hover operation for this control
-			if(m_hovertimer.Enabled) m_hovertimer.Stop();
-
 			Selected?.Invoke(this, EventArgs.Empty);
 		}
 
@@ -174,13 +139,6 @@ namespace zuki.hdhomeruntray
 		// Handles the MouseEnter event for button-type controls
 		private void OnMouseEnterButton(object sender, EventArgs args)
 		{
-			// Start the hover timer for this control if it is allowed and not already enabled
-			if((m_hovertoclick) && (Settings.Default.HoverToClick == EnabledDisabled.Enabled) && (!m_hovertimer.Enabled))
-			{
-				m_hovertimer.Interval = GetHoverInterval(Settings.Default.HoverToClickDelay);
-				m_hovertimer.Start();
-			}
-
 			Debug.Assert(sender is RoundedFlowLayoutPanel);
 			RoundedFlowLayoutPanel panel = (RoundedFlowLayoutPanel)sender;
 
@@ -193,9 +151,6 @@ namespace zuki.hdhomeruntray
 		// Handles the MouseLeave event for button-type controls
 		private void OnMouseLeaveButton(object sender, EventArgs args)
 		{
-			// Stop any pending hover operation for this control
-			if(m_hovertimer.Enabled) m_hovertimer.Stop();
-
 			Debug.Assert(sender is RoundedFlowLayoutPanel);
 			RoundedFlowLayoutPanel panel = (RoundedFlowLayoutPanel)sender;
 
@@ -208,9 +163,6 @@ namespace zuki.hdhomeruntray
 		// Handles the MouseClick event for toggle-type controls
 		private void OnMouseClickToggle(object sender, EventArgs args)
 		{
-			// Stop any pending hover operation for this control
-			if(m_hovertimer.Enabled) m_hovertimer.Stop();
-
 			m_toggled = !m_toggled;             // Invert the toggle state
 
 			// Update the toggle state if the mouse isn't in the control
@@ -225,13 +177,6 @@ namespace zuki.hdhomeruntray
 		// Handles the MouseEnter event for toggle-type controls
 		private void OnMouseEnterToggle(object sender, EventArgs args)
 		{
-			// Start the hover timer for this control if it is allowed and not already enabled
-			if((m_hovertoclick) && (Settings.Default.HoverToClick == EnabledDisabled.Enabled) && (!m_hovertimer.Enabled))
-			{
-				m_hovertimer.Interval = GetHoverInterval(Settings.Default.HoverToClickDelay);
-				m_hovertimer.Start();
-			}
-
 			Debug.Assert(sender is RoundedFlowLayoutPanel);
 			RoundedFlowLayoutPanel panel = (RoundedFlowLayoutPanel)sender;
 
@@ -244,9 +189,6 @@ namespace zuki.hdhomeruntray
 		// Handles the MouseLeave event for toggle-type controls
 		private void OnMouseLeaveToggle(object sender, EventArgs args)
 		{
-			// Stop any pending hover operation for this control
-			if(m_hovertimer.Enabled) m_hovertimer.Stop();
-
 			Debug.Assert(sender is RoundedFlowLayoutPanel);
 			RoundedFlowLayoutPanel panel = (RoundedFlowLayoutPanel)sender;
 
@@ -263,34 +205,10 @@ namespace zuki.hdhomeruntray
 		}
 
 		//-------------------------------------------------------------------
-		// Private Member Functions
-		//-------------------------------------------------------------------
-
-		// GetHoverInterval (static)
-		//
-		// Converts a HoverToClickDelay into milliseconds taking into consideration
-		// the running operation system limitations
-		private static int GetHoverInterval(HoverToClickDelay delay)
-		{
-			// No coersion is necessary for a non-default value or a default one outside of Windows 11
-			if((delay != HoverToClickDelay.SystemDefault) || (!VersionHelper.IsWindows11OrGreater())) return (int)delay;
-
-			int mousehovertimeout = 400;            // Default value to use on Windows 11 (ms)
-
-			// Use the default hover interval specified in HKEY_CURRENT_USER
-			object value = Registry.GetValue(@"HKEY_CURRENT_USER\Control Panel\Mouse", "MouseHoverTime", null);
-			if((value != null) && (value is string @string)) _ = int.TryParse(@string, out mousehovertimeout);
-
-			return mousehovertimeout;
-		}
-
-		//-------------------------------------------------------------------
 		// Private Member Variables
 		//-------------------------------------------------------------------
 
 		private readonly PopupItemControlType m_type;
 		private bool m_toggled = false;
-		private bool m_hovertoclick = false;
-		private readonly Timer m_hovertimer;
 	}
 }

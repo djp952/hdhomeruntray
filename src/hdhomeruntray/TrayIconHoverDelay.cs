@@ -25,12 +25,12 @@ using System.ComponentModel;
 namespace zuki.hdhomeruntray
 {
 	//-----------------------------------------------------------------------
-	// Enum HoverToClickDelay
+	// Enum TrayIconHoverDelay
 	//
-	// Defines constants that control how quickly a "hover to click" operation
-	// will result in the action being taken. Values are in ms.
+	// Defines constants that control how quickly the pop-up form will show
+	// when the user hovers the mouse over the tray icon.  Values are in ms
 
-	public enum HoverToClickDelay
+	public enum TrayIconHoverDelay
 	{
 		[Description("System Default")]
 		SystemDefault = 0,

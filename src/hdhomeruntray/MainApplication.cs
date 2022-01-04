@@ -243,7 +243,7 @@ namespace zuki.hdhomeruntray
 			{
 				// Show the popup window if it's not already shown, and this
 				// function hasn't been disabled by the user
-				if((Settings.Default.HoverToClick == EnabledDisabled.Enabled) && (m_popupform == null))
+				if((Settings.Default.TrayIconHover == EnabledDisabled.Enabled) && (m_popupform == null))
 				{
 					m_popupform = new PopupForm(m_devicelist);
 					m_popupform.DeviceStatusChanged += new DeviceStatusChangedEventHandler(OnPopupDeviceStatusChanged);
@@ -375,11 +375,11 @@ namespace zuki.hdhomeruntray
 				if(wasenabled) m_discoverytimer.Enabled = true;     // Restart the timer
 			}
 
-			// HoverToClickDelay
+			// TrayIconHoverDelay
 			//
-			if(args.PropertyName == nameof(Settings.Default.HoverToClickDelay))
+			if(args.PropertyName == nameof(Settings.Default.TrayIconHoverDelay))
 			{
-				m_notifyicon.HoverInterval = GetHoverInterval(Settings.Default.HoverToClickDelay);
+				m_notifyicon.HoverInterval = GetHoverInterval(Settings.Default.TrayIconHoverDelay);
 			}
 		}
 
@@ -399,12 +399,12 @@ namespace zuki.hdhomeruntray
 
 		// GetHoverInterval (static)
 		//
-		// Converts a HoverToClickDelay into milliseconds taking into consideration
+		// Converts a TrayIconHoverDelay into milliseconds taking into consideration
 		// the running operation system limitations
-		private static int GetHoverInterval(HoverToClickDelay delay)
+		private static int GetHoverInterval(TrayIconHoverDelay delay)
 		{
 			// No coersion is necessary for a non-default value or a default one outside of Windows 11
-			if((delay != HoverToClickDelay.SystemDefault) || (!VersionHelper.IsWindows11OrGreater())) return (int)delay;
+			if((delay != TrayIconHoverDelay.SystemDefault) || (!VersionHelper.IsWindows11OrGreater())) return (int)delay;
 
 			int mousehovertimeout = 400;            // Default value to use on Windows 11 (ms)
 
@@ -497,7 +497,7 @@ namespace zuki.hdhomeruntray
 			m_notifyicon.Selected += new EventHandler(OnNotifyIconSelected);
 			m_notifyicon.ContextMenuStrip = contextmenu;
 			m_notifyicon.Icon = StatusIcons.Get(DeviceStatus.Idle);
-			m_notifyicon.HoverInterval = GetHoverInterval(Settings.Default.HoverToClickDelay);
+			m_notifyicon.HoverInterval = GetHoverInterval(Settings.Default.TrayIconHoverDelay);
 			m_notifyicon.ToolTip = "HDHomeRun Status Monitor";
 
 			// Create the network timer object
