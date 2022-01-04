@@ -41,6 +41,14 @@
       <![CDATA[Installed OR WIX_IS_NETFRAMEWORK_462_OR_LATER_INSTALLED]]>
     </Condition>
 
+    <!-- LAUNCH APPLICATION AFTER INSTALLATION -->
+    <!-- https://wixtoolset.org/documentation/manual/v3/howtos/ui_and_localization/run_program_after_install.html -->
+    
+    <Property Id="WIXUI_EXITDIALOGOPTIONALCHECKBOXTEXT" Value="Launch HDHomeRun Status Monitor" />
+    <Property Id="WIXUI_EXITDIALOGOPTIONALCHECKBOX" Value="1"/>
+    <Property Id="WixShellExecTarget" Value="[#hdhomeruntray.exe]" />
+    <CustomAction Id="LaunchApplication" BinaryKey="WixCA" DllEntry="WixShellExec" Impersonate="yes" />
+
     <Directory Id="TARGETDIR" Name="SourceDir">
 
       <?if $(var.Platform) = "x86" ?>
