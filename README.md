@@ -5,7 +5,7 @@ A Windows system tray application that monitors the status of all local HDHomeRu
    
 ## [__USER DOCUMENTATION AND DOWNLOADS__](https://github.com/djp952/hdhomeruntray/wiki)   
    
-Copyright (C)2021 Michael G. Brehm    
+Copyright (C)2021-2022 Michael G. Brehm    
 [MIT LICENSE](https://opensource.org/licenses/MIT)   
    
 [__LIBHDHOMERUN__](https://github.com/Silicondust/libhdhomerun) - Copyright (C)2005-2018 Silicondust USA Inc   
