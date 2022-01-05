@@ -745,10 +745,17 @@ namespace zuki.hdhomeruntray
 
 		// OnTaskbarCreated
 		//
-		// Invoked when the custom TaskbarCreated window message is handled
+		// Invoked when the TaskbarCreated window message is handled
 		private void OnTaskbarCreated()
 		{
-			m_created = false;
+			// Cancel any pending hover operation
+			if(m_hoverstart.Enabled) m_hoverstart.Stop();
+
+			// If this event comes in trigger ClosePopup, since the system may
+			// have just woken from sleep or the DPI has changed
+			OnClosePopup();
+
+			// Update the tray icon any time this event comes in
 			UpdateIcon(m_visible);
 		}
 
