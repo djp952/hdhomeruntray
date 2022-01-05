@@ -88,6 +88,12 @@
       <ComponentRef Id="hdhomeruntray_discovery_dll"/>
       <ComponentRef Id="newtonsoft_json_dll"/>
       <ComponentRef Id="winjs_symbols_ttf"/>
+
+      <?if $(var.Configuration) = "Debug" ?>
+      <ComponentRef Id="hdhomeruntray_pdb"/>
+      <ComponentRef Id="hdhomeruntray_discovery_pdb"/>
+      <?endif?>
+
     </ComponentGroup>
 
     <Component Id="hdhomeruntray_exe" Directory="HDHomeRunTrayBinFolder" Guid="16F99373-B2BB-49C0-907C-08A6AF1CBE83">
@@ -100,19 +106,27 @@
     </Component>
 
     <Component Id="hdhomeruntray_discovery_dll" Directory="HDHomeRunTrayBinFolder" Guid="3A95EABB-D8FD-4945-89A3-918253AF419A">
-      <File Id="hdhomeruntray.discovery.dll" Source="$(var.ProjectBinFolder)hdhomeruntray.discovery.dll" Vital="yes" KeyPath="yes">
-      </File>
+      <File Id="hdhomeruntray.discovery.dll" Source="$(var.ProjectBinFolder)hdhomeruntray.discovery.dll" Vital="yes" KeyPath="yes" />
     </Component>
 
     <Component Id="newtonsoft_json_dll" Directory="HDHomeRunTrayBinFolder" Guid="26A88C3C-864D-4043-80B2-E49550877C93">
-      <File Id="Newtonsoft.Json.dll" Source="$(var.ProjectPackagesFolder)Newtonsoft.Json.13.0.1\lib\net45\Newtonsoft.Json.dll" Vital="yes" KeyPath="yes">
-      </File>
+      <File Id="Newtonsoft.Json.dll" Source="$(var.ProjectPackagesFolder)Newtonsoft.Json.13.0.1\lib\net45\Newtonsoft.Json.dll" Vital="yes" KeyPath="yes" />
     </Component>
 
     <Component Id="winjs_symbols_ttf" Directory="FontsFolder" Guid="FC564FF7-9D04-49D2-B2E9-44422B19DD57">
       <File Id="winjs_symbols.ttf" Name="winjs-symbols.ttf" KeyPath="yes" TrueType="yes" Source="$(var.ProjectDependsFolder)msfonts\Symbols\winjs-symbols.ttf" />
     </Component>
-    
+
+    <?if $(var.Configuration) = "Debug" ?>
+    <Component Id="hdhomeruntray_pdb" Directory="HDHomeRunTrayBinFolder" Guid="E8748F25-7301-4DCE-B03B-F2F8B7E773E8">
+      <File Id="hdhomeruntray.pdb" Source="$(var.ProjectBinFolder)hdhomeruntray.pdb" Vital="yes" KeyPath="yes"/>
+    </Component>
+
+    <Component Id="hdhomeruntray_discovery_pdb" Directory="HDHomeRunTrayBinFolder" Guid="A9FB0B2B-AB3A-48CE-BE0B-0D24DE91FC40">
+      <File Id="hdhomeruntray.discovery.pdb" Source="$(var.ProjectBinFolder)hdhomeruntray.discovery.pdb" Vital="yes" KeyPath="yes"/>
+    </Component>
+    <?endif?>
+
     <Icon Id="app_ico" SourceFile="$(var.ProjectAssetsFolder)app.ico"/>
     <Property Id="ARPPRODUCTICON" Value="app_ico" />
 
