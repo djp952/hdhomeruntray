@@ -43,7 +43,7 @@ Recording::Recording(JObject^ recording)
 
 	// The only thing in a recording is the name
 	JToken^ name = recording->GetValue("Name", StringComparison::OrdinalIgnoreCase);
-	m_name = CLRISNOTNULL(name) ? FormatName(name->ToObject<String^>()) : String::Empty;
+	m_name = CLRISNOTNULL(name) ? FormatName(name->ToObject<String^>()->Replace("&", "&&")) : String::Empty;
 }
 
 //---------------------------------------------------------------------------

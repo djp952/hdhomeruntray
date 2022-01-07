@@ -220,6 +220,7 @@ TunerStatus^ TunerStatus::Create(TunerDevice^ tunerdevice, int index)
 		// If a better channel name was determined, overwrite it in the status structure
 		if(!String::IsNullOrEmpty(channelname)) {
 
+			channelname = channelname->Replace("&", "&&");
 			msclr::auto_handle<msclr::interop::marshal_context> context(gcnew msclr::interop::marshal_context());
 			strncpy_s(status.channel, std::extent<decltype(status.channel)>::value, context->marshal_as<char const*>(channelname), _TRUNCATE);
 		}

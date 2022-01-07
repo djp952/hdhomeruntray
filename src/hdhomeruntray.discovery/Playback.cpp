@@ -45,7 +45,7 @@ Playback::Playback(JObject^ playback) : m_targetip(IPAddress::None)
 	JToken^ name = playback->GetValue("Name", StringComparison::OrdinalIgnoreCase);
 	JToken^ targetip = playback->GetValue("TargetIP", StringComparison::OrdinalIgnoreCase);
 
-	m_name = CLRISNOTNULL(name) ? FormatName(name->ToObject<String^>()) : String::Empty;
+	m_name = CLRISNOTNULL(name) ? FormatName(name->ToObject<String^>()->Replace("&", "&&")) : String::Empty;
 	if(CLRISNOTNULL(targetip)) IPAddress::TryParse(targetip->ToObject<String^>(), m_targetip);
 }
 
