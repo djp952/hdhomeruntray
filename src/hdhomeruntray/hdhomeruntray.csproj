@@ -202,6 +202,8 @@
     <Compile Include="RoundedFlowLayoutPanel.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="ApplicationTheme.cs" />
+    <Compile Include="Theme.cs" />
     <Compile Include="TrayIconHoverDelay.cs" />
     <Compile Include="MainApplication.cs" />
     <Compile Include="Program.cs" />

@@ -45,6 +45,12 @@ namespace zuki.hdhomeruntray
 
 			m_layoutpanel.EnableDoubleBuferring();
 
+			// THEME
+			//
+			m_appthemechanged = new EventHandler(OnApplicationThemeChanged);
+			ApplicationTheme.Changed += m_appthemechanged;
+			OnApplicationThemeChanged(this, EventArgs.Empty);
+
 			m_layoutpanel.SuspendLayout();
 			m_signallayoutpanel.SuspendLayout();
 			m_headerlayoutpanel.SuspendLayout();
@@ -136,6 +142,21 @@ namespace zuki.hdhomeruntray
 			m_tunernumber.Text = "Tuner " + m_tuner.Index.ToString();
 
 			UpdateStatus();             // Initial status load
+		}
+
+		// Dispose
+		//
+		// Releases unmanaged resources and optionally releases managed resources
+		protected override void Dispose(bool disposing)
+		{
+			if(disposing)
+			{
+				// Dispose managed state
+				if(m_appthemechanged != null) ApplicationTheme.Changed -= m_appthemechanged;
+				if(components != null) components.Dispose();
+			}
+
+			base.Dispose(disposing);
 		}
 
 		//-------------------------------------------------------------------------
@@ -242,6 +263,19 @@ namespace zuki.hdhomeruntray
 			}
 		}
 
+		//-------------------------------------------------------------------
+		// Event Handlers
+		//-------------------------------------------------------------------
+
+		// OnApplicationThemeChanged
+		//
+		// Invoked when the application theme has changed
+		private void OnApplicationThemeChanged(object sender, EventArgs args)
+		{
+			m_layoutpanel.BackColor = ApplicationTheme.PanelBackColor;
+			m_layoutpanel.ForeColor = ApplicationTheme.PanelForeColor;
+		}
+
 		//-------------------------------------------------------------------------
 		// Private Member Functions
 		//-------------------------------------------------------------------------
@@ -272,5 +306,6 @@ namespace zuki.hdhomeruntray
 		private readonly Tuner m_tuner;
 		private int m_lasthash = 0;
 		private readonly SizeF m_scalefactor = SizeF.Empty;
+		private readonly EventHandler m_appthemechanged;
 	}
 }

@@ -40,6 +40,12 @@ namespace zuki.hdhomeruntray
 		{
 			InitializeComponent();
 
+			// THEME
+			//
+			m_appthemechanged = new EventHandler(OnApplicationThemeChanged);
+			ApplicationTheme.Changed += m_appthemechanged;
+			OnApplicationThemeChanged(this, EventArgs.Empty);
+
 			m_layoutpanel.EnableDoubleBuferring();
 
 			Padding = Padding.ScaleDPI(scalefactor);
@@ -65,6 +71,21 @@ namespace zuki.hdhomeruntray
 				m_layoutpanel.MouseEnter += OnMouseEnterToggle;
 				m_layoutpanel.MouseLeave += OnMouseLeaveToggle;
 			}
+		}
+
+		// Dispose
+		//
+		// Releases unmanaged resources and optionally releases managed resources
+		protected override void Dispose(bool disposing)
+		{
+			if(disposing)
+			{
+				// Dispose managed state
+				if(m_appthemechanged != null) ApplicationTheme.Changed -= m_appthemechanged;
+				if(components != null) components.Dispose();
+			}
+
+			base.Dispose(disposing);
 		}
 
 		//-------------------------------------------------------------------------
@@ -126,6 +147,15 @@ namespace zuki.hdhomeruntray
 		// Event Handlers
 		//-------------------------------------------------------------------
 
+		// OnApplicationThemeChanged
+		//
+		// Invoked when the application theme has changed
+		private void OnApplicationThemeChanged(object sender, EventArgs args)
+		{
+			m_layoutpanel.BackColor = ApplicationTheme.PanelBackColor;
+			m_layoutpanel.ForeColor = ApplicationTheme.PanelForeColor;
+		}
+
 		// OnMouseClickButton
 		//
 		// Handles the MouseClick event for button-type controls
@@ -142,8 +172,8 @@ namespace zuki.hdhomeruntray
 			Debug.Assert(sender is RoundedFlowLayoutPanel);
 			RoundedFlowLayoutPanel panel = (RoundedFlowLayoutPanel)sender;
 
-			panel.ForeColor = SystemColors.ControlLightLight;
-			panel.BackColor = SystemColors.ControlDark;
+			panel.ForeColor = ApplicationTheme.InvertedPanelForeColor;
+			panel.BackColor = ApplicationTheme.InvertedPanelBackColor;
 		}
 
 		// OnMouseLeaveButton
@@ -154,8 +184,8 @@ namespace zuki.hdhomeruntray
 			Debug.Assert(sender is RoundedFlowLayoutPanel);
 			RoundedFlowLayoutPanel panel = (RoundedFlowLayoutPanel)sender;
 
-			panel.ForeColor = SystemColors.ControlText;
-			panel.BackColor = SystemColors.ControlLightLight;
+			panel.ForeColor = ApplicationTheme.PanelForeColor;
+			panel.BackColor = ApplicationTheme.PanelBackColor;
 		}
 
 		// OnMouseClickToggle
@@ -180,8 +210,8 @@ namespace zuki.hdhomeruntray
 			Debug.Assert(sender is RoundedFlowLayoutPanel);
 			RoundedFlowLayoutPanel panel = (RoundedFlowLayoutPanel)sender;
 
-			panel.ForeColor = SystemColors.ControlLightLight;
-			panel.BackColor = SystemColors.ControlDark;
+			panel.ForeColor = ApplicationTheme.InvertedPanelForeColor;
+			panel.BackColor = ApplicationTheme.InvertedPanelBackColor;
 		}
 
 		// OnMouseLeaveToggle
@@ -194,13 +224,13 @@ namespace zuki.hdhomeruntray
 
 			if(!m_toggled)
 			{
-				panel.ForeColor = SystemColors.ControlText;
-				panel.BackColor = SystemColors.ControlLightLight;
+				panel.ForeColor = ApplicationTheme.PanelForeColor;
+				panel.BackColor = ApplicationTheme.PanelBackColor;
 			}
 			else
 			{
-				panel.ForeColor = SystemColors.ControlLightLight;
-				panel.BackColor = SystemColors.ControlDark;
+				panel.ForeColor = ApplicationTheme.InvertedPanelForeColor;
+				panel.BackColor = ApplicationTheme.InvertedPanelBackColor;
 			}
 		}
 
@@ -210,5 +240,6 @@ namespace zuki.hdhomeruntray
 
 		private readonly PopupItemControlType m_type;
 		private bool m_toggled = false;
+		private readonly EventHandler m_appthemechanged;
 	}
 }

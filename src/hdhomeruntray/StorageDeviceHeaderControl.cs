@@ -42,6 +42,12 @@ namespace zuki.hdhomeruntray
 		{
 			InitializeComponent();
 
+			// THEME
+			//
+			m_appthemechanged = new EventHandler(OnApplicationThemeChanged);
+			ApplicationTheme.Changed += m_appthemechanged;
+			OnApplicationThemeChanged(this, EventArgs.Empty);
+
 			m_layoutpanel.EnableDoubleBuferring();
 
 			Padding = Padding.ScaleDPI(scalefactor);
@@ -73,9 +79,34 @@ namespace zuki.hdhomeruntray
 			m_baseurl = device.BaseURL;
 		}
 
+		// Dispose
+		//
+		// Releases unmanaged resources and optionally releases managed resources
+		protected override void Dispose(bool disposing)
+		{
+			if(disposing)
+			{
+				// Dispose managed state
+				if(m_appthemechanged != null) ApplicationTheme.Changed -= m_appthemechanged;
+				if(components != null) components.Dispose();
+			}
+
+			base.Dispose(disposing);
+		}
+
 		//-------------------------------------------------------------------
 		// Event Handlers
 		//-------------------------------------------------------------------
+
+		// OnApplicationThemeChanged
+		//
+		// Invoked when the application theme has changed
+		private void OnApplicationThemeChanged(object sender, EventArgs args)
+		{
+			m_layoutpanel.BackColor = ApplicationTheme.PanelBackColor;
+			m_layoutpanel.ForeColor = ApplicationTheme.PanelForeColor;
+			m_ipaddress.ActiveLinkColor = m_ipaddress.LinkColor = m_ipaddress.VisitedLinkColor = ApplicationTheme.LinkColor;
+		}
 
 		// OnIPAddressClicked
 		//
@@ -92,9 +123,10 @@ namespace zuki.hdhomeruntray
 		}
 
 		//-------------------------------------------------------------------
-		// Event Handlers
+		// Member Variables
 		//-------------------------------------------------------------------
 
 		private readonly string m_baseurl;
+		private readonly EventHandler m_appthemechanged;
 	}
 }

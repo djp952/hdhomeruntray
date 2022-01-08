@@ -26,5 +26,8 @@
     <Setting Name="AutoUnpin" Type="zuki.hdhomeruntray.EnabledDisabled" Scope="User">
       <Value Profile="(Default)">Disabled</Value>
     </Setting>
+    <Setting Name="AppTheme" Type="zuki.hdhomeruntray.Theme" Scope="User">
+      <Value Profile="(Default)">System</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

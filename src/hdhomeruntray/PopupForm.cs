@@ -67,6 +67,12 @@ namespace zuki.hdhomeruntray
 		{
 			InitializeComponent();
 
+			// THEME
+			//
+			m_appthemechanged = new EventHandler(OnApplicationThemeChanged);
+			ApplicationTheme.Changed += m_appthemechanged;
+			OnApplicationThemeChanged(this, EventArgs.Empty);
+
 			m_layoutpanel.EnableDoubleBuferring();
 
 			// WINDOWS 11
@@ -138,6 +144,21 @@ namespace zuki.hdhomeruntray
 
 			// If the window is supposed to be pinned, pin it
 			if((pinned) && (icon != null)) Pin(icon);
+		}
+
+		// Dispose
+		//
+		// Releases unmanaged resources and optionally releases managed resources
+		protected override void Dispose(bool disposing)
+		{
+			if(disposing)
+			{
+				// Dispose managed state
+				if(m_appthemechanged != null) ApplicationTheme.Changed -= m_appthemechanged;
+				if(components != null) components.Dispose();
+			}
+
+			base.Dispose(disposing);
 		}
 
 		//-------------------------------------------------------------------------
@@ -230,6 +251,14 @@ namespace zuki.hdhomeruntray
 		//-------------------------------------------------------------------
 		// Event Handlers
 		//-------------------------------------------------------------------
+
+		// OnApplicationThemeChanged
+		//
+		// Invoked when the application theme has changed
+		private void OnApplicationThemeChanged(object sender, EventArgs args)
+		{
+			BackColor = ApplicationTheme.FormBackColor;
+		}
 
 		// OnDeactivate
 		//
@@ -487,5 +516,6 @@ namespace zuki.hdhomeruntray
 		private SettingsForm m_settingsform = null;
 		private DeviceStatus m_status = DeviceStatus.Idle;
 		private readonly SizeF m_scalefactor = SizeF.Empty;
+		private readonly EventHandler m_appthemechanged;
 	}
 }

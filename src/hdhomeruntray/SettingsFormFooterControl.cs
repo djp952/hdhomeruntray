@@ -20,6 +20,7 @@
 // SOFTWARE.
 //---------------------------------------------------------------------------
 
+using System;
 using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
@@ -38,6 +39,12 @@ namespace zuki.hdhomeruntray
 		public SettingsFormFooterControl()
 		{
 			InitializeComponent();
+
+			// THEME
+			//
+			m_appthemechanged = new EventHandler(OnApplicationThemeChanged);
+			ApplicationTheme.Changed += m_appthemechanged;
+			OnApplicationThemeChanged(this, EventArgs.Empty);
 
 			m_layoutpanel.EnableDoubleBuferring();
 
@@ -62,9 +69,35 @@ namespace zuki.hdhomeruntray
 			m_link2.Text = "LICENSE";
 		}
 
+		// Dispose
+		//
+		// Releases unmanaged resources and optionally releases managed resources
+		protected override void Dispose(bool disposing)
+		{
+			if(disposing)
+			{
+				// Dispose managed state
+				if(m_appthemechanged != null) ApplicationTheme.Changed -= m_appthemechanged;
+				if(components != null) components.Dispose();
+			}
+
+			base.Dispose(disposing);
+		}
+
 		//-------------------------------------------------------------------
 		// Event Handlers
 		//-------------------------------------------------------------------
+
+		// OnApplicationThemeChanged
+		//
+		// Invoked when the application theme has changed
+		private void OnApplicationThemeChanged(object sender, EventArgs args)
+		{
+			m_layoutpanel.BackColor = ApplicationTheme.PanelBackColor;
+			m_layoutpanel.ForeColor = ApplicationTheme.PanelForeColor;
+			m_link1.ActiveLinkColor = m_link1.LinkColor = m_link1.VisitedLinkColor = ApplicationTheme.LinkColor;
+			m_link2.ActiveLinkColor = m_link2.LinkColor = m_link2.VisitedLinkColor = ApplicationTheme.LinkColor;
+		}
 
 		// OnLink1Clicked
 		//
@@ -87,5 +120,11 @@ namespace zuki.hdhomeruntray
 				process.Start();
 			}
 		}
+
+		//-------------------------------------------------------------------
+		// Member Variables
+		//-------------------------------------------------------------------
+
+		private readonly EventHandler m_appthemechanged;
 	}
 }

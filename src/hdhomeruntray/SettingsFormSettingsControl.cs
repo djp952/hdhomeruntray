@@ -42,6 +42,12 @@ namespace zuki.hdhomeruntray
 		{
 			InitializeComponent();
 
+			// THEME
+			//
+			m_appthemechanged = new EventHandler(OnApplicationThemeChanged);
+			ApplicationTheme.Changed += m_appthemechanged;
+			OnApplicationThemeChanged(this, EventArgs.Empty);
+
 			m_layoutpanel.EnableDoubleBuferring();
 
 			using(Graphics graphics = CreateGraphics())
@@ -86,15 +92,40 @@ namespace zuki.hdhomeruntray
 			m_autostart.BindEnum(Settings.Default.AutoStart);
 			m_discoveryinterval.BindEnum(Settings.Default.DiscoveryInterval);
 			m_discoverymethod.BindEnum(Settings.Default.DiscoveryMethod);
+			m_theme.BindEnum(Settings.Default.AppTheme);
 			m_trayiconhover.BindEnum(Settings.Default.TrayIconHover);
 			m_trayiconhoverdelay.BindEnum(Settings.Default.TrayIconHoverDelay);
 			m_tunerstatuscolorsource.BindEnum(Settings.Default.TunerStatusColorSource);
 			m_unpinautomatically.BindEnum(Settings.Default.AutoUnpin);
 		}
 
+		// Dispose
+		//
+		// Releases unmanaged resources and optionally releases managed resources
+		protected override void Dispose(bool disposing)
+		{
+			if(disposing)
+			{
+				// Dispose managed state
+				if(m_appthemechanged != null) ApplicationTheme.Changed -= m_appthemechanged;
+				if(components != null) components.Dispose();
+			}
+
+			base.Dispose(disposing);
+		}
+
 		//-------------------------------------------------------------------
 		// Event Handlers
 		//-------------------------------------------------------------------
+
+		// OnApplicationThemeChanged
+		//
+		// Invoked when the application theme has changed
+		private void OnApplicationThemeChanged(object sender, EventArgs args)
+		{
+			m_layoutpanel.BackColor = ApplicationTheme.PanelBackColor;
+			m_layoutpanel.ForeColor = ApplicationTheme.PanelForeColor;
+		}
 
 		// OnAutoStartCommitted
 		//
@@ -152,6 +183,20 @@ namespace zuki.hdhomeruntray
 			}
 		}
 
+		// OnThemeCommitted
+		//
+		// Invoked when a change to the combobox is committed
+		private void OnThemeCommitted(object sender, EventArgs args)
+		{
+			// If the value of the combobox changed, update and save the settings
+			Theme theme = (Theme)m_theme.SelectedValue;
+			if(theme != Settings.Default.AppTheme)
+			{
+				Settings.Default.AppTheme = theme;
+				Settings.Default.Save();
+			}
+		}
+
 		// OnTrayIconHoverDelayCommitted
 		//
 		// Invoked when a change to the combobox is committed
@@ -194,5 +239,10 @@ namespace zuki.hdhomeruntray
 			}
 		}
 
+		//-------------------------------------------------------------------
+		// Member Variables
+		//-------------------------------------------------------------------
+
+		private readonly EventHandler m_appthemechanged;
 	}
 }

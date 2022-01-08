@@ -63,6 +63,13 @@ namespace zuki.hdhomeruntray
 		{
 			InitializeComponent();
 
+			// THEME
+			//
+			m_appthemechanged = new EventHandler(OnApplicationThemeChanged);
+			ApplicationTheme.Changed += m_appthemechanged;
+			OnApplicationThemeChanged(this, EventArgs.Empty);
+
+
 			m_layoutpanel.EnableDoubleBuferring();
 
 			// WINDOWS 11
@@ -107,6 +114,21 @@ namespace zuki.hdhomeruntray
 			OnSizeChanged(this, EventArgs.Empty);
 		}
 
+		// Dispose
+		//
+		// Releases unmanaged resources and optionally releases managed resources
+		protected override void Dispose(bool disposing)
+		{
+			if(disposing)
+			{
+				// Dispose managed state
+				if(m_appthemechanged != null) ApplicationTheme.Changed -= m_appthemechanged;
+				if(components != null) components.Dispose();
+			}
+
+			base.Dispose(disposing);
+		}
+
 		//-------------------------------------------------------------------
 		// Control Overrides
 		//-------------------------------------------------------------------
@@ -124,9 +146,13 @@ namespace zuki.hdhomeruntray
 			}
 		}
 
-		//-------------------------------------------------------------------
-		// Event Handlers
-		//-------------------------------------------------------------------
+		// OnApplicationThemeChanged
+		//
+		// Invoked when the application theme has changed
+		private void OnApplicationThemeChanged(object sender, EventArgs args)
+		{
+			BackColor = ApplicationTheme.FormBackColor;
+		}
 
 		// OnSizeChanged
 		//
@@ -162,5 +188,6 @@ namespace zuki.hdhomeruntray
 
 		private readonly Rectangle m_popupformbounds;
 		private readonly Rectangle m_popupitembounds;
+		private readonly EventHandler m_appthemechanged;
 	}
 }

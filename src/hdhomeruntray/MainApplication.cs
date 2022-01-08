@@ -89,7 +89,7 @@ namespace zuki.hdhomeruntray
 			if(VersionHelper.IsWindows10OrGreater())
 			{
 				m_thememonitor = new RegistryKeyValueChangeMonitor(Registry.CurrentUser, @"Software\Microsoft\Windows\CurrentVersion\Themes\Personalize");
-				m_thememonitor.ValueChanged += new EventHandler(OnTaskbarThemeChanged);
+				m_thememonitor.ValueChanged += new EventHandler(OnSystemThemesChanged);
 
 				try { m_thememonitor.Start(); }
 				catch(Exception) { /* DON'T CARE FOR NOW */ }
@@ -383,14 +383,22 @@ namespace zuki.hdhomeruntray
 			}
 		}
 
-		// OnTaskbarThemeChanged
+		// OnSystemThemesChanged
 		//
-		// Invoked when the system taskbar theme has changed
-		private void OnTaskbarThemeChanged(object sender, EventArgs args)
+		// Invoked when the system theme(s) have changed
+		private void OnSystemThemesChanged(object sender, EventArgs args)
 		{
 			// Refresh the status icon if would be different than it already is
 			Icon statusicon = StatusIcons.Get(m_status);
 			if(!m_notifyicon.Icon.Equals(statusicon)) m_notifyicon.Icon = statusicon;
+
+			// The ApplicationTheme class exists in the WindowsFormsSynchronizationContext
+			// but also needs to know about this event to change the application theme
+			m_context.Post(new SendOrPostCallback((o) =>
+			{
+				ApplicationTheme.SystemThemesChanged(this, EventArgs.Empty);
+
+			}), null);
 		}
 
 		//-------------------------------------------------------------------
@@ -462,7 +470,7 @@ namespace zuki.hdhomeruntray
 			// Create the ContextMenuStrip for the tray icon
 			ContextMenuStrip contextmenu = new ContextMenuStrip(container)
 			{
-				BackColor = SystemColors.ControlLightLight,
+				BackColor = SystemColors.ControlLightLight,		// NOTE: DO NOT THEME THIS
 				Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold),
 				RenderMode = ToolStripRenderMode.Professional
 			};
