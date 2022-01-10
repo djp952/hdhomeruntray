@@ -69,7 +69,7 @@ namespace zuki.hdhomeruntray
 			if(recording == null) throw new ArgumentNullException(nameof(recording));
 
 			// This is static information, just assign from the recording instance
-			m_activedot.ForeColor = DeviceStatusColor.Red;
+			m_activedot.ForeColor = StatusColor.FromDeviceStatusColor(DeviceStatusColor.Red);
 			m_name.Text = recording.Name;
 		}
 

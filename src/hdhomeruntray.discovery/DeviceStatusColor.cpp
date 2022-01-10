@@ -24,41 +24,4 @@
 
 #include "DeviceStatusColor.h"
 
-#pragma warning(push, 4)
-
-namespace zuki::hdhomeruntray::discovery {
-
-//---------------------------------------------------------------------------
-// DeviceStatusColor::FromDeviceStatus (status)
-//
-// Creates a DeviceStatusColor based on a DeviceStatus value
-//
-// Arguments:
-//
-//	devicestatus	- DeviceStatus value to use for the color
-
-Color DeviceStatusColor::FromDeviceStatus(_DeviceStatus devicestatus)
-{
-	switch(devicestatus) {
-
-		// Idle --> Gray
-		//
-		case _DeviceStatus::Idle: return Gray;
-
-		// Active --> Green
-		//
-		case _DeviceStatus::Active: return Green;
-
-		// ActiveAndRecording --> Red
-		//
-		case _DeviceStatus::ActiveAndRecording: return Red;
-	}
-
-	return Gray;			// {invalid} --> Gray
-}
-
-//---------------------------------------------------------------------------
-
-} // zuki::hdhomeruntray::discovery
-
-#pragma warning(pop)
+// EMPTY TRANSLATION UNIT

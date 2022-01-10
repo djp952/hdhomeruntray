@@ -193,38 +193,22 @@ namespace zuki.hdhomeruntray
 			{
 				// Header Controls
 				//
-				Color forecolor = DeviceStatusColor.FromDeviceStatus(status.DeviceStatus);
-				switch(Settings.Default.TunerStatusColorSource)
-				{
-					case TunerStatusColorSource.SignalStrength:
-						forecolor = status.SignalStrengthColor;
-						break;
-
-					case TunerStatusColorSource.SignalQuality:
-						forecolor = status.SignalQualityColor;
-						break;
-
-					case TunerStatusColorSource.SymbolQuality:
-						forecolor = status.SymbolQualityColor;
-						break;
-				}
-				m_activedot.ForeColor = forecolor;
-
+				m_activedot.ForeColor = StatusColor.FromDeviceStatus(status.DeviceStatus);
 				m_channelname.Text = (status.DeviceStatus >= DeviceStatus.Active) ? status.ChannelName : "Idle";
 
 				if(status.DeviceStatus >= DeviceStatus.Active)
 				{
 					// Signal Meter Controls
 					//
-					m_signalstrengthbar.ProgressBarColor = status.SignalStrengthColor;
+					m_signalstrengthbar.ProgressBarColor = StatusColor.FromDeviceStatusColor(status.SignalStrengthColor);
 					m_signalstrengthbar.Value = status.SignalStrength;
 					m_signalstrengthpct.Text = string.Format("{0}%", status.SignalStrength);
 
-					m_signalqualitybar.ProgressBarColor = status.SignalQualityColor;
+					m_signalqualitybar.ProgressBarColor = StatusColor.FromDeviceStatusColor(status.SignalQualityColor);
 					m_signalqualitybar.Value = status.SignalQuality;
 					m_signalqualitypct.Text = string.Format("{0}%", status.SignalQuality);
 
-					m_symbolqualitybar.ProgressBarColor = status.SymbolQualityColor;
+					m_symbolqualitybar.ProgressBarColor = StatusColor.FromDeviceStatusColor(status.SymbolQualityColor);
 					m_symbolqualitybar.Value = status.SymbolQuality;
 					m_symbolqualitypct.Text = string.Format("{0}%", status.SymbolQuality);
 
@@ -259,7 +243,7 @@ namespace zuki.hdhomeruntray
 			// Invoke the status color changed event if the color of the dot changed
 			if(lastcolor != m_activedot.ForeColor)
 			{
-				DeviceStatusChanged?.Invoke(this, new DeviceStatusChangedEventArgs(status.DeviceStatus, m_device, m_tuner.Index, m_activedot.ForeColor));
+				DeviceStatusChanged?.Invoke(this, new DeviceStatusChangedEventArgs(status.DeviceStatus, m_device, m_tuner.Index));
 			}
 		}
 

@@ -31,9 +31,7 @@
 #pragma warning(push, 4)
 
 using namespace System;
-using namespace System::Drawing;
 
-using _Color = System::Drawing::Color;
 using _Device = zuki::hdhomeruntray::discovery::Device;
 using _DeviceStatus = zuki::hdhomeruntray::discovery::DeviceStatus;
 
@@ -54,16 +52,10 @@ public:
 	DeviceStatusChangedEventArgs(_DeviceStatus status);
 	DeviceStatusChangedEventArgs(_DeviceStatus status, _Device^ device);
 	DeviceStatusChangedEventArgs(_DeviceStatus status, _Device^ device, int index);
-	DeviceStatusChangedEventArgs(_DeviceStatus status, _Device^ device, int index, _Color color);
 
 	//-----------------------------------------------------------------------
 	// Fields
 	
-	// Color
-	//
-	// The color code to assign to the device status
-	initonly _Color Color;
-
 	// Device
 	//
 	// The referenced device instance

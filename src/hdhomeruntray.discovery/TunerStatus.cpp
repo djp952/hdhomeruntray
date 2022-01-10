@@ -64,13 +64,13 @@ TunerStatus::TunerStatus(struct hdhomerun_tuner_status_t const* status, IPAddres
 	if(m_devicestatus == _DeviceStatus::Active) {
 
 		m_signalstrength = static_cast<int>(status->signal_strength);
-		m_signalstrengthcolor = ConvertHDHomeRunColor(hdhomerun_device_get_tuner_status_ss_color(const_cast<hdhomerun_tuner_status_t*>(status)));
+		m_signalstrengthcolor = static_cast<DeviceStatusColor>(hdhomerun_device_get_tuner_status_ss_color(const_cast<hdhomerun_tuner_status_t*>(status)));
 
 		m_signalquality = static_cast<int>(status->signal_to_noise_quality);
-		m_signalqualitycolor = ConvertHDHomeRunColor(hdhomerun_device_get_tuner_status_snq_color(const_cast<hdhomerun_tuner_status_t*>(status)));
+		m_signalqualitycolor = static_cast<DeviceStatusColor>(hdhomerun_device_get_tuner_status_snq_color(const_cast<hdhomerun_tuner_status_t*>(status)));
 
 		m_symbolquality = static_cast<int>(status->symbol_error_quality);
-		m_symbolqualitycolor = ConvertHDHomeRunColor(hdhomerun_device_get_tuner_status_seq_color(const_cast<hdhomerun_tuner_status_t*>(status)));
+		m_symbolqualitycolor = static_cast<DeviceStatusColor>(hdhomerun_device_get_tuner_status_seq_color(const_cast<hdhomerun_tuner_status_t*>(status)));
 
 		m_bitrate = status->raw_bits_per_second;
 		m_targetip = targetip;
@@ -95,26 +95,6 @@ int TunerStatus::BitRate::get(void)
 String^ TunerStatus::ChannelName::get(void)
 {
 	return m_channelname;
-}
-
-//---------------------------------------------------------------------------
-// TunerStatus::ConvertHDHomeRunColor (private, static)
-//
-// Converts the color code from libhdhomerun into the color I want to use
-//
-// Arguments:
-//
-//	color		- The color code from libhdhomerun to convert
-
-Color TunerStatus::ConvertHDHomeRunColor(uint32_t color)
-{
-	if(color == HDHOMERUN_STATUS_COLOR_GREEN) return DeviceStatusColor::Green;
-	else if(color == HDHOMERUN_STATUS_COLOR_YELLOW) return DeviceStatusColor::Yellow;
-	else if(color == HDHOMERUN_STATUS_COLOR_RED) return DeviceStatusColor::Red;
-
-	// HDHOMERUN_STATUS_COLOR_NEUTRAL is only used for devices that don't 
-	// support tuner locking; not sure what that's about so default to green
-	return DeviceStatusColor::Green;
 }
 
 //---------------------------------------------------------------------------
@@ -348,7 +328,7 @@ int TunerStatus::SignalQuality::get(void)
 //
 // Gets the color code for the signal quality
 
-Color TunerStatus::SignalQualityColor::get(void)
+DeviceStatusColor TunerStatus::SignalQualityColor::get(void)
 {
 	return m_signalqualitycolor;
 }
@@ -368,7 +348,7 @@ int TunerStatus::SignalStrength::get(void)
 //
 // Gets the color code for the signal strength
 
-Color TunerStatus::SignalStrengthColor::get(void)
+DeviceStatusColor TunerStatus::SignalStrengthColor::get(void)
 {
 	return m_signalstrengthcolor;
 }
@@ -388,7 +368,7 @@ int TunerStatus::SymbolQuality::get(void)
 //
 // Gets the color code for the symbol quality
 
-Color TunerStatus::SymbolQualityColor::get(void)
+DeviceStatusColor TunerStatus::SymbolQualityColor::get(void)
 {
 	return m_symbolqualitycolor;
 }

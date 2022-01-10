@@ -293,7 +293,7 @@ namespace zuki.hdhomeruntray
 				if(control is PopupItemDeviceControl devicecontrol)
 				{
 					// TODO: A proper Device.Equals() would be better
-					if(devicecontrol.Device.BaseURL == args.Device.BaseURL) devicecontrol.SetDotColor(args.Index, args.Color);
+					if(devicecontrol.Device.BaseURL == args.Device.BaseURL) devicecontrol.SetDotColor(args.Index, StatusColor.FromDeviceStatus(args.DeviceStatus));
 					if(devicecontrol.DeviceStatus > newstatus) newstatus = devicecontrol.DeviceStatus;
 				}
 			}

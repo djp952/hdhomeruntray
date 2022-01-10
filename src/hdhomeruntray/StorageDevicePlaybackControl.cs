@@ -70,7 +70,7 @@ namespace zuki.hdhomeruntray
 			if(playback == null) throw new ArgumentNullException(nameof(playback));
 
 			// This is static information, just assign from the playback instance
-			m_activedot.ForeColor = DeviceStatusColor.Green;
+			m_activedot.ForeColor = StatusColor.FromDeviceStatusColor(DeviceStatusColor.Green);
 			m_name.Text = playback.Name;
 			m_targetip.Text = playback.TargetIP.ToString();
 		}

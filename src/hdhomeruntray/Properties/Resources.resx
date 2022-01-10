@@ -124,6 +124,12 @@
   <data name="LicenseURL" xml:space="preserve">
     <value>https://github.com/djp952/hdhomeruntray/blob/main/LICENSE</value>
   </data>
+  <data name="TrayIconBlueDark" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\trayicon-blue-dark.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="TrayIconBlueLight" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\trayicon-blue-light.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="TrayIconGrayDark" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\trayicon-gray-dark.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -135,6 +141,12 @@
   </data>
   <data name="TrayIconGreenLight" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\trayicon-green-light.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="TrayIconOrangeDark" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\trayicon-orange-dark.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="TrayIconOrangeLight" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\trayicon-orange-light.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="TrayIconRedDark" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\trayicon-red-dark.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>

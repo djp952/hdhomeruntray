@@ -70,7 +70,7 @@ namespace zuki.hdhomeruntray
 			if(livebuffer == null) throw new ArgumentNullException(nameof(livebuffer));
 
 			// This is static information, just assign from the livebuffer instance
-			m_activedot.ForeColor = DeviceStatusColor.Green;
+			m_activedot.ForeColor = StatusColor.FromDeviceStatusColor(DeviceStatusColor.Green);
 			m_name.Text = livebuffer.Name;
 			m_targetip.Text = livebuffer.TargetIP.ToString();
 		}

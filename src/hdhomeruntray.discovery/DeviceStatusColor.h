@@ -26,53 +26,22 @@
 
 #pragma warning(push, 4)
 
-#include "DeviceStatus.h"
-
 using namespace System;
-using namespace System::Drawing;
-
-using _DeviceStatus = zuki::hdhomeruntray::discovery::DeviceStatus;
 
 namespace zuki::hdhomeruntray::discovery {
 
 //---------------------------------------------------------------------------
-// Class DeviceStatusColor
+// Enum DeviceStatusColor
 //
-// Defines constant Color declarations for device functions
+// Managed version of HDHOMERUN_STATUS_COLOR_XXXX
 //---------------------------------------------------------------------------
 
-public ref class DeviceStatusColor abstract sealed
+public enum class DeviceStatusColor : uint32_t
 {
-public:
-
-	//-----------------------------------------------------------------------
-	// Member Functions
-	//-----------------------------------------------------------------------
-
-	// FromDeviceStatus (static)
-	//
-	// Determines the color from a DeviceStatus enumeration value
-	static Color FromDeviceStatus(_DeviceStatus devicestatus);
-
-	//-----------------------------------------------------------------------
-	// Fields
-	//-----------------------------------------------------------------------
-
-	// Gray
-	//
-	static initonly Color Gray = Color::FromArgb(0xFFC0C0C0);
-
-	// Green
-	//
-	static initonly Color Green = Color::FromArgb(0xFF1EE500);
-
-	// Red
-	//
-	static initonly Color Red = Color::FromArgb(0xFFE50000);
-
-	// Yellow
-	//
-	static initonly Color Yellow = Color::FromArgb(0xFFFFE900);
+	Green	= HDHOMERUN_STATUS_COLOR_GREEN,
+	Neutral	= HDHOMERUN_STATUS_COLOR_NEUTRAL,
+	Red		= HDHOMERUN_STATUS_COLOR_RED,
+	Yellow	= HDHOMERUN_STATUS_COLOR_YELLOW,
 };
 
 //---------------------------------------------------------------------------

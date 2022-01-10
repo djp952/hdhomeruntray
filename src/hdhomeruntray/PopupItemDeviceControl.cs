@@ -66,14 +66,10 @@ namespace zuki.hdhomeruntray
 			// Determine the number of dots to display; for tuners this will be the
 			// number of tuners within the device; otherwise just use one dot
 			int numdots = 1;
-			if(m_device is TunerDevice tunerdevice)
-			{
-				numdots = tunerdevice.Tuners.Count;
+			if(m_device is TunerDevice tunerdevice) numdots = tunerdevice.Tuners.Count;
 
-				// For tuner devices, also wire up a handler for property changes as the color
-				// of the dot(s) may need to change dynamically
-				Settings.Default.PropertyChanged += new PropertyChangedEventHandler(OnPropertyChanged);
-			}
+			// Wire up a handler for property changes as the color of the dot(s) may need to change dynamically
+			Settings.Default.PropertyChanged += new PropertyChangedEventHandler(OnPropertyChanged);
 
 			// Create the dot labels
 			m_dots = new Label[numdots];
@@ -151,24 +147,8 @@ namespace zuki.hdhomeruntray
 					// Update the overall device status indicator
 					if(status.DeviceStatus > m_status) m_status = status.DeviceStatus;
 
-					// Default to a standard color, but obey the setting
-					Color forecolor = DeviceStatusColor.FromDeviceStatus(status.DeviceStatus);
-					switch(Settings.Default.TunerStatusColorSource)
-					{
-						case TunerStatusColorSource.SignalStrength:
-							forecolor = status.SignalStrengthColor;
-							break;
-
-						case TunerStatusColorSource.SignalQuality:
-							forecolor = status.SignalQualityColor;
-							break;
-
-						case TunerStatusColorSource.SymbolQuality:
-							forecolor = status.SymbolQualityColor;
-							break;
-					}
-
-					m_dots[index].ForeColor = forecolor;
+					// Update the dot color based on the device status
+					m_dots[index].ForeColor = StatusColor.FromDeviceStatus(status.DeviceStatus);
 				}
 			}
 
@@ -183,7 +163,7 @@ namespace zuki.hdhomeruntray
 				if(status.DeviceStatus > m_status) m_status = status.DeviceStatus;
 
 				// The storage device only gets one dot for the overall status
-				m_dots[0].ForeColor = DeviceStatusColor.FromDeviceStatus(status.DeviceStatus);
+				m_dots[0].ForeColor = StatusColor.FromDeviceStatus(status.DeviceStatus);
 			}
 
 			base.Refresh();
@@ -208,11 +188,12 @@ namespace zuki.hdhomeruntray
 		// Invoked when a settings property has been changed
 		private void OnPropertyChanged(object sender, PropertyChangedEventArgs args)
 		{
-			// TunerStatusColorSource
+			// StatusColorSet
 			//
-			if(args.PropertyName == nameof(Settings.Default.TunerStatusColorSource))
+			if(args.PropertyName == nameof(Settings.Default.StatusColorSet))
 			{
-				Refresh();
+				// Rebase the dot colors appropriately for the new color set
+				for(int index = 0; index < m_dots.Length; index++) m_dots[index].ForeColor = StatusColor.Rebase(m_dots[index].ForeColor);
 			}
 		}
 

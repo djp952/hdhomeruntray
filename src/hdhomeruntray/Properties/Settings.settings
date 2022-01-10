@@ -11,9 +11,6 @@
     <Setting Name="TrayIconHoverDelay" Type="zuki.hdhomeruntray.TrayIconHoverDelay" Scope="User">
       <Value Profile="(Default)">SystemDefault</Value>
     </Setting>
-    <Setting Name="TunerStatusColorSource" Type="zuki.hdhomeruntray.TunerStatusColorSource" Scope="User">
-      <Value Profile="(Default)">None</Value>
-    </Setting>
     <Setting Name="UpgradeRequired" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
@@ -28,6 +25,9 @@
     </Setting>
     <Setting Name="AppTheme" Type="zuki.hdhomeruntray.Theme" Scope="User">
       <Value Profile="(Default)">System</Value>
+    </Setting>
+    <Setting Name="StatusColorSet" Type="zuki.hdhomeruntray.StatusColorSet" Scope="User">
+      <Value Profile="(Default)">GreenRed</Value>
     </Setting>
   </Settings>
 </SettingsFile>

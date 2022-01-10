@@ -50,7 +50,7 @@ namespace zuki.hdhomeruntray
 			m_layoutpanel.EnableDoubleBuferring();
 
 			// There is no device information to read from, this is all static
-			m_activedot.ForeColor = DeviceStatusColor.Gray;
+			m_activedot.ForeColor = StatusColor.FromDeviceStatusColor(DeviceStatusColor.Neutral);
 			m_name.Text = string.Empty;
 			
 			Padding = Padding.ScaleDPI(scalefactor);

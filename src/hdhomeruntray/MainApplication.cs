@@ -375,6 +375,15 @@ namespace zuki.hdhomeruntray
 				if(wasenabled) m_discoverytimer.Enabled = true;     // Restart the timer
 			}
 
+			// StatusColorSet
+			//
+			if(args.PropertyName == nameof(Settings.Default.StatusColorSet))
+			{
+				// Refresh the status icon if would be different than it already is
+				Icon statusicon = StatusIcons.Get(m_status);
+				if(!m_notifyicon.Icon.Equals(statusicon)) m_notifyicon.Icon = statusicon;
+			}
+
 			// TrayIconHoverDelay
 			//
 			if(args.PropertyName == nameof(Settings.Default.TrayIconHoverDelay))

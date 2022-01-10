@@ -25,23 +25,16 @@ using System.ComponentModel;
 namespace zuki.hdhomeruntray
 {
 	//-----------------------------------------------------------------------
-	// Enum TunerStatusColorSource
+	// Enum StatusColorSet
 	//
-	// Defines constants that control what signal status metric will determine
-	// the color of a tuner dot in the popup form
+	// Defines constants that determine the available status color sets
 
-	public enum TunerStatusColorSource
+	public enum StatusColorSet
 	{
-		[Description("None")]
-		None = 0,
+		[Description("Green / Red")]
+		GreenRed = 0,
 
-		[Description("Signal Strength")]
-		SignalStrength = 1,
-
-		[Description("Signal Quality")]
-		SignalQuality = 2,
-
-		[Description("Symbol Quality")]
-		SymbolQuality = 3,
+		[Description("Blue / Orange")]
+		BlueOrange = 1,
 	}
 }

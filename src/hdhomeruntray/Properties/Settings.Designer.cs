@@ -61,18 +61,6 @@ namespace zuki.hdhomeruntray.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("None")]
-        public global::zuki.hdhomeruntray.TunerStatusColorSource TunerStatusColorSource {
-            get {
-                return ((global::zuki.hdhomeruntray.TunerStatusColorSource)(this["TunerStatusColorSource"]));
-            }
-            set {
-                this["TunerStatusColorSource"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("True")]
         public bool UpgradeRequired {
             get {
@@ -128,6 +116,18 @@ namespace zuki.hdhomeruntray.Properties {
             }
             set {
                 this["AppTheme"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("GreenRed")]
+        public global::zuki.hdhomeruntray.StatusColorSet StatusColorSet {
+            get {
+                return ((global::zuki.hdhomeruntray.StatusColorSet)(this["StatusColorSet"]));
+            }
+            set {
+                this["StatusColorSet"] = value;
             }
         }
     }

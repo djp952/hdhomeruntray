@@ -19,7 +19,7 @@ namespace zuki.hdhomeruntray.Properties {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Resources {
@@ -82,6 +82,26 @@ namespace zuki.hdhomeruntray.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
+        internal static System.Drawing.Icon TrayIconBlueDark {
+            get {
+                object obj = ResourceManager.GetObject("TrayIconBlueDark", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        internal static System.Drawing.Icon TrayIconBlueLight {
+            get {
+                object obj = ResourceManager.GetObject("TrayIconBlueLight", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
         internal static System.Drawing.Icon TrayIconGrayDark {
             get {
                 object obj = ResourceManager.GetObject("TrayIconGrayDark", resourceCulture);
@@ -115,6 +135,26 @@ namespace zuki.hdhomeruntray.Properties {
         internal static System.Drawing.Icon TrayIconGreenLight {
             get {
                 object obj = ResourceManager.GetObject("TrayIconGreenLight", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        internal static System.Drawing.Icon TrayIconOrangeDark {
+            get {
+                object obj = ResourceManager.GetObject("TrayIconOrangeDark", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        internal static System.Drawing.Icon TrayIconOrangeLight {
+            get {
+                object obj = ResourceManager.GetObject("TrayIconOrangeLight", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
             }
         }

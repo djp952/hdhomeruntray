@@ -24,8 +24,6 @@
 
 #include "DeviceStatusChangedEventArgs.h"
 
-#include "DeviceStatusColor.h"
-
 #pragma warning(push, 4)
 
 namespace zuki::hdhomeruntray::discovery {
@@ -38,7 +36,7 @@ namespace zuki::hdhomeruntray::discovery {
 //	status		- DeviceStatus to report
 
 DeviceStatusChangedEventArgs::DeviceStatusChangedEventArgs(_DeviceStatus status) :
-	DeviceStatusChangedEventArgs(status, NullDevice::Create(), 0, DeviceStatusColor::FromDeviceStatus(status))
+	DeviceStatusChangedEventArgs(status, NullDevice::Create(), 0)
 {
 }
 
@@ -51,7 +49,7 @@ DeviceStatusChangedEventArgs::DeviceStatusChangedEventArgs(_DeviceStatus status)
 //	device		- Device instance associated with the status
 
 DeviceStatusChangedEventArgs::DeviceStatusChangedEventArgs(_DeviceStatus status, _Device^ device) :
-	DeviceStatusChangedEventArgs(status, device, 0, DeviceStatusColor::FromDeviceStatus(status))
+	DeviceStatusChangedEventArgs(status, device, 0)
 {
 }
 
@@ -65,24 +63,9 @@ DeviceStatusChangedEventArgs::DeviceStatusChangedEventArgs(_DeviceStatus status,
 //	index		- Index of a subdevice within the device, like a tuner
 
 DeviceStatusChangedEventArgs::DeviceStatusChangedEventArgs(_DeviceStatus status, _Device^ device, int index) :
-	DeviceStatusChangedEventArgs(status, device, index, DeviceStatusColor::FromDeviceStatus(status))
+	Device(device), DeviceStatus(status), Index(index)
 {
-}
-
-//---------------------------------------------------------------------------
-// DeviceStatusChangedEventArgs Constructor
-//
-// Arguments:
-//
-//	status		- DeviceStatus to report
-//	device		- Device instance associated with the status
-//	index		- Index of a subdevice within the device, like a tuner
-//	color		- The color to associate with the device status
-
-DeviceStatusChangedEventArgs::DeviceStatusChangedEventArgs(_DeviceStatus status, _Device^ device, int index, _Color color) :
-	Color(color), Device(device), DeviceStatus(status), Index(index)
-{
-	if(CLRISNULL(device)) throw gcnew ArgumentNullException("devices");
+	if(CLRISNULL(device)) throw gcnew ArgumentNullException("device");
 }
 
 //---------------------------------------------------------------------------

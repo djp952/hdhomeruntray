@@ -30,7 +30,6 @@
 #pragma warning(push, 4)
 
 using namespace System;
-using namespace System::Drawing;
 using namespace System::Net;
 
 using _DeviceStatus = zuki::hdhomeruntray::discovery::DeviceStatus;
@@ -89,9 +88,9 @@ public:
 	// SignalQualityColor
 	//
 	// Gets the color code for the signal quality
-	property Color SignalQualityColor
+	property DeviceStatusColor SignalQualityColor
 	{
-		Color get(void);
+		DeviceStatusColor get(void);
 	}
 
 	// SignalStrength
@@ -105,9 +104,9 @@ public:
 	// SignalStrengthColor
 	//
 	// Gets the color code for the signal strength
-	property Color SignalStrengthColor
+	property DeviceStatusColor SignalStrengthColor
 	{
-		Color get(void);
+		DeviceStatusColor get(void);
 	}
 
 	// SymbolQuality
@@ -121,9 +120,9 @@ public:
 	// SymbolQualityColor
 	//
 	// Gets the color code for the symbol quality
-	property Color SymbolQualityColor
+	property DeviceStatusColor SymbolQualityColor
 	{
-		Color get(void);
+		DeviceStatusColor get(void);
 	}
 
 	// TargetIP
@@ -178,11 +177,6 @@ private:
 	//-----------------------------------------------------------------------
 	// Private Member Functions
 
-	// ConvertHDHomeRunColor
-	//
-	// Converts the color code from libhdhomerun into the color I want to use
-	static Color ConvertHDHomeRunColor(uint32_t color);
-
 	// GetVirtualChannelName
 	//
 	// Retrieves the virtual channel name from a tuner program and streaminfo
@@ -193,11 +187,11 @@ private:
 
 	String^				m_channelname = NoChannel;
 	int					m_signalquality = 0;
-	Color				m_signalqualitycolor = DeviceStatusColor::Gray;
+	DeviceStatusColor	m_signalqualitycolor = DeviceStatusColor::Neutral;
 	int					m_signalstrength = 0;
-	Color				m_signalstrengthcolor = DeviceStatusColor::Gray;
+	DeviceStatusColor	m_signalstrengthcolor = DeviceStatusColor::Neutral;
 	int					m_symbolquality = 0;
-	Color				m_symbolqualitycolor = DeviceStatusColor::Gray;
+	DeviceStatusColor	m_symbolqualitycolor = DeviceStatusColor::Neutral;
 	int					m_bitrate = 0;
 	IPAddress^			m_targetip = IPAddress::None;
 	_DeviceStatus		m_devicestatus = _DeviceStatus::Idle;
