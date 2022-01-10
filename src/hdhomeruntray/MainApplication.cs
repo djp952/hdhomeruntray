@@ -102,6 +102,10 @@ namespace zuki.hdhomeruntray
 			m_powerchanged = new PowerModeChangedEventHandler(OnPowerModeChanged);
 			SystemEvents.PowerModeChanged += m_powerchanged;
 
+			// Wire up a handler to watch for user preference changes
+			m_userpreferencechanged = new UserPreferenceChangedEventHandler(OnUserPreferenceChanged);
+			SystemEvents.UserPreferenceChanged += m_userpreferencechanged;
+
 			// Create and wire up the device discovery object
 			m_devices = new Devices();
 			m_devices.DiscoveryCompleted += new DiscoveryCompletedEventHandler(OnDiscoveryCompleted);
@@ -134,7 +138,8 @@ namespace zuki.hdhomeruntray
 
 			}), null);
 
-			// Unsubscribe from the power mode event handler
+			// Unsubscribe from the SystemEvents event handlers
+			SystemEvents.UserPreferenceChanged -= m_userpreferencechanged;
 			SystemEvents.PowerModeChanged -= m_powerchanged;
 
 			// Stop and dispose of the theme registry monitor if created
@@ -410,6 +415,21 @@ namespace zuki.hdhomeruntray
 			}), null);
 		}
 
+		// OnUserPreferenceChanged
+		//
+		// Invoked when a user preference has been changed
+		private void OnUserPreferenceChanged(object sender, UserPreferenceChangedEventArgs args)
+		{
+			// The tray icon may need to switch themes (dark/light) if high contrast
+			// mode has been enabled/disabled, trigger an update on any accesibility change
+			if(args.Category == UserPreferenceCategory.Accessibility)
+			{
+				// Refresh the status icon if would be different than it already is
+				Icon statusicon = StatusIcons.Get(m_status);
+				if(!m_notifyicon.Icon.Equals(statusicon)) m_notifyicon.Icon = statusicon;
+			}
+		}
+
 		//-------------------------------------------------------------------
 		// Private Member Functions
 		//-------------------------------------------------------------------
@@ -655,6 +675,7 @@ namespace zuki.hdhomeruntray
 		private DeviceStatus m_status = DeviceStatus.Idle;
 		private readonly RegistryKeyValueChangeMonitor m_thememonitor;
 		private readonly PowerModeChangedEventHandler m_powerchanged;
+		private readonly UserPreferenceChangedEventHandler m_userpreferencechanged;
 		private readonly Guid m_guid = Guid.Empty;
 	}
 }

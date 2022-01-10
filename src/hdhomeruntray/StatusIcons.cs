@@ -49,8 +49,16 @@ namespace zuki.hdhomeruntray
 			bool lighticon = false;
 			StatusColorSet colorset = Settings.Default.StatusColorSet;
 
+			// High contrast mode requires checking what the color of the taskbar will be
+			if(SystemInformation.HighContrast)
+			{
+				// It appears the taskbar will follow SystemColors.Control
+				int brightness = Brightness(SystemColors.Control);
+				if(brightness < 130) lighticon = true;
+			}
+
 			// On Windows 10 and above the icon should be appropriate for the system theme
-			if(VersionHelper.IsWindows10OrGreater())
+			else if(VersionHelper.IsWindows10OrGreater())
 			{
 				// NOTE: Assume zero (dark taskbar / light icon) here if the value is missing
 				object value = Registry.GetValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize", "SystemUsesLightTheme", 0);
@@ -75,6 +83,19 @@ namespace zuki.hdhomeruntray
 
 				default: throw new ArgumentOutOfRangeException(nameof(devicestatus));
 			}
+		}
+
+		//-------------------------------------------------------------------
+		// Private Member Functions
+		//-------------------------------------------------------------------
+
+		// Brightness
+		//
+		// Determines the perceived brightness of a color
+		// https://www.nbdtech.com/Blog/archive/2008/04/27/calculating-the-perceived-brightness-of-a-color.aspx
+		private static int Brightness(Color color)
+		{
+			return (int)Math.Sqrt(color.R * color.R * .241 + color.G * color.G * .691 + color.B * color.B * .068);
 		}
 
 		//-------------------------------------------------------------------
