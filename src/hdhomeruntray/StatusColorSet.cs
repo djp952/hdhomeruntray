@@ -31,10 +31,13 @@ namespace zuki.hdhomeruntray
 
 	public enum StatusColorSet
 	{
+		[Description("System Default")]
+		System = 0,
+
 		[Description("Green / Red")]
-		GreenRed = 0,
+		GreenRed = 1,
 
 		[Description("Blue / Orange")]
-		BlueOrange = 1,
+		BlueOrange = 2,
 	}
 }

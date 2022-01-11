@@ -85,13 +85,19 @@ namespace zuki.hdhomeruntray
 				Settings.Default.Save();
 			}
 
-			// On Windows 10 and above, set up a system theme registry monitor
+			// On Windows 10 and above, set up system theme and color filter registry monitors
 			if(VersionHelper.IsWindows10OrGreater())
 			{
 				m_thememonitor = new RegistryKeyValueChangeMonitor(Registry.CurrentUser, @"Software\Microsoft\Windows\CurrentVersion\Themes\Personalize");
 				m_thememonitor.ValueChanged += new EventHandler(OnSystemThemesChanged);
 
 				try { m_thememonitor.Start(); }
+				catch(Exception) { /* DON'T CARE FOR NOW */ }
+
+				m_colorfiltermonitor = new RegistryKeyValueChangeMonitor(Registry.CurrentUser, @"Software\Microsoft\ColorFiltering");
+				m_colorfiltermonitor.ValueChanged += new EventHandler(OnSystemThemesChanged);
+
+				try { m_colorfiltermonitor.Start(); }
 				catch(Exception) { /* DON'T CARE FOR NOW */ }
 			}
 
@@ -141,6 +147,13 @@ namespace zuki.hdhomeruntray
 			// Unsubscribe from the SystemEvents event handlers
 			SystemEvents.UserPreferenceChanged -= m_userpreferencechanged;
 			SystemEvents.PowerModeChanged -= m_powerchanged;
+
+			// Stop and dispose of the color filter registry monitor if created
+			if(m_colorfiltermonitor != null)
+			{
+				m_colorfiltermonitor.Stop();
+				m_colorfiltermonitor.Dispose();
+			}
 
 			// Stop and dispose of the theme registry monitor if created
 			if(m_thememonitor != null)
@@ -673,6 +686,7 @@ namespace zuki.hdhomeruntray
 		private readonly Devices m_devices;
 		private DeviceList m_devicelist = DeviceList.Empty;
 		private DeviceStatus m_status = DeviceStatus.Idle;
+		private readonly RegistryKeyValueChangeMonitor m_colorfiltermonitor;
 		private readonly RegistryKeyValueChangeMonitor m_thememonitor;
 		private readonly PowerModeChangedEventHandler m_powerchanged;
 		private readonly UserPreferenceChangedEventHandler m_userpreferencechanged;

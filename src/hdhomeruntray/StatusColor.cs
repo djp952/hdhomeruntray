@@ -22,6 +22,7 @@
 
 using System.Drawing;
 
+using Microsoft.Win32;
 using zuki.hdhomeruntray.discovery;
 using zuki.hdhomeruntray.Properties;
 
@@ -72,6 +73,21 @@ namespace zuki.hdhomeruntray
 		public static Color Rebase(Color color)
 		{
 			StatusColorSet colorset = Settings.Default.StatusColorSet;
+
+			// The "System" colorset depends on if the user has a color filter enabled or not
+			if(colorset == StatusColorSet.System)
+			{
+				colorset = StatusColorSet.GreenRed;             // Default to green/red
+
+				// If on Windows 10 / Windows 11, change the color set to blue/orange if the user
+				// has any color filtering setting applied at the operating system level
+				if(VersionHelper.IsWindows10OrGreater())
+				{
+					object value = Registry.GetValue(@"HKEY_CURRENT_USER\Software\Microsoft\ColorFiltering", "Active", 0);
+					if((value is int @int) && (@int != 0)) colorset = StatusColorSet.BlueOrange;
+				}
+			}
+
 			if(colorset == StatusColorSet.BlueOrange)
 			{
 				if(color == Green) return Blue;
@@ -83,9 +99,7 @@ namespace zuki.hdhomeruntray
 				if(color == Orange) return Red;
 			}
 
-			// Gray and Yellow don't get changed around.  Yellow should only
-			// be used for a signal strength bar anyway, and that's not set up
-			// to change dynamically with the setting
+			// Gray and Yellow don't get changed
 			return color;
 		}
 
@@ -96,6 +110,20 @@ namespace zuki.hdhomeruntray
 		{
 			Color result = Gray;
 			StatusColorSet colorset = Settings.Default.StatusColorSet;
+
+			// The "System" colorset depends on if the user has a color filter enabled or not
+			if(colorset == StatusColorSet.System)
+			{
+				colorset = StatusColorSet.GreenRed;             // Default to green/red
+
+				// If on Windows 10 / Windows 11, change the color set to blue/orange if the user
+				// has any color filtering setting applied at the operating system level
+				if(VersionHelper.IsWindows10OrGreater())
+				{
+					object value = Registry.GetValue(@"HKEY_CURRENT_USER\Software\Microsoft\ColorFiltering", "Active", 0);
+					if((value is int @int) && (@int != 0)) colorset = StatusColorSet.BlueOrange;
+				}
+			}
 
 			// Active = Green/Blue
 			//
@@ -115,6 +143,20 @@ namespace zuki.hdhomeruntray
 		{
 			Color result = Gray;
 			StatusColorSet colorset = Settings.Default.StatusColorSet;
+
+			// The "System" colorset depends on if the user has a color filter enabled or not
+			if(colorset == StatusColorSet.System)
+			{
+				colorset = StatusColorSet.GreenRed;             // Default to green/red
+
+				// If on Windows 10 / Windows 11, change the color set to blue/orange if the user
+				// has any color filtering setting applied at the operating system level
+				if(VersionHelper.IsWindows10OrGreater())
+				{
+					object value = Registry.GetValue(@"HKEY_CURRENT_USER\Software\Microsoft\ColorFiltering", "Active", 0);
+					if((value is int @int) && (@int != 0)) colorset = StatusColorSet.BlueOrange;
+				}
+			}
 
 			if(devicestatuscolor == DeviceStatusColor.Neutral) result = Gray;
 			else if(devicestatuscolor == DeviceStatusColor.Green) result = (colorset == StatusColorSet.BlueOrange) ? Blue : Green;

@@ -31,7 +31,7 @@ namespace zuki.hdhomeruntray
 
 	public enum Theme
 	{
-		[Description("Follow System")]
+		[Description("System Default")]
 		System = 0,
 
 		[Description("Light Mode")]

@@ -121,7 +121,7 @@ namespace zuki.hdhomeruntray.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("GreenRed")]
+        [global::System.Configuration.DefaultSettingValueAttribute("System")]
         public global::zuki.hdhomeruntray.StatusColorSet StatusColorSet {
             get {
                 return ((global::zuki.hdhomeruntray.StatusColorSet)(this["StatusColorSet"]));

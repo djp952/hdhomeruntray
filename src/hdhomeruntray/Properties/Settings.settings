@@ -27,7 +27,7 @@
       <Value Profile="(Default)">System</Value>
     </Setting>
     <Setting Name="StatusColorSet" Type="zuki.hdhomeruntray.StatusColorSet" Scope="User">
-      <Value Profile="(Default)">GreenRed</Value>
+      <Value Profile="(Default)">System</Value>
     </Setting>
   </Settings>
 </SettingsFile>
