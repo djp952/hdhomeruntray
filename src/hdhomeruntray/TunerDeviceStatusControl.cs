@@ -26,7 +26,6 @@ using System.Net;
 using System.Windows.Forms;
 
 using zuki.hdhomeruntray.discovery;
-using zuki.hdhomeruntray.Properties;
 
 namespace zuki.hdhomeruntray
 {
@@ -50,6 +49,12 @@ namespace zuki.hdhomeruntray
 			m_appthemechanged = new EventHandler(OnApplicationThemeChanged);
 			ApplicationTheme.Changed += m_appthemechanged;
 			OnApplicationThemeChanged(this, EventArgs.Empty);
+
+			// COLOR FILTER
+			//
+			m_statuscolorschanged = new EventHandler(OnStatusColorsChanged);
+			StatusColor.Changed += m_statuscolorschanged;
+			OnStatusColorsChanged(this, EventArgs.Empty);
 
 			m_layoutpanel.SuspendLayout();
 			m_signallayoutpanel.SuspendLayout();
@@ -152,6 +157,7 @@ namespace zuki.hdhomeruntray
 			if(disposing)
 			{
 				// Dispose managed state
+				if(m_statuscolorschanged != null) StatusColor.Changed -= m_statuscolorschanged;
 				if(m_appthemechanged != null) ApplicationTheme.Changed -= m_appthemechanged;
 				if(components != null) components.Dispose();
 			}
@@ -260,6 +266,18 @@ namespace zuki.hdhomeruntray
 			m_layoutpanel.ForeColor = ApplicationTheme.PanelForeColor;
 		}
 
+		// OnStatusColorsChanged
+		//
+		// Invoked when the application status colors have changed
+		private void OnStatusColorsChanged(object sender, EventArgs args)
+		{
+			// Rebase the colors for the new color set
+			m_activedot.ForeColor = StatusColor.Rebase(m_activedot.ForeColor);
+			m_signalstrengthbar.ProgressBarColor = StatusColor.Rebase(m_signalstrengthbar.ProgressBarColor);
+			m_signalqualitybar.ProgressBarColor = StatusColor.Rebase(m_signalqualitybar.ProgressBarColor);
+			m_symbolqualitybar.ProgressBarColor = StatusColor.Rebase(m_symbolqualitybar.ProgressBarColor);
+		}
+
 		//-------------------------------------------------------------------------
 		// Private Member Functions
 		//-------------------------------------------------------------------------
@@ -291,5 +309,6 @@ namespace zuki.hdhomeruntray
 		private int m_lasthash = 0;
 		private readonly SizeF m_scalefactor = SizeF.Empty;
 		private readonly EventHandler m_appthemechanged;
+		private readonly EventHandler m_statuscolorschanged;
 	}
 }

@@ -20,6 +20,8 @@
 // SOFTWARE.
 //---------------------------------------------------------------------------
 
+using System;
+using System.ComponentModel;
 using System.Drawing;
 
 using Microsoft.Win32;
@@ -35,6 +37,18 @@ namespace zuki.hdhomeruntray
 
 	internal static class StatusColor
 	{
+		// Static Constructor
+		//
+		static StatusColor()
+		{
+			if(Settings.Default.StatusColorSet == StatusColorSet.System) s_filteractive = GetColorFilterActive();
+			else if(Settings.Default.StatusColorSet == StatusColorSet.GreenRed) s_filteractive = false;
+			else if(Settings.Default.StatusColorSet == StatusColorSet.BlueOrange) s_filteractive = true;
+
+			// Wire up a handler to watch for property changes
+			Settings.Default.PropertyChanged += new PropertyChangedEventHandler(OnPropertyChanged);
+		}
+
 		//-------------------------------------------------------------------
 		// Fields
 		//-------------------------------------------------------------------
@@ -63,32 +77,43 @@ namespace zuki.hdhomeruntray
 		//
 		public static readonly Color Yellow = Color.FromArgb(0xFF, 0xE9, 0x00);
 
+		//-------------------------------------------------------------------------
+		// Events
+		//-------------------------------------------------------------------------
+
+		// Changed
+		//
+		// Invoked when the status color set has changed
+		public static event EventHandler Changed;
+
 		//-------------------------------------------------------------------
 		// Member Functions
 		//-------------------------------------------------------------------
+
+		// ColorFilterChanged (static)
+		//
+		// Invoked when the color filter has been changed
+		public static void ColorFilterChanged(object sender, EventArgs args)
+		{
+			// This is only applicable if the setting is set to System
+			if(Settings.Default.StatusColorSet == StatusColorSet.System)
+			{
+				// Get a new color filter flag for the system, and if it changed inform listeners
+				bool filteractive = GetColorFilterActive();
+				if(filteractive != s_filteractive)
+				{
+					s_filteractive = filteractive;
+					Changed?.Invoke(typeof(ApplicationTheme), EventArgs.Empty);
+				}
+			}
+		}
 
 		// Rebase (static)
 		//
 		// Resets a color due to a color set switch
 		public static Color Rebase(Color color)
 		{
-			StatusColorSet colorset = Settings.Default.StatusColorSet;
-
-			// The "System" colorset depends on if the user has a color filter enabled or not
-			if(colorset == StatusColorSet.System)
-			{
-				colorset = StatusColorSet.GreenRed;             // Default to green/red
-
-				// If on Windows 10 / Windows 11, change the color set to blue/orange if the user
-				// has any color filtering setting applied at the operating system level
-				if(VersionHelper.IsWindows10OrGreater())
-				{
-					object value = Registry.GetValue(@"HKEY_CURRENT_USER\Software\Microsoft\ColorFiltering", "Active", 0);
-					if((value is int @int) && (@int != 0)) colorset = StatusColorSet.BlueOrange;
-				}
-			}
-
-			if(colorset == StatusColorSet.BlueOrange)
+			if(s_filteractive)
 			{
 				if(color == Green) return Blue;
 				if(color == Red) return Orange;
@@ -108,30 +133,10 @@ namespace zuki.hdhomeruntray
 		// Retrieves the correct GUI color based on a DeviceStatus
 		public static Color FromDeviceStatus(DeviceStatus status)
 		{
-			Color result = Gray;
-			StatusColorSet colorset = Settings.Default.StatusColorSet;
+			Color result = Gray;			// Default to gray
 
-			// The "System" colorset depends on if the user has a color filter enabled or not
-			if(colorset == StatusColorSet.System)
-			{
-				colorset = StatusColorSet.GreenRed;             // Default to green/red
-
-				// If on Windows 10 / Windows 11, change the color set to blue/orange if the user
-				// has any color filtering setting applied at the operating system level
-				if(VersionHelper.IsWindows10OrGreater())
-				{
-					object value = Registry.GetValue(@"HKEY_CURRENT_USER\Software\Microsoft\ColorFiltering", "Active", 0);
-					if((value is int @int) && (@int != 0)) colorset = StatusColorSet.BlueOrange;
-				}
-			}
-
-			// Active = Green/Blue
-			//
-			if(status == DeviceStatus.Active) result = (colorset == StatusColorSet.BlueOrange) ? Blue : Green;
-
-			// ActiveAndRecording = Red/Orange
-			//
-			else if(status == DeviceStatus.ActiveAndRecording) result = (colorset == StatusColorSet.BlueOrange) ? Orange : Red;
+			if(status == DeviceStatus.Active) result = s_filteractive ? Blue : Green;
+			else if(status == DeviceStatus.ActiveAndRecording) result = s_filteractive ? Orange : Red;
 
 			return result;
 		}
@@ -141,29 +146,66 @@ namespace zuki.hdhomeruntray
 		// Retrieves the correct GUI color based on a DeviceStatusColor
 		public static Color FromDeviceStatusColor(DeviceStatusColor devicestatuscolor)
 		{
-			Color result = Gray;
-			StatusColorSet colorset = Settings.Default.StatusColorSet;
+			Color result = Gray;			// Default to gray
 
-			// The "System" colorset depends on if the user has a color filter enabled or not
-			if(colorset == StatusColorSet.System)
-			{
-				colorset = StatusColorSet.GreenRed;             // Default to green/red
-
-				// If on Windows 10 / Windows 11, change the color set to blue/orange if the user
-				// has any color filtering setting applied at the operating system level
-				if(VersionHelper.IsWindows10OrGreater())
-				{
-					object value = Registry.GetValue(@"HKEY_CURRENT_USER\Software\Microsoft\ColorFiltering", "Active", 0);
-					if((value is int @int) && (@int != 0)) colorset = StatusColorSet.BlueOrange;
-				}
-			}
-
-			if(devicestatuscolor == DeviceStatusColor.Neutral) result = Gray;
-			else if(devicestatuscolor == DeviceStatusColor.Green) result = (colorset == StatusColorSet.BlueOrange) ? Blue : Green;
-			else if(devicestatuscolor == DeviceStatusColor.Red) result = (colorset == StatusColorSet.BlueOrange) ? Orange : Red;
-			else if(devicestatuscolor == DeviceStatusColor.Yellow) result = (colorset == StatusColorSet.BlueOrange) ? Blue : Yellow;
+			if(devicestatuscolor == DeviceStatusColor.Green) result = s_filteractive ? Blue : Green;
+			else if(devicestatuscolor == DeviceStatusColor.Red) result = s_filteractive ? Orange : Red;
+			else if(devicestatuscolor == DeviceStatusColor.Yellow) result = s_filteractive ? Blue : Yellow;
 
 			return result;
 		}
+
+		//-------------------------------------------------------------------
+		// Event Handlers
+		//-------------------------------------------------------------------
+
+		// OnPropertyChanged
+		//
+		// Invoked when a settings property has been changed
+		private static void OnPropertyChanged(object sender, PropertyChangedEventArgs args)
+		{
+			// StatusColorSet
+			//
+			if(args.PropertyName == nameof(Settings.Default.StatusColorSet))
+			{
+				bool filteractive = GetColorFilterActive();
+
+				// Override for specific settings
+				if(Settings.Default.StatusColorSet == StatusColorSet.GreenRed) filteractive = false;
+				else if(Settings.Default.StatusColorSet == StatusColorSet.BlueOrange) filteractive = true;
+
+				// If the setting has changed, invoke the event to inform
+				if(filteractive != s_filteractive)
+				{
+					s_filteractive = filteractive;
+					Changed?.Invoke(typeof(StatusColor), EventArgs.Empty);
+				}
+			}
+		}
+
+		//-------------------------------------------------------------------
+		// Private Member Functions
+		//-------------------------------------------------------------------
+
+		// GetColorFilterActive
+		//
+		// Gets the flag indicating if color filtering is active
+		private static bool GetColorFilterActive()
+		{
+			// On Windows 10 / Windows 11, check if filtering is currently active
+			if(VersionHelper.IsWindows10OrGreater())
+			{
+				object value = Registry.GetValue(@"HKEY_CURRENT_USER\Software\Microsoft\ColorFiltering", "Active", 0);
+				if((value is int @int) && (@int != 0)) return true;
+			}
+
+			return false;                   // Default to no filtering
+		}
+
+		//-------------------------------------------------------------------
+		// Member Variables
+		//-------------------------------------------------------------------
+
+		private static bool s_filteractive = false;
 	}
 }

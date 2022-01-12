@@ -37,6 +37,8 @@ namespace zuki.hdhomeruntray
 
 	internal static class ApplicationTheme
 	{
+		// Static Constructor
+		//
 		static ApplicationTheme()
 		{
 			if(Settings.Default.AppTheme == Theme.System) s_darkmode = (GetSystemTheme() == Theme.Dark);

@@ -95,7 +95,7 @@ namespace zuki.hdhomeruntray
 				catch(Exception) { /* DON'T CARE FOR NOW */ }
 
 				m_colorfiltermonitor = new RegistryKeyValueChangeMonitor(Registry.CurrentUser, @"Software\Microsoft\ColorFiltering");
-				m_colorfiltermonitor.ValueChanged += new EventHandler(OnSystemThemesChanged);
+				m_colorfiltermonitor.ValueChanged += new EventHandler(OnColorFilterChanged);
 
 				try { m_colorfiltermonitor.Start(); }
 				catch(Exception) { /* DON'T CARE FOR NOW */ }
@@ -166,6 +166,24 @@ namespace zuki.hdhomeruntray
 			m_discoverytimer.Enabled = false;   // Disable the timer
 			m_devices.CancelAsync(this);        // Cancel any operations
 			m_notifyicon.Visible = false;       // Remove the tray icon
+		}
+
+		// OnColorFilterChanged
+		//
+		// Invoked when the color filter has changed
+		private void OnColorFilterChanged(object sender, EventArgs args)
+		{
+			// Refresh the status icon if would be different than it already is
+			Icon statusicon = StatusIcons.Get(m_status);
+			if(!m_notifyicon.Icon.Equals(statusicon)) m_notifyicon.Icon = statusicon;
+
+			// The StatusColor class exists in the WindowsFormsSynchronizationContext
+			// but also needs to know about this event to inform listeners
+			m_context.Post(new SendOrPostCallback((o) =>
+			{
+				StatusColor.ColorFilterChanged(this, EventArgs.Empty);
+
+			}), null);
 		}
 
 		// OnDiscoveryCompleted

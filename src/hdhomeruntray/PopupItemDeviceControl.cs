@@ -21,12 +21,10 @@
 //---------------------------------------------------------------------------
 
 using System;
-using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
 
 using zuki.hdhomeruntray.discovery;
-using zuki.hdhomeruntray.Properties;
 
 namespace zuki.hdhomeruntray
 {
@@ -68,9 +66,6 @@ namespace zuki.hdhomeruntray
 			int numdots = 1;
 			if(m_device is TunerDevice tunerdevice) numdots = tunerdevice.Tuners.Count;
 
-			// Wire up a handler for property changes as the color of the dot(s) may need to change dynamically
-			Settings.Default.PropertyChanged += new PropertyChangedEventHandler(OnPropertyChanged);
-
 			// Create the dot labels
 			m_dots = new Label[numdots];
 			for(int index = 0; index < numdots; index++)
@@ -90,6 +85,26 @@ namespace zuki.hdhomeruntray
 				// Add the dot label to the layout panel
 				base.LayoutPanel.Controls.Add(m_dots[index]);
 			}
+
+			// COLOR FILTER (Initialize after m_dots)
+			//
+			m_statuscolorschanged = new EventHandler(OnStatusColorsChanged);
+			StatusColor.Changed += m_statuscolorschanged;
+			OnStatusColorsChanged(this, EventArgs.Empty);
+		}
+
+		// Dispose
+		//
+		// Releases unmanaged resources and optionally releases managed resources
+		protected override void Dispose(bool disposing)
+		{
+			if(disposing)
+			{
+				// Dispose managed state
+				if(m_statuscolorschanged != null) StatusColor.Changed -= m_statuscolorschanged;
+			}
+
+			base.Dispose(disposing);
 		}
 
 		//-------------------------------------------------------------------------
@@ -183,18 +198,13 @@ namespace zuki.hdhomeruntray
 		// Event Handlers
 		//-------------------------------------------------------------------
 
-		// OnPropertyChanged
+		// OnStatusColorsChanged
 		//
-		// Invoked when a settings property has been changed
-		private void OnPropertyChanged(object sender, PropertyChangedEventArgs args)
+		// Invoked when the application status colors have changed
+		private void OnStatusColorsChanged(object sender, EventArgs args)
 		{
-			// StatusColorSet
-			//
-			if(args.PropertyName == nameof(Settings.Default.StatusColorSet))
-			{
-				// Rebase the dot colors appropriately for the new color set
-				for(int index = 0; index < m_dots.Length; index++) m_dots[index].ForeColor = StatusColor.Rebase(m_dots[index].ForeColor);
-			}
+			// Rebase the dot colors appropriately for the new color set
+			for(int index = 0; index < m_dots.Length; index++) m_dots[index].ForeColor = StatusColor.Rebase(m_dots[index].ForeColor);		
 		}
 
 		//-------------------------------------------------------------------
@@ -204,5 +214,6 @@ namespace zuki.hdhomeruntray
 		private readonly Device m_device = null;
 		private readonly Label[] m_dots;
 		private DeviceStatus m_status = DeviceStatus.Idle;
+		private readonly EventHandler m_statuscolorschanged;
 	}
 }

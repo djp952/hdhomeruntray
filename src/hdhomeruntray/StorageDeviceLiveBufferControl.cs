@@ -47,6 +47,12 @@ namespace zuki.hdhomeruntray
 			ApplicationTheme.Changed += m_appthemechanged;
 			OnApplicationThemeChanged(this, EventArgs.Empty);
 
+			// COLOR FILTER
+			//
+			m_statuscolorschanged = new EventHandler(OnStatusColorsChanged);
+			StatusColor.Changed += m_statuscolorschanged;
+			OnStatusColorsChanged(this, EventArgs.Empty);
+
 			m_layoutpanel.EnableDoubleBuferring();
 
 			Padding = Padding.ScaleDPI(scalefactor);
@@ -83,6 +89,7 @@ namespace zuki.hdhomeruntray
 			if(disposing)
 			{
 				// Dispose managed state
+				if(m_statuscolorschanged != null) StatusColor.Changed -= m_statuscolorschanged;
 				if(m_appthemechanged != null) ApplicationTheme.Changed -= m_appthemechanged;
 				if(components != null) components.Dispose();
 			}
@@ -103,10 +110,20 @@ namespace zuki.hdhomeruntray
 			m_layoutpanel.ForeColor = ApplicationTheme.PanelForeColor;
 		}
 
+		// OnStatusColorsChanged
+		//
+		// Invoked when the application status colors have changed
+		private void OnStatusColorsChanged(object sender, EventArgs args)
+		{
+			// Rebase the colors for the new color set
+			m_activedot.ForeColor = StatusColor.Rebase(m_activedot.ForeColor);
+		}
+
 		//-------------------------------------------------------------------
 		// Member Variables
 		//-------------------------------------------------------------------
 
 		private readonly EventHandler m_appthemechanged;
+		private readonly EventHandler m_statuscolorschanged;
 	}
 }
