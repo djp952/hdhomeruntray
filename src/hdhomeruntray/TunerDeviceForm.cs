@@ -36,7 +36,7 @@ namespace zuki.hdhomeruntray
 	{
 		// Instance Constructor
 		//
-		public TunerDeviceForm(TunerDevice device, PopupForm form, PopupItemControl item) : base(form, item)
+		public TunerDeviceForm(TunerDevice device, PopupForm form, PopupItemControl item, DockStyle dockstyle) : base(form, item, dockstyle)
 		{
 			if(device == null) throw new ArgumentNullException(nameof(device));
 

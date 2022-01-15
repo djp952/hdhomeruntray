@@ -100,13 +100,14 @@ namespace zuki.hdhomeruntray
 
 		// Instance Constructor
 		//
-		public SettingsForm(PopupForm form, PopupItemControl item) : this()
+		public SettingsForm(PopupForm form, PopupItemControl item, DockStyle dockstyle) : this()
 		{
 			if(form == null) throw new ArgumentNullException(nameof(form));
 			if(item == null) throw new ArgumentNullException(nameof(item));
 
 			m_popupformbounds = form.Bounds;
 			m_popupitembounds = item.Bounds;
+			m_popupformdockstyle = dockstyle;
 
 			// Avoid repeated calls to OnSizeChanged() by adding the event handler
 			// after the form has been initialized and call it manually the first time
@@ -162,24 +163,57 @@ namespace zuki.hdhomeruntray
 			// This should work acceptably well given that the screen/monitor that will
 			// display this form is the same one with the taskbar, but there are better ways
 			// in .NET 4.7 and/or Windows 10/11 to figure out how to scale this value
-			float scalefactor = (SystemInformation.SmallIconSize.Height / 16.0F);
+			int padding = (int)(4.0F * (SystemInformation.SmallIconSize.Height / 16.0F));
 
-			// The item's coordinates will be relative to the parent form
+			int left;                   // New left coordinate
+			int top;                    // New top coordinate
+
+			// The left margin of the item is relative to the parent form
 			int itemleft = m_popupformbounds.Left + m_popupitembounds.Left;
 
-			// Move the form so that it's centered above the item that was used to open it
-			int top = m_popupformbounds.Top - Size.Height - (int)(4.0F * scalefactor);
-			int left = (itemleft + (m_popupitembounds.Width / 2)) - (Width / 2);
+			// TOP DOCK
+			//
+			if(m_popupformdockstyle == DockStyle.Top)
+			{
+				// Move the form so that it's centered below the item
+				top = m_popupformbounds.Bottom + padding;
+				left = (itemleft + (m_popupitembounds.Width / 2)) - (Width / 2);
 
-			// Adjust the left margin of the form if necessary
-			if(left < m_popupformbounds.Left) left = m_popupformbounds.Left;
+				// Adjust the left margin first, then the right margin
+				if(left < m_popupformbounds.Left) left = m_popupformbounds.Left;
+				int right = left + Width;
+				if(right > m_popupformbounds.Right) left -= (right - m_popupformbounds.Right);
+			}
 
-			// Adjust the right margin of the form if necessary
-			int right = left + Width;
-			if(right > m_popupformbounds.Right) left -= (right - m_popupformbounds.Right);
+			// LEFT DOCK
+			//
+			else if(m_popupformdockstyle == DockStyle.Left)
+			{
+				// Move the form so that it's centered above the item
+				top = m_popupformbounds.Top - Size.Height - padding;
+				left = (itemleft + (m_popupitembounds.Width / 2)) - (Width / 2);
 
-			// Set the location of the form
-			Location = new Point(left, top);
+				// Adjust the right margin first, then the left margin
+				int right = left + Width;
+				if(right > m_popupformbounds.Right) left -= (right - m_popupformbounds.Right);
+				if(left < m_popupformbounds.Left) left = m_popupformbounds.Left;
+			}
+
+			// BOTTOM / RIGHT DOCK
+			//
+			else
+			{
+				// Move the form so that it's centered above the item
+				top = m_popupformbounds.Top - Size.Height - padding;
+				left = (itemleft + (m_popupitembounds.Width / 2)) - (Width / 2);
+
+				// Adjust the left margin first, then the right margin
+				if(left < m_popupformbounds.Left) left = m_popupformbounds.Left;
+				int right = left + Width;
+				if(right > m_popupformbounds.Right) left -= (right - m_popupformbounds.Right);
+			}
+
+			Location = new Point(left, top);            // Move the form
 		}
 
 		//-------------------------------------------------------------------
@@ -189,5 +223,6 @@ namespace zuki.hdhomeruntray
 		private readonly Rectangle m_popupformbounds;
 		private readonly Rectangle m_popupitembounds;
 		private readonly EventHandler m_appthemechanged;
+		private readonly DockStyle m_popupformdockstyle;
 	}
 }

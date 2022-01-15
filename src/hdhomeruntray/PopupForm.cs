@@ -41,6 +41,7 @@ namespace zuki.hdhomeruntray
 		#region Win32 API Declarations
 		private static class NativeMethods
 		{
+			public const uint ABM_GETTASKBARPOS = 0x00000005;
 			public const int WS_EX_COMPOSITED = 0x02000000;
 
 			public enum DWMWINDOWATTRIBUTE
@@ -56,8 +57,31 @@ namespace zuki.hdhomeruntray
 				DWMWCP_ROUNDSMALL = 3
 			}
 
+			[StructLayout(LayoutKind.Sequential)]
+			public struct RECT
+			{
+				public int left;
+				public int top;
+				public int right;
+				public int bottom;
+			}
+
+			[StructLayout(LayoutKind.Sequential)]
+			public struct APPBARDATA
+			{
+				public uint cbSize;
+				public IntPtr hWnd;
+				public uint uCallbackMessage;
+				public uint uEdge;
+				public RECT rc;
+				public IntPtr lParam;
+			}
+
 			[DllImport("dwmapi.dll")]
 			public static extern long DwmSetWindowAttribute(IntPtr hwnd, DWMWINDOWATTRIBUTE attribute, ref DWM_WINDOW_CORNER_PREFERENCE pvAttribute, uint cbAttribute);
+
+			[DllImport("shell32.dll")]
+			public static extern IntPtr SHAppBarMessage(uint dwMessage, ref APPBARDATA pData);
 		}
 		#endregion
 
@@ -179,6 +203,11 @@ namespace zuki.hdhomeruntray
 		// Properties
 		//-------------------------------------------------------------------------
 
+		// DockStyle
+		//
+		// Exposes the DockStyle of the PopupForm instance
+		public DockStyle DockStyle => m_dockstyle;
+
 		// Pinned
 		//
 		// Indicates if the popup form is currently pinned or not
@@ -238,6 +267,10 @@ namespace zuki.hdhomeruntray
 			// Get the boundaries of the notify icon and the associated Screen
 			Rectangle iconbounds = icon.GetBounds();
 			Screen screen = Screen.FromPoint(iconbounds.Location);
+
+			// Get the dock style for the taskbar and use it for this and any
+			// other windows that will be created
+			m_dockstyle = GetTaskbarDockStyle(screen);
 
 			SetWindowPosition(iconbounds, screen);      // Set the window position
 			
@@ -326,7 +359,7 @@ namespace zuki.hdhomeruntray
 					{
 						Debug.Assert(devicecontrol.Device is TunerDevice);
 						TunerDevice tunerdevice = (TunerDevice)devicecontrol.Device;
-						m_deviceform = new TunerDeviceForm(tunerdevice, this, devicecontrol);
+						m_deviceform = new TunerDeviceForm(tunerdevice, this, devicecontrol, m_dockstyle);
 						m_deviceform.DeviceStatusChanged += new DeviceStatusChangedEventHandler(OnDeviceStatusChanged);
 					}
 
@@ -336,7 +369,7 @@ namespace zuki.hdhomeruntray
 					{
 						Debug.Assert(devicecontrol.Device is StorageDevice);
 						StorageDevice storagedevice = (StorageDevice)devicecontrol.Device;
-						m_deviceform = new StorageDeviceForm(storagedevice, this, devicecontrol);
+						m_deviceform = new StorageDeviceForm(storagedevice, this, devicecontrol, m_dockstyle);
 						m_deviceform.DeviceStatusChanged += new DeviceStatusChangedEventHandler(OnDeviceStatusChanged);
 					}
 
@@ -378,6 +411,7 @@ namespace zuki.hdhomeruntray
 			}
 
 			m_timer.Enabled = false;        // Kill the timer
+			m_dockstyle = DockStyle.None;	// Reset the dock style
 		}
 
 		// OnSettingsToggled
@@ -391,7 +425,7 @@ namespace zuki.hdhomeruntray
 
 				if(m_settingsform == null)
 				{
-					m_settingsform = new SettingsForm(this, (PopupItemControl)sender);
+					m_settingsform = new SettingsForm(this, (PopupItemControl)sender, m_dockstyle);
 					m_settingsform.Deactivate += new EventHandler(OnDeactivate);
 					m_settingsform.Show(this);
 				}
@@ -460,6 +494,30 @@ namespace zuki.hdhomeruntray
 		// Private Member Functions
 		//-------------------------------------------------------------------
 
+		// GetTaskbarDockStyle
+		//
+		// Gets the taskbar dock for the system
+		private DockStyle GetTaskbarDockStyle(Screen screen)
+		{
+			NativeMethods.APPBARDATA appbardata = new NativeMethods.APPBARDATA()
+			{
+				cbSize = (uint)Marshal.SizeOf(typeof(NativeMethods.APPBARDATA))
+			};
+
+			// Try to get the taskbar position, this method accounts for the taskbar being collapsed
+			if(NativeMethods.SHAppBarMessage(NativeMethods.ABM_GETTASKBARPOS, ref appbardata) != IntPtr.Zero)
+			{
+				int midx = (screen.Bounds.Left + screen.Bounds.Right) / 2;
+				int midy = (screen.Bounds.Top + screen.Bounds.Bottom) / 2;
+
+				if(appbardata.rc.right < midx) return DockStyle.Left;
+				else if(appbardata.rc.bottom < midy) return DockStyle.Top;
+				else if(appbardata.rc.left > midx) return DockStyle.Right;
+			}
+
+			return DockStyle.Bottom;
+		}
+
 		// SetWindowPosition
 		//
 		// Sets the window position so that it's in the lower right of the screen
@@ -468,20 +526,68 @@ namespace zuki.hdhomeruntray
 			// This should work acceptably well given that the screen/monitor that will
 			// display this form is the same one with the taskbar, but there are better ways
 			// in .NET 4.7 and/or Windows 10/11 to figure out how to scale this value
-			float scalefactor = (SystemInformation.SmallIconSize.Height / 16.0F);
+			int padding = (int)(12.0F * (SystemInformation.SmallIconSize.Height / 16.0F));
 
-			// Determine the bounding rectangle to use; if the tray icon isn't docked its
-			// vertical position will be higher than the screen working area will allow
-			Rectangle workarea = screen.WorkingArea;
-			if(iconrect.Top < workarea.Bottom)
+			Rectangle workarea = screen.WorkingArea;    // Screen working area
+			int top;									// Window top coordinate
+			int left;									// Window left coordinate
+
+			// TOP DOCK
+			//
+			if(m_dockstyle == DockStyle.Top)
 			{
-				workarea = new Rectangle(workarea.Left, workarea.Top, workarea.Width, workarea.Height - (screen.WorkingArea.Bottom - iconrect.Top));
+				// Adjust the working area if the tray icon isn't docked
+				if(iconrect.Bottom > workarea.Top)
+					workarea = new Rectangle(workarea.Left, iconrect.Bottom, workarea.Width, workarea.Height - (screen.WorkingArea.Bottom - iconrect.Bottom));
+
+				// Position the window in the upper right corner of the (adjusted) working area
+				top = workarea.Top + padding;
+				left = workarea.Width - Size.Width - padding;
 			}
 
-			// Move the form to the desired position before showing it; it should be aligned
-			// to the lower-right corner of the work area
-			int top = workarea.Height - Size.Height - (int)(12.0F * scalefactor);
-			int left = workarea.Width - Size.Width - (int)(12.0F * scalefactor);
+			// LEFT DOCK
+			//
+			// TODO: REVERSE CONTROLS
+			else if(m_dockstyle == DockStyle.Left)
+			{
+				// Adjust the working area if the tray icon isn't docked
+				if(iconrect.Right > workarea.Left)
+					workarea = new Rectangle(iconrect.Right, workarea.Top, workarea.Width - (screen.WorkingArea.Right - iconrect.Right), workarea.Height);
+
+				// Position the window so it's centered horizontally with the icon and left-aigned in the work area
+				top = (iconrect.Top + (iconrect.Height / 2)) - (Size.Height / 2);
+				if((top + Height + padding) > (workarea.Bottom)) top = workarea.Bottom - Height - padding;
+				left = workarea.Left + padding;
+			}
+
+			// RIGHT DOCK
+			//
+			else if(m_dockstyle == DockStyle.Right)
+			{
+				// Adjust the working area if the tray icon isn't docked
+				if(iconrect.Left < workarea.Right)
+					workarea = new Rectangle(workarea.Left, workarea.Top, workarea.Width - (screen.WorkingArea.Right - iconrect.Left), workarea.Height);
+
+				// Position the window so it's centered horizontally with the icon and right-aigned in the work area
+				top = (iconrect.Top + (iconrect.Height / 2)) - (Size.Height / 2);
+				if((top + Height + padding) > (workarea.Bottom)) top = workarea.Bottom - Height - padding;
+				left = workarea.Width - Size.Width - padding;
+			}
+
+			// BOTTOM DOCK
+			//
+			else
+			{
+				// Adjust the working area if the tray icon isn't docked
+				if(iconrect.Top < workarea.Bottom)
+					workarea = new Rectangle(workarea.Left, workarea.Top, workarea.Width, workarea.Height - (screen.WorkingArea.Bottom - iconrect.Top));
+
+				// Position the window in the lower right corner of the (adjusted) working area
+				top = workarea.Height - Size.Height - padding;
+				left = workarea.Width - Size.Width - padding;
+			}
+
+			// Move the form to the desired position set it as topmost
 			Location = new Point(left, top);
 			TopMost = true;
 		}
@@ -517,5 +623,6 @@ namespace zuki.hdhomeruntray
 		private DeviceStatus m_status = DeviceStatus.Idle;
 		private readonly SizeF m_scalefactor = SizeF.Empty;
 		private readonly EventHandler m_appthemechanged;
+		private DockStyle m_dockstyle = DockStyle.None;
 	}
 }

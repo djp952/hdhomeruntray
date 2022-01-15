@@ -38,7 +38,7 @@ namespace zuki.hdhomeruntray
 	{
 		// Instance Constructor
 		//
-		public StorageDeviceForm(StorageDevice device, PopupForm form, PopupItemControl item) : base(form, item)
+		public StorageDeviceForm(StorageDevice device, PopupForm form, PopupItemControl item, DockStyle dockstyle) : base(form, item, dockstyle)
 		{
 			m_device = device ?? throw new ArgumentNullException(nameof(device));
 
