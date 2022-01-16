@@ -41,9 +41,9 @@ namespace zuki.hdhomeruntray
 		//
 		static StatusColor()
 		{
-			if(Settings.Default.StatusColorSet == StatusColorSet.System) s_filteractive = GetColorFilterActive();
-			else if(Settings.Default.StatusColorSet == StatusColorSet.GreenRed) s_filteractive = false;
-			else if(Settings.Default.StatusColorSet == StatusColorSet.BlueOrange) s_filteractive = true;
+			if(Settings.Default.VirtualLEDColorSet == VirtualLEDColorSet.System) s_filteractive = GetColorFilterActive();
+			else if(Settings.Default.VirtualLEDColorSet == VirtualLEDColorSet.GreenRed) s_filteractive = false;
+			else if(Settings.Default.VirtualLEDColorSet == VirtualLEDColorSet.BlueOrange) s_filteractive = true;
 
 			// Wire up a handler to watch for property changes
 			Settings.Default.PropertyChanged += new PropertyChangedEventHandler(OnPropertyChanged);
@@ -96,7 +96,7 @@ namespace zuki.hdhomeruntray
 		public static void ColorFilterChanged(object sender, EventArgs args)
 		{
 			// This is only applicable if the setting is set to System
-			if(Settings.Default.StatusColorSet == StatusColorSet.System)
+			if(Settings.Default.VirtualLEDColorSet == VirtualLEDColorSet.System)
 			{
 				// Get a new color filter flag for the system, and if it changed inform listeners
 				bool filteractive = GetColorFilterActive();
@@ -166,13 +166,13 @@ namespace zuki.hdhomeruntray
 		{
 			// StatusColorSet
 			//
-			if(args.PropertyName == nameof(Settings.Default.StatusColorSet))
+			if(args.PropertyName == nameof(Settings.Default.VirtualLEDColorSet))
 			{
 				bool filteractive = GetColorFilterActive();
 
 				// Override for specific settings
-				if(Settings.Default.StatusColorSet == StatusColorSet.GreenRed) filteractive = false;
-				else if(Settings.Default.StatusColorSet == StatusColorSet.BlueOrange) filteractive = true;
+				if(Settings.Default.VirtualLEDColorSet == VirtualLEDColorSet.GreenRed) filteractive = false;
+				else if(Settings.Default.VirtualLEDColorSet == VirtualLEDColorSet.BlueOrange) filteractive = true;
 
 				// If the setting has changed, invoke the event to inform
 				if(filteractive != s_filteractive)

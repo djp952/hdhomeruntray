@@ -79,9 +79,9 @@ namespace zuki.hdhomeruntray
 
 			// Check the actual autostart setting in the registry and change if necessary
 			EnabledDisabled autostart = (IsAutoStartEnabled()) ? EnabledDisabled.Enabled : EnabledDisabled.Disabled;
-			if(autostart != Settings.Default.AutoStart)
+			if(autostart != Settings.Default.StartAutomatically)
 			{
-				Settings.Default.AutoStart = autostart;
+				Settings.Default.StartAutomatically = autostart;
 				Settings.Default.Save();
 			}
 
@@ -279,7 +279,7 @@ namespace zuki.hdhomeruntray
 			{
 				// Show the popup window if it's not already shown, and this
 				// function hasn't been disabled by the user
-				if((Settings.Default.TrayIconHover == EnabledDisabled.Enabled) && (m_popupform == null))
+				if((Settings.Default.HoverActions == EnabledDisabled.Enabled) && (m_popupform == null))
 				{
 					m_popupform = new PopupForm(m_devicelist);
 					m_popupform.DeviceStatusChanged += new DeviceStatusChangedEventHandler(OnPopupDeviceStatusChanged);
@@ -389,10 +389,10 @@ namespace zuki.hdhomeruntray
 		{
 			// AutoStart
 			//
-			if(args.PropertyName == nameof(Settings.Default.AutoStart))
+			if(args.PropertyName == nameof(Settings.Default.StartAutomatically))
 			{
 				// Enable or disable the autostart function in the registry
-				EnableDisableAutoStart(Settings.Default.AutoStart == EnabledDisabled.Enabled);
+				EnableDisableAutoStart(Settings.Default.StartAutomatically == EnabledDisabled.Enabled);
 			}
 
 			// DiscoveryInterval
@@ -413,7 +413,7 @@ namespace zuki.hdhomeruntray
 
 			// StatusColorSet
 			//
-			if(args.PropertyName == nameof(Settings.Default.StatusColorSet))
+			if(args.PropertyName == nameof(Settings.Default.VirtualLEDColorSet))
 			{
 				// Refresh the status icon if would be different than it already is
 				Icon statusicon = StatusIcons.Get(m_status);
@@ -422,9 +422,9 @@ namespace zuki.hdhomeruntray
 
 			// TrayIconHoverDelay
 			//
-			if(args.PropertyName == nameof(Settings.Default.TrayIconHoverDelay))
+			if(args.PropertyName == nameof(Settings.Default.HoverActionsDelay))
 			{
-				m_notifyicon.HoverInterval = GetHoverInterval(Settings.Default.TrayIconHoverDelay);
+				m_notifyicon.HoverInterval = GetHoverInterval(Settings.Default.HoverActionsDelay);
 			}
 		}
 
@@ -469,10 +469,10 @@ namespace zuki.hdhomeruntray
 		//
 		// Converts a TrayIconHoverDelay into milliseconds taking into consideration
 		// the running operation system limitations
-		private static int GetHoverInterval(TrayIconHoverDelay delay)
+		private static int GetHoverInterval(HoverActionsDelay delay)
 		{
 			// No coersion is necessary for a non-default value or a default one outside of Windows 11
-			if((delay != TrayIconHoverDelay.SystemDefault) || (!VersionHelper.IsWindows11OrGreater())) return (int)delay;
+			if((delay != HoverActionsDelay.System) || (!VersionHelper.IsWindows11OrGreater())) return (int)delay;
 
 			int mousehovertimeout = 400;            // Default value to use on Windows 11 (ms)
 
@@ -565,7 +565,7 @@ namespace zuki.hdhomeruntray
 			m_notifyicon.Selected += new EventHandler(OnNotifyIconSelected);
 			m_notifyicon.ContextMenuStrip = contextmenu;
 			m_notifyicon.Icon = StatusIcons.Get(DeviceStatus.Idle);
-			m_notifyicon.HoverInterval = GetHoverInterval(Settings.Default.TrayIconHoverDelay);
+			m_notifyicon.HoverInterval = GetHoverInterval(Settings.Default.HoverActionsDelay);
 			m_notifyicon.ToolTip = "HDHomeRun Status Monitor";
 
 			// Create the network timer object

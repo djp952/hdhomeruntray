@@ -25,29 +25,19 @@ using System.ComponentModel;
 namespace zuki.hdhomeruntray
 {
 	//-----------------------------------------------------------------------
-	// Enum TrayIconHoverDelay
+	// Enum VirtualLEDColorSet
 	//
-	// Defines constants that control how quickly the pop-up form will show
-	// when the user hovers the mouse over the tray icon.  Values are in ms
+	// Defines constants that determine the virtual LED color sets
 
-	public enum TrayIconHoverDelay
+	public enum VirtualLEDColorSet
 	{
 		[Description("System Default")]
-		SystemDefault = 0,
+		System = 0,
 
-		[Description("None")]
-		None = 1,
+		[Description("Green / Red")]
+		GreenRed = 1,
 
-		[Description("250 Milliseconds")]
-		TwoHundredFiftyMilliseconds = 250,
-
-		[Description("500 Milliseconds")]
-		FiveHundredMilliseconds = 500,
-
-		[Description("1 Second")]
-		OneSecond = 1000,
-
-		[Description("2 Seconds")]
-		TwoSeconds = 2000,
+		[Description("Blue / Orange")]
+		BlueOrange = 2,
 	}
 }

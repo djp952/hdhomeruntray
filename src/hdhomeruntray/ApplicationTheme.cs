@@ -41,9 +41,9 @@ namespace zuki.hdhomeruntray
 		//
 		static ApplicationTheme()
 		{
-			if(Settings.Default.AppTheme == Theme.System) s_darkmode = (GetSystemTheme() == Theme.Dark);
-			else if(Settings.Default.AppTheme == Theme.Light) s_darkmode = false;
-			else if(Settings.Default.AppTheme == Theme.Dark) s_darkmode = true;
+			if(Settings.Default.Theme == Theme.System) s_darkmode = (GetSystemTheme() == Theme.Dark);
+			else if(Settings.Default.Theme == Theme.Light) s_darkmode = false;
+			else if(Settings.Default.Theme == Theme.Dark) s_darkmode = true;
 
 			// Wire up a handler to watch for property changes
 			Settings.Default.PropertyChanged += new PropertyChangedEventHandler(OnPropertyChanged);
@@ -68,7 +68,7 @@ namespace zuki.hdhomeruntray
 		public static void SystemThemesChanged(object sender, EventArgs args)
 		{
 			// This is only applicable if the setting is set to System
-			if(Settings.Default.AppTheme == Theme.System)
+			if(Settings.Default.Theme == Theme.System)
 			{
 				// Get a new dark mode flag for the system, and if it has changed
 				// inform any listeners on the Changed event to switch the theme
@@ -126,13 +126,13 @@ namespace zuki.hdhomeruntray
 		{
 			// AppTheme
 			//
-			if(args.PropertyName == nameof(Settings.Default.AppTheme))
+			if(args.PropertyName == nameof(Settings.Default.Theme))
 			{
 				bool dark = s_darkmode;             // Flag for dark mode
 
-				if(Settings.Default.AppTheme == Theme.System) dark = (GetSystemTheme() == Theme.Dark);
-				else if(Settings.Default.AppTheme == Theme.Light) dark = false;
-				else if(Settings.Default.AppTheme == Theme.Dark) dark = true;
+				if(Settings.Default.Theme == Theme.System) dark = (GetSystemTheme() == Theme.Dark);
+				else if(Settings.Default.Theme == Theme.Light) dark = false;
+				else if(Settings.Default.Theme == Theme.Dark) dark = true;
 
 				// If the mode has changed, invoke the event to change it
 				if(dark != s_darkmode)

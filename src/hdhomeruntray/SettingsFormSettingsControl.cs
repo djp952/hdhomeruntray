@@ -58,13 +58,13 @@ namespace zuki.hdhomeruntray
 				m_layoutpanel.Radii = m_layoutpanel.Radii.ScaleDPI(graphics);
 
 				// Scaling the margins of the comboboxes will adjust the row height
-				m_autostart.Margin = m_autostart.Margin.ScaleDPI(graphics);
+				m_startautomatically.Margin = m_startautomatically.Margin.ScaleDPI(graphics);
 				m_discoveryinterval.Margin = m_discoveryinterval.Margin.ScaleDPI(graphics);
 				m_discoverymethod.Margin = m_discoverymethod.Margin.ScaleDPI(graphics);
-				m_statuscolorset.Margin = m_statuscolorset.Margin.ScaleDPI(graphics);
+				m_virtualledcolorset.Margin = m_virtualledcolorset.Margin.ScaleDPI(graphics);
 				m_theme.Margin = m_theme.Margin.ScaleDPI(graphics);
-				m_trayiconhover.Margin = m_trayiconhover.Margin.ScaleDPI(graphics);
-				m_trayiconhoverdelay.Margin = m_trayiconhoverdelay.Margin.ScaleDPI(graphics);
+				m_hoveractions.Margin = m_hoveractions.Margin.ScaleDPI(graphics);
+				m_hoveractionsdelay.Margin = m_hoveractionsdelay.Margin.ScaleDPI(graphics);
 				m_unpinautomatically.Margin = m_unpinautomatically.Margin.ScaleDPI(graphics);
 			}
 
@@ -72,34 +72,34 @@ namespace zuki.hdhomeruntray
 			//
 			if(VersionHelper.IsWindows11OrGreater())
 			{
-				m_autostartlabel.Font = new Font("Segoe UI Variable Text Semibold", m_autostartlabel.Font.Size, m_autostartlabel.Font.Style);
+				m_startautomaticallylabel.Font = new Font("Segoe UI Variable Text Semibold", m_startautomaticallylabel.Font.Size, m_startautomaticallylabel.Font.Style);
 				m_discoveryintervallabel.Font = new Font("Segoe UI Variable Text Semibold", m_discoveryintervallabel.Font.Size, m_discoveryintervallabel.Font.Style);
 				m_discoverymethodlabel.Font = new Font("Segoe UI Variable Text Semibold", m_discoverymethodlabel.Font.Size, m_discoverymethodlabel.Font.Style);
-				m_statuscolorsetlabel.Font = new Font("Segoe UI Variable Text Semibold", m_statuscolorsetlabel.Font.Size, m_statuscolorsetlabel.Font.Style);
+				m_virtualledcolorsetlabel.Font = new Font("Segoe UI Variable Text Semibold", m_virtualledcolorsetlabel.Font.Size, m_virtualledcolorsetlabel.Font.Style);
 				m_themelabel.Font = new Font("Segoe UI Variable Text Semibold", m_themelabel.Font.Size, m_themelabel.Font.Style);
-				m_trayiconhoverlabel.Font = new Font("Segoe UI Variable Text Semibold", m_trayiconhoverlabel.Font.Size, m_trayiconhoverlabel.Font.Style);
-				m_trayiconhoverdelaylabel.Font = new Font("Segoe UI Variable Text Semibold", m_trayiconhoverdelaylabel.Font.Size, m_trayiconhoverdelaylabel.Font.Style);
+				m_hoveractionslabel.Font = new Font("Segoe UI Variable Text Semibold", m_hoveractionslabel.Font.Size, m_hoveractionslabel.Font.Style);
+				m_hoveractionsdelaylabel.Font = new Font("Segoe UI Variable Text Semibold", m_hoveractionsdelaylabel.Font.Size, m_hoveractionsdelaylabel.Font.Style);
 				m_unpinautomaticallylabel.Font = new Font("Segoe UI Variable Text Semibold", m_unpinautomaticallylabel.Font.Size, m_unpinautomaticallylabel.Font.Style);
 
-				m_autostart.Font = new Font("Segoe UI Variable Text", m_autostart.Font.Size, m_autostart.Font.Style);
+				m_startautomatically.Font = new Font("Segoe UI Variable Text", m_startautomatically.Font.Size, m_startautomatically.Font.Style);
 				m_discoveryinterval.Font = new Font("Segoe UI Variable Text", m_discoveryinterval.Font.Size, m_discoveryinterval.Font.Style);
 				m_discoverymethod.Font = new Font("Segoe UI Variable Text", m_discoverymethod.Font.Size, m_discoverymethod.Font.Style);
-				m_statuscolorset.Font = new Font("Segoe UI Variable Text", m_statuscolorset.Font.Size, m_statuscolorset.Font.Style);
+				m_virtualledcolorset.Font = new Font("Segoe UI Variable Text", m_virtualledcolorset.Font.Size, m_virtualledcolorset.Font.Style);
 				m_theme.Font = new Font("Segoe UI Variable Text", m_theme.Font.Size, m_theme.Font.Style);
-				m_trayiconhover.Font = new Font("Segoe UI Variable Text", m_trayiconhover.Font.Size, m_trayiconhover.Font.Style);
-				m_trayiconhoverdelay.Font = new Font("Segoe UI Variable Text", m_trayiconhoverdelay.Font.Size, m_trayiconhoverdelay.Font.Style);
+				m_hoveractions.Font = new Font("Segoe UI Variable Text", m_hoveractions.Font.Size, m_hoveractions.Font.Style);
+				m_hoveractionsdelay.Font = new Font("Segoe UI Variable Text", m_hoveractionsdelay.Font.Size, m_hoveractionsdelay.Font.Style);
 				m_unpinautomatically.Font = new Font("Segoe UI Variable Text", m_unpinautomatically.Font.Size, m_unpinautomatically.Font.Style);
 			}
 
 			// Bind each of the ComboBox drop-downs to their enum class
-			m_autostart.BindEnum(Settings.Default.AutoStart);
+			m_startautomatically.BindEnum(Settings.Default.StartAutomatically);
 			m_discoveryinterval.BindEnum(Settings.Default.DiscoveryInterval);
 			m_discoverymethod.BindEnum(Settings.Default.DiscoveryMethod);
-			m_statuscolorset.BindEnum(Settings.Default.StatusColorSet);
-			m_theme.BindEnum(Settings.Default.AppTheme);
-			m_trayiconhover.BindEnum(Settings.Default.TrayIconHover);
-			m_trayiconhoverdelay.BindEnum(Settings.Default.TrayIconHoverDelay);
-			m_unpinautomatically.BindEnum(Settings.Default.AutoUnpin);
+			m_virtualledcolorset.BindEnum(Settings.Default.VirtualLEDColorSet);
+			m_theme.BindEnum(Settings.Default.Theme);
+			m_hoveractions.BindEnum(Settings.Default.HoverActions);
+			m_hoveractionsdelay.BindEnum(Settings.Default.HoverActionsDelay);
+			m_unpinautomatically.BindEnum(Settings.Default.UnpinAutomatically);
 		}
 
 		// Dispose
@@ -136,10 +136,10 @@ namespace zuki.hdhomeruntray
 		private void OnAutoStartCommitted(object sender, EventArgs args)
 		{
 			// If the value of the combobox changed, update and save the settings
-			EnabledDisabled autostart = (EnabledDisabled)m_autostart.SelectedValue;
-			if(autostart != Settings.Default.AutoStart)
+			EnabledDisabled autostart = (EnabledDisabled)m_startautomatically.SelectedValue;
+			if(autostart != Settings.Default.StartAutomatically)
 			{
-				Settings.Default.AutoStart = autostart;
+				Settings.Default.StartAutomatically = autostart;
 				Settings.Default.Save();
 			}
 		}
@@ -178,10 +178,10 @@ namespace zuki.hdhomeruntray
 		private void OnStatusColorSetCommitted(object sender, EventArgs args)
 		{
 			// If the value of the combobox changed, update and save the settings
-			StatusColorSet colorset = (StatusColorSet)m_statuscolorset.SelectedValue;
-			if(colorset != Settings.Default.StatusColorSet)
+			VirtualLEDColorSet colorset = (VirtualLEDColorSet)m_virtualledcolorset.SelectedValue;
+			if(colorset != Settings.Default.VirtualLEDColorSet)
 			{
-				Settings.Default.StatusColorSet = colorset;
+				Settings.Default.VirtualLEDColorSet = colorset;
 				Settings.Default.Save();
 			}
 		}
@@ -192,10 +192,10 @@ namespace zuki.hdhomeruntray
 		private void OnTrayIconHoverCommitted(object sender, EventArgs args)
 		{
 			// If the value of the combobox changed, update and save the settings
-			EnabledDisabled trayiconhover = (EnabledDisabled)m_trayiconhover.SelectedValue;
-			if(trayiconhover != Settings.Default.TrayIconHover)
+			EnabledDisabled trayiconhover = (EnabledDisabled)m_hoveractions.SelectedValue;
+			if(trayiconhover != Settings.Default.HoverActions)
 			{
-				Settings.Default.TrayIconHover = trayiconhover;
+				Settings.Default.HoverActions = trayiconhover;
 				Settings.Default.Save();
 			}
 		}
@@ -207,9 +207,9 @@ namespace zuki.hdhomeruntray
 		{
 			// If the value of the combobox changed, update and save the settings
 			Theme theme = (Theme)m_theme.SelectedValue;
-			if(theme != Settings.Default.AppTheme)
+			if(theme != Settings.Default.Theme)
 			{
-				Settings.Default.AppTheme = theme;
+				Settings.Default.Theme = theme;
 				Settings.Default.Save();
 			}
 		}
@@ -220,10 +220,10 @@ namespace zuki.hdhomeruntray
 		private void OnTrayIconHoverDelayCommitted(object sender, EventArgs args)
 		{
 			// If the value of the combobox changed, update and save the settings
-			TrayIconHoverDelay trayiconhoverdelay = (TrayIconHoverDelay)m_trayiconhoverdelay.SelectedValue;
-			if(trayiconhoverdelay != Settings.Default.TrayIconHoverDelay)
+			HoverActionsDelay trayiconhoverdelay = (HoverActionsDelay)m_hoveractionsdelay.SelectedValue;
+			if(trayiconhoverdelay != Settings.Default.HoverActionsDelay)
 			{
-				Settings.Default.TrayIconHoverDelay = trayiconhoverdelay;
+				Settings.Default.HoverActionsDelay = trayiconhoverdelay;
 				Settings.Default.Save();
 			}
 		}
@@ -235,9 +235,9 @@ namespace zuki.hdhomeruntray
 		{
 			// If the value of the combobox changed, update and save the settings
 			EnabledDisabled unpinautomatically = (EnabledDisabled)m_unpinautomatically.SelectedValue;
-			if(unpinautomatically != Settings.Default.AutoUnpin)
+			if(unpinautomatically != Settings.Default.UnpinAutomatically)
 			{
-				Settings.Default.AutoUnpin = unpinautomatically;
+				Settings.Default.UnpinAutomatically = unpinautomatically;
 				Settings.Default.Save();
 			}
 		}

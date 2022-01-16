@@ -25,19 +25,28 @@ using System.ComponentModel;
 namespace zuki.hdhomeruntray
 {
 	//-----------------------------------------------------------------------
-	// Enum StatusColorSet
+	// Enum HoverActionsDelay
 	//
-	// Defines constants that determine the available status color sets
+	// Defines constants that control how quickly hover actions will occur
 
-	public enum StatusColorSet
+	public enum HoverActionsDelay
 	{
 		[Description("System Default")]
 		System = 0,
 
-		[Description("Green / Red")]
-		GreenRed = 1,
+		[Description("None")]
+		None = 1,
 
-		[Description("Blue / Orange")]
-		BlueOrange = 2,
+		[Description("250 Milliseconds")]
+		TwoHundredFiftyMilliseconds = 250,
+
+		[Description("500 Milliseconds")]
+		FiveHundredMilliseconds = 500,
+
+		[Description("1 Second")]
+		OneSecond = 1000,
+
+		[Description("2 Seconds")]
+		TwoSeconds = 2000,
 	}
 }

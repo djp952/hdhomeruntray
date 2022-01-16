@@ -309,7 +309,7 @@ namespace zuki.hdhomeruntray
 		{
 			// If the form is pinned and the setting to auto-unpin is set, this
 			// event handler is enabled
-			if((m_pinned) && (Properties.Settings.Default.AutoUnpin == EnabledDisabled.Enabled))
+			if((m_pinned) && (Properties.Settings.Default.UnpinAutomatically == EnabledDisabled.Enabled))
 			{
 				Point cursorpos = Cursor.Position;
 
