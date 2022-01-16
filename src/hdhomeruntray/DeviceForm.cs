@@ -87,6 +87,15 @@ namespace zuki.hdhomeruntray
 				NativeMethods.DwmSetWindowAttribute(Handle, attribute, ref preference, sizeof(uint));
 			}
 
+			// WINDOWS 10
+			//
+			else if(VersionHelper.IsWindows10OrGreater())
+			{
+				// Switch to a single border and change the padding to 2 (will scale below)
+				FormBorderStyle = FormBorderStyle.FixedToolWindow;
+				Padding = new Padding(2);
+			}
+
 			// Using CreateGraphics() in every form/control that autoscales was
 			// causing a performance concern; calculate the factor only once
 			using(Graphics graphics = CreateGraphics())
