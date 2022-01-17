@@ -755,6 +755,9 @@ namespace zuki.hdhomeruntray
 			// have just woken from sleep or the DPI has changed
 			OnClosePopup();
 
+			// Force the icon into a non-created state
+			m_created = false;
+
 			// Update the tray icon any time this event comes in
 			UpdateIcon(m_visible);
 		}
@@ -807,6 +810,15 @@ namespace zuki.hdhomeruntray
 					{
 						// Create the tray icon instance
 						m_created = NativeMethods.Shell_NotifyIconW(NativeMethods.NIM_ADD, ref data);
+
+						// If the icon wasn't created, attempt to delete it and try again.  This seems
+						// to happen on some platforms with suspend/resume cycles.  Previous fix to not
+						// reset m_created caused other problems
+						if(!m_created)
+						{
+							NativeMethods.Shell_NotifyIconW(NativeMethods.NIM_DELETE, ref data);
+							m_created = NativeMethods.Shell_NotifyIconW(NativeMethods.NIM_ADD, ref data);
+						}
 
 						if(m_created)
 						{
