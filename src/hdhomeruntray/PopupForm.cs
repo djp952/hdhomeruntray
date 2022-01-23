@@ -231,6 +231,8 @@ namespace zuki.hdhomeruntray
 		// "Pins" the popup form by adding additional controls
 		public void Pin(ShellNotifyIcon icon)
 		{
+			Activate();								// Activate the form
+
 			if(m_pinned) return;
 
 			// Create the settings toggle
@@ -288,6 +290,7 @@ namespace zuki.hdhomeruntray
 			m_timer.Enabled = true;
 
 			Show();                         // Show the form
+			Activate();						// Activate the form
 		}
 
 		//-------------------------------------------------------------------
