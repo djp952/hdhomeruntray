@@ -118,24 +118,36 @@ generic<class T> T JsonWebRequest::Get(String^ uri, CancellationToken cancel)
 {
 	if(String::IsNullOrEmpty(uri)) throw gcnew ArgumentNullException("uri");
 
-	// TODO: Requires exception handling and cancellation logic
+	// Pass the cancellation token onto the HttpClient and watch for TaskCanceledException (via AggregateException)
 	Task<HttpResponseMessage^>^ gettask = s_httpclient->GetAsync(uri, HttpCompletionOption::ResponseHeadersRead, cancel);
-	gettask->Result->EnsureSuccessStatusCode();
-	gettask->Wait();
+	
+	try {
+
+		gettask->Result->EnsureSuccessStatusCode();
+		gettask->Wait();
+	}
+
+	catch(AggregateException^) { return T(); }
+	catch(TaskCanceledException^) { return T(); }
 
 	// If the returned data was of type application/json, access the stream data and deserialize it
 	if(CLRISNOTNULL(gettask->Result->Content) && gettask->Result->Content->Headers->ContentType->MediaType == "application/json")
 	{
-		// TODO: Exception handling and cancellation logic (if available here)
-		Task<Stream^>^ streamtask = gettask->Result->Content->ReadAsStreamAsync();
-		streamtask->Wait();
+		// Watch out for TaskCanceledException (via AggregateException) here as well
+		try {
 
-		msclr::auto_handle<TextReader> textreader(gcnew StreamReader(streamtask->Result));
-		msclr::auto_handle<JsonTextReader> jsonreader(gcnew JsonTextReader(textreader.get()));
+			Task<Stream^>^ streamtask = gettask->Result->Content->ReadAsStreamAsync();
+			streamtask->Wait();
 
-		// TODO: Exception handling
-		JsonSerializer^ serializer = gcnew JsonSerializer();
-		return serializer->Deserialize<T>(jsonreader.get());
+			msclr::auto_handle<TextReader> textreader(gcnew StreamReader(streamtask->Result));
+			msclr::auto_handle<JsonTextReader> jsonreader(gcnew JsonTextReader(textreader.get()));
+
+			JsonSerializer^ serializer = gcnew JsonSerializer();
+			return serializer->Deserialize<T>(jsonreader.get());
+		}
+
+		catch(AggregateException^) { return T(); }
+		catch(TaskCanceledException^) { return T(); }
 	}
 
 	return T();						// default(T)
