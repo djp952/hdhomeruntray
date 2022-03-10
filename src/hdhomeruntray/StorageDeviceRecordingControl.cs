@@ -53,7 +53,7 @@ namespace zuki.hdhomeruntray
 			StatusColor.Changed += m_statuscolorschanged;
 			OnStatusColorsChanged(this, EventArgs.Empty);
 
-			m_layoutpanel.EnableDoubleBuferring();
+			m_layoutpanel.EnableDoubleBuffering();
 
 			Padding = Padding.ScaleDPI(scalefactor);
 			m_layoutpanel.Margin = m_layoutpanel.Margin.ScaleDPI(scalefactor);

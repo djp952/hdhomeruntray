@@ -77,7 +77,7 @@ namespace zuki.hdhomeruntray
 		//
 		// Enables double-buffering for a control via reflection
 
-		public static void EnableDoubleBuferring(this Control control)
+		public static void EnableDoubleBuffering(this Control control)
 		{
 			PropertyInfo property = typeof(Control).GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic);
 			property.SetValue(control, true, null);

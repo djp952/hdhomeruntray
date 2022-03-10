@@ -42,7 +42,7 @@ namespace zuki.hdhomeruntray
 		{
 			InitializeComponent();
 
-			m_layoutpanel.EnableDoubleBuferring();
+			m_layoutpanel.EnableDoubleBuffering();
 
 			// THEME
 			//

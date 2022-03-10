@@ -71,7 +71,7 @@ namespace zuki.hdhomeruntray
 			ApplicationTheme.Changed += m_appthemechanged;
 			OnApplicationThemeChanged(this, EventArgs.Empty);
 
-			m_layoutpanel.EnableDoubleBuferring();
+			m_layoutpanel.EnableDoubleBuffering();
 
 			// WINDOWS 11
 			//

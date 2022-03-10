@@ -70,7 +70,7 @@ namespace zuki.hdhomeruntray
 			OnApplicationThemeChanged(this, EventArgs.Empty);
 
 
-			m_layoutpanel.EnableDoubleBuferring();
+			m_layoutpanel.EnableDoubleBuffering();
 
 			// WINDOWS 11
 			//

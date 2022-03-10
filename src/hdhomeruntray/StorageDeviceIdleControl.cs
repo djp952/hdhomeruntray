@@ -47,7 +47,7 @@ namespace zuki.hdhomeruntray
 			ApplicationTheme.Changed += m_appthemechanged;
 			OnApplicationThemeChanged(this, EventArgs.Empty);
 
-			m_layoutpanel.EnableDoubleBuferring();
+			m_layoutpanel.EnableDoubleBuffering();
 
 			// There is no device information to read from, this is all static
 			m_activedot.ForeColor = StatusColor.FromDeviceStatusColor(DeviceStatusColor.Neutral);
