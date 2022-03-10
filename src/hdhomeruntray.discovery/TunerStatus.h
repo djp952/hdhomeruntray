@@ -172,10 +172,15 @@ private:
 	// Instance Constructors
 	//
 	TunerStatus(void);
-	TunerStatus(struct hdhomerun_tuner_status_t const* status, IPAddress^ targetip);
+	TunerStatus(String^ channelname, struct hdhomerun_tuner_status_t const* status, IPAddress^ targetip);
 
 	//-----------------------------------------------------------------------
 	// Private Member Functions
+
+	// StringFromUTF8 (static)
+	//
+	// Creates a System::String^ from an input UTF8 encoded char* string
+	static String^ StringFromUTF8(char const* input);
 
 	// GetVirtualChannelName
 	//

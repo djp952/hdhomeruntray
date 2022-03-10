@@ -48,16 +48,18 @@ TunerStatus::TunerStatus(void)
 //
 // Arguments:
 //
+//	channelname	- Channel name
 //	status		- Pointer to the unmanaged hdhomerun_tuner_status_t struct
 //	targetip	- IPAddress of the target device
 
-TunerStatus::TunerStatus(struct hdhomerun_tuner_status_t const* status, IPAddress^ targetip) : TunerStatus()
+TunerStatus::TunerStatus(String^ channelname, struct hdhomerun_tuner_status_t const* status, IPAddress^ targetip) : TunerStatus()
 {
+	if(CLRISNULL(channelname)) throw gcnew ArgumentNullException("channelname");
 	if(status == nullptr) throw gcnew ArgumentNullException("status");
 	if(CLRISNULL(targetip)) throw gcnew ArgumentNullException("targetip");
 
 	// Assign the channel name and determine the overall device status
-	m_channelname = gcnew String(status->channel);
+	m_channelname = channelname->Replace("&", "&&");
 	if(String::Compare(m_channelname, NoChannel, StringComparison::OrdinalIgnoreCase) != 0) m_devicestatus = _DeviceStatus::Active;
 
 	// Only bother with setting the variables if the tuner is active
@@ -139,8 +141,7 @@ TunerStatus^ TunerStatus::Create(TunerDevice^ tunerdevice, int index)
 		result = hdhomerun_device_get_tuner_streaminfo(device, &streaminfo_str);
 		if((result == 1) && (streaminfo_str != nullptr)) {
 
-			// Convert the volatile unmanaged string pointer before it's overwritten
-			String^ streaminfo = gcnew String(streaminfo_str);
+			String^ streaminfo = StringFromUTF8(streaminfo_str);
 
 			// Try to get the program number string from the tuner
 			char* program_str = nullptr;
@@ -148,7 +149,7 @@ TunerStatus^ TunerStatus::Create(TunerDevice^ tunerdevice, int index)
 			if(result == 1) {
 
 				// Try to use the stream info and program number to get the channel name
-				channelname = GetVirtualChannelName(gcnew String(program_str), streaminfo);
+				channelname = GetVirtualChannelName(StringFromUTF8(program_str), streaminfo);
 			}
 		}
 
@@ -164,7 +165,7 @@ TunerStatus^ TunerStatus::Create(TunerDevice^ tunerdevice, int index)
 				struct hdhomerun_channel_list_t* channellist = hdhomerun_channel_list_create(channelmap_str);
 				if(channellist != nullptr) {
 
-					String^ rawchannel = gcnew String(status.channel);
+					String^ rawchannel = StringFromUTF8(status.channel);
 
 					// The raw channel name should be modulation:frequency, we only care about the frequency
 					int colon = rawchannel->IndexOf(':');
@@ -197,13 +198,8 @@ TunerStatus^ TunerStatus::Create(TunerDevice^ tunerdevice, int index)
 			}
 		}
 
-		// If a better channel name was determined, overwrite it in the status structure
-		if(!String::IsNullOrEmpty(channelname)) {
-
-			channelname = channelname->Replace("&", "&&");
-			msclr::auto_handle<msclr::interop::marshal_context> context(gcnew msclr::interop::marshal_context());
-			strncpy_s(status.channel, std::extent<decltype(status.channel)>::value, context->marshal_as<char const*>(channelname), _TRUNCATE);
-		}
+		// If a better channel name was not determined, use the original string from libhdhomerun
+		if(String::IsNullOrEmpty(channelname)) channelname = StringFromUTF8(status.channel);
 
 		// Try to get the tuner target device to convert into an IP address
 		char* target_str = nullptr;
@@ -220,7 +216,7 @@ TunerStatus^ TunerStatus::Create(TunerDevice^ tunerdevice, int index)
 			}
 		}
 
-		return gcnew TunerStatus(&status, targetip);	// Create the TunerStatus instance
+		return gcnew TunerStatus(channelname, &status, targetip);	// Create the TunerStatus instance
 	}
 
 	// Ensure destruction of the hdhomerun_device_t instance
@@ -351,6 +347,27 @@ int TunerStatus::SignalStrength::get(void)
 DeviceStatusColor TunerStatus::SignalStrengthColor::get(void)
 {
 	return m_signalstrengthcolor;
+}
+
+//---------------------------------------------------------------------------
+// TunerStatus::StringFromUTF8 (private, static)
+//
+// Creates a System::String^ from an input UTF8 encoded char* string
+//
+// Arguments:
+//
+//	input		- Input UTF8 string pointer
+
+String^ TunerStatus::StringFromUTF8(char const* input)
+{
+	if(input == nullptr) return String::Empty;
+
+	// This is much easier to do with the unmanaged API up until .NET 5
+	int buffercch = MultiByteToWideChar(CP_UTF8, 0, input, -1, nullptr, 0);
+	auto buffer = std::make_unique<wchar_t[]>(buffercch);
+	MultiByteToWideChar(CP_UTF8, 0, input, -1, buffer.get(), buffercch);
+
+	return gcnew String(reinterpret_cast<wchar_t*>(&buffer[0]));
 }
 
 //---------------------------------------------------------------------------
