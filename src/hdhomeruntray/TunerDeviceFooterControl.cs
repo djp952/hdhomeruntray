@@ -26,6 +26,7 @@ using System.Drawing;
 using System.Windows.Forms;
 
 using zuki.hdhomeruntray.discovery;
+using zuki.hdhomeruntray.Properties;
 
 namespace zuki.hdhomeruntray
 {
@@ -48,12 +49,30 @@ namespace zuki.hdhomeruntray
 			ApplicationTheme.Changed += m_appthemechanged;
 			OnApplicationThemeChanged(this, EventArgs.Empty);
 
+			m_outerpanel.EnableDoubleBuffering();
 			m_layoutpanel.EnableDoubleBuffering();
 
 			Padding = Padding.ScaleDPI(scalefactor);
 			m_layoutpanel.Margin = m_layoutpanel.Margin.ScaleDPI(scalefactor);
 			m_layoutpanel.Padding = m_layoutpanel.Padding.ScaleDPI(scalefactor);
 			m_layoutpanel.Radii = m_layoutpanel.Radii.ScaleDPI(scalefactor);
+
+			// TUNER TOOLS BUTTON
+			//
+			if(Settings.Default.ShowTunerTools == EnabledDisabled.Enabled)
+			{
+				// Create the tools button panel object
+				var toolsbutton = new TunerDeviceFooterControlToolsToggle(scalefactor);
+				toolsbutton.Toggled += new ToggledEventHandler(OnToolsButtonToggled);
+
+				// Add a second column to the outer panel for the tools button
+				m_outerpanel.ColumnCount = 2;
+				m_outerpanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+				m_outerpanel.Controls.Add(toolsbutton, 1, 0);
+
+				// Square off the lower right corner of the layout panel
+				m_layoutpanel.Radii = new Radii(0, 0, 0, m_layoutpanel.Radii.BottomLeft);
+			}
 
 			// WINDOWS 11
 			//
@@ -93,6 +112,15 @@ namespace zuki.hdhomeruntray
 			base.Dispose(disposing);
 		}
 
+		//-------------------------------------------------------------------------
+		// Events
+		//-------------------------------------------------------------------------
+
+		// ShowToolsToggled
+		//
+		// Invoked when the show tools button has been toggled
+		public event ToggledEventHandler ShowToolsToggled;
+
 		//-------------------------------------------------------------------
 		// Event Handlers
 		//-------------------------------------------------------------------
@@ -105,6 +133,14 @@ namespace zuki.hdhomeruntray
 			m_layoutpanel.BackColor = ApplicationTheme.PanelBackColor;
 			m_layoutpanel.ForeColor = ApplicationTheme.PanelForeColor;
 			m_updateavailable.ActiveLinkColor = m_updateavailable.LinkColor = m_updateavailable.VisitedLinkColor = ApplicationTheme.LinkColor;
+		}
+
+		// OnToolsButtonToggled
+		//
+		// Invoked when the tuner tools button has been toggled
+		private void OnToolsButtonToggled(object sender, ToggledEventArgs args)
+		{
+			ShowToolsToggled?.Invoke(this, args);
 		}
 
 		// OnUpdateClicked

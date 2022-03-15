@@ -99,6 +99,9 @@
     <Compile Include="DeviceForm.Designer.cs">
       <DependentUpon>DeviceForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="TunerDeviceFooterControlToolsToggle.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="PassthroughLabelControl.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -118,8 +121,8 @@
     <Compile Include="PopupItemLabelControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="PopupItemToggledEventArgs.cs" />
-    <Compile Include="PopupItemToggledEventHandler.cs" />
+    <Compile Include="ToggledEventArgs.cs" />
+    <Compile Include="ToggledEventHandler.cs" />
     <Compile Include="Radii.cs" />
     <Compile Include="RadiiConverter.cs" />
     <Compile Include="RegistryKeyValueChangeMonitor.cs" />
@@ -158,6 +161,15 @@
       <DependentUpon>SignalStatusProgressBar.cs</DependentUpon>
     </Compile>
     <Compile Include="StatusColor.cs" />
+    <Compile Include="TunerDeviceToolsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="TunerDeviceToolsControl.designer.cs">
+      <DependentUpon>TunerDeviceToolsControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="TunerDeviceToolsControlLabelButton.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="VirtualLEDColorSet.cs" />
     <Compile Include="StorageDeviceFooterControl.cs">
       <SubType>UserControl</SubType>
@@ -302,6 +314,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="TunerDeviceStatusControl.resx">
       <DependentUpon>TunerDeviceStatusControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TunerDeviceToolsControl.resx">
+      <DependentUpon>TunerDeviceToolsControl.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="app.manifest" />
     <None Include="packages.config" />

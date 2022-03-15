@@ -100,7 +100,7 @@ namespace zuki.hdhomeruntray
 		// Toggled
 		//
 		// Invoked when a toggle-type PopupItemControl has been toggled
-		public event PopupItemToggledEventHandler Toggled;
+		public event ToggledEventHandler Toggled;
 
 		//-------------------------------------------------------------------
 		// Member Functions
@@ -199,7 +199,7 @@ namespace zuki.hdhomeruntray
 			if(!ClientRectangle.Contains(PointToClient(Cursor.Position)))
 				OnMouseLeaveToggle(sender, args);
 
-			Toggled?.Invoke(this, new PopupItemToggledEventArgs(m_toggled));
+			Toggled?.Invoke(this, new ToggledEventArgs(m_toggled));
 		}
 
 		// OnMouseEnterToggle

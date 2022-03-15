@@ -35,6 +35,7 @@ namespace zuki.hdhomeruntray
 		Expand = 0xE10C,            // Ellipsis icon	(U+E10C)
 		Pin = 0xE141,               // Pin icon			(U+E141)
 		Settings = 0xE115,          // Gear icon		(U+E115)
+		Tools = 0xE15E,				// Wrench icon		(U+E15E)
 		Unpin = 0xE196,             // Unpin icon		(U+E196)
 	};
 }

@@ -12,7 +12,7 @@ namespace zuki.hdhomeruntray.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "17.0.3.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "17.1.0.0")]
     internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
         
         private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
@@ -20,6 +20,18 @@ namespace zuki.hdhomeruntray.Properties {
         public static Settings Default {
             get {
                 return defaultInstance;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Broadcast")]
+        public global::zuki.hdhomeruntray.discovery.DiscoveryMethod DiscoveryMethod {
+            get {
+                return ((global::zuki.hdhomeruntray.discovery.DiscoveryMethod)(this["DiscoveryMethod"]));
+            }
+            set {
+                this["DiscoveryMethod"] = value;
             }
         }
         
@@ -34,22 +46,31 @@ namespace zuki.hdhomeruntray.Properties {
                 this["DiscoveryInterval"] = value;
             }
         }
-
-		[global::System.Configuration.UserScopedSettingAttribute()]
-		[global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-		[global::System.Configuration.DefaultSettingValueAttribute("Broadcast")]
-		public global::zuki.hdhomeruntray.discovery.DiscoveryMethod DiscoveryMethod
-		{
-			get
-			{
-				return ((global::zuki.hdhomeruntray.discovery.DiscoveryMethod)(this["DiscoveryMethod"]));
-			}
-			set
-			{
-				this["DiscoveryMethod"] = value;
-			}
-		}
-
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool UpgradeRequired {
+            get {
+                return ((bool)(this["UpgradeRequired"]));
+            }
+            set {
+                this["UpgradeRequired"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Disabled")]
+        public global::zuki.hdhomeruntray.EnabledDisabled StartAutomatically {
+            get {
+                return ((global::zuki.hdhomeruntray.EnabledDisabled)(this["StartAutomatically"]));
+            }
+            set {
+                this["StartAutomatically"] = value;
+            }
+        }
+        
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("Enabled")]
@@ -61,53 +82,8 @@ namespace zuki.hdhomeruntray.Properties {
                 this["HoverActions"] = value;
             }
         }
-
-		[global::System.Configuration.UserScopedSettingAttribute()]
-		[global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-		[global::System.Configuration.DefaultSettingValueAttribute("System")]
-		public global::zuki.hdhomeruntray.HoverActionsDelay HoverActionsDelay
-		{
-			get
-			{
-				return ((global::zuki.hdhomeruntray.HoverActionsDelay)(this["HoverActionsDelay"]));
-			}
-			set
-			{
-				this["HoverActionsDelay"] = value;
-			}
-		}
-
-		[global::System.Configuration.UserScopedSettingAttribute()]
-		[global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-		[global::System.Configuration.DefaultSettingValueAttribute("Disabled")]
-		public global::zuki.hdhomeruntray.EnabledDisabled StartAutomatically
-		{
-			get
-			{
-				return ((global::zuki.hdhomeruntray.EnabledDisabled)(this["StartAutomatically"]));
-			}
-			set
-			{
-				this["StartAutomatically"] = value;
-			}
-		}
-
-		[global::System.Configuration.UserScopedSettingAttribute()]
-		[global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-		[global::System.Configuration.DefaultSettingValueAttribute("System")]
-		public global::zuki.hdhomeruntray.Theme Theme
-		{
-			get
-			{
-				return ((global::zuki.hdhomeruntray.Theme)(this["Theme"]));
-			}
-			set
-			{
-				this["Theme"] = value;
-			}
-		}
-
-		[global::System.Configuration.UserScopedSettingAttribute()]
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("Disabled")]
         public global::zuki.hdhomeruntray.EnabledDisabled UnpinAutomatically {
@@ -118,22 +94,19 @@ namespace zuki.hdhomeruntray.Properties {
                 this["UnpinAutomatically"] = value;
             }
         }
-
-		[global::System.Configuration.UserScopedSettingAttribute()]
-		[global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-		[global::System.Configuration.DefaultSettingValueAttribute("True")]
-		public bool UpgradeRequired
-		{
-			get
-			{
-				return ((bool)(this["UpgradeRequired"]));
-			}
-			set
-			{
-				this["UpgradeRequired"] = value;
-			}
-		}
-
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("System")]
+        public global::zuki.hdhomeruntray.Theme Theme {
+            get {
+                return ((global::zuki.hdhomeruntray.Theme)(this["Theme"]));
+            }
+            set {
+                this["Theme"] = value;
+            }
+        }
+        
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("System")]
@@ -143,6 +116,30 @@ namespace zuki.hdhomeruntray.Properties {
             }
             set {
                 this["VirtualLEDColorSet"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("System")]
+        public global::zuki.hdhomeruntray.HoverActionsDelay HoverActionsDelay {
+            get {
+                return ((global::zuki.hdhomeruntray.HoverActionsDelay)(this["HoverActionsDelay"]));
+            }
+            set {
+                this["HoverActionsDelay"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Disabled")]
+        public global::zuki.hdhomeruntray.EnabledDisabled ShowTunerTools {
+            get {
+                return ((global::zuki.hdhomeruntray.EnabledDisabled)(this["ShowTunerTools"]));
+            }
+            set {
+                this["ShowTunerTools"] = value;
             }
         }
     }

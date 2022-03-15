@@ -58,6 +58,16 @@ public:
 	TunerStatus^ GetTunerStatus(int index);
 	TunerStatus^ GetTunerStatus(Tuner^ tuner);
 
+	// Restart
+	//
+	// Restarts the tuner device
+	void Restart(void);
+
+	// StopTuner
+	//
+	// Stops a tuner
+	void StopTuner(int index);
+
 	//-----------------------------------------------------------------------
 	// Properties
 

@@ -171,7 +171,7 @@ namespace zuki.hdhomeruntray
 					else devicecontrol.Padding = new Padding(1, 0, 1, 0).ScaleDPI(m_scalefactor);
 				}
 
-				devicecontrol.Toggled += new PopupItemToggledEventHandler(OnDeviceToggled);
+				devicecontrol.Toggled += new ToggledEventHandler(OnDeviceToggled);
 				m_layoutpanel.Controls.Add(devicecontrol);
 			}
 
@@ -240,7 +240,7 @@ namespace zuki.hdhomeruntray
 			{
 				Padding = new Padding(2, 0, 1, 0).ScaleDPI(m_scalefactor)
 			};
-			settings.Toggled += new PopupItemToggledEventHandler(OnSettingsToggled);
+			settings.Toggled += new ToggledEventHandler(OnSettingsToggled);
 
 			// Crate the unpin button
 			PopupItemGlyphControl unpin = new PopupItemGlyphControl(SymbolGlyph.Unpin, PopupItemControlType.Button, m_scalefactor)
@@ -354,7 +354,7 @@ namespace zuki.hdhomeruntray
 		// OnDeviceToggled
 		//
 		// Invoked when a device toggle state has been changed
-		private void OnDeviceToggled(object sender, PopupItemToggledEventArgs args)
+		private void OnDeviceToggled(object sender, ToggledEventArgs args)
 		{
 			if(args.Toggled)
 			{
@@ -429,7 +429,7 @@ namespace zuki.hdhomeruntray
 		// OnSettingsToggled
 		//
 		// Invoked when the settings toggle state has been changed
-		private void OnSettingsToggled(object sender, PopupItemToggledEventArgs args)
+		private void OnSettingsToggled(object sender, ToggledEventArgs args)
 		{
 			if(args.Toggled)
 			{

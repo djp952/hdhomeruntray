@@ -38,14 +38,14 @@ namespace zuki.hdhomeruntray
 		//
 		public TunerDeviceForm(TunerDevice device, PopupForm form, PopupItemControl item, DockStyle dockstyle) : base(form, item, dockstyle)
 		{
-			if(device == null) throw new ArgumentNullException(nameof(device));
+			m_device = device ?? throw new ArgumentNullException(nameof(device));
 
 			m_layoutpanel.SuspendLayout();
 
 			try
 			{
 				// Add the header user control for the device
-				m_header = new TunerDeviceHeaderControl(device, m_scalefactor)
+				m_header = new TunerDeviceHeaderControl(m_device, m_scalefactor)
 				{
 					Dock = DockStyle.Top,
 					Padding = new Padding(0, 0, 0, 1).ScaleDPI(m_scalefactor)
@@ -53,9 +53,9 @@ namespace zuki.hdhomeruntray
 				m_layoutpanel.Controls.Add(m_header);
 
 				// Add the tuner user controls for the device
-				foreach(Tuner tuner in device.Tuners)
+				foreach(Tuner tuner in m_device.Tuners)
 				{
-					TunerDeviceStatusControl status = new TunerDeviceStatusControl(device, tuner, m_scalefactor)
+					TunerDeviceStatusControl status = new TunerDeviceStatusControl(m_device, tuner, m_scalefactor)
 					{
 						Dock = DockStyle.Top,
 						Padding = new Padding(0, 1, 0, 1).ScaleDPI(m_scalefactor)
@@ -65,11 +65,12 @@ namespace zuki.hdhomeruntray
 				}
 
 				// Add the footer user control for the device
-				m_footer = new TunerDeviceFooterControl(device, m_scalefactor)
+				m_footer = new TunerDeviceFooterControl(m_device, m_scalefactor)
 				{
 					Dock = DockStyle.Top,
 					Padding = new Padding(0, 1, 0, 0).ScaleDPI(m_scalefactor)
 				};
+				m_footer.ShowToolsToggled += new ToggledEventHandler(OnShowToolsToggled);
 				m_layoutpanel.Controls.Add(m_footer);
 			}
 
@@ -91,6 +92,34 @@ namespace zuki.hdhomeruntray
 		private void OnDeviceStatusChanged(object sender, DeviceStatusChangedEventArgs args)
 		{
 			RaiseDeviceStatusChanged(this, args);
+		}
+
+		// OnShowToolsToggled
+		//
+		// Invoked when the show tools option has been toggled
+		private void OnShowToolsToggled(object sender, ToggledEventArgs args)
+		{
+			if(args.Toggled == false)
+			{
+				// When turned off, cycle through and remove any TunerDeviceToolsControl objects
+				foreach(Control control in m_layoutpanel.Controls)
+				{
+					if(control is TunerDeviceToolsControl) m_layoutpanel.Controls.Remove(control);
+				}
+			}
+			else
+			{
+				// When turned on, insert a TunerDeviceToolsControl above the footer
+				TunerDeviceToolsControl toolscontrol = new TunerDeviceToolsControl(m_device, m_scalefactor)
+				{
+					Dock = DockStyle.Top,
+					Padding = new Padding(0, 1, 0, 1).ScaleDPI(m_scalefactor)
+				};
+
+				// Insert the control above the footer
+				m_layoutpanel.Controls.Add(toolscontrol);
+				m_layoutpanel.Controls.SetChildIndex(toolscontrol, m_layoutpanel.Controls.GetChildIndex(m_footer));
+			}
 		}
 
 		// OnTimerTick
@@ -119,6 +148,7 @@ namespace zuki.hdhomeruntray
 		// Member Variables
 		//-------------------------------------------------------------------
 
+		private readonly TunerDevice m_device;
 		private readonly TunerDeviceHeaderControl m_header;
 		private readonly TunerDeviceFooterControl m_footer;
 	}

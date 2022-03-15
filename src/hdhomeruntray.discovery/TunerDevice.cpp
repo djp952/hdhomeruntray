@@ -26,6 +26,8 @@
 
 #pragma warning(push, 4)
 
+using namespace System::Globalization;
+
 namespace zuki::hdhomeruntray::discovery {
 
 //---------------------------------------------------------------------------
@@ -188,6 +190,77 @@ String^ TunerDevice::Name::get(void)
 bool TunerDevice::IsLegacy::get(void)
 {
 	return m_islegacy;
+}
+
+//---------------------------------------------------------------------------
+// TunerDevice::Restart
+//
+// Restarts the tuner device
+//
+// Arguments:
+//
+//	NONE
+
+void TunerDevice::Restart(void)
+{
+	// Convert the device ID into an unsigned 32-bit integer
+	uint32_t deviceid = 0;
+	if(uint32_t::TryParse(DeviceID, NumberStyles::HexNumber, CultureInfo::InvariantCulture, deviceid)) {
+
+		// Convert the IP address into a byte array; convert for little endian as necessary
+		array<Byte>^ ipbytes = LocalIP->GetAddressBytes();
+		if(BitConverter::IsLittleEndian) Array::Reverse(ipbytes);
+
+		// Attempt to create a hdhomerun_device_t instance for tuner instance 0
+		hdhomerun_device_t* device = hdhomerun_device_create(deviceid, BitConverter::ToUInt32(ipbytes, 0), 0, nullptr);
+		if(device != nullptr) {
+
+			// Attempt to reboot the device by sending the "sys/restart self" command to it
+			hdhomerun_device_set_var(device, "/sys/restart", "self", nullptr, nullptr);
+
+			// Release the hdhomerun_device_t instance
+			hdhomerun_device_destroy(device);
+		}
+	}
+}
+
+//---------------------------------------------------------------------------
+// TunerDevice::StopTuner
+//
+// Stops a tuner
+//
+// Arguments:
+//
+//	index		- Index of the tuner to stop
+
+void TunerDevice::StopTuner(int index)
+{
+	// Convert the device ID into an unsigned 32-bit integer
+	uint32_t deviceid = 0;
+	if(uint32_t::TryParse(DeviceID, NumberStyles::HexNumber, CultureInfo::InvariantCulture, deviceid)) {
+
+		// Convert the IP address into a byte array; convert for little endian as necessary
+		array<Byte>^ ipbytes = LocalIP->GetAddressBytes();
+		if(BitConverter::IsLittleEndian) Array::Reverse(ipbytes);
+
+		// Attempt to create a hdhomerun_device_t instance for tuner instance 0
+		hdhomerun_device_t* device = hdhomerun_device_create(deviceid, BitConverter::ToUInt32(ipbytes, 0), 0, nullptr);
+		if(device != nullptr) {
+
+			char name[256] = {};			// Variable name
+
+			// Unlock the specified tuner
+			sprintf_s(name, std::extent<decltype(name)>::value, "/tuner%d/lockkey", index);
+			hdhomerun_device_set_var(device, name, "force", nullptr, nullptr);
+
+			// Reset the specified tuner
+			sprintf_s(name, std::extent<decltype(name)>::value, "/tuner%d/channel", index);
+			hdhomerun_device_set_var(device, name, "none", nullptr, nullptr);
+
+			// Release the hdhomerun_device_t instance
+			hdhomerun_device_destroy(device);
+		}
+	}
 }
 
 //---------------------------------------------------------------------------

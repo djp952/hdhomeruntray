@@ -29,5 +29,8 @@
     <Setting Name="HoverActionsDelay" Type="zuki.hdhomeruntray.HoverActionsDelay" Scope="User">
       <Value Profile="(Default)">System</Value>
     </Setting>
+    <Setting Name="ShowTunerTools" Type="zuki.hdhomeruntray.EnabledDisabled" Scope="User">
+      <Value Profile="(Default)">Disabled</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

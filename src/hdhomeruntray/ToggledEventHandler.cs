@@ -23,9 +23,9 @@
 namespace zuki.hdhomeruntray
 {
 	//-----------------------------------------------------------------------
-	// Delegate PopupItemToggledEventHandler (internal)
+	// Delegate ToggledEventHandler (internal)
 	//
-	// Delegate type for the PopupItemControl::Toggled event
+	// Delegate type for a Toggled event
 
-	internal delegate void PopupItemToggledEventHandler(object sender, PopupItemToggledEventArgs args);
+	internal delegate void ToggledEventHandler(object sender, ToggledEventArgs args);
 }

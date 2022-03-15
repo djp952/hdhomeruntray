@@ -21,26 +21,42 @@
 //---------------------------------------------------------------------------
 
 using System;
-using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
 
-using zuki.hdhomeruntray.discovery;
-
 namespace zuki.hdhomeruntray
 {
-	//--------------------------------------------------------------------------
-	// Class TunerDeviceHeaderControl (internal)
+	//-----------------------------------------------------------------------
+	// Class TunerDeviceToolsControlLabelButton (internal)
 	//
-	// User control that implements the header for a tuner device in the DeviceForm
+	// Implements a button for the tuner device tools control strip
 
-	internal partial class TunerDeviceHeaderControl : UserControl
+	internal partial class TunerDeviceToolsControlLabelButton : RoundedTableLayoutPanel
 	{
-		// Instance Constructor
+		// Instance Constructor (protected)
 		//
-		private TunerDeviceHeaderControl(SizeF scalefactor)
+		public TunerDeviceToolsControlLabelButton(string text, SizeF scalefactor)
 		{
-			InitializeComponent();
+			// There is no Forms Designer for this component, set the required
+			// properties manually during construction
+			AutoSize = true;
+			AutoSizeMode = AutoSizeMode.GrowAndShrink;
+			BackColor = SystemColors.ControlLightLight;
+			Dock = DockStyle.Fill;
+			Padding = new Padding(4).ScaleDPI(scalefactor);
+
+			// Create the label control for the glyph
+			PassthroughLabelControl label = new PassthroughLabelControl
+			{
+				AutoSize = true,
+				Size = new Size(1, 1),
+				Text = text,
+				TextAlign = ContentAlignment.MiddleCenter,
+				Dock = DockStyle.Fill,
+				Font = new Font("Segoe UI Semibold", 8.25F, FontStyle.Bold),
+				Visible = true
+			};
+			Controls.Add(label);
 
 			// THEME
 			//
@@ -48,38 +64,15 @@ namespace zuki.hdhomeruntray
 			ApplicationTheme.Changed += m_appthemechanged;
 			OnApplicationThemeChanged(this, EventArgs.Empty);
 
-			m_layoutpanel.EnableDoubleBuffering();
+			// Wire up the event handlers
+			MouseClick += OnMouseClick;
+			MouseEnter += OnMouseEnter;
+			MouseLeave += OnMouseLeave;
 
-			Padding = Padding.ScaleDPI(scalefactor);
-			m_layoutpanel.Margin = m_layoutpanel.Margin.ScaleDPI(scalefactor);
-			m_layoutpanel.Padding = m_layoutpanel.Padding.ScaleDPI(scalefactor);
-			m_layoutpanel.Radii = m_layoutpanel.Radii.ScaleDPI(scalefactor);
-
-			// WINDOWS 11
+			// Windows 11 - Change label typeface to Segoe UI Variable Display Semib
 			//
 			if(VersionHelper.IsWindows11OrGreater())
-			{
-				m_devicename.Font = new Font("Segoe UI Variable Display SemiB", m_devicename.Font.Size, m_devicename.Font.Style);
-				m_modelname.Font = new Font("Segoe UI Variable Display SemiB", m_modelname.Font.Size, m_modelname.Font.Style);
-				m_deviceid.Font = new Font("Segoe UI Variable Small", m_deviceid.Font.Size, m_deviceid.Font.Style);
-				m_ipaddress.Font = new Font("Segoe UI Variable Small", m_ipaddress.Font.Size, m_ipaddress.Font.Style);
-			}
-		}
-
-		// Instance Constructor
-		//
-		public TunerDeviceHeaderControl(TunerDevice device, SizeF scalefactor) : this(scalefactor)
-		{
-			if(device == null) throw new ArgumentNullException(nameof(device));
-
-			// Just copy the data from the device instance into the appropriate controls
-			m_devicename.Text = device.FriendlyName;
-			m_modelname.Text = device.ModelNumber;
-			m_deviceid.Text = device.DeviceID;
-			m_ipaddress.Text = device.LocalIP.ToString();
-
-			// Save the BaseURL for the device for the link target
-			m_baseurl = device.BaseURL;
+				label.Font = new Font("Segoe UI Variable Display Semib", label.Font.Size, label.Font.Style);
 		}
 
 		// Dispose
@@ -91,11 +84,19 @@ namespace zuki.hdhomeruntray
 			{
 				// Dispose managed state
 				if(m_appthemechanged != null) ApplicationTheme.Changed -= m_appthemechanged;
-				if(components != null) components.Dispose();
 			}
 
 			base.Dispose(disposing);
 		}
+
+		//-------------------------------------------------------------------------
+		// Events
+		//-------------------------------------------------------------------------
+
+		// Selected
+		//
+		// Invoked when a button-type PopupItemControl has been selected
+		public event EventHandler Selected;
 
 		//-------------------------------------------------------------------
 		// Event Handlers
@@ -106,30 +107,40 @@ namespace zuki.hdhomeruntray
 		// Invoked when the application theme has changed
 		private void OnApplicationThemeChanged(object sender, EventArgs args)
 		{
-			m_layoutpanel.BackColor = ApplicationTheme.PanelBackColor;
-			m_layoutpanel.ForeColor = ApplicationTheme.PanelForeColor;
-			m_ipaddress.ActiveLinkColor = m_ipaddress.LinkColor = m_ipaddress.VisitedLinkColor = ApplicationTheme.LinkColor;
+			BackColor = ApplicationTheme.PanelBackColor;
+			ForeColor = ApplicationTheme.PanelForeColor;
 		}
 
-		// OnIPAddressClicked
+		// OnMouseClick
 		//
-		// Invoked when the IP address link has been clicked
-		private void OnIPAddressClicked(object sender, LinkLabelLinkClickedEventArgs args)
+		// Handles the MouseClick event
+		private void OnMouseClick(object sender, EventArgs args)
 		{
-			using(Process process = new Process())
-			{
-				process.StartInfo.FileName = m_baseurl;
-				process.StartInfo.UseShellExecute = true;
-				process.StartInfo.Verb = "open";
-				process.Start();
-			}
+			Selected?.Invoke(this, EventArgs.Empty);
+		}
+
+		// OnMouseEnter
+		//
+		// Handles the MouseEnter event
+		private void OnMouseEnter(object sender, EventArgs args)
+		{
+			ForeColor = ApplicationTheme.InvertedPanelForeColor;
+			BackColor = ApplicationTheme.InvertedPanelBackColor;
+		}
+
+		// OnMouseLeave
+		//
+		// Handles the MouseLeave event
+		private void OnMouseLeave(object sender, EventArgs args)
+		{
+			ForeColor = ApplicationTheme.PanelForeColor;
+			BackColor = ApplicationTheme.PanelBackColor;
 		}
 
 		//-------------------------------------------------------------------
-		// Member Variables
+		// Private Member Variables
 		//-------------------------------------------------------------------
 
-		private readonly string m_baseurl;
 		private readonly EventHandler m_appthemechanged;
 	}
 }

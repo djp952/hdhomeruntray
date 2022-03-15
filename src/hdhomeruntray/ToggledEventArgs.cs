@@ -27,13 +27,13 @@ namespace zuki.hdhomeruntray
 	//-----------------------------------------------------------------------
 	// Class PopupItemToggledEventArgs (internal)
 	//
-	// Event arguments type for the PopupItemControl::Toggled event
+	// Event arguments type for a Toggled event
 
-	internal class PopupItemToggledEventArgs : EventArgs
+	internal class ToggledEventArgs : EventArgs
 	{
 		// Instance Constructor
 		//
-		public PopupItemToggledEventArgs(bool toggled)
+		public ToggledEventArgs(bool toggled)
 		{
 			m_toggled = toggled;
 		}
