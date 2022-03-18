@@ -90,9 +90,10 @@ namespace zuki.hdhomeruntray
 				m_symbolqualitybar.Padding = m_symbolqualitybar.Padding.ScaleDPI(m_scalefactor);
 				m_symbolqualitypct.Padding = m_symbolqualitypct.Padding.ScaleDPI(m_scalefactor);
 
-				// Scale the middle column to have a consistent progress bar width
-				int column = m_signallayoutpanel.GetColumn(m_signalstrengthbar);
-				m_signallayoutpanel.ColumnStyles[column].Width = (m_signallayoutpanel.ColumnStyles[column].Width * m_scalefactor.Width);
+				// Enforce a minimum size for the signal strength progress bars
+				m_signalqualitybar.MinimumSize = m_signalqualitybar.MinimumSize = m_symbolqualitybar.MinimumSize =
+					new Size((int)(m_signalqualitybar.MinimumSize.Width * m_scalefactor.Width), 
+					(int)(m_signalqualitybar.MinimumSize.Height * m_scalefactor.Height));
 
 				// These panels start out as invisible
 				m_signallayoutpanel.Visible = false;
