@@ -41,14 +41,16 @@ namespace zuki.hdhomeruntray
 			// properties manually during construction
 			AutoSize = true;
 			AutoSizeMode = AutoSizeMode.GrowAndShrink;
-			BackColor = SystemColors.ControlLightLight;
 			Dock = DockStyle.Fill;
-			Padding = new Padding(4).ScaleDPI(scalefactor);
+			Margin = new Padding(2).ScaleDPI(scalefactor);
 
 			// Create the label control for the glyph
 			PassthroughLabelControl label = new PassthroughLabelControl
 			{
 				AutoSize = true,
+				BackColor = SystemColors.ControlLightLight,
+				Margin = new Padding(0),
+				Padding = new Padding(6).ScaleDPI(scalefactor),
 				Size = new Size(1, 1),
 				Text = text,
 				TextAlign = ContentAlignment.MiddleCenter,
@@ -107,8 +109,11 @@ namespace zuki.hdhomeruntray
 		// Invoked when the application theme has changed
 		private void OnApplicationThemeChanged(object sender, EventArgs args)
 		{
-			BackColor = ApplicationTheme.PanelBackColor;
-			ForeColor = ApplicationTheme.PanelForeColor;
+			foreach(Control control in Controls)
+			{
+				control.BackColor = ApplicationTheme.PanelBackColor;
+				control.ForeColor = ApplicationTheme.PanelForeColor;
+			}
 		}
 
 		// OnMouseClick
@@ -124,8 +129,11 @@ namespace zuki.hdhomeruntray
 		// Handles the MouseEnter event
 		private void OnMouseEnter(object sender, EventArgs args)
 		{
-			ForeColor = ApplicationTheme.InvertedPanelForeColor;
-			BackColor = ApplicationTheme.InvertedPanelBackColor;
+			foreach(Control control in Controls)
+			{
+				control.ForeColor = ApplicationTheme.InvertedPanelForeColor;
+				control.BackColor = ApplicationTheme.InvertedPanelBackColor;
+			}
 		}
 
 		// OnMouseLeave
@@ -133,8 +141,11 @@ namespace zuki.hdhomeruntray
 		// Handles the MouseLeave event
 		private void OnMouseLeave(object sender, EventArgs args)
 		{
-			ForeColor = ApplicationTheme.PanelForeColor;
-			BackColor = ApplicationTheme.PanelBackColor;
+			foreach(Control control in Controls)
+			{
+				control.ForeColor = ApplicationTheme.PanelForeColor;
+				control.BackColor = ApplicationTheme.PanelBackColor;
+			}
 		}
 
 		//-------------------------------------------------------------------

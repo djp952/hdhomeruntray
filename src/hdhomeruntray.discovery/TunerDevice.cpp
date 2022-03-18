@@ -193,15 +193,15 @@ bool TunerDevice::IsLegacy::get(void)
 }
 
 //---------------------------------------------------------------------------
-// TunerDevice::Restart
+// TunerDevice::Reboot
 //
-// Restarts the tuner device
+// Reboots the tuner device
 //
 // Arguments:
 //
 //	NONE
 
-void TunerDevice::Restart(void)
+void TunerDevice::Reboot(void)
 {
 	// Convert the device ID into an unsigned 32-bit integer
 	uint32_t deviceid = 0;
@@ -225,15 +225,15 @@ void TunerDevice::Restart(void)
 }
 
 //---------------------------------------------------------------------------
-// TunerDevice::StopTuner
+// TunerDevice::ResetTuner
 //
-// Stops a tuner
+// Resets a tuner
 //
 // Arguments:
 //
-//	index		- Index of the tuner to stop
+//	index		- Index of the tuner to reset
 
-void TunerDevice::StopTuner(int index)
+void TunerDevice::ResetTuner(int index)
 {
 	// Convert the device ID into an unsigned 32-bit integer
 	uint32_t deviceid = 0;

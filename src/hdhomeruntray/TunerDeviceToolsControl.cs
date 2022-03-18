@@ -69,42 +69,42 @@ namespace zuki.hdhomeruntray
 			// The "Reboot" column will be set to AutoSize to take up any remaining space cleanly
 			m_layoutpanel.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
 
-			// Add the "Stop" buttons for each tuner
+			// Add the "Reset" buttons for each tuner
 			for(int index = 0; index < numtuners; index++)
 			{
-				var stopbutton = new TunerDeviceToolsControlLabelButton(String.Format("Stop Tuner {0}", index), scalefactor)
+				var resetbutton = new TunerDeviceToolsControlLabelButton(String.Format("Reset Tuner {0}", index), scalefactor)
 				{
 					Tag = m_device.Tuners[index]
 				};
-				stopbutton.Selected += new EventHandler(OnStopTunerSelected);
-				m_layoutpanel.Controls.Add(stopbutton, index, 0);
+				resetbutton.Selected += new EventHandler(OnResetTunerSelected);
+				m_layoutpanel.Controls.Add(resetbutton, index, 0);
 			}
 
-			// Add the "Restart" button
-			var restartbutton = new TunerDeviceToolsControlLabelButton("Restart Device", scalefactor);
-			restartbutton.Selected += new EventHandler(OnRestartSelected);
-			m_layoutpanel.Controls.Add(restartbutton, numtuners, 0);
+			// Add the "Reboot" button
+			var rebootbutton = new TunerDeviceToolsControlLabelButton("Reboot", scalefactor);
+			rebootbutton.Selected += new EventHandler(OnRebootSelected);
+			m_layoutpanel.Controls.Add(rebootbutton, numtuners, 0);
 		}
 
 		//-------------------------------------------------------------------
 		// Event Handlers
 		//-------------------------------------------------------------------
 
-		// OnRestartSelected
+		// OnRebootSelected
 		//
-		// Invoked when the "Restart Device" button has been selected
-		private void OnRestartSelected(object sender, EventArgs args)
+		// Invoked when the "Reboot" button has been selected
+		private void OnRebootSelected(object sender, EventArgs args)
 		{
-			try { m_device.Restart(); }
+			try { m_device.Reboot(); }
 			catch { /* DON'T CARE */ }
 		}
 
-		// OnStopTunerSelected
+		// OnResetTunerSelected
 		//
-		// Invoked when a "Stop Tuner" button has been selected
-		private void OnStopTunerSelected(object sender, EventArgs args)
+		// Invoked when a "Reset Tuner" button has been selected
+		private void OnResetTunerSelected(object sender, EventArgs args)
 		{
-			if((sender is Control control) && (control.Tag is Tuner tuner)) m_device.StopTuner(tuner.Index);
+			if((sender is Control control) && (control.Tag is Tuner tuner)) m_device.ResetTuner(tuner.Index);
 		}
 
 		//-------------------------------------------------------------------

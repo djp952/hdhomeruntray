@@ -136,7 +136,7 @@ namespace zuki.hdhomeruntray
 			this.m_signalstrengthbar.Location = new System.Drawing.Point(97, 7);
 			this.m_signalstrengthbar.Maximum = 100;
 			this.m_signalstrengthbar.Minimum = 0;
-			this.m_signalstrengthbar.MinimumSize = new System.Drawing.Size(135 0);
+			this.m_signalstrengthbar.MinimumSize = new System.Drawing.Size(135, 0);
 			this.m_signalstrengthbar.Name = "m_signalstrengthbar";
 			this.m_signalstrengthbar.Padding = new System.Windows.Forms.Padding(0, 2, 0, 1);
 			this.m_signalstrengthbar.ProgressBarColor = System.Drawing.SystemColors.ControlLight;
@@ -153,7 +153,7 @@ namespace zuki.hdhomeruntray
 			this.m_signalqualitybar.Location = new System.Drawing.Point(97, 26);
 			this.m_signalqualitybar.Maximum = 100;
 			this.m_signalqualitybar.Minimum = 0;
-			this.m_signalqualitybar.MinimumSize = new System.Drawing.Size(135 0);
+			this.m_signalqualitybar.MinimumSize = new System.Drawing.Size(135, 0);
 			this.m_signalqualitybar.Name = "m_signalqualitybar";
 			this.m_signalqualitybar.Padding = new System.Windows.Forms.Padding(0, 2, 0, 1);
 			this.m_signalqualitybar.ProgressBarColor = System.Drawing.SystemColors.ControlLight;
@@ -170,7 +170,7 @@ namespace zuki.hdhomeruntray
 			this.m_symbolqualitybar.Location = new System.Drawing.Point(97, 45);
 			this.m_symbolqualitybar.Maximum = 100;
 			this.m_symbolqualitybar.Minimum = 0;
-			this.m_symbolqualitybar.MinimumSize = new System.Drawing.Size(135 0);
+			this.m_symbolqualitybar.MinimumSize = new System.Drawing.Size(135, 0);
 			this.m_symbolqualitybar.Name = "m_symbolqualitybar";
 			this.m_symbolqualitybar.Padding = new System.Windows.Forms.Padding(0, 2, 0, 1);
 			this.m_symbolqualitybar.ProgressBarColor = System.Drawing.SystemColors.ControlLight;
