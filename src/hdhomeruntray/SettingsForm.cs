@@ -76,8 +76,7 @@ namespace zuki.hdhomeruntray
 			//
 			if(VersionHelper.IsWindows11OrGreater())
 			{
-				// Remove the border and change the padding to 4 (will scale below)
-				FormBorderStyle = FormBorderStyle.None;
+				// Change the padding to 4 (will scale below)
 				Padding = new Padding(4);
 
 				// Apply rounded corners to the form
