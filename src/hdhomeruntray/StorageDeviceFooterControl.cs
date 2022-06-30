@@ -70,7 +70,7 @@ namespace zuki.hdhomeruntray
 
 			// Just copy the data from the device instance into the appropriate controls
 			m_version.Text = "Version " + device.Version;
-			m_space.Text = FormatDiskSpace(device.FreeSpace);
+			m_space.Text = (device.FreeSpace > 0) ? FormatDiskSpace(device.FreeSpace) : String.Empty;
 		}
 
 		// Dispose
@@ -99,6 +99,20 @@ namespace zuki.hdhomeruntray
 		{
 			m_layoutpanel.BackColor = ApplicationTheme.PanelBackColor;
 			m_layoutpanel.ForeColor = ApplicationTheme.PanelForeColor;
+		}
+
+		//-------------------------------------------------------------------
+		// Member Functions
+		//-------------------------------------------------------------------
+
+		// UpdateStatus
+		//
+		// Updates the storage status data displayed in the footer
+		public void UpdateStatus(StorageStatus status)
+		{
+			if(status == null) throw new ArgumentNullException("status");
+
+			m_space.Text = (status.FreeSpace > 0) ? FormatDiskSpace(status.FreeSpace) : String.Empty;
 		}
 
 		//-------------------------------------------------------------------------

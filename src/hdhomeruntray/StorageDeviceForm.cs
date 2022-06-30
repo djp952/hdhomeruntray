@@ -91,6 +91,9 @@ namespace zuki.hdhomeruntray
 				StorageStatus status = m_device.GetStorageStatus();
 				if(status.GetHashCode() == m_lasthash) return;
 
+				// The footer control needs the updated status for the free disk space
+				m_footer.UpdateStatus(status);
+
 				// Save the updated hash code
 				m_lasthash = status.GetHashCode();
 

@@ -42,9 +42,12 @@ namespace zuki::hdhomeruntray::discovery {
 //	livebuffers		- List<> of live buffers
 //	playbacks		- List<> of active playbacks
 //	recordings		- List<> of active recordings
+//	totalspace		- Total storage space
+//	freespace		- Free storage space
 
-StorageStatus::StorageStatus(LiveBufferList^ livebuffers, PlaybackList^ playbacks, RecordingList^ recordings) : 
-	m_livebuffers(livebuffers), m_playbacks(playbacks),  m_recordings(recordings)
+StorageStatus::StorageStatus(LiveBufferList^ livebuffers, PlaybackList^ playbacks, RecordingList^ recordings,
+	int64_t totalspace, int64_t freespace) : m_livebuffers(livebuffers), m_playbacks(playbacks),  m_recordings(recordings),
+	m_totalspace(totalspace), m_freespace(freespace)
 {
 	if(CLRISNULL(livebuffers)) throw gcnew ArgumentNullException("livebuffers");
 	if(CLRISNULL(playbacks)) throw gcnew ArgumentNullException("playbacks");
@@ -67,6 +70,22 @@ StorageStatus::StorageStatus(LiveBufferList^ livebuffers, PlaybackList^ playback
 StorageStatus^ StorageStatus::Create(StorageDevice^ storagedevice)
 {
 	if(CLRISNULL(storagedevice)) throw gcnew ArgumentNullException("storagedevice");
+
+	// Generate the URL to the device discovery JSON data
+	String^ discoverurl = String::Concat(storagedevice->BaseURL, "/discover.json");
+
+	int64_t totalspace = 0;						// Total available storage space
+	int64_t freespace = 0;						// Free storage space
+
+	JObject^ discovery = JsonWebRequest::GetObject(discoverurl);
+	if(CLRISNOTNULL(discovery)) {
+
+		JToken^ total = discovery->GetValue("TotalSpace", StringComparison::OrdinalIgnoreCase);
+		JToken^ free = discovery->GetValue("FreeSpace", StringComparison::OrdinalIgnoreCase);
+
+		if(CLRISNOTNULL(totalspace)) int64_t::TryParse(total->ToObject<String^>(), totalspace);
+		if(CLRISNOTNULL(freespace)) int64_t::TryParse(free->ToObject<String^>(), freespace);
+	}
 
 	// Generate the URL to the device status JSON data
 	String^ statusurl = String::Concat(storagedevice->BaseURL, "/status.json");
@@ -95,7 +114,7 @@ StorageStatus^ StorageStatus::Create(StorageDevice^ storagedevice)
 		}
 	}
 
-	return gcnew StorageStatus(LiveBufferList::Create(livebuffers), PlaybackList::Create(playbacks), RecordingList::Create(recordings));
+	return gcnew StorageStatus(LiveBufferList::Create(livebuffers), PlaybackList::Create(playbacks), RecordingList::Create(recordings), totalspace, freespace);
 }
 
 //---------------------------------------------------------------------------
@@ -106,6 +125,16 @@ StorageStatus^ StorageStatus::Create(StorageDevice^ storagedevice)
 _DeviceStatus StorageStatus::DeviceStatus::get(void)
 {
 	return m_devicestatus;
+}
+
+//---------------------------------------------------------------------------
+// StorageStatus::FreeSpace::get
+//
+// Gets the free storage space
+
+int64_t StorageStatus::FreeSpace::get(void)
+{
+	return m_freespace;
 }
 
 //---------------------------------------------------------------------------
@@ -167,6 +196,16 @@ RecordingList^ StorageStatus::Recordings::get(void)
 {
 	CLRASSERT(CLRISNOTNULL(m_recordings));
 	return m_recordings;
+}
+
+//---------------------------------------------------------------------------
+// StorageStatus::TotalSpace::get
+//
+// Gets the total storage space
+
+int64_t StorageStatus::TotalSpace::get(void)
+{
+	return m_totalspace;
 }
 
 //---------------------------------------------------------------------------

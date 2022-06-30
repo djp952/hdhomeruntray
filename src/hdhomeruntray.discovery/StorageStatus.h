@@ -63,6 +63,14 @@ public:
 		_DeviceStatus get(void);
 	}
 
+	// FreeSpace
+	//
+	// Gets the amount of free storage space
+	property int64_t FreeSpace
+	{
+		int64_t get(void);
+	}
+
 	// LiveBuffers
 	//
 	// Gets the collection of active live buffers
@@ -87,6 +95,14 @@ public:
 		RecordingList^ get(void);
 	}
 
+	// TotalSpace
+	//
+	// Gets the total amount of storage space
+	property int64_t TotalSpace
+	{
+		int64_t get(void);
+	}
+
 	//-----------------------------------------------------------------------
 	// Object Overrides
 
@@ -109,15 +125,19 @@ private:
 
 	// Instance Constructor
 	//
-	StorageStatus(LiveBufferList^ livebuffers, PlaybackList^ playbacks, RecordingList^ recordings);
+	StorageStatus(LiveBufferList^ livebuffers, PlaybackList^ playbacks, RecordingList^ recordings,
+		int64_t totalspace, int64_t freespace);
 
 	//-----------------------------------------------------------------------
 	// Member Variables
 
-	LiveBufferList^		m_livebuffers = nullptr;
-	PlaybackList^		m_playbacks = nullptr;
-	RecordingList^		m_recordings = nullptr;
-	_DeviceStatus		m_devicestatus = _DeviceStatus::Idle;
+	LiveBufferList^			m_livebuffers = nullptr;
+	PlaybackList^			m_playbacks = nullptr;
+	RecordingList^			m_recordings = nullptr;
+	_DeviceStatus			m_devicestatus = _DeviceStatus::Idle;
+
+	int64_t	const			m_freespace;		// Free storage space
+	int64_t	const			m_totalspace;		// Total storage space
 };
 
 //---------------------------------------------------------------------------
