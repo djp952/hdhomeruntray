@@ -59,7 +59,7 @@ TunerStatus::TunerStatus(String^ channelname, struct hdhomerun_tuner_status_t co
 	if(CLRISNULL(targetip)) throw gcnew ArgumentNullException("targetip");
 
 	// Assign the channel name and determine the overall device status
-	m_channelname = channelname->Replace("&", "&&");
+	m_channelname = channelname;
 	if(String::Compare(m_channelname, NoChannel, StringComparison::OrdinalIgnoreCase) != 0) m_devicestatus = _DeviceStatus::Active;
 
 	// Only bother with setting the variables if the tuner is active

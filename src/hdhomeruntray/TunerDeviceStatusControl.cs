@@ -201,7 +201,7 @@ namespace zuki.hdhomeruntray
 				// Header Controls
 				//
 				m_activedot.ForeColor = StatusColor.FromDeviceStatus(status.DeviceStatus);
-				m_channelname.Text = (status.DeviceStatus >= DeviceStatus.Active) ? status.ChannelName : "Idle";
+				m_channelname.Text = (status.DeviceStatus >= DeviceStatus.Active) ? status.ChannelName.Replace("&", "&&") : "Idle";
 
 				if(status.DeviceStatus >= DeviceStatus.Active)
 				{

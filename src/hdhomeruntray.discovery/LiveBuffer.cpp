@@ -43,7 +43,7 @@ LiveBuffer::LiveBuffer(JObject^ livebuffer) : m_targetip(IPAddress::None)
 	JToken^ name = livebuffer->GetValue("Name", StringComparison::OrdinalIgnoreCase);
 	JToken^ targetip = livebuffer->GetValue("TargetIP", StringComparison::OrdinalIgnoreCase);
 
-	m_name = CLRISNOTNULL(name) ? name->ToObject<String^>()->Replace("&", "&&") : String::Empty;
+	m_name = CLRISNOTNULL(name) ? name->ToObject<String^>() : String::Empty;
 	if(CLRISNOTNULL(targetip)) IPAddress::TryParse(targetip->ToObject<String^>(), m_targetip);
 }
 

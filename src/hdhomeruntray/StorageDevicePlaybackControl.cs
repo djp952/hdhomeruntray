@@ -77,7 +77,7 @@ namespace zuki.hdhomeruntray
 
 			// This is static information, just assign from the playback instance
 			m_activedot.ForeColor = StatusColor.FromDeviceStatusColor(DeviceStatusColor.Green);
-			m_name.Text = playback.Name;
+			m_name.Text = playback.Name.Replace("&", "&&");
 			m_targetip.Text = playback.TargetIP.ToString();
 		}
 

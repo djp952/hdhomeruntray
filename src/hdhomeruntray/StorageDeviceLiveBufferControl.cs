@@ -77,7 +77,7 @@ namespace zuki.hdhomeruntray
 
 			// This is static information, just assign from the livebuffer instance
 			m_activedot.ForeColor = StatusColor.FromDeviceStatusColor(DeviceStatusColor.Green);
-			m_name.Text = livebuffer.Name;
+			m_name.Text = livebuffer.Name.Replace("&", "&&");
 			m_targetip.Text = livebuffer.TargetIP.ToString();
 		}
 

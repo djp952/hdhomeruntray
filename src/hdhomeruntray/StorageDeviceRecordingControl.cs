@@ -76,7 +76,7 @@ namespace zuki.hdhomeruntray
 
 			// This is static information, just assign from the recording instance
 			m_activedot.ForeColor = StatusColor.FromDeviceStatusColor(DeviceStatusColor.Red);
-			m_name.Text = recording.Name;
+			m_name.Text = recording.Name.Replace("&", "&&");
 		}
 
 		// Dispose
