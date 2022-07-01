@@ -497,7 +497,7 @@ namespace zuki.hdhomeruntray
 			RegistryKey startupkey = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run", true);
 			if(startupkey != null)
 			{
-				if(enable) startupkey.SetValue(appname, Application.ExecutablePath);
+				if(enable) startupkey.SetValue(appname, "\"" + Application.ExecutablePath + "\"");
 				else
 				{
 					// RegistryKey will throw if the value doesn't exist ...
