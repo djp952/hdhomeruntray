@@ -23,6 +23,7 @@
 using System;
 using System.Diagnostics;
 using System.Drawing;
+using System.Net;
 using System.Windows.Forms;
 
 using zuki.hdhomeruntray.discovery;
@@ -75,8 +76,15 @@ namespace zuki.hdhomeruntray
 			m_storageid.Text = device.StorageID;
 			m_ipaddress.Text = device.LocalIP.ToString();
 
-			// Save the BaseURL for the device for the link target
-			m_baseurl = device.BaseURL;
+            // Get DNS hostname from IP (and FQDN), if available
+            try
+            {
+                m_ipaddress.Text = Dns.GetHostEntry(device.LocalIP.ToString()).HostName.Split('.')[0];
+            }
+            catch (Exception) { /* DO NOTHING, m_ipaddress.Text not changed */ }
+
+            // Save the BaseURL for the device for the link target
+            m_baseurl = device.BaseURL;
 		}
 
 		// Dispose
